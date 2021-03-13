@@ -102,7 +102,6 @@ HARDWARE
  #include	"uCosmos.h"
 #endif
 
-#include "peripherals.h"
 
 
 // Definicja struktury bufora pieœcieniowego, u¿ywanego przez wszystkie UARTy

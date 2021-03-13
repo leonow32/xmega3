@@ -10,7 +10,7 @@
 
 	// Wybór, które porty UART maj¹ byæ u¿ywane
 	#define		UART0_USE					0
-	#define		UART1_USE					1
+	#define		UART1_USE					0
 	#define		UART2_USE					1
 
 	#if UART0_USE
@@ -43,8 +43,8 @@
 	#define		UART_USE_UCOSMOS_SLEEP		0
 
 	// Prêdkoœæ transmisji
-	#define		UART0_BAUD					57600			// Not used	
-	#define		UART1_BAUD					57600			// Connector
+	#define		UART0_BAUD					0				// Not used	
+	#define		UART1_BAUD					0				// Connector
 	#define		UART2_BAUD					57600			// Debug
 
 	// Bufory (max 254)
