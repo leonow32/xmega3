@@ -10,4 +10,10 @@
 #endif
 
 
+#if B_XNANO
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+#endif
+
+
 #endif /* CLOCK_CONFIG_H_ */

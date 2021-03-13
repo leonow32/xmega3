@@ -66,7 +66,8 @@ static volatile UART_Buffer_t * Uart__GetProgBuffer(USART_t * Port) {
 	
 	
 	//return &UART2_ProgBuf;
-	#if B_MIFARE_v002 || B_LOCK_v001
+	// TODO: Posprz¹taæ to
+	#if B_MIFARE_v002 || B_LOCK_v001 || B_XNANO
 		return &UART0_ProgBuf;
 	#else
 		return &UART2_ProgBuf;

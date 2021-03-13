@@ -84,16 +84,20 @@ int main(void) {
 	// Software init
 	// =============
 	
-	Uart_Write("\r\n=== START ===\r\n", &USART2);
+	Uart_Write("\r\n=== START ===\r\n");
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
 	Os_ResetSourceClear();
 	
 	// Peripherals demo tasks
-	#if PERIPHERALS_USE_DEMO_TASKS
+	#if B_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskRed,		1000);
 		TaskAddMs(Peripherals_TaskYellow,	1100);
 		TaskAddMs(Peripherals_TaskGreen,	1200);
 		TaskAddMs(Peripherals_TaskBlue,		1300);
+	#endif
+	
+	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
 	
@@ -105,16 +109,15 @@ int main(void) {
 		TaskScheduler();
 	}
 	
-	while(1) {
-		if(KEY_SW0_READ)					LED_BLUE_ON;
-		else								LED_BLUE_OFF;
-		
-		if(KEY_SW1_READ)					LED_GREEN_ON;
-		else								LED_GREEN_OFF;
-		
-		if(KEY_SW0_READ && KEY_SW1_READ)	LED_YELLOW_ON;
-		else								LED_YELLOW_OFF;
-		
-	}
+// 	while(1) {
+// 		if(KEY_SW0_READ)					LED_BLUE_ON;
+// 		else								LED_BLUE_OFF;
+// 		
+// 		if(KEY_SW1_READ)					LED_GREEN_ON;
+// 		else								LED_GREEN_OFF;
+// 		
+// 		if(KEY_SW0_READ && KEY_SW1_READ)	LED_YELLOW_ON;
+// 		else								LED_YELLOW_OFF;
+// 	}
 }
 

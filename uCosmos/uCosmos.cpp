@@ -116,12 +116,6 @@ void TaskScheduler(void) {
 		uint32_t IIR;
 	#endif
 
-
-	// !! Debug na XNANO
-	#if B_XNANO
-		PA6_ON;
-	#endif
-
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
 		if(Task[i].Pending) {
 			if(Task[i].Pending != OS_RUN_EVERY_CYCLE) {
@@ -203,11 +197,6 @@ void TaskScheduler(void) {
 			asm volatile("wdr");
 		#endif
 	}
-
-	// !! Debug na XNANO
-	#if B_XNANO
-		PA6_OFF;
-	#endif
 
 	// W konfiguracji mo¿na ustawiæ, by sleep uruchomiæ w Schedularze, zamiast w main()
 	#if OS_USE_SLEEP && OS_SLEEP_INDISE_SCHEDULER

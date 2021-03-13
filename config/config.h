@@ -10,7 +10,7 @@ CHANGELOG
 #ifndef GENERAL_CONFIG_H_
 #define GENERAL_CONFIG_H_
 
-// Wybór procesora
+
 #if B_AVRIOT
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
@@ -18,6 +18,17 @@ CHANGELOG
 	#define HW_CPU_ATtinyXX17					0
 	#define HW_CPU_ATmegaXX08_28pin				0
 	#define HW_CPU_ATmegaXX08_32pin				1
+	#define HW_CPU_ATmegaXX09					0
+#endif
+
+
+#if B_XNANO
+	#define HW_CPU_ATtinyXX12					0
+	#define HW_CPU_ATtinyXX14					0
+	#define HW_CPU_ATtinyXX16					1
+	#define HW_CPU_ATtinyXX17					0
+	#define HW_CPU_ATmegaXX08_28pin				0
+	#define HW_CPU_ATmegaXX08_32pin				0
 	#define HW_CPU_ATmegaXX09					0
 #endif
 
