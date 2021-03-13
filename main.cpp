@@ -27,6 +27,14 @@
 // Software includes
 // =================
 
+#if C_CONSOLE
+	#include "console.h"
+#endif
+
+#if C_UCOSMOS
+	#include "uCosmos.h"
+#endif
+
 
 // Main
 int main(void) {
@@ -48,22 +56,47 @@ int main(void) {
 	#endif
 	
 	sei();
+	
+	// ======================
+	// Internal Software Init
+	// ======================
+	
+	#if C_UCOSMOS
+		Os_Init();
+		Os_ConsoleInit();
+	#endif
 
 	// ======================
 	// External Hardware init
 	// ======================
-
+	
+	
+	
 	// =============
 	// Software init
 	// =============
-
-
+	
+	
 	// =========
 	// Main loop
 	// =========
 	
 	
-	Uart_Write("Hello\r\n", &USART2);
+	Uart_Write("\r\n=== START ===\r\n", &USART2);
+	Os_ResetSourceShow(RSTCTRL.RSTFR);
+	Os_ResetSourceClear();
+	
+	// Peripherals demo tasks
+	#if PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskRed,		1000);
+		TaskAddMs(Peripherals_TaskYellow,	1100);
+		TaskAddMs(Peripherals_TaskGreen,	1200);
+		TaskAddMs(Peripherals_TaskBlue,		1300);
+	#endif
+		
+	while(1) {
+		TaskScheduler();
+	}
 	
 	while(1) {
 		//PORTD.OUTSET = PIN0_bm;

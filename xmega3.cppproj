@@ -93,8 +93,10 @@
       <Value>V_AVRIOT</Value>
       <Value>B_AVRIOT</Value>
       <Value>C_CLOCK</Value>
+      <Value>C_CONSOLE</Value>
       <Value>C_PERIPHERALS</Value>
       <Value>C_UART</Value>
+      <Value>C_UCOSMOS</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
@@ -136,6 +138,18 @@
     <Compile Include="clock_config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="console.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="console.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="console_commands.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="console_config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="general_config.h">
       <SubType>compile</SubType>
     </Compile>
@@ -155,6 +169,21 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uCosmos.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uCosmos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uCosmos_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uCosmos_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uCosmos_template.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

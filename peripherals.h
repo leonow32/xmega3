@@ -83,17 +83,24 @@ CHANGELOG
 	
 	// Funkcje
 	void Peripherals_Init(void);
-/*
-	task_t Peripherals_TaskRed(runmode_t RunMode);
-	task_t Peripherals_TaskYellow(runmode_t RunMode);
-	task_t Peripherals_TaskGreen(runmode_t RunMode);
-	task_t Peripherals_TaskBlue(runmode_t RunMode);
+	
+	// Taski
+	#define		PERIPHERALS_USE_DEMO_TASKS		1
+	#if PERIPHERALS_USE_DEMO_TASKS
+		task_t Peripherals_TaskRed(runmode_t RunMode);
+		task_t Peripherals_TaskYellow(runmode_t RunMode);
+		task_t Peripherals_TaskGreen(runmode_t RunMode);
+		task_t Peripherals_TaskBlue(runmode_t RunMode);
+	#endif
 	
 	// Polecenie wywo³ywane z konsoli
-	void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]);
-	void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]);
-	void Peripherals_Echo(uint8_t argc, uint8_t * argv[]);
-*/
+	#define		PERIPHERALS_USE_DEMO_COMMANDS	1
+	#if PERIPHERALS_USE_DEMO_COMMANDS
+		void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]);
+		void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]);
+		//void Peripherals_Echo(uint8_t argc, uint8_t * argv[]);
+	#endif
+
 #endif
 
 

@@ -24,11 +24,15 @@ void Peripherals_Init(void) {
 
 	// Piny IO
 	PWM_INIT;
-	//INT_INIT;
+	INT_INIT;
 	
 }
 
-/*
+// ==========================
+// PERIPHERALS_USE_DEMO_TASKS
+// ==========================
+
+#if PERIPHERALS_USE_DEMO_TASKS
 // Task demonstracyjny do mrugania diodami
 task_t Peripherals_TaskRed(runmode_t RunMode) {
 
@@ -119,8 +123,15 @@ task_t Peripherals_TaskBlue(runmode_t RunMode) {
 
 	return TaskOK;
 } 
+#endif
 
 
+// =============================
+// PERIPHERALS_USE_DEMO_COMMANDS
+// =============================
+
+
+#if PERIPHERALS_USE_DEMO_COMMANDS
 // Ustawienie pinów wyjœciowych
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
@@ -160,6 +171,6 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
 	Uart_Write((const char *)argv[1]);
 }
-*/
+#endif
 
 #endif
