@@ -58,8 +58,8 @@ HARDWARE
 #include <avr/io.h>
 #include <string.h>
 #include "console_config.h"
-#include "uCosmos.h"
-#include "uart.h"
+#include "../uCosmos/uCosmos.h"
+#include "../uart/uart.h"
 
 #if C_REMOTE
 	#include "remote.h"

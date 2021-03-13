@@ -12,7 +12,7 @@ HARDWARE
 #define CLOCK_H_
 
 #include <avr/io.h>
-#include "general_config.h"
+#include "../config/config.h"
 #include "clock_config.h"
 
 // Funkcje

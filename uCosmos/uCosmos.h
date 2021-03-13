@@ -88,16 +88,19 @@ HARDWARE
 #ifndef UCOSMOS_H_
 #define UCOSMOS_H_
 
-#include	<time.h>
-#include	<string.h>		// memset
-#include	<avr/io.h>
-#include	<avr/interrupt.h>
-#include	"uCosmos_defines.h"
-#include	"uCosmos_config.h"
-#include	"uart.h"							// Do debugowania
+#include		<time.h>
+#include		<string.h>		// memset
+#include		<avr/io.h>
+#include		<avr/interrupt.h>
+#include		"uCosmos_defines.h"
+#include		"uCosmos_config.h"
 
-#if B_AVRIOT
- #include	"peripherals.h"
+#if C_UART
+	#include	"../uart/uart.h"							// Do debugowania
+#endif
+
+#if C_PERIPHERALS
+ #include		"../peripherals/peripherals.h"
 #endif
 
 //#if C_LOG
@@ -106,11 +109,12 @@ HARDWARE
 //#endif
 
 #if OS_USE_CONSOLE
- #include	"console.h"
+	#include	"../console/console.h"
 #endif
 
+// TODO: Po co to jest?
 #if OS_USE_TIMESET_COMMAND || OS_USE_TIME_COMMAND
- #include	"console.h"
+ #include		"../console/console.h"
 #endif
 
 #if OS_USE_TIME && OS_USE_TIME_RECOVERY

@@ -31,15 +31,12 @@ CHANGELOG
 #include <avr/io.h>
 
 #if C_CONSOLE
-	#include "console.h"
+	#include "../console/console.h"
 #endif
 
-#if C_I2C_MASTER
-	#include "i2c_master.h"
+#if C_UART
+	#include "../uart/uart.h"
 #endif
-
-#include "uart.h"
-#include "uart_config.h"
 
 
 #if B_AVRIOT

@@ -7,15 +7,15 @@
 // =========================
 
 #if C_CLOCK
-	#include "clock.h"
+	#include "clock/clock.h"
 #endif
 
 #if C_PERIPHERALS
-	#include "peripherals.h"
+	#include "peripherals/peripherals.h"
 #endif
 
 #if C_UART
-	#include "uart.h"
+	#include "uart/uart.h"
 #endif
 
 // =========================
@@ -28,11 +28,11 @@
 // =================
 
 #if C_CONSOLE
-	#include "console.h"
+	#include "console/console.h"
 #endif
 
 #if C_UCOSMOS
-	#include "uCosmos.h"
+	#include "uCosmos/uCosmos.h"
 #endif
 
 

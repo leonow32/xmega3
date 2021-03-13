@@ -2,7 +2,7 @@
 
 #if C_UCOSMOS
 
-#include "general_config.h"
+#include "../config/config.h"
 #include "uCosmos_defines.h"
 #include "uCosmos_config.h"
 #include "uCosmos.h"

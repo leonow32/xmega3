@@ -3,7 +3,7 @@
 #ifndef UART_CONFIG_H_
 #define UART_CONFIG_H_
 
-#include	"general_config.h"
+#include "../config/config.h"
 
 
 #if B_AVRIOT

@@ -14,7 +14,7 @@
 
 // Nag³ówki plików, których funkcje s¹ wywo³ywane przez wiersz poleceñ
 #if C_UCOSMOS
-	#include	"uCosmos.h"
+	#include	"../uCosmos/uCosmos.h"
 #endif
 
 #if C_I2C_MASTER
@@ -26,7 +26,7 @@
 #endif
 
 #if C_PERIPHERALS
-	#include	"peripherals.h"
+	#include	"../peripherals/peripherals.h"
 #endif
 
 #if C_ADC

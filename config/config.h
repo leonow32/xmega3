@@ -24,7 +24,7 @@ CHANGELOG
 
 // Komunikaty o b³êdach
 #if HW_CPU_ATtinyXX12 + HW_CPU_ATtinyXX14 + HW_CPU_ATtinyXX16 + HW_CPU_ATtinyXX17 + HW_CPU_ATmegaXX09 + HW_CPU_ATmegaXX08_28pin + HW_CPU_ATmegaXX08_32pin > 1
- #error "Selected more than one CPU"
+	#error "Selected more than one CPU"
 #endif
 
 #endif /* GENERAL_CONFIG_H_ */
