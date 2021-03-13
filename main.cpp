@@ -84,12 +84,6 @@ int main(void) {
 	// Software init
 	// =============
 	
-	
-	// =========
-	// Main loop
-	// =========
-	
-	
 	Uart_Write("\r\n=== START ===\r\n", &USART2);
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
 	Os_ResetSourceClear();
@@ -101,19 +95,17 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskGreen,	1200);
 		TaskAddMs(Peripherals_TaskBlue,		1300);
 	#endif
-		
+	
+	
+	// =========
+	// Main loop
+	// =========
+	
 	while(1) {
 		TaskScheduler();
 	}
 	
 	while(1) {
-		//PORTD.OUTSET = PIN0_bm;
-		//_delay_ms(1000);
-		//PORTD.OUTCLR = PIN0_bm;
-		//_delay_ms(1000);
-
-		//Uart_Write("Hello\r\n", &USART2);
-		
 		if(KEY_SW0_READ)					LED_BLUE_ON;
 		else								LED_BLUE_OFF;
 		
@@ -123,15 +115,6 @@ int main(void) {
 		if(KEY_SW0_READ && KEY_SW1_READ)	LED_YELLOW_ON;
 		else								LED_YELLOW_OFF;
 		
-		uint8_t ch;
-		ch = Uart_Read();
-		if(ch) {
-			Uart_Write(ch);
-		}
-
-// 		if(Uart_Read()) {
-// 			PORTD.OUTTGL = PIN0_bm;
-// 		}
 	}
 }
 

@@ -188,6 +188,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig">
+      <SubType>compile</SubType>
+    </None>
     <None Include=".gitignore">
       <SubType>compile</SubType>
     </None>
