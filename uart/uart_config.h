@@ -14,22 +14,24 @@
 	#define		UART2_USE					1
 
 	#if UART0_USE
+		#define	UART0_BAUD					0				// Not used	
 		#define	UART0_PORTA_01				1
 		#define UART0_PORTA_45				0
 	#endif
 
 	#if UART1_USE
+		#define	UART1_BAUD					0				// Connector
 		#define	UART1_PORTC_01				1
 	#endif
 
 	#if UART2_USE
+		#define	UART2_BAUD					115200			// Debug
 		#define	UART2_PORTF_01				1
 		#define	UART2_PORTF_45				0
 	#endif
 
 	// Domyœlny port
 	#define		UART_DEFAULT_PORT			USART2
-	#define		UART_DEFAUL_PORT_BACKUP		USART2
  
 	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
 	#define		UART_CONSOLE_INT			USART2_DRE_vect_num
@@ -41,11 +43,6 @@
 
 	// Tryb uœpienia je¿eli jest wykorzystywany AVR uCosmos
 	#define		UART_USE_UCOSMOS_SLEEP		0
-
-	// Prêdkoœæ transmisji
-	#define		UART0_BAUD					0				// Not used	
-	#define		UART1_BAUD					0				// Connector
-	#define		UART2_BAUD					57600			// Debug
 
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
@@ -59,11 +56,13 @@
  
 	#if HW_CPU_ATtinyXX12
 		#define	UART0_USE					1
+		#define	UART0_BAUD					115200			// Connected to...
 		#define	UART0_PORTA_12				1
 	#endif
 
 	#if HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17
 		#define	UART0_USE					1
+		#define	UART0_BAUD					115200			// Connected to...
 		#define	UART0_PORTA_12				1
 		#define	UART0_PORTB_23				0
 	#endif
@@ -74,15 +73,18 @@
 		#define	UART2_USE					1
 
 		#if UART0_USE
+			#define	UART0_BAUD				115200			// Connected to...
 			#define	UART0_PORTA_01			1
 			#define	UART0_PORTA_45			0
 		#endif
 
 		#if UART1_USE
+			#define	UART1_BAUD				115200			// Connected to...
 			#define	UART1_PORTC_01			1
 		#endif
 
 		#if UART2_USE
+			#define	UART2_BAUD				115200			// Connected to...
 			#define	UART2_PORTF_01			1
 		#endif
 	#endif
@@ -93,42 +95,49 @@
 		#define	UART2_USE					1
 
 		#if UART0_USE
+			#define	UART0_BAUD				115200			// Connected to...
 			#define	UART0_PORTA_01			1
 			#define	UART0_PORTA_45			0
 		#endif
 
 		#if UART1_USE
+			#define	UART1_BAUD				115200			// Connected to...
 			#define	UART1_PORTC_01			1
 		#endif
 
 		#if UART2_USE
+			#define	UART2_BAUD				115200			// Connected to...
 			#define	UART2_PORTF_01			1
 			#define	UART2_PORTF_45			0
 		#endif
 	#endif
 
-	#if HW_CPU_ATmegaXX09 && B_RPM_v005
+	#if HW_CPU_ATmegaXX09
 		#define		UART0_USE				1
 		#define		UART1_USE				1
 		#define		UART2_USE				1
 		#define		UART3_USE				1
 
 		#if UART0_USE
+			#define	UART0_BAUD				115200			// Connected to...
 			#define	UART0_PORTA_01			1
 			#define	UART0_PORTA_45			0
 		#endif
 
 		#if UART1_USE
+			#define	UART1_BAUD				115200			// Connected to...
 			#define	UART1_PORTC_01			1
 			#define	UART1_PORTC_45			0
 		#endif
 
 		#if UART2_USE
+			#define	UART2_BAUD				115200			// Connected to...
 			#define	UART2_PORTF_01			0
 			#define	UART2_PORTF_45			1
 		#endif
 
 		#if UART3_USE
+			#define	UART3_BAUD				115200			// Connected to...
 			#define	UART3_PORTB_01			1
 			#define	UART3_PORTB_45			0
 		#endif
@@ -136,7 +145,6 @@
 
 	// Domyœlny port
 	#define		UART_DEFAULT_PORT			USART2
-	#define		UART_DEFAUL_PORT_BACKUP		USART2
 
 	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
 	#define		UART_CONSOLE_INT			USART2_DRE_vect_num
@@ -148,12 +156,6 @@
 
 	// Tryb uœpienia je¿eli jest wykorzystywany AVR uCosmos
 	#define		UART_USE_UCOSMOS_SLEEP		0
-
-	// Prêdkoœæ transmisji
-	#define		UART0_BAUD					57600			// Not used
-	#define		UART1_BAUD					57600			// Connector
-	#define		UART2_BAUD					57600			// Debug
-	#define		UART3_BAUD					57600			// Other
 
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255

@@ -15,6 +15,7 @@ UWAGI I POMYS£Y
 
 
 CHANGELOG
+2.18	-	Optymalizacja uart_config.h
 2.17	+	Dodanie funkcji CRC kontrolnego
 2.16	+	Dodanie funkcji XOR Kontrolny
 		+	void Uart_Resend(USART_t * Port);
