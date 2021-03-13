@@ -8,6 +8,7 @@
 #Build Directories
 [Dd]ebug/
 [Rr]elease/
+AVR-IoT/
 
 #Build Results
 *.o
