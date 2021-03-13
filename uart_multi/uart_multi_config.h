@@ -8,7 +8,7 @@
 
 #if B_AVRIOT
 
-	// Wybór, które porty UART maj¹ byæ u¿ywane
+	// Które porty UART maj¹ byæ u¿ywane
 	#define		UART0_USE					0
 	#define		UART1_USE					0
 	#define		UART2_USE					1

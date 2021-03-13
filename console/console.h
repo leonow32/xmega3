@@ -58,8 +58,20 @@ HARDWARE
 #include <avr/io.h>
 #include <string.h>
 #include "console_config.h"
-#include "../uCosmos/uCosmos.h"
-#include "../uart/uart.h"
+
+#if C_UCOSMOS
+	#include	"../uCosmos/uCosmos.h"
+#else 
+	#error		"Component CONSOLE requires uCSOMOS" 
+#endif
+
+#if C_UART_SINGLE
+	#include	"../uart_single/uart_single.h"
+#elif C_UART_MULTI
+	#include	"../uart_multi/uart_multi.h"
+#else
+	#error		"This module requires UART component"
+#endif
 
 #if C_REMOTE
 	#include "remote.h"

@@ -1,26 +1,34 @@
+// ================
+// AVR_GCC Includes
+// ================
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-// =========================
-// Internal Hardware Icludes
-// =========================
+// ==========================
+// Internal Hardware Includes
+// ==========================
 
 #if C_CLOCK
-	#include "clock/clock.h"
+	#include	"clock/clock.h"
 #endif
 
 #if C_PERIPHERALS
-	#include "peripherals/peripherals.h"
+	#include	"peripherals/peripherals.h"
 #endif
 
-#if C_UART
-	#include "uart/uart.h"
+#if C_UART_SINGLE
+	#include	"uart_single/uart_single.h"
+#elif C_UART_MULTI
+	#include	"uart_multi/uart_multi.h"
+#else
+	#error		"This module requires UART component"
 #endif
 
-// =========================
-// External Hardware Icludes
-// =========================
+// ==========================
+// External Hardware Includes
+// ==========================
 
 
 // =================
@@ -28,11 +36,11 @@
 // =================
 
 #if C_CONSOLE
-	#include "console/console.h"
+	#include	"console/console.h"
 #endif
 
 #if C_UCOSMOS
-	#include "uCosmos/uCosmos.h"
+	#include	"uCosmos/uCosmos.h"
 #endif
 
 
@@ -51,7 +59,7 @@ int main(void) {
 		Peripherals_Init();
 	#endif
 
-	#if C_UART
+	#if C_UART_MULTI || C_UART_SINGLE
 		Uart_Init();
 	#endif
 	

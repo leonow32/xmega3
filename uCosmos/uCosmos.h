@@ -95,12 +95,16 @@ HARDWARE
 #include		"uCosmos_defines.h"
 #include		"uCosmos_config.h"
 
-#if C_UART
-	#include	"../uart/uart.h"							// Do debugowania
+#if C_UART_SINGLE
+	#include	"../uart_single/uart_single.h"
+#elif C_UART_MULTI
+	#include	"../uart_multi/uart_multi.h"
+#else
+	#error		"This module requires UART component"
 #endif
 
 #if C_PERIPHERALS
- #include		"../peripherals/peripherals.h"
+	#include	"../peripherals/peripherals.h"
 #endif
 
 //#if C_LOG

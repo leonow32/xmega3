@@ -97,10 +97,10 @@ HARDWARE
 #include	<avr/interrupt.h>
 #include	<string.h>
 #include	<util/delay.h>
-#include	"uart_config.h"
+#include	"uart_multi_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
- #include	"uCosmos.h"
+	#include	"../uCosmos/uCosmos.h"
 #endif
 
 
@@ -118,6 +118,7 @@ struct UART_Buffer_t {
 	uint16_t	TxBufferCRC;
 };
 
+// TODO: spróbowaæ to wywaliæ
 extern USART_t * UART_PortOverride;
 
 // Inicjalizacja

@@ -1,6 +1,6 @@
 // Wersja 2.17
 
-#include "uart.h"
+#include "uart_multi.h"
 
 
 // Bufory programowe dla ka¿dego sprzêtowego portu

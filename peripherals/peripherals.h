@@ -31,11 +31,15 @@ CHANGELOG
 #include <avr/io.h>
 
 #if C_CONSOLE
-	#include "../console/console.h"
+	#include	"../console/console.h"
 #endif
 
-#if C_UART
-	#include "../uart/uart.h"
+#if C_UART_SINGLE
+	#include	"../uart_single/uart_single.h"
+#elif C_UART_MULTI
+	#include	"../uart_multi/uart_multi.h"
+#else
+	#error		"This module requires UART component"
 #endif
 
 
