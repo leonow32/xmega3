@@ -1,14 +1,14 @@
-// ================
+// ========================================
 // AVR_GCC Includes
-// ================
+// ========================================
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-// ==========================
+// ========================================
 // Internal Hardware Includes
-// ==========================
+// ========================================
 
 #if C_CLOCK
 	#include	"clock/clock.h"
@@ -19,21 +19,21 @@
 #endif
 
 #if C_UART_SINGLE
-	#include	"uart_single/uart_single.h"
+	#include	"uart/uart_single.h"
 #elif C_UART_MULTI
-	#include	"uart_multi/uart_multi.h"
+	#include	"uart/uart_multi.h"
 #else
 	#error		"This module requires UART component"
 #endif
 
-// ==========================
+// ========================================
 // External Hardware Includes
-// ==========================
+// ========================================
 
 
-// =================
+// ========================================
 // Software includes
-// =================
+// ========================================
 
 #if C_CONSOLE
 	#include	"console/console.h"
@@ -47,9 +47,9 @@
 // Main
 int main(void) {
 
-	// ======================
+	// ========================================
 	// Internal Hardware init
-	// ======================
+	// ========================================
 
 	#if C_CLOCK
 		Clock_Init();
@@ -65,24 +65,24 @@ int main(void) {
 	
 	sei();
 	
-	// ======================
+	// ========================================
 	// Internal Software Init
-	// ======================
+	// ========================================
 	
 	#if C_UCOSMOS
 		Os_Init();
 		Os_ConsoleInit();
 	#endif
 
-	// ======================
+	// ========================================
 	// External Hardware init
-	// ======================
+	// ========================================
 	
 	
 	
-	// =============
+	// ========================================
 	// Software init
-	// =============
+	// ========================================
 	
 	Uart_Write("\r\n=== START ===\r\n");
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
@@ -101,23 +101,12 @@ int main(void) {
 	#endif
 	
 	
-	// =========
+	// ========================================
 	// Main loop
-	// =========
+	// ========================================
 	
 	while(1) {
 		TaskScheduler();
 	}
-	
-// 	while(1) {
-// 		if(KEY_SW0_READ)					LED_BLUE_ON;
-// 		else								LED_BLUE_OFF;
-// 		
-// 		if(KEY_SW1_READ)					LED_GREEN_ON;
-// 		else								LED_GREEN_OFF;
-// 		
-// 		if(KEY_SW0_READ && KEY_SW1_READ)	LED_YELLOW_ON;
-// 		else								LED_YELLOW_OFF;
-// 	}
 }
 

@@ -66,9 +66,9 @@ HARDWARE
 #endif
 
 #if C_UART_SINGLE
-	#include	"../uart_single/uart_single.h"
+	#include	"../uart/uart_single.h"
 #elif C_UART_MULTI
-	#include	"../uart_multi/uart_multi.h"
+	#include	"../uart/uart_multi.h"
 #else
 	#error		"This module requires UART component"
 #endif

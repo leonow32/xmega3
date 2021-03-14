@@ -15,17 +15,18 @@ UWAGI I POMYS£Y
 
 
 CHANGELOG
+3.0.0	+	Utworzenie wersji signle i multi
 2.18	-	Optymalizacja uart_config.h
 2.17	+	Dodanie funkcji CRC kontrolnego
 2.16	+	Dodanie funkcji XOR Kontrolny
-		+	void Uart_Resend(USART_t * Port);
+		+	void Uart_Resend(P);
 2.15	+	Wyœwietlanie liczb dziesiêtnych ze znakiem
-			void Uart_WriteDec(int32_t Value, USART_t * Port);
-2.14	+	Prosta optymalizacja poprzez dodanie funkcji void Uart__WriteNibble(uint8_t Nibble, USART_t * Port), oszczêdnoœæ 6B
+			void Uart_WriteDec(int32_t Value, P);
+2.14	+	Prosta optymalizacja poprzez dodanie funkcji void Uart__WriteNibble(uint8_t Nibble, P), oszczêdnoœæ 6B
 2.13	*	Dodanie resetu watchdoga w pêtli w funkcji Uart_Dump()
 2.12	+	Dodano funkcje do w³¹czania i wy³¹czanie odbiornika w celu oszczêdzania energii
-		+	void Uart_RxDisable(USART_t * Port = &UART_DEFAULT_PORT); - automatyczne wy³¹czanie nadajnika pozwala zaoszczêdziæ pr¹c ok 5uA @ 5V
-		+	void Uart_RxEnable(USART_t * Port = &UART_DEFAULT_PORT);
+		+	void Uart_RxDisable(); - automatyczne wy³¹czanie nadajnika pozwala zaoszczêdziæ pr¹c ok 5uA @ 5V
+		+	void Uart_RxEnable();
 2.11	+	Implementacja przerwanie TXC - wyzwalanego po zakoñczeniu transmisji
 		+	Poprawienie funkcji Uart_WaitForTxComplete()
 		+	Automatyczne w³¹czanie transmitera w Uart_Write() i wy³¹czanie w przerwaniu TXC, kiedy nic nie jest nadawane
@@ -34,10 +35,10 @@ CHANGELOG
 			rejestru DIR pozostawa³o bez efektu. Pomog³a zamiana kolejnoœci - najpierw w³¹czanie nadajnika, potem ustawienie Tx
 			jako wyjœcie. Potencjalnie b³¹d w procesorze. Wymaga dok³adniejszej weryfikacji.
 2.09	*	B³ad w funkcji Uart_Disable()
-2.08	+	void Uart_Disable(USART_t * Port);
-		+	void UART_Enable(USART_t * Port);
-2.07	+	void Uart_RxBufferFlush(USART_t * Port);
-		+	void Uart_TxBufferFlush(USART_t * Port);
+2.08	+	void Uart_Disable(P);
+		+	void UART_Enable(P);
+2.07	+	void Uart_RxBufferFlush(P);
+		+	void Uart_TxBufferFlush(P);
 2.06	+	Kontynuacja prac przy przerabianiu biblioteki na 4 porty
 2.05	+	Kontynuacja prac przy przerabianiu biblioteki na 4 porty
 2.04	*	Kontynuacja prac przy przerabianiu biblioteki na 4 porty
@@ -90,22 +91,22 @@ HARDWARE
 		-	przerwania
 */
 
-#ifndef UART_H_
-#define UART_H_
+#ifndef UART_SINGLE_H_
+#define UART_SINGLE_H_
+
+#if C_UART_SINGLE
 
 #include	<avr/io.h>
 #include	<avr/interrupt.h>
 #include	<string.h>
 #include	<util/delay.h>
-#include	"uart_multi_config.h"
+#include	"uart_single_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
-
-
-// Definicja struktury bufora pieœcieniowego, u¿ywanego przez wszystkie UARTy
+// Definicja struktury bufora pieœcieniowego
 struct UART_Buffer_t {
 	uint8_t		RxBuffer[UART_RX_BUFFER_LENGTH];
 	uint8_t		RxBufferHead;
@@ -122,45 +123,66 @@ struct UART_Buffer_t {
 extern USART_t * UART_PortOverride;
 
 // Inicjalizacja
-void		Uart_Init();
-void		Uart_TxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_TxEnable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_RxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_RxEnable(USART_t * Port = &UART_DEFAULT_PORT);
+void		UartSingle_Init(void);
+void		UartSingle_TxDisable(void);
+void		UartSingle_TxEnable(void);
+void		UartSingle_RxDisable(void);
+void		UartSingle_RxEnable(void);
 
 // Zapisywanie
-void		Uart_Write(uint8_t Data, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Write(const char * Text, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteNL(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDec(uint32_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int8_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int32_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteBin(uint8_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint8_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint16_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint32_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Resend(USART_t * Port);
+void		UartSingle_Write(uint8_t Data);
+void		UartSingle_Write(const char * Text);
+void		UartSingle_WriteNL(void);
+void		UartSingle_WriteDec(uint32_t Value);
+void		UartSingle_WriteDecSigned(int8_t Value);
+void		UartSingle_WriteDecSigned(int32_t Value);
+void		UartSingle_WriteBin(uint8_t Data, const uint8_t Separator = 0);
+void		UartSingle_WriteHex(const uint8_t Data, const uint8_t Separator = 0);
+void		UartSingle_WriteHex(const uint16_t Data, const uint8_t Separator = 0);
+void		UartSingle_WriteHex(const uint32_t Data, const uint8_t Separator = 0);
+void		UartSingle_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0);
+void		UartSingle_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue = 0);
+void		UartSingle_Resend(P);
 
 // Odczytywanie
-uint8_t		Uart_Read(USART_t * Port = &UART_DEFAULT_PORT);
-uint8_t		Uart_ReceivedCnt(USART_t * Port = &UART_DEFAULT_PORT);
+uint8_t		UartSingle_Read();
+uint8_t		UartSingle_ReceivedCnt();
 
 // Funkcje pomocnicze
-void		Uart_RxBufferFlush(volatile UART_Buffer_t * ProgBuf);
-void		Uart_RxBufferFlush(USART_t * Port);
-void		Uart_TxBufferFlush(volatile UART_Buffer_t * ProgBuf);
-void		Uart_TxBufferFlush(USART_t * Port);
-void		Uart_WaitForTxComplete(USART_t * Port);		
-void		Uart_WaitForTxComplete(void);
-
-// CRC kontrolne
-void		Uart_TxCrcClear(USART_t * Port);
-uint16_t	Uart_TxCrcGet(USART_t * Port);
+void		UartSingle_RxBufferFlush(void);
+void		UartSingle_TxBufferFlush(void);
+void		UartSingle_WaitForTxComplete(void);
 
 // Wycofane, definicje dla kompatybilnoœci wstecznej
-#define		Uart_WriteProgmem(x)	Uart_Write(x)
-#define		Uart_WriteTxt(x)		Uart_Write(x)
+#define		Uart_WriteProgmem(x)	UartSingle_Write(x)
+#define		Uart_WriteTxt(x)		UartSingle_Write(x)
 
-#endif /* UART_H_ */
+// Mockupy w celu kompatybilnoœci z bibliotek¹ w wersji multi
+#define		Uart_TxDisable(...)													UartSingle_TxDisable()
+#define		Uart_TxEnable(...)													UartSingle_TxEnable()
+#define		Uart_RxDisable(...)													UartSingle_RxDisable()
+#define		Uart_RxEnable(...)													UartSingle_RxEnable()
+#define		Uart_Write(Data, ...)													UartSingle_Write(Data)
+#define		Uart_WriteNL(...)														UartSingle_WriteNL()
+#define		Uart_WriteDec(Value, ...)												UartSingle_WriteDec(Value)
+#define		Uart_WriteDecSigned(Value, ...)										UartSingle_WriteDecSigned(Value)
+#define		Uart_WriteBin(Data, Separator, ...)									UartSingle_WriteBin(Data, Separator)
+#define		Uart_WriteHex(Data, ...)									UartSingle_WriteHex(Data)
+#define		Uart_WriteHex(Data, Separator, ...)									UartSingle_WriteHex(Data, Separator)
+#define		Uart_WriteHexString(String, Length, Separator, BytesInRow, ...)		UartSingle_WriteHexString(String, Length, Separator, BytesInRow)
+#define		Uart_Dump(String, Length, AddressStartValue, ...)						UartSingle_Dump(String, Length, AddressStartValue)
+#define		Uart_Resend(...)														UartSingle_Resend()
+#define		Uart_Read(...)														UartSingle_Read()
+#define		Uart_ReceivedCnt(...)													UartSingle_ReceivedCnt()
+#define		Uart_RxBufferFlush(...)												UartSingle_RxBufferFlush()
+#define		Uart_TxBufferFlush(...)												UartSingle_TxBufferFlush()
+#define		Uart_WaitForTxComplete(...)											UartSingle_WaitForTxComplete()
+
+// Kontrola b³êdów
+#if C_UART_SINGLE && C_UART_MULTI
+	#error "Can't use C_UART_SINGLE and C_UART_MULTI at the same time"
+#endif
+
+#endif
+
+#endif /* UART_SINGLE_H_ */

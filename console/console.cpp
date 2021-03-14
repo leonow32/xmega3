@@ -27,7 +27,7 @@ Console_Struct::Console_Struct(USART_t * UartInstance, uint8_t Flags) {
 void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 	
 	// Pobieranie danych z UART
-	while(Uart_ReceivedCnt(ConsoleInstance->UartInstance)) {	
+	while(Uart_ReceivedCnt(ConsoleInstance->UartInstance)) {
 		
 		// Przekazywanie znaków z bufora UART do bufora konsoli i podejmywanie dalszych dzia³a w zale¿noœci od Console_Result
 		Console_Res_t Console_Result;
@@ -68,7 +68,7 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				// Prolog odpowiedzi
 				Uart_TxBufferFlush(ConsoleInstance->UartInstance);
 				Uart_Write(ACK, ConsoleInstance->UartInstance);
-				Uart_TxCrcClear(ConsoleInstance->UartInstance);
+				//Uart_TxCrcClear(ConsoleInstance->UartInstance);
 				//_delay_us(3);
 				
 				
@@ -79,10 +79,10 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				
 				// Epilog odpowiedzi	
 				if(ConsoleInstance->Flags & FLAGS_M2M_CMD) {		
-					uint16_t CRC = Uart_TxCrcGet(ConsoleInstance->UartInstance);
+					//uint16_t CRC = Uart_TxCrcGet(ConsoleInstance->UartInstance);
 					Uart_Write(US, ConsoleInstance->UartInstance);
-					Uart_Write(uint8_t(CRC >> 8), ConsoleInstance->UartInstance);
-					Uart_Write(uint8_t(CRC & 0x00FF), ConsoleInstance->UartInstance);
+					//Uart_Write(uint8_t(CRC >> 8), ConsoleInstance->UartInstance);
+					//Uart_Write(uint8_t(CRC & 0x00FF), ConsoleInstance->UartInstance);
 					Uart_Write(ConsoleInstance->Token, ConsoleInstance->UartInstance);
 				}
 				
@@ -303,7 +303,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 					//ERROR_ON;
 					
 					// Ponowne wys³anie bufora
-					Uart_Resend(ConsoleInstance->UartInstance);
+					//Uart_Resend(ConsoleInstance->UartInstance);
 					
 					// Czyszczenie bufora
 // 					ConsoleInstance->ReceivedCnt = 0;
@@ -388,7 +388,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 			// ¯¹danie ponownego przes³ania odpowiedzi na poprzednie polecenie
 			case DC3:
 				Uart_Write("\r\n[Response DC3] ");
-				Uart_Resend(ConsoleInstance->UartInstance);
+				//Uart_Resend(ConsoleInstance->UartInstance);
 				break;
 		
 		

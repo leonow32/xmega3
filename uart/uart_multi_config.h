@@ -1,7 +1,7 @@
-// Wersja 2.16
+// Wersja 3.0.0
 
-#ifndef UART_CONFIG_H_
-#define UART_CONFIG_H_
+#ifndef UART_MULTI_CONFIG_H_
+#define UART_MULTI_CONFIG_H_
 
 #include "../config/config.h"
 
@@ -197,4 +197,4 @@
 
 
 
-#endif /* UART_CONFIG_H_ */
+#endif /* UART_MULTI_CONFIG_H_ */

@@ -1,4 +1,6 @@
-// Wersja 2.17
+// Wersja 3.0.0
+
+#if C_UART_MULTI
 
 #include "uart_multi.h"
 
@@ -250,7 +252,7 @@ static void Uart__InitPinsForUsart3(void) {
 #endif
 
 
-// Inicjalizacja zgodnie z konfiguracj¹ w pliku uart_config.h
+// Inicjalizacja zgodnie z konfiguracj¹ w pliku config
 void Uart_Init() {
 		
 	// Konfiguracja UART0
@@ -959,3 +961,4 @@ uint16_t Uart_TxCrcGet(USART_t * Port) {
 	return Uart__GetProgBuffer(Port)->TxBufferCRC;
 }
 
+#endif
