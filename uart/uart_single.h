@@ -1,7 +1,7 @@
 /*
 UWAGI I POMYS£Y
 		*	Obecny sposób implementacji uœpienia w AVR uCosmos zabrania wejœcia w tryb uœpienia IDLE je¿eli w buforze odbiorczym s¹ jakieœ dane do odczytania.
-			Nastêpuje wtedy kolejuny obieg Schedulera. W przypadku je¿eli s¹ jakieœ dane w buforze nadawczym to mo¿na wejœæ w tryb uœpienia IDLE, poniewa¿ przerwanie
+			Nastêpuje wtedy kolejny obieg Schedulera. W przypadku je¿eli s¹ jakieœ dane w buforze nadawczym to mo¿na wejœæ w tryb uœpienia IDLE, poniewa¿ przerwanie
 			od DRE bêdzie wybudza³o procesor. W przysz³oœci dodaæ obs³ugê trybów STANDBY I POWER DOWN
 		*	Dodaæ funkcjê do zmieny baud rate
 		*	Dodaæ auto baud
@@ -12,6 +12,11 @@ UWAGI I POMYS£Y
 			5MHz	-	38400
 			2MHz	-	19200 (wybudzanie dzia³a na 38400, ale s¹ b³êdy synchronizacji)
 			1MHz	-	9600 (wybudzanie dzia³a na 19200, ale s¹ b³êdy synchronizacji)
+			
+			Maksymalna prêdkoœæ nadawania
+			F_CPU		TX		RX
+			20MHz		1Mbit	230400
+			10MHZ		460800	230400
 
 
 CHANGELOG
@@ -23,7 +28,7 @@ CHANGELOG
 2.15	+	Wyœwietlanie liczb dziesiêtnych ze znakiem
 			void Uart_WriteDec(int32_t Value, P);
 2.14	+	Prosta optymalizacja poprzez dodanie funkcji void Uart__WriteNibble(uint8_t Nibble, P), oszczêdnoœæ 6B
-2.13	*	Dodanie resetu watchdoga w pêtli w funkcji Uart_Dump()
+2.13	*	Dodanie resetu watchd	oga w pêtli w funkcji Uart_Dump()
 2.12	+	Dodano funkcje do w³¹czania i wy³¹czanie odbiornika w celu oszczêdzania energii
 		+	void Uart_RxDisable(); - automatyczne wy³¹czanie nadajnika pozwala zaoszczêdziæ pr¹c ok 5uA @ 5V
 		+	void Uart_RxEnable();
@@ -109,6 +114,17 @@ HARDWARE
 // TODO: Zoptymalizowaæ to
 #define UART_DEFAULT_PORT	NULL
 
+// DEBUG
+#define PIN_A_INIT		PORTB.DIRSET = PIN1_bm
+#define PIN_A_ON		VPORTB.OUT	|=	PIN1_bm
+#define PIN_A_OFF		VPORTB.OUT	&= ~PIN1_bm
+#define PIN_B_INIT		PORTB.DIRSET = PIN4_bm
+#define PIN_B_ON		VPORTB.OUT	|=	PIN4_bm
+#define PIN_B_OFF		VPORTB.OUT	&= ~PIN4_bm
+
+// Definicje statusów
+#define UART_TX_BUSY		uint8_t(0b00000001)
+
 // Definicja struktury bufora pieœcieniowego
 struct UART_Buffer_t {
 	uint8_t		RxBuffer[UART_RX_BUFFER_LENGTH];
@@ -119,7 +135,8 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferHead;
 	uint8_t		TxBufferTail;
 	uint8_t		TxBufferCnt;
-	uint16_t	TxBufferCRC;
+	//uint16_t	TxBufferCRC;
+	uint8_t		Status;
 };
 
 // TODO: spróbowaæ to wywaliæ

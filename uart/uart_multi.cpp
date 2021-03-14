@@ -280,7 +280,6 @@ void Uart_Init() {
 	#endif
 	
 	// Przerwania
-	CPUINT.CTRLA	|=	CPUINT_LVL0RR_bm;										// Algorytm round-robin dla przerwañ o tym samym priorytecie
 	CPUINT.LVL1VEC	=	UART_CONSOLE_INT;										// Jeœli wrzucamy coœ do bufora UART w przerwaniu, 
 																				// to przerwanie opró¿nienia bufora musi mieæ wiêkszy priortet, 
 																				// bo inaczej w przypadku przepe³nienia bufora procesor siê zawiesi

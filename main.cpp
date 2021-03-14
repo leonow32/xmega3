@@ -63,6 +63,8 @@ int main(void) {
 		Uart_Init();
 	#endif
 	
+	// Przerwania
+	CPUINT.CTRLA |=	CPUINT_LVL0RR_bm;			// Algorytm round-robin dla przerwañ o tym samym priorytecie
 	sei();
 	
 	// ========================================
@@ -96,9 +98,9 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskBlue,		1300);
 	#endif
 	
-	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
-		TaskAddMs(Peripherals_TaskYellow,	1000);
-	#endif
+// 	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
+// 		TaskAddMs(Peripherals_TaskYellow,	1000);
+// 	#endif
 	
 	
 	// ========================================
@@ -108,6 +110,13 @@ int main(void) {
 // 	while(1) {
 // 		Uart_Write("0123456789");
 // 		_delay_ms(1000);
+// 	}
+	
+// 	while(1) {
+// 		uint8_t Received = Uart_ReceivedCnt();
+// 		if(Received > 10) {
+// 			Uart_Write(Uart_Read());
+// 		}
 // 	}
 	
 	while(1) {

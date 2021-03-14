@@ -4,7 +4,6 @@
 
 #include "uart_single.h"
 
-
 // Bufor programowy
 volatile UART_Buffer_t UART_ProgBuf;
 
@@ -14,7 +13,11 @@ USART_t * UART_PortOverride = NULL;
 
 // Inicjalizacja zgodnie z konfiguracj¹ w pliku configS
 void Uart_Init(void) {
-		
+	
+	// DEBUG
+	PIN_A_INIT;
+	PIN_B_INIT;
+	
 	// Konfiguracja dla ATtinyXX14/16/17/18 - port podstawowy
 	#if UART0_PORTB_23 && (HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
 		PORTMUX.CTRLB	&= ~PORTMUX_USART0_ALTERNATE_gc;
@@ -124,75 +127,10 @@ void Uart_Init(void) {
 	// Czyszczenie bufora
 	//memset(UART_ProgBuf, 0, sizeof(UART_ProgBuf));
 	
-	// Przerwania
-	CPUINT.CTRLA				|=	CPUINT_LVL0RR_bm;							// Algorytm round-robin dla przerwañ o tym samym priorytecie
 	CPUINT.LVL1VEC				=	UART_CONSOLE_INT;							// Jeœli wrzucamy coœ do bufora UART w przerwaniu, 
 																				// to przerwanie opró¿nienia bufora musi mieæ wiêkszy priortet, 
 																				// bo inaczej w przypadku przepe³nienia bufora procesor siê zawiesi
 }
-
-
-// Wy³¹czenie transmitera (domyœlnie po inicjalizacji jest w³¹czony)
-/*
-void Uart_TxDisable(void) {
-	cli();
-	USARTX.CTRLB		&=	~USART_TXEN_bm;
-	sei();
-}*/
-
-
-// W³¹czenie transmitera (domyœlnie po inicjalizacji jest w³¹czony)
-// void Uart_TxEnable(void) {
-// 	cli();
-// 
-// 	// W³¹czenie nadajnika
-// 	USARTX.CTRLB		|=	USART_TXEN_bm;
-// 
-// /*
-// 	// Po wy³¹czeniu nadajnika UART pin Tx ustawiany jest automatycznie jako wejœcie i trzeba go ponownie skonfigurowaæ jako wyjœcie
-// 	// UWAGA - chyba jest tu jakiœ problem z procesorem, bo jeœli ustawienie pinów bêdzie przez ponownym w³¹czeniem nadajnika,
-// 	// to wpisanie 1 do rejestru DIR nie daje efektu!?
-// 	#if UART0_USE
-// 		if(Port == &USART0) {
-// 			Uart__InitPinsForUsart0();
-// 		}
-// 	#endif
-// 	
-// 	#if UART1_USE
-// 		if(Port == &USART1) {
-// 			Uart__InitPinsForUsart1();
-// 		}
-// 	#endif
-// 	
-// 	#if UART2_USE
-// 		if(Port == &USART2) {
-// 			Uart__InitPinsForUsart2();
-// 		}
-// 	#endif
-// 	
-// 	#if UART3_USE
-// 		if(Port == &USART3) {
-// 			Uart__InitPinsForUsart3();
-// 		}
-// 	#endif	
-// */
-// 	sei();
-// }
-
-
-// Wy³¹czenie odbiornika (domyœlnie po inicjalizacji jest w³¹czony)
-/*
-void Uart_RxDisable(USART_t * Port) {
-	Port->CTRLB		&=	~USART_RXEN_bm;
-}*/
-
-
-// W³¹czenie odbiornika (domyœlnie po inicjalizacji jest w³¹czony)
-/*
-void Uart_RxEnable(USART_t * Port) {
-	Port->CTRLB		|=	USART_RXEN_bm;
-}*/
-
 
 
 // ====================
@@ -203,82 +141,69 @@ void Uart_RxEnable(USART_t * Port) {
 // Wysy³anie 1 bajtu danych
 void Uart_Write(uint8_t Data, USART_t * Port) {
 	
-	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy 
-/*	if((Port->CTRLB & USART_TXEN_bm) == 0) {								
-		Uart_TxEnable(Port);													
-
-		// Je¿eli jest u¿ywana blokada uœpienia
-		#if UART_USE_UCOSMOS_SLEEP
-			OS_SLEEP_DISABLE;													// Ustawienie blokady uœpienia
-		#endif
-	}*/
+	// Ustawienie flagi zajêtoœci transmitera
+	UART_ProgBuf.Status |= UART_TX_BUSY;
 	
 	// Procedura zapisu danych do bufora sprzêtowego lub programowego
 	USARTX.STATUS		=	USART_TXCIF_bm;										// Kasowanie flagi koñca nadawania
-// 	if(!(Port->CTRLA & USART_DREIE_bm)) {										// Jeœli DRE jest w³¹czone to znaczy, ¿e mamy ju¿ rozpoczêt¹ transmisjê
-// 		Port->TXDATAL	=	Data;												// Wpisanie danych do bufora nadawczego i rozpoczêcie transmisji
-// 		Port->CTRLA		=	USART_DREIE_bm |									// W³¹czenie przerwañ od DRE...
-// 							USART_RXCIE_bm |									// ...a RX...
-// 							USART_TXCIE_bm;										// ...oraz TX ju¿ wczeœniej by³o w³¹czone
-// 	} 
-// 	else {																		// Bufor sprzêtowy pe³ny
-		while(UART_ProgBuf.TxBufferCnt == UART_TX_BUFFER_LENGTH) {					// Sprawdzenie czy bufor programowy pusty lub czekanie a¿ bêdzie wolne miejsce
-			#if UART_BREAK_ON_BUFFER_FULL								
-				asm volatile("break");											// Zatrzymanie jeœli bufor przepe³niony
-			#endif
-		}
+	
+	while(UART_ProgBuf.TxBufferCnt == UART_TX_BUFFER_LENGTH) {					// Sprawdzenie czy bufor programowy pusty lub czekanie a¿ bêdzie wolne miejsce
+		#if UART_BREAK_ON_BUFFER_FULL
+			asm volatile("break");												// Zatrzymanie jeœli bufor przepe³niony
+		#endif
+	}
 		
-		cli();																	// Wy³¹czenie przerwañ, aby nie dopuœciæ do sytuacji, kiedy TxBuffer by³by jednoczeœnie modyfikowany w przerwaniu
-		UART_ProgBuf.TxBufferCnt++;													// Zwiêkszenie licznika znaków w buforze nadawczym
-		UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferHead] = Data;							// Wpisanie znaku do bufora na pocz¹tek kolejki FIFO
+	cli();																		// Wy³¹czenie przerwañ, aby nie dopuœciæ do sytuacji, kiedy TxBuffer by³by jednoczeœnie modyfikowany w przerwaniu
+	UART_ProgBuf.TxBufferCnt++;													// Zwiêkszenie licznika znaków w buforze nadawczym
+	UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferHead] = Data;					// Wpisanie znaku do bufora na pocz¹tek kolejki FIFO
 		
-		if(++UART_ProgBuf.TxBufferHead == UART_TX_BUFFER_LENGTH) {					// Zapis ++TxBufferHead oszczêdza pamiêæ o 4B
-			UART_ProgBuf.TxBufferHead = 0;											// Przekreœcenie siê bufora pierœcieniowego
-		}
+	if(++UART_ProgBuf.TxBufferHead == UART_TX_BUFFER_LENGTH) {					// Zapis ++TxBufferHead oszczêdza pamiêæ o 4B
+		UART_ProgBuf.TxBufferHead = 0;											// Przekreœcenie siê bufora pierœcieniowego
+	}
 		
-		USARTX.CTRLA	=	USART_DREIE_bm |									// W³¹czenie przerwañ od DRE...
-							USART_RXCIE_bm |									// ...a RX...
-							USART_TXCIE_bm;										// ...oraz TX ju¿ wczeœniej by³o w³¹czone
-		sei();																	// Glabalne w³¹czenie przerwañ
-//	}
+	USARTX.CTRLA	=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
+						USART_RXCIE_bm |										// ...a RX...
+						USART_TXCIE_bm;											// ...oraz TX ju¿ wczeœniej by³o w³¹czone
+	sei();																		// Glabalne w³¹czenie przerwañ
 }
 
 
 // Przerwanie UART0 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
 ISR(USARTX_DRE_vect) {
-	if(UART_ProgBuf.TxBufferCnt) {													// Je¿eli w buforze programowym jest coœ do wys³ania
+	if(UART_ProgBuf.TxBufferCnt) {												// Je¿eli w buforze programowym jest coœ do wys³ania
 		
 		USARTX.STATUS	=	USART_TXCIF_bm;										// Kasowanie flagi koñca nadawania
-		UART_ProgBuf.TxBufferCnt--;													// Zmniejszenie liczby znaków w buforze nadawczym
-		USARTX.TXDATAL = UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail];					// Wysy³anie znaku z koñca kolejki FIFO
+		UART_ProgBuf.TxBufferCnt--;												// Zmniejszenie liczby znaków w buforze nadawczym
+		USARTX.TXDATAL = UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail];		// Wysy³anie znaku z koñca kolejki FIFO
 		
 		#if UART_CLEAR_BYTE_AFTER_READ											// W celach debugowych
-			UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail] = 0;							// Czyszczenie znaku w buforze programowym, który zosta³ skopiowany do bufora sprzêtowego
+			UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail] = 0;				// Czyszczenie znaku w buforze programowym, który zosta³ skopiowany do bufora sprzêtowego
 		#endif
 		
-		if(++UART_ProgBuf.TxBufferTail == UART_TX_BUFFER_LENGTH) {					// Umieszczenie ++ tutaj oszczêdza 4 bajty	
-			UART_ProgBuf.TxBufferTail = 0;											// Przekrêcenie siê bufora pierœcieniowego
+		if(++UART_ProgBuf.TxBufferTail == UART_TX_BUFFER_LENGTH) {				// Umieszczenie ++ tutaj oszczêdza 4 bajty	
+			UART_ProgBuf.TxBufferTail = 0;										// Przekrêcenie siê bufora pierœcieniowego
 		}
 	} 
 	else {																		// Bufor programowy pusty, koniec transmisji (ale bajty w buforze sprzêtowym ca³y czas s¹ jeszcze wysy³ane!)
-		USARTX.CTRLA		=	USART_RXCIE_bm |									// W³¹czenie przerwañ od DRE...
+		USARTX.CTRLA		=	USART_RXCIE_bm |								// W³¹czenie przerwañ od DRE...
 							USART_TXCIE_bm;										// ...a RX oraz TX ju¿ wczeœniej by³o w³¹czone
-	}	
+	}
 }
 
 
-// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 0
+// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji
 ISR(USARTX_TXC_vect) {
+	
 	// Kasowanie flagi przerwania
 	USARTX.STATUS	=	USART_TXCIF_bm;
-
-	// Wy³¹czenie transmitera
-	//USARTX.CTRLB		&= ~USART_TXEN_bm;
-
+	
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
 		OS_SLEEP_ENABLE;														// Zwolnienie blokady uœpienia
 	#endif
+	
+	// Czyszczenie flagi zajêtoœci transmitera
+	UART_ProgBuf.Status &= ~UART_TX_BUSY;
 }
 
 
@@ -387,7 +312,7 @@ void Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const ui
 		if((i%BytesInRow == 0) && i != 0) {
 			Uart_WriteNL();
 		}
-
+		
 		// Wyœwietlenie znaku
 		Uart_WriteHex(*(String+i), Separator);
 	}
@@ -401,19 +326,19 @@ void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVal
 	uint16_t LengthForHex	= Length;
 	uint16_t LengthForAscii	= Length;
 	uint16_t i = 0;
-
+	
 	Uart_Write("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
-
+	
 	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
 	do {
 		
 		// Zejœcie do nowej linii
 		Uart_WriteNL();
-
+		
 		// Wyœwietlenie adresu
 		Uart_WriteHex(uint16_t(i + AddressStartValue), ':');
 		Uart_Write(' ');
-
+		
 		// Wyœwietlenie HEX
 		for(uint8_t h=0; h<=15; h++) {
 			
@@ -445,86 +370,84 @@ void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVal
 		// Inkrementacja wskaŸników
 		wskaznik += 16;
 		i += 16;
-
+		
 		// Reset watchdoga
 		asm volatile("wdr");
-	} while(i <= Length-1 && i != 0);		// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
-
-
+	} while(i <= Length-1 && i != 0);											// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
 }
 
 
 // Ponowne wys³anie ca³ej zawartoœci bufora TX
 // Aby ta operacja dzia³a³a prawid³owo, wczeœniej nale¿y wywo³aæ Uart_TxBufferFlush i d³ugoœæ wysy³anego
 // ci¹gu znaków nie mo¿e przekroczyæ d³ugoœci bufora UART_TX_BUFFER_LENGTH
-// void Uart_Resend(USART_t * Port) {
-// 	
-// 	volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
-// // 	Uart_Write("\r\nHead: ");
-// // 	Uart_WriteDec(Buffer->TxBufferHead);
-// // 	Uart_Write("\r\nTail: ");
-// // 	Uart_WriteDec(Buffer->TxBufferTail);
-// // 	Uart_Write("\r\nCnt: ");
-// // 	Uart_WriteDec(Buffer->TxBufferCnt);
-// // 	Uart_WriteNL();
-// 	
-// 	// Wy³¹czenie przerwañ
-// 	cli();
-// 	
-// 	// Zerowanie wskaŸnika tail
-// 	
-// 	Buffer->TxBufferTail = 0;
-// 	
-// 	
-// // 	Uart_Write("\r\nHead: ");
-// // 	Uart_WriteDec(Buffer->TxBufferHead);
-// // 	Uart_Write("\r\nTail: ");
-// // 	Uart_WriteDec(Buffer->TxBufferTail);
-// // 	Uart_Write("\r\nCnt: ");
-// // 	Uart_WriteDec(Buffer->TxBufferCnt);
-// // 	Uart_WriteNL();
-// 
-// 	// Usuwanie ACK doklejonego na koñcu bufora
-// // 	if(Buffer->TxBuffer[Buffer->TxBufferHead - 1] == ACK) {
-// // 		Buffer->TxBuffer[--Buffer->TxBufferHead] = NUL;
-// // 	}
-// 	
-// 	Buffer->TxBufferCnt = Buffer->TxBufferHead;
-// 
-// 	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy
-// 	/*
-// 	if((Port->CTRLB & USART_TXEN_bm) == 0) {
-// 		Uart_TxEnable(Port);
-// 
-// 		// Je¿eli jest u¿ywana blokada uœpienia
-// 		#if UART_USE_UCOSMOS_SLEEP
-// 		OS_SLEEP_DISABLE;													// Ustawienie blokady uœpienia
-// 		#endif
-// 	}*/
-// 	
-// 	// Aktywowanie wysy³ania
-// 	Port->CTRLA		=	USART_DREIE_bm |									// W³¹czenie przerwañ od DRE...
-// 						USART_RXCIE_bm |									// ...a RX...
-// 						USART_TXCIE_bm;										// ...oraz TX ju¿ wczeœniej by³o w³¹czone
-// 	
-// 	// W³¹czenie przerwañ
-// 	sei();
-// 	
-// 	
-// 	
-// 	
-// 	//Uart_Write('x', Port);
-// 	
-// // 	Uart_Write("\r\nHead: ");
-// // 	Uart_WriteDec(Buffer->TxBufferHead);
-// // 	Uart_Write("\r\nTail: ");
-// // 	Uart_WriteDec(Buffer->TxBufferTail);
-// // 	Uart_Write("\r\nCnt: ");
-// // 	Uart_WriteDec(Buffer->TxBufferCnt);
-// // 	Uart_WriteNL();
-// 	
-// //	Uart_Write((const char *)Buffer->TxBuffer);
-// }
+void Uart_Resend(USART_t * Port) {
+	
+	//volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
+// 	Uart_Write("\r\nHead: ");
+// 	Uart_WriteDec(Buffer->TxBufferHead);
+// 	Uart_Write("\r\nTail: ");
+// 	Uart_WriteDec(Buffer->TxBufferTail);
+// 	Uart_Write("\r\nCnt: ");
+// 	Uart_WriteDec(Buffer->TxBufferCnt);
+// 	Uart_WriteNL();
+	
+	// Wy³¹czenie przerwañ
+	cli();
+	
+	// Zerowanie wskaŸnika tail
+	
+	UART_ProgBuf.TxBufferTail = 0;
+	
+	
+// 	Uart_Write("\r\nHead: ");
+// 	Uart_WriteDec(Buffer->TxBufferHead);
+// 	Uart_Write("\r\nTail: ");
+// 	Uart_WriteDec(Buffer->TxBufferTail);
+// 	Uart_Write("\r\nCnt: ");
+// 	Uart_WriteDec(Buffer->TxBufferCnt);
+// 	Uart_WriteNL();
+
+	// Usuwanie ACK doklejonego na koñcu bufora
+// 	if(Buffer->TxBuffer[Buffer->TxBufferHead - 1] == ACK) {
+// 		Buffer->TxBuffer[--Buffer->TxBufferHead] = NUL;
+// 	}
+	
+	UART_ProgBuf.TxBufferCnt = UART_ProgBuf.TxBufferHead;
+
+	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy
+	/*
+	if((Port->CTRLB & USART_TXEN_bm) == 0) {
+		Uart_TxEnable(Port);
+
+		// Je¿eli jest u¿ywana blokada uœpienia
+		#if UART_USE_UCOSMOS_SLEEP
+		OS_SLEEP_DISABLE;														// Ustawienie blokady uœpienia
+		#endif
+	}*/
+	
+	// Aktywowanie wysy³ania
+	Port->CTRLA		=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
+						USART_RXCIE_bm |										// ...a RX...
+						USART_TXCIE_bm;											// ...oraz TX ju¿ wczeœniej by³o w³¹czone
+	
+	// W³¹czenie przerwañ
+	sei();
+	
+	
+	
+	
+	//Uart_Write('x', Port);
+	
+// 	Uart_Write("\r\nHead: ");
+// 	Uart_WriteDec(Buffer->TxBufferHead);
+// 	Uart_Write("\r\nTail: ");
+// 	Uart_WriteDec(Buffer->TxBufferTail);
+// 	Uart_Write("\r\nCnt: ");
+// 	Uart_WriteDec(Buffer->TxBufferCnt);
+// 	Uart_WriteNL();
+	
+//	Uart_Write((const char *)Buffer->TxBuffer);
+}
 
 
 // ====================
@@ -535,30 +458,29 @@ void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVal
 // Funkcja pobieraj¹ca jeden znak z wybranego portu
 // Po odczytani znak z bufora programowego jest usuwany i automatycznie jest zwalniane miejsce na odbiór kolejnego znaku
 uint8_t Uart_Read(USART_t * Port) {
-		
+	
 	uint8_t Data;
-	if(UART_ProgBuf.RxBufferCnt) {													// Je¿eli jest coœ w buforze
+	if(UART_ProgBuf.RxBufferCnt) {												// Je¿eli jest coœ w buforze
 		
-		UART_ProgBuf.RxBufferCnt--;													// Zmniejszenie liczby znaków w buforze, bo zaraz odczytamy jeden z nich
-
+		UART_ProgBuf.RxBufferCnt--;												// Zmniejszenie liczby znaków w buforze, bo zaraz odczytamy jeden z nich
+		
 		// Je¿eli jest u¿ywana blokada uœpienia
 		#if UART_USE_UCOSMOS_SLEEP
-			if(UART_ProgBuf.RxBufferCnt == 0) {										// Je¿eli bufor za chwilê bêdzie pusty
+			if(UART_ProgBuf.RxBufferCnt == 0) {									// Je¿eli bufor za chwilê bêdzie pusty
 				OS_SLEEP_ENABLE;												// Zwolnienie blokady uœpienia
 			}
 		#endif
-
-		Data = UART_ProgBuf.RxBuffer[UART_ProgBuf.RxBufferTail];							// Odczytanie ogona bufora						
+		
+		Data = UART_ProgBuf.RxBuffer[UART_ProgBuf.RxBufferTail];				// Odczytanie ogona bufora						
 		
 		#if UART_CLEAR_BYTE_AFTER_READ											// Tylko w celach debugowych
-			UART_ProgBuf.RxBuffer[UART_ProgBuf.RxBufferTail] = 0;							// Czyszczenie bajtu w buforze po jego odczycie
+			UART_ProgBuf.RxBuffer[UART_ProgBuf.RxBufferTail] = 0;				// Czyszczenie bajtu w buforze po jego odczycie
 		#endif
 		
 		if(++UART_ProgBuf.RxBufferTail == UART_RX_BUFFER_LENGTH) {
-			UART_ProgBuf.RxBufferTail = 0;											// Inkrementacja ogona i kontrola przepe³nienia, zapis ++ w tej lini oszczêdza 2B ni¿ gdyby ++ by³o w kolejnej linii
+			UART_ProgBuf.RxBufferTail = 0;										// Inkrementacja ogona i kontrola przepe³nienia, zapis ++ w tej lini oszczêdza 2B ni¿ gdyby ++ by³o w kolejnej linii
 		}
 		
-		//Uart_Write(Data, Port);
 		return Data;
 	} 
 	else {																		// Je¿eli bufor jest pusty
@@ -569,22 +491,19 @@ uint8_t Uart_Read(USART_t * Port) {
 
 // Przerwanie od RXC w celu skopiowanie znaku odebranego przez UART do bufora programowego
 ISR(USARTX_RXC_vect) {
-	
-	// WskaŸnik do bufora portu UART, który zg³osi³ przerwanie
-	//volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
 
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
-		if(UART_ProgBuf.RxBufferCnt == 0) {											// Je¿eli bufor wczeœniej by³ pusty
+		if(UART_ProgBuf.RxBufferCnt == 0) {										// Je¿eli bufor wczeœniej by³ pusty
 			OS_SLEEP_DISABLE;													// Wy³¹czenie trybu uœpienia do czasu odebrania wszystkich znaków z bufora
 		}
 	#endif
 	
-	if(UART_ProgBuf.RxBufferCnt < UART_RX_BUFFER_LENGTH) {							// Kontrola wolnego miejsca w buforze
+	if(UART_ProgBuf.RxBufferCnt < UART_RX_BUFFER_LENGTH) {						// Kontrola wolnego miejsca w buforze
 		UART_ProgBuf.RxBufferCnt++;
 		UART_ProgBuf.RxBuffer[UART_ProgBuf.RxBufferHead] = USARTX.RXDATAL;
-		if(++UART_ProgBuf.RxBufferHead == UART_RX_BUFFER_LENGTH) {					// Zapis ++RxBufferHead oszczêdza pamiêæ o 2B
-			UART_ProgBuf.RxBufferHead = 0;											// Przepe³nienie indeksu head
+		if(++UART_ProgBuf.RxBufferHead == UART_RX_BUFFER_LENGTH) {				// Zapis ++RxBufferHead oszczêdza pamiêæ o 2B
+			UART_ProgBuf.RxBufferHead = 0;										// Przepe³nienie indeksu head
 		}
 	} 
 	else {																		// Przepe³nienie bufora
@@ -651,18 +570,8 @@ void Uart_TxBufferFlush(USART_t * Port) {
 
 // Czekanie a¿ transmisja dobiegnie koñca (przydatne przed wejœciem w stan uœpienia) - wersja dla wskazanego UART
 void Uart_WaitForTxComplete(USART_t * Port) {
-	if(UART_ProgBuf.TxBufferCnt == 0) {
-		return;
-	}
-	//while(USARTX.CTRLB & USART_TXEN_bm);
+	while(UART_ProgBuf.Status & UART_TX_BUSY);
 }
-
-
-// Czekanie a¿ tranmisja dobiegnie koñca - wersja dla wszystkich u¿ywanych UARTów
-// void Uart_WaitForTxComplete(void) {
-// 	while(USARTX.CTRLB & USART_TXEN_bm);
-// }
-
 
 
 #endif

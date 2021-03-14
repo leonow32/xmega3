@@ -14,8 +14,8 @@
 #if B_XNANO
 	
 	#if HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17
-		#define	UART0_PORTA_12				1
-		#define	UART0_PORTB_23				0
+		#define	UART0_PORTA_12				0
+		#define	UART0_PORTB_23				1
 	#endif
 	
 	// Baud rate
@@ -111,6 +111,11 @@
 	#define USARTX_TXC_vect		USART0_TXC_vect
 	#define USARTX_RXC_vect		USART0_RXC_vect
 #elif UART0_PORTA_45
+	#define USARTX				USART0
+	#define USARTX_DRE_vect		USART0_DRE_vect
+	#define USARTX_TXC_vect		USART0_TXC_vect
+	#define USARTX_RXC_vect		USART0_RXC_vect
+#elif UART0_PORTB_23
 	#define USARTX				USART0
 	#define USARTX_DRE_vect		USART0_DRE_vect
 	#define USARTX_TXC_vect		USART0_TXC_vect
