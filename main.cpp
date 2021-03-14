@@ -105,6 +105,11 @@ int main(void) {
 	// Main loop
 	// ========================================
 	
+// 	while(1) {
+// 		Uart_Write("0123456789");
+// 		_delay_ms(1000);
+// 	}
+	
 	while(1) {
 		TaskScheduler();
 	}

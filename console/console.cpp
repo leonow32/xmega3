@@ -110,11 +110,11 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				if(ConsoleInstance->Flags & FLAGS_USE_HMI) {
 					//ERROR_ON;
 					Uart_Write(NAK, ConsoleInstance->UartInstance);
-					Uart_Write("Bad command", ConsoleInstance->UartInstance);		
+					Uart_Write("Bad command", ConsoleInstance->UartInstance);
 					Uart_Write(ETX, ConsoleInstance->UartInstance);		
 				
 					// !! Debug
-					Uart_WaitForTxComplete(ConsoleInstance->UartInstance)		;
+					Uart_WaitForTxComplete(ConsoleInstance->UartInstance);
 				}
 				
 				#if REMOTE_DEBUG

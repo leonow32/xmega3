@@ -8,9 +8,12 @@
 // Bufor programowy
 volatile UART_Buffer_t UART_ProgBuf;
 
+// TODO: Wyci¹æ to
+USART_t * UART_PortOverride = NULL;
+
 
 // Inicjalizacja zgodnie z konfiguracj¹ w pliku configS
-void UartSingle_Init(void) {
+void Uart_Init(void) {
 		
 	// Konfiguracja dla ATtinyXX14/16/17/18 - port podstawowy
 	#if UART0_PORTB_23 && (HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
@@ -103,7 +106,7 @@ void UartSingle_Init(void) {
 									USART_RS485_OFF_gc;							// RS485 Mode
 
 	USARTX.CTRLB				=	USART_RXEN_bm |								// Receiver Enable
-								  //USART_TXEN_bm |								// Transmitter Enable
+									USART_TXEN_bm |								// Transmitter Enable
 									USART_SFDEN_bm |							// Start Frame Detection Enable
 								  //USART_ODME_bm |								// Open Drain Mode Enable
 									USART_RXMODE_NORMAL_gc ;					// Receiver Mode
@@ -119,7 +122,7 @@ void UartSingle_Init(void) {
 	#endif	
 	
 	// Czyszczenie bufora
-	memset(UART_ProgBuf, 0, sizeof(UART_ProgBuf));
+	//memset(UART_ProgBuf, 0, sizeof(UART_ProgBuf));
 	
 	// Przerwania
 	CPUINT.CTRLA				|=	CPUINT_LVL0RR_bm;							// Algorytm round-robin dla przerwañ o tym samym priorytecie
@@ -198,7 +201,7 @@ void Uart_RxEnable(USART_t * Port) {
 
 
 // Wysy³anie 1 bajtu danych
-void UartSingle_Write(uint8_t Data) {
+void Uart_Write(uint8_t Data, USART_t * Port) {
 	
 	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy 
 /*	if((Port->CTRLB & USART_TXEN_bm) == 0) {								
@@ -241,74 +244,36 @@ void UartSingle_Write(uint8_t Data) {
 }
 
 
-// Funkcja obs³uguj¹ca przerwania od zwolnienia siê miejsca w buforze
-static void UartSingle__InterruptDre(USART_t * Port, UART_Buffer_t * Buffer) {
-	
-	//volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
-	
-	if(Buffer->TxBufferCnt) {													// Je¿eli w buforze programowym jest coœ do wys³ania
+// Przerwanie UART0 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
+ISR(USARTX_DRE_vect) {
+	if(UART_ProgBuf.TxBufferCnt) {													// Je¿eli w buforze programowym jest coœ do wys³ania
 		
-		Port->STATUS	=	USART_TXCIF_bm;										// Kasowanie flagi koñca nadawania
-		Buffer->TxBufferCnt--;													// Zmniejszenie liczby znaków w buforze nadawczym
-		Port->TXDATAL = Buffer->TxBuffer[Buffer->TxBufferTail];					// Wysy³anie znaku z koñca kolejki FIFO
+		USARTX.STATUS	=	USART_TXCIF_bm;										// Kasowanie flagi koñca nadawania
+		UART_ProgBuf.TxBufferCnt--;													// Zmniejszenie liczby znaków w buforze nadawczym
+		USARTX.TXDATAL = UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail];					// Wysy³anie znaku z koñca kolejki FIFO
 		
 		#if UART_CLEAR_BYTE_AFTER_READ											// W celach debugowych
-			Buffer->TxBuffer[Buffer->TxBufferTail] = 0;							// Czyszczenie znaku w buforze programowym, który zosta³ skopiowany do bufora sprzêtowego
+			UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferTail] = 0;							// Czyszczenie znaku w buforze programowym, który zosta³ skopiowany do bufora sprzêtowego
 		#endif
 		
-		if(++Buffer->TxBufferTail == UART_TX_BUFFER_LENGTH) {					// Umieszczenie ++ tutaj oszczêdza 4 bajty	
-			Buffer->TxBufferTail = 0;											// Przekrêcenie siê bufora pierœcieniowego
+		if(++UART_ProgBuf.TxBufferTail == UART_TX_BUFFER_LENGTH) {					// Umieszczenie ++ tutaj oszczêdza 4 bajty	
+			UART_ProgBuf.TxBufferTail = 0;											// Przekrêcenie siê bufora pierœcieniowego
 		}
 	} 
 	else {																		// Bufor programowy pusty, koniec transmisji (ale bajty w buforze sprzêtowym ca³y czas s¹ jeszcze wysy³ane!)
-		Port->CTRLA		=	USART_RXCIE_bm |									// W³¹czenie przerwañ od DRE...
+		USARTX.CTRLA		=	USART_RXCIE_bm |									// W³¹czenie przerwañ od DRE...
 							USART_TXCIE_bm;										// ...a RX oraz TX ju¿ wczeœniej by³o w³¹czone
 	}	
 }
 
 
-// Przerwanie UART0 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
-#if UART0_USE
-ISR(USART0_DRE_vect) {
-//	INT_ON;
-	Uart__InterruptDre(&USART0, &UART0_ProgBuf);
-//	INT_OFF;
-}
-#endif
-
-
-// Przerwanie UART1 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
-#if UART1_USE
-ISR(USART1_DRE_vect) {
-	Uart__InterruptDre(&USART1, &UART1_ProgBuf);
-}
-#endif
-
-
-// Przerwanie UART2 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
-#if UART2_USE
-ISR(USART2_DRE_vect) {
-	Uart__InterruptDre(&USART2, &UART2_ProgBuf);
-}
-#endif
-
-
-// Przerwanie UART3 w celu wysy³ania danych - po zwolnieniu 1 bajtu w buforze sprzêtowym
-#if UART3_USE
-ISR(USART3_DRE_vect) {
-	Uart__InterruptDre(&USART3, &UART3_ProgBuf);
-}
-#endif
-
-
-// Funkcja obs³uguj¹ca przerwanie od zakoñczenia transmisji
-static void Uart__InterruptTx(USART_t * Port) {
-
+// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 0
+ISR(USARTX_TXC_vect) {
 	// Kasowanie flagi przerwania
-	Port->STATUS	=	USART_TXCIF_bm;
+	USARTX.STATUS	=	USART_TXCIF_bm;
 
 	// Wy³¹czenie transmitera
-	Port->CTRLB		&= ~USART_TXEN_bm;
+	//USARTX.CTRLB		&= ~USART_TXEN_bm;
 
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
@@ -317,58 +282,27 @@ static void Uart__InterruptTx(USART_t * Port) {
 }
 
 
-// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 0
-#if UART0_USE
-ISR(USART0_TXC_vect) {
-	Uart__InterruptTx(&USART0);
-}
-#endif
-
-
-// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 1
-#if UART1_USE
-ISR(USART1_TXC_vect) {
-	Uart__InterruptTx(&USART1);
-}
-#endif
-
-
-// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 2
-#if UART2_USE
-ISR(USART2_TXC_vect) {
-	Uart__InterruptTx(&USART2);
-}
-#endif
-
-
-// Ca³kowite opró¿nienie bufora sprzêtowego i zakoñczenie transmisji w USART 3
-#if UART3_USE
-ISR(USART3_TXC_vect) {
-	Uart__InterruptTx(&USART3);
-}
-#endif
-
 // ================================================
 // Funkcje wy¿szego poziomu do wysy³ania przez UART
 // ================================================
 
 
 // Zapis ci¹gu znaków
-void UartSingle_Write(const char * Text) {
-	while(*Text) UartSingle_Write(*Text++);
+void Uart_Write(const char * Text, USART_t * Port) {
+	while(*Text) Uart_Write(*Text++);
 }
 
 
 // Nowa linia
-void UartSingle_WriteNL(void) {
-	UartSingle_Write("\r\n");
+void Uart_WriteNL(USART_t * Port) {
+	Uart_Write("\r\n");
 }
 
 
 // Liczba dziesiêtna bez znaku
-void UartSingle_WriteDec(uint32_t Value) {
+void Uart_WriteDec(uint32_t Value, USART_t * Port) {
 	if(Value==0) {
-		UartSingle_Write('0');
+		Uart_Write('0');
 		return;
 	}
 	
@@ -383,69 +317,69 @@ void UartSingle_WriteDec(uint32_t Value) {
 	}
 	
 	while(i--) {
-		UartSingle_Write(cyfra[i]+48);
+		Uart_Write(cyfra[i]+48);
 	}
 }
 
 // Liczba dziesiêtna ze znakiem
-void UartSingle_WriteDecSigned(int8_t Value) {
+void Uart_WriteDecSigned(int8_t Value, USART_t * Port) {
 	if(Value < 0) {
-		UartSingle_Write('-');
+		Uart_Write('-');
 		Value = -Value;
 	}
-	UartSingle_WriteDec(uint8_t(Value));
+	Uart_WriteDec(uint8_t(Value));
 }
 
 // Liczba dziesiêtna ze znakiem
-void UartSingle_WriteDecSigned(int32_t Value) {
+void Uart_WriteDecSigned(int32_t Value, USART_t * Port) {
 	if(Value < 0) {
-		UartSingle_Write('-');
+		Uart_Write('-');
 		Value = -Value;
 	}
-	UartSingle_WriteDec(uint32_t(Value));
+	Uart_WriteDec(uint32_t(Value));
 }
 
 
 // Zapis liczny binarnej
-void UartSingle_WriteBin(uint8_t Data, const uint8_t Separator) {
+void Uart_WriteBin(uint8_t Data, const uint8_t Separator, USART_t * Port) {
 	for(uint8_t BitMask = 0b10000000; BitMask; BitMask = BitMask >> 1) {
-		UartSingle_Write(Data & BitMask ? '1' : '0');
+		Uart_Write(Data & BitMask ? '1' : '0');
 	}
-	if(Separator) UartSingle_Write(Separator);
+	if(Separator) Uart_Write(Separator);
 }
 
 
-void UartSingle__WriteNibble(uint8_t Nibble) {
-	if(Nibble <= 9) UartSingle_Write(Nibble + '0');
-	else UartSingle_Write(Nibble + 55);
+void Uart__WriteNibble(uint8_t Nibble) {
+	if(Nibble <= 9) Uart_Write(Nibble + '0');
+	else Uart_Write(Nibble + 55);
 }
 
 // Liczba HEX 8-bitowa
-void UartSingle_WriteHex(const uint8_t Data, const uint8_t Separator) {
-	UartSingle__WriteNibble((Data & 0xF0) >> 4);
-	UartSingle__WriteNibble((Data & 0x0F) >> 0);
-	if(Separator) UartSingle_Write(Separator); 
+void Uart_WriteHex(const uint8_t Data, const uint8_t Separator, USART_t * Port) {
+	Uart__WriteNibble((Data & 0xF0) >> 4);
+	Uart__WriteNibble((Data & 0x0F) >> 0);
+	if(Separator) Uart_Write(Separator); 
 }
 
 
 // Liczba HEX 16-bitowa
-void UartSingle_WriteHex(const uint16_t Data, const uint8_t Separator) {
-	UartSingle_WriteHex(uint8_t((Data & 0xFF00) >> 8), 0);
-	UartSingle_WriteHex(uint8_t((Data & 0x00FF)     ), Separator);
+void Uart_WriteHex(const uint16_t Data, const uint8_t Separator, USART_t * Port) {
+	Uart_WriteHex(uint8_t((Data & 0xFF00) >> 8), 0);
+	Uart_WriteHex(uint8_t((Data & 0x00FF)     ), Separator);
 }
 
 
 // Liczba HEX 32-bitowa
-void UartSingle_WriteHex(const uint32_t Data, const uint8_t Separator) {
-	UartSingle_WriteHex(uint8_t((Data & 0xFF000000) >> 24), 0);
-	UartSingle_WriteHex(uint8_t((Data & 0x00FF0000) >> 16), 0);
-	UartSingle_WriteHex(uint8_t((Data & 0x0000FF00) >> 8 ), 0);
-	UartSingle_WriteHex(uint8_t((Data & 0x000000FF)      ), Separator);
+void Uart_WriteHex(const uint32_t Data, const uint8_t Separator, USART_t * Port) {
+	Uart_WriteHex(uint8_t((Data & 0xFF000000) >> 24), 0);
+	Uart_WriteHex(uint8_t((Data & 0x00FF0000) >> 16), 0);
+	Uart_WriteHex(uint8_t((Data & 0x0000FF00) >> 8 ), 0);
+	Uart_WriteHex(uint8_t((Data & 0x000000FF)      ), Separator);
 }
 
 
 // Ci¹g znaków prezentowany jako HEX
-void UartSingle_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow) {
+void Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow, USART_t * Port) {
 	
 	for(uint16_t i=0; i<Length; i++) {
 		
@@ -455,30 +389,30 @@ void UartSingle_WriteHexString(const uint8_t * String, const uint16_t Length, co
 		}
 
 		// Wyœwietlenie znaku
-		UartSingle_WriteHex(*(String+i), Separator);
+		Uart_WriteHex(*(String+i), Separator);
 	}
 }
 
 
 // Ci¹g znaków prezentowany jako HEX, wraz z nag³ówkiem i adresowaniem
-void UartSingle_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue) {
+void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue, USART_t * Port) {
 	
 	uint8_t * wskaznik		= (uint8_t *)String;
 	uint16_t LengthForHex	= Length;
 	uint16_t LengthForAscii	= Length;
 	uint16_t i = 0;
 
-	UartSingle_Write("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
+	Uart_Write("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
 
 	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
 	do {
 		
 		// Zejœcie do nowej linii
-		UartSingle_WriteNL();
+		Uart_WriteNL();
 
 		// Wyœwietlenie adresu
-		UartSingle_WriteHex(uint16_t(i + AddressStartValue), ':');
-		UartSingle_Write(' ');
+		Uart_WriteHex(uint16_t(i + AddressStartValue), ':');
+		Uart_Write(' ');
 
 		// Wyœwietlenie HEX
 		for(uint8_t h=0; h<=15; h++) {
@@ -486,21 +420,21 @@ void UartSingle_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressSt
 			// Sprawdzanie czy nie zosta³y wyœwietlone ju¿ wszystkie znaki
 			if(LengthForHex) {
 				LengthForHex--;
-				UartSingle_WriteHex(*(wskaznik+h), ' ');
+				Uart_WriteHex(*(wskaznik+h), ' ');
 			}
 			else {
 				// Wyœwietlanie trzech spacji, aby potem mo¿na by³o wyœwietliæ ASCII we w³aœciwym miejscu
-				UartSingle_Write("   ");
+				Uart_Write("   ");
 			}
 		}
 		
 		// Wyœwietlenie ASCII
 		for(uint8_t h=0; h<=15; h++) {
 			if((*(wskaznik+h) >= ' ') && (*(wskaznik+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
-				UartSingle_Write(*(wskaznik+h));
+				Uart_Write(*(wskaznik+h));
 			} 
 			else {
-				UartSingle_Write(' ');
+				Uart_Write(' ');
 			}
 			
 			if(--LengthForAscii == 0) {
@@ -600,7 +534,7 @@ void UartSingle_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressSt
 
 // Funkcja pobieraj¹ca jeden znak z wybranego portu
 // Po odczytani znak z bufora programowego jest usuwany i automatycznie jest zwalniane miejsce na odbiór kolejnego znaku
-uint8_t UartSingle_Read(void) {
+uint8_t Uart_Read(USART_t * Port) {
 		
 	uint8_t Data;
 	if(UART_ProgBuf.RxBufferCnt) {													// Je¿eli jest coœ w buforze
@@ -663,7 +597,7 @@ ISR(USARTX_RXC_vect) {
 
 
 // Odczyt liczby znaków gotowych do odczyty z bufora programowego
-uint8_t UartSingle_ReceivedCnt(void) {
+uint8_t Uart_ReceivedCnt(USART_t * Port) {
 	return  UART_ProgBuf.RxBufferCnt;
 }
 
@@ -674,7 +608,7 @@ uint8_t UartSingle_ReceivedCnt(void) {
 
 
 // Czyszczenie bufora programowego Rx
-void UartSingle_RxBufferFlush(void) {
+void Uart_RxBufferFlush(volatile UART_Buffer_t * ProgBuf) {
 	
 	cli();
 	for(uint8_t i=0; i<UART_RX_BUFFER_LENGTH; i++) {
@@ -688,8 +622,14 @@ void UartSingle_RxBufferFlush(void) {
 }
 
 
+// TODO: Wyci¹æ to
+void Uart_RxBufferFlush(USART_t * Port) {
+	Uart_RxBufferFlush(&UART_ProgBuf);
+}
+
+
 // Czyszczenie bufora programowego Tx
-void UartSingle_TxBufferFlush(void) {
+void Uart_TxBufferFlush(volatile UART_Buffer_t * ProgBuf) {
 	
 	cli();
 	for(uint8_t i=0; i<UART_TX_BUFFER_LENGTH; i++) {
@@ -703,12 +643,18 @@ void UartSingle_TxBufferFlush(void) {
 }
 
 
+// TODO: Wyci¹æ to
+void Uart_TxBufferFlush(USART_t * Port) {
+	Uart_TxBufferFlush(&UART_ProgBuf);
+}
+
+
 // Czekanie a¿ transmisja dobiegnie koñca (przydatne przed wejœciem w stan uœpienia) - wersja dla wskazanego UART
-void UartSingle_WaitForTxComplete() {
+void Uart_WaitForTxComplete(USART_t * Port) {
 	if(UART_ProgBuf.TxBufferCnt == 0) {
 		return;
 	}
-	while(USARTX.CTRLB & USART_TXEN_bm);
+	//while(USARTX.CTRLB & USART_TXEN_bm);
 }
 
 

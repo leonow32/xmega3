@@ -847,7 +847,7 @@ ISR(RTC_CNT_vect) {													// Przerwanie wywo³ywane na koniec uœpienia prze
 					// Przepe³nienie zmiennej pending
 					Uart_Write("\r\nPending overflow on slot ");
 					Uart_WriteDec(i);
-					asm volatile("break");
+					//asm volatile("break");
 					// !! Domyœlny UART musi mieæ najwy¿szy priorytet, bo inaczej w tym miejscy mo¿e dojœæ do zawieszenia siê programu
 				}
 				#endif
