@@ -123,6 +123,7 @@ HARDWARE
 #define PIN_B_OFF		VPORTB.OUT	&= ~PIN4_bm
 
 // Definicje statusów
+// Zapisywanie w rejestrze TXPLCTRL, który s³u¿y do IR, ale nie wykorzystujemy tej mo¿liwoœci
 #define UART_TX_BUSY		uint8_t(0b00000001)
 
 // Definicja struktury bufora pieœcieniowego
@@ -135,8 +136,6 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferHead;
 	uint8_t		TxBufferTail;
 	uint8_t		TxBufferCnt;
-	//uint16_t	TxBufferCRC;
-	uint8_t		Status;
 };
 
 // TODO: spróbowaæ to wywaliæ
@@ -144,10 +143,6 @@ extern USART_t * UART_PortOverride;
 
 // Inicjalizacja
 void		Uart_Init();
-void		Uart_TxDisable(USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_TxEnable(USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_RxDisable(USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_RxEnable(USART_t * Port = UART_DEFAULT_PORT);
 
 // Zapisywanie
 void		Uart_Write(uint8_t Data, USART_t * Port = UART_DEFAULT_PORT);

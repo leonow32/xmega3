@@ -142,7 +142,7 @@ void Uart_Init(void) {
 void Uart_Write(uint8_t Data, USART_t * Port) {
 	
 	// Ustawienie flagi zajêtoœci transmitera
-	UART_ProgBuf.Status |= UART_TX_BUSY;
+	USARTX.TXPLCTRL = UART_TX_BUSY;
 	
 	// Procedura zapisu danych do bufora sprzêtowego lub programowego
 	USARTX.STATUS		=	USART_TXCIF_bm;										// Kasowanie flagi koñca nadawania
@@ -203,7 +203,7 @@ ISR(USARTX_TXC_vect) {
 	#endif
 	
 	// Czyszczenie flagi zajêtoœci transmitera
-	UART_ProgBuf.Status &= ~UART_TX_BUSY;
+	USARTX.TXPLCTRL = 0;
 }
 
 
@@ -413,17 +413,6 @@ void Uart_Resend(USART_t * Port) {
 // 	}
 	
 	UART_ProgBuf.TxBufferCnt = UART_ProgBuf.TxBufferHead;
-
-	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy
-	/*
-	if((Port->CTRLB & USART_TXEN_bm) == 0) {
-		Uart_TxEnable(Port);
-
-		// Je¿eli jest u¿ywana blokada uœpienia
-		#if UART_USE_UCOSMOS_SLEEP
-		OS_SLEEP_DISABLE;														// Ustawienie blokady uœpienia
-		#endif
-	}*/
 	
 	// Aktywowanie wysy³ania
 	Port->CTRLA		=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
@@ -570,7 +559,7 @@ void Uart_TxBufferFlush(USART_t * Port) {
 
 // Czekanie a¿ transmisja dobiegnie koñca (przydatne przed wejœciem w stan uœpienia) - wersja dla wskazanego UART
 void Uart_WaitForTxComplete(USART_t * Port) {
-	while(UART_ProgBuf.Status & UART_TX_BUSY);
+	while(USARTX.TXPLCTRL);
 }
 
 
