@@ -43,6 +43,10 @@
 	#include	"uCosmos/uCosmos.h"
 #endif
 
+#if C_PRINT
+	#include	"print/print.h"
+#endif
+
 
 // Main
 int main(void) {
@@ -71,6 +75,10 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
+	#if C_PRINT
+		
+	#endif
+	
 	#if C_UCOSMOS
 		Os_Init();
 		Os_ConsoleInit();
@@ -86,7 +94,7 @@ int main(void) {
 	// Software init
 	// ========================================
 	
-	Uart_Write("\r\n=== START ===\r\n");
+	Print("\r\n=== START ===\r\n");
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
 	Os_ResetSourceClear();
 	
@@ -98,9 +106,9 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskBlue,		1300);
 	#endif
 	
-// 	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
-// 		TaskAddMs(Peripherals_TaskYellow,	1000);
-// 	#endif
+	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
 	
 	
 	// ========================================

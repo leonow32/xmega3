@@ -145,19 +145,8 @@ extern USART_t * UART_PortOverride;
 void		Uart_Init();
 
 // Zapisywanie
-void		Uart_Write(uint8_t Data, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_Write(const char * Text, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteNL(USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteDec(uint32_t Value, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int8_t Value, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int32_t Value, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteBin(uint8_t Data, const uint8_t Separator = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint8_t Data, const uint8_t Separator = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint16_t Data, const uint8_t Separator = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint32_t Data, const uint8_t Separator = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue = 0, USART_t * Port = UART_DEFAULT_PORT);
-void		Uart_Resend(USART_t * Port);
+void		Uart_Write(uint8_t Data);
+//void		Uart_Resend(USART_t * Port);
 
 // Odczytywanie
 uint8_t		Uart_Read(USART_t * Port = UART_DEFAULT_PORT);

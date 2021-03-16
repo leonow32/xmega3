@@ -73,6 +73,12 @@ HARDWARE
 	#error		"This module requires UART component"
 #endif
 
+#if C_PRINT
+	#include	"../print/print.h"
+#else
+	#error		"This module requires PRINT component"
+#endif
+
 #if C_REMOTE
 	#include "remote.h"
 #endif

@@ -95,12 +95,10 @@ HARDWARE
 #include		"uCosmos_defines.h"
 #include		"uCosmos_config.h"
 
-#if C_UART_SINGLE
-	#include	"../uart/uart_single.h"
-#elif C_UART_MULTI
-	#include	"../uart/uart_multi.h"
+#if C_PRINT
+#include	"../print/print.h"
 #else
-	#error		"This module requires UART component"
+#error		"This module requires PRINT component"
 #endif
 
 #if C_PERIPHERALS

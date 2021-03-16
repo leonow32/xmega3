@@ -139,7 +139,7 @@ void Uart_Init(void) {
 
 
 // Wysy³anie 1 bajtu danych
-void Uart_Write(uint8_t Data, USART_t * Port) {
+void Uart_Write(uint8_t Data) {
 	
 	// Ustawienie flagi zajêtoœci transmitera
 	USARTX.TXPLCTRL = UART_TX_BUSY;
@@ -211,172 +211,7 @@ ISR(USARTX_TXC_vect) {
 // Funkcje wy¿szego poziomu do wysy³ania przez UART
 // ================================================
 
-
-// Zapis ci¹gu znaków
-void Uart_Write(const char * Text, USART_t * Port) {
-	while(*Text) Uart_Write(*Text++);
-}
-
-
-// Nowa linia
-void Uart_WriteNL(USART_t * Port) {
-	Uart_Write("\r\n");
-}
-
-
-// Liczba dziesiêtna bez znaku
-void Uart_WriteDec(uint32_t Value, USART_t * Port) {
-	if(Value==0) {
-		Uart_Write('0');
-		return;
-	}
-	
-	uint8_t cyfra[10];
-	memset(cyfra, 0, sizeof(cyfra));
-	int8_t i=0;
-	
-	while(Value) {
-		cyfra[i] = (uint8_t)(Value%10);
-		Value = Value / 10;
-		++i;
-	}
-	
-	while(i--) {
-		Uart_Write(cyfra[i]+48);
-	}
-}
-
-// Liczba dziesiêtna ze znakiem
-void Uart_WriteDecSigned(int8_t Value, USART_t * Port) {
-	if(Value < 0) {
-		Uart_Write('-');
-		Value = -Value;
-	}
-	Uart_WriteDec(uint8_t(Value));
-}
-
-// Liczba dziesiêtna ze znakiem
-void Uart_WriteDecSigned(int32_t Value, USART_t * Port) {
-	if(Value < 0) {
-		Uart_Write('-');
-		Value = -Value;
-	}
-	Uart_WriteDec(uint32_t(Value));
-}
-
-
-// Zapis liczny binarnej
-void Uart_WriteBin(uint8_t Data, const uint8_t Separator, USART_t * Port) {
-	for(uint8_t BitMask = 0b10000000; BitMask; BitMask = BitMask >> 1) {
-		Uart_Write(Data & BitMask ? '1' : '0');
-	}
-	if(Separator) Uart_Write(Separator);
-}
-
-
-void Uart__WriteNibble(uint8_t Nibble) {
-	if(Nibble <= 9) Uart_Write(Nibble + '0');
-	else Uart_Write(Nibble + 55);
-}
-
-// Liczba HEX 8-bitowa
-void Uart_WriteHex(const uint8_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart__WriteNibble((Data & 0xF0) >> 4);
-	Uart__WriteNibble((Data & 0x0F) >> 0);
-	if(Separator) Uart_Write(Separator); 
-}
-
-
-// Liczba HEX 16-bitowa
-void Uart_WriteHex(const uint16_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart_WriteHex(uint8_t((Data & 0xFF00) >> 8), 0);
-	Uart_WriteHex(uint8_t((Data & 0x00FF)     ), Separator);
-}
-
-
-// Liczba HEX 32-bitowa
-void Uart_WriteHex(const uint32_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart_WriteHex(uint8_t((Data & 0xFF000000) >> 24), 0);
-	Uart_WriteHex(uint8_t((Data & 0x00FF0000) >> 16), 0);
-	Uart_WriteHex(uint8_t((Data & 0x0000FF00) >> 8 ), 0);
-	Uart_WriteHex(uint8_t((Data & 0x000000FF)      ), Separator);
-}
-
-
-// Ci¹g znaków prezentowany jako HEX
-void Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow, USART_t * Port) {
-	
-	for(uint16_t i=0; i<Length; i++) {
-		
-		// Przejœcie do nowej linii (nie dotyczny pierwszego wyœwietlanego znaku)
-		if((i%BytesInRow == 0) && i != 0) {
-			Uart_WriteNL();
-		}
-		
-		// Wyœwietlenie znaku
-		Uart_WriteHex(*(String+i), Separator);
-	}
-}
-
-
-// Ci¹g znaków prezentowany jako HEX, wraz z nag³ówkiem i adresowaniem
-void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue, USART_t * Port) {
-	
-	uint8_t * wskaznik		= (uint8_t *)String;
-	uint16_t LengthForHex	= Length;
-	uint16_t LengthForAscii	= Length;
-	uint16_t i = 0;
-	
-	Uart_Write("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
-	
-	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
-	do {
-		
-		// Zejœcie do nowej linii
-		Uart_WriteNL();
-		
-		// Wyœwietlenie adresu
-		Uart_WriteHex(uint16_t(i + AddressStartValue), ':');
-		Uart_Write(' ');
-		
-		// Wyœwietlenie HEX
-		for(uint8_t h=0; h<=15; h++) {
-			
-			// Sprawdzanie czy nie zosta³y wyœwietlone ju¿ wszystkie znaki
-			if(LengthForHex) {
-				LengthForHex--;
-				Uart_WriteHex(*(wskaznik+h), ' ');
-			}
-			else {
-				// Wyœwietlanie trzech spacji, aby potem mo¿na by³o wyœwietliæ ASCII we w³aœciwym miejscu
-				Uart_Write("   ");
-			}
-		}
-		
-		// Wyœwietlenie ASCII
-		for(uint8_t h=0; h<=15; h++) {
-			if((*(wskaznik+h) >= ' ') && (*(wskaznik+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
-				Uart_Write(*(wskaznik+h));
-			} 
-			else {
-				Uart_Write(' ');
-			}
-			
-			if(--LengthForAscii == 0) {
-				break;
-			}
-		}
-		
-		// Inkrementacja wskaŸników
-		wskaznik += 16;
-		i += 16;
-		
-		// Reset watchdoga
-		asm volatile("wdr");
-	} while(i <= Length-1 && i != 0);											// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
-}
-
-
+/*
 // Ponowne wys³anie ca³ej zawartoœci bufora TX
 // Aby ta operacja dzia³a³a prawid³owo, wczeœniej nale¿y wywo³aæ Uart_TxBufferFlush i d³ugoœæ wysy³anego
 // ci¹gu znaków nie mo¿e przekroczyæ d³ugoœci bufora UART_TX_BUFFER_LENGTH
@@ -437,6 +272,7 @@ void Uart_Resend(USART_t * Port) {
 	
 //	Uart_Write((const char *)Buffer->TxBuffer);
 }
+*/
 
 
 // ====================

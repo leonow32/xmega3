@@ -56,7 +56,8 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 
 			// Zejœcie do nowej linii, ¿eby w trybie rêcznym ³adnie wygl¹da³o w terminalu
 			if(ConsoleInstance->Flags & FLAGS_USE_HMI) {
-				Uart_WriteNL(ConsoleInstance->UartInstance);
+				//Print_NL()(ConsoleInstance->UartInstance);
+				Print_NL();
 			}
 
 			// Ustawienie portu UART, który ma otrzymaæ odpowiedŸ
@@ -67,7 +68,9 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				
 				// Prolog odpowiedzi
 				Uart_TxBufferFlush(ConsoleInstance->UartInstance);
-				Uart_Write(ACK, ConsoleInstance->UartInstance);
+				//Print(ACK, ConsoleInstance->UartInstance);
+				Print(ACK);
+				
 				//Uart_TxCrcClear(ConsoleInstance->UartInstance);
 				//_delay_us(3);
 				
@@ -80,14 +83,21 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				// Epilog odpowiedzi	
 				if(ConsoleInstance->Flags & FLAGS_M2M_CMD) {		
 					//uint16_t CRC = Uart_TxCrcGet(ConsoleInstance->UartInstance);
-					Uart_Write(US, ConsoleInstance->UartInstance);
-					//Uart_Write(uint8_t(CRC >> 8), ConsoleInstance->UartInstance);
-					//Uart_Write(uint8_t(CRC & 0x00FF), ConsoleInstance->UartInstance);
-					Uart_Write(ConsoleInstance->Token, ConsoleInstance->UartInstance);
+					
+					//Print(US, ConsoleInstance->UartInstance);
+					Print(US);
+					
+					
+					//Print(uint8_t(CRC >> 8), ConsoleInstance->UartInstance);
+					//Print(uint8_t(CRC & 0x00FF), ConsoleInstance->UartInstance);
+					
+					//Print(ConsoleInstance->Token, ConsoleInstance->UartInstance);
+					Print(ConsoleInstance->Token);
 				}
 				
 				if(ConsoleInstance->Flags & FLAGS_USE_HMI) {
-					Uart_Write(ETX, ConsoleInstance->UartInstance);	
+					//Print(ETX, ConsoleInstance->UartInstance);
+					Print(ETX);
 				}
 				
 				// Czekanie na zakoñczenie wysy³ania polecenia
@@ -98,20 +108,23 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 			// Je¿eli nie rozpoznano polecenia
 			else {
 				#if REMOTE_DEBUG
-// 					Uart_Write("[Console ");
-// 					Uart_WriteHex((uint16_t)ConsoleInstance);
-// 					Uart_Write(" BadCom=");
+// 					Print("[Console ");
+// 					PrintHex((uint16_t)ConsoleInstance);
+// 					Print(" BadCom=");
 // 					for(uint8_t i=0; i<CMD_LINE_BUFFER_LENGTH; i++) {
-// 						Uart_Write(ConsoleInstance->Buffer[i]);
+// 						Print(ConsoleInstance->Buffer[i]);
 // 					}
 //					ERROR_ON;
 				#endif
 				
 				if(ConsoleInstance->Flags & FLAGS_USE_HMI) {
 					//ERROR_ON;
-					Uart_Write(NAK, ConsoleInstance->UartInstance);
-					Uart_Write("Bad command", ConsoleInstance->UartInstance);
-					Uart_Write(ETX, ConsoleInstance->UartInstance);		
+// 					Print(NAK, ConsoleInstance->UartInstance);
+// 					Print("Bad command", ConsoleInstance->UartInstance);
+// 					Print(ETX, ConsoleInstance->UartInstance);
+					Print(NAK);
+					Print("Bad command");
+					Print(ETX);
 				
 					// !! Debug
 					Uart_WaitForTxComplete(ConsoleInstance->UartInstance);
@@ -120,11 +133,11 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 				#if REMOTE_DEBUG
 					//ERROR_ON;
 					UART_PortOverride = NULL;
-					Uart_Write("\r\n[Bad command:", &UART_DEFAULT_PORT);
+					Print("\r\n[Bad command:", &UART_DEFAULT_PORT);
 					for(uint8_t i=0; i<CMD_LINE_BUFFER_LENGTH; i++) {
-						Uart_Write(ConsoleInstance->Buffer[i]);
+						Print(ConsoleInstance->Buffer[i]);
 					}
-					Uart_Write(']');
+					Print(']');
 					Uart_WaitForTxComplete(&UART_DEFAULT_PORT);
 					
 				#endif
@@ -153,9 +166,9 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 
 		// Wciœniêto ESCAPE
 		else if(Console_Result == Console_InputCancelled) {
-			//Uart_Write("[Console ");
-			//Uart_WriteHex((uint16_t)ConsoleInstance);
-			//Uart_Write(" CANCELED] ");
+			//Print("[Console ");
+			//PrintHex((uint16_t)ConsoleInstance);
+			//Print(" CANCELED] ");
 			//PF2_ON;
 			Console_PromptShow(ConsoleInstance);
 			
@@ -175,8 +188,8 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 	static uint8_t TestMode = 0;
 	
 // 	UART_PortOverride = &UART_DEFAULT_PORT;
-// 	Uart_WriteHex(ReceivedChar, ' ', ConsoleInstance->UartInstance);
-// 	Uart_Write(ReceivedChar, ConsoleInstance->UartInstance);
+// 	PrintHex(ReceivedChar, ' ', ConsoleInstance->UartInstance);
+// 	Print(ReceivedChar, ConsoleInstance->UartInstance);
 // 	Uart_WaitForTxComplete(&UART_DEFAULT_PORT);
 // 	UART_PortOverride = NULL;
 	
@@ -206,11 +219,11 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 			TestMode--;
 		}
 		
-// 		Uart_Write("[Cmd_CRC_");
-// 		Uart_WriteHex(ReceivedCRC);
-// 		Uart_Write(',');
-// 		Uart_WriteHex(CalculatedCRC);
-// 		Uart_Write("] ");
+// 		Print("[Cmd_CRC_");
+// 		PrintHex(ReceivedCRC);
+// 		Print(',');
+// 		PrintHex(CalculatedCRC);
+// 		Print("] ");
 		
 		
 		
@@ -219,7 +232,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 		/*
 		if(ReceivedCRC == CalculatedCRC) {
 // 			#if REMOTE_DEBUG
-// 				Uart_Write("[Cmd_CRC_OK] ");
+// 				Print("[Cmd_CRC_OK] ");
 // 			#endif
 //			ConsoleInstance->M2M |=	FLAGS_CRC_CORRECT;
 
@@ -228,7 +241,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 			// Sprawdzenie czy to duplikat polecenia - otrzymano polecenie z DC2, ale wczeœniej podano odpowiedŸ
 // 			if(ConsoleInstance->Flags & FLAGS_CMD_RETRY) {
 // 				if(Console_StrCmp((const char *)ConsoleInstance->Buffer, (const char *)ConsoleInstance->Buffer2)) {
-// 					Uart_Write("[Duplicate_CMD] ");
+// 					Print("[Duplicate_CMD] ");
 // 					
 // 					// Czyszczenie bufora
 // 					ConsoleInstance->ReceivedCnt = 0;
@@ -246,11 +259,11 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 		}
 		else {
 			#if REMOTE_DEBUG
-// 				Uart_Write("\r\n[Cmd_CRC_ERROR_");
-// 				Uart_WriteHex(ReceivedChar);
-// 				Uart_Write(',');
-// 				Uart_WriteHex(CalculatedCrc);
-// 				Uart_Write(']');
+// 				Print("\r\n[Cmd_CRC_ERROR_");
+// 				PrintHex(ReceivedChar);
+// 				Print(',');
+// 				PrintHex(CalculatedCrc);
+// 				Print(']');
 			#endif
 //			ConsoleInstance->M2M |=	FLAGS_CRC_INCORRECT;
 			
@@ -261,7 +274,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 // 			ConsoleInstance->CRCH = 0;
 // 			ConsoleInstance->Flags = ConsoleInstance->Flags & (FLAGS_USE_HMI | FLAGS_USE_M2M);
 // 			memset(ConsoleInstance->Buffer, 0, CMD_LINE_BUFFER_LENGTH);
-// 			Uart_Write(NAK, ConsoleInstance->UartInstance);
+// 			Print(NAK, ConsoleInstance->UartInstance);
 			
 			ConsoleInstance->Flags |= FLAGS_WRONG_CRC;
 		}
@@ -283,7 +296,8 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 			ConsoleInstance->CRCH = 0;
 			ConsoleInstance->Flags = ConsoleInstance->Flags & (FLAGS_USE_HMI | FLAGS_USE_M2M);
 			memset(ConsoleInstance->Buffer, 0, CMD_LINE_BUFFER_LENGTH);
-			Uart_Write(NAK, ConsoleInstance->UartInstance);
+			//Print(NAK, ConsoleInstance->UartInstance);
+			Print(NAK);
 		}
 		else {
 			// CRC prawid³owe
@@ -295,11 +309,11 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 				if(ConsoleInstance->Token == ReceivedChar) {
 					// Token taki sam jak wczeœnie, a wiêc dostaliœmy duplikat
 					
-					Uart_Write("\r\n[Duplicate_CMD ");
+					Print("\r\n[Duplicate_CMD ");
 					for(uint8_t i=0; i<16; i++) {
-						Uart_Write(ConsoleInstance->Buffer[i]);
+						Print(ConsoleInstance->Buffer[i]);
 					}
-					Uart_Write("] ");
+					Print("] ");
 					//ERROR_ON;
 					
 					// Ponowne wys³anie bufora
@@ -342,8 +356,8 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 			// !! co robiæ, kiedy nie ma miejsca w buforze?
 			#if REMOTE_DEBUG
 				//ERROR_ON;
-				//Uart_Write('_');										// !! który uart?
-				Uart_Write(ReceivedChar);
+				//Print('_');										// !! który uart?
+				Print(ReceivedChar);
 			#endif
 
 			return Console_BufferFull;
@@ -387,7 +401,7 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 
 			// ¯¹danie ponownego przes³ania odpowiedzi na poprzednie polecenie
 			case DC3:
-				Uart_Write("\r\n[Response DC3] ");
+				Print("\r\n[Response DC3] ");
 				//Uart_Resend(ConsoleInstance->UartInstance);
 				break;
 		
@@ -398,10 +412,11 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 				ConsoleInstance->ControlUse = false;
 				ConsoleInstance->CRCH = 0;
 				memset(ConsoleInstance->Buffer, 0, CMD_LINE_BUFFER_LENGTH);
-				Uart_Write(DC4, ConsoleInstance->UartInstance);
+				//Print(DC4, ConsoleInstance->UartInstance);
+				Print(DC4);
 				break;
-		
-		
+			
+			
 			// US - kolejny znak to CRC
 			case US:
 				ConsoleInstance->Flags	|=	FLAGS_NEXT_BYTE_CRCH;
@@ -446,13 +461,17 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 				while(ConsoleInstance->ReceivedCnt) {
 					ConsoleInstance->ReceivedCnt--;
 					ConsoleInstance->Buffer[ConsoleInstance->ReceivedCnt] = 0;
-					Uart_Write(BACKSPACE1, ConsoleInstance->UartInstance); 
+					
+					//Print(BACKSPACE1, ConsoleInstance->UartInstance);
+					Print(BACKSPACE1); 
 				}
 			
 				// Kopiowanie z drugiego bufora	
 				memcpy(ConsoleInstance->Buffer, ConsoleInstance->Buffer2, CMD_LINE_BUFFER_LENGTH);
 				ConsoleInstance->ReceivedCnt = strlen((const char *)ConsoleInstance->Buffer);
-				Uart_Write((const char *)ConsoleInstance->Buffer, ConsoleInstance->UartInstance);									// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
+				
+				//Print((const char *)ConsoleInstance->Buffer, ConsoleInstance->UartInstance);									// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
+				Print((const char *)ConsoleInstance->Buffer);									// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
 				break;
 
 			// SOH - pocz¹tek przesy³ania polecenia, kasowanie bufora, je¿eli nie jest pusty
@@ -490,16 +509,11 @@ Console_Res_t Console_UartInput(Console_Struct * ConsoleInstance) {
 // Wyœwietlenie znaku zachêty wiersza poleceñ
 // - Console_Struct * ConsoleInstance					-	WskaŸnik do struktry konsoli
 void Console_PromptShow(Console_Struct * ConsoleInstance) {
-	Uart_Write("\r\n > ", ConsoleInstance->UartInstance);
-	Uart_Write(DC4, ConsoleInstance->UartInstance);
+// 	Print("\r\n > ", ConsoleInstance->UartInstance);
+// 	Print(DC4, ConsoleInstance->UartInstance);
+	Print("\r\n > ");
+	Print(DC4);
 }
-
-
-
-
-
-
-
 
 
 // Dzielenie wejœciowego stringu z wierza poleceñ na pojedyncze argumenty
@@ -529,7 +543,7 @@ static inline CmdRes_t Console_SplitArguments(Console_Struct * ConsoleInstance, 
 						argv[ArgCount] = CharPointer;
 						ArgCount++;
 						if(ArgCount == CMD_MAX_ARGUMENTS) {				// Przekroczenie dopuszczalnej liczby argumentów
-							Uart_Write("max arg");
+							Print("max arg");
 							while(1);
 							//Os_ResetExecute();
 						}
@@ -558,7 +572,7 @@ static inline CmdRes_t Console_SplitArguments(Console_Struct * ConsoleInstance, 
 					argv[ArgCount] = CharPointer;
 					ArgCount++;
 					if(ArgCount == CMD_MAX_ARGUMENTS) {
-						Uart_Write("max arg");
+						Print("max arg");
 						while(1);
 						//asm volatile("break");
 						Os_ResetExecute();
@@ -611,33 +625,33 @@ static inline void (*Console_FindPointer(uint8_t * EnteredName))(uint8_t argc, u
 
 // Pokazywanie wszystkicj pól struktury
 // void Console_StructPrint(Console_Struct * ConsoleInstance) {
-// 	Uart_Write("\r\nReceivedCnt\t");
-// 	Uart_WriteDec(ConsoleInstance->ReceivedCnt);
+// 	Print("\r\nReceivedCnt\t");
+// 	PrintDec(ConsoleInstance->ReceivedCnt);
 // 	
-// 	Uart_Write("\r\nBuffer\t");
+// 	Print("\r\nBuffer\t");
 // 	for(uint8_t i=0; i<CMD_LINE_BUFFER_LENGTH; i++) {
-// 		Uart_Write(ConsoleInstance->Buffer[i]);
+// 		Print(ConsoleInstance->Buffer[i]);
 // 	}
 // 	
-// 	Uart_Write("\r\nBuffer2\t");
+// 	Print("\r\nBuffer2\t");
 // 	for(uint8_t i=0; i<CMD_LINE_BUFFER_LENGTH; i++) {
-// 		Uart_Write(ConsoleInstance->Buffer2[i]);
+// 		Print(ConsoleInstance->Buffer2[i]);
 // 	}
 // 	
-// 	Uart_Write("\r\nUartInstance\t");
-// 	Uart_WriteHex(uint16_t(ConsoleInstance->UartInstance));
+// 	Print("\r\nUartInstance\t");
+// 	PrintHex(uint16_t(ConsoleInstance->UartInstance));
 // 	
-// 	Uart_Write("\r\nControlUse\t");
-// 	Uart_WriteHex(uint8_t(ConsoleInstance->ControlUse));
+// 	Print("\r\nControlUse\t");
+// 	PrintHex(uint8_t(ConsoleInstance->ControlUse));
 // 	
-// 	Uart_Write("\r\nCRCH\t");
-// 	Uart_WriteHex(uint8_t(ConsoleInstance->CRCH));
+// 	Print("\r\nCRCH\t");
+// 	PrintHex(uint8_t(ConsoleInstance->CRCH));
 // 	
-// 	Uart_Write("\r\nToken\t");
-// 	Uart_WriteHex(uint8_t(ConsoleInstance->Token));
+// 	Print("\r\nToken\t");
+// 	PrintHex(uint8_t(ConsoleInstance->Token));
 // 	
-// 	Uart_Write("\r\nFlags\t");
-// 	Uart_WriteHex(uint8_t(ConsoleInstance->Flags));
+// 	Print("\r\nFlags\t");
+// 	PrintHex(uint8_t(ConsoleInstance->Flags));
 // }
 
 
@@ -645,12 +659,12 @@ static inline void (*Console_FindPointer(uint8_t * EnteredName))(uint8_t argc, u
 #if CMD_USE_ALL
 void Console_ShowAllCommands(uint8_t argc, uint8_t * argv[]) {
 	for(uint8_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
-		Uart_WriteDec(i);
-		Uart_Write(":\t");
-		Uart_WriteHex((uint16_t)Console_CommandList[i].Pointer);
-		Uart_Write('\t');
-		Uart_Write((const char *)Console_CommandList[i].Name);
-		Uart_WriteNL();
+		Print_Dec(i);
+		Print(":\t");
+		Print_Hex((uint16_t)Console_CommandList[i].Pointer);
+		Print('\t');
+		Print((const char *)Console_CommandList[i].Name);
+		Print_NL();
 	}
 }
 #endif
@@ -658,30 +672,30 @@ void Console_ShowAllCommands(uint8_t argc, uint8_t * argv[]) {
 
 // Standardowa odpowiedŸ OK
 void Console_ResponseOK(void) {
-	Uart_Write("OK");
+	Print("OK");
 }
 
 // Standardowa odpowiedŸ Error
 void Console_ResponseError(void) {
-	Uart_Write("Error");
+	Print("Error");
 }
 
 
 // Standardowa odpowiedŸ In Progress...
 void Console_ResponseInProgress(void) {
-	Uart_Write("In progress... ");
+	Print("In progress... ");
 }
 
 
 // Standardowa odpowiedŸ Timeout
 void Console_ResponseTimeout(void) {
-	Uart_Write("Timeout");
+	Print("Timeout");
 }
 
 
 // Standardowa odpowiedŸ Not supported
 void Console_ResponseNotSupported(void) {
-	Uart_Write("Not supported");
+	Print("Not supported");
 }
 
 // ==================
@@ -691,26 +705,26 @@ void Console_ResponseNotSupported(void) {
 
 // Debugowanie b³êdów
 void Console_Debug(const CmdRes_t Result, const uint8_t * Argument) {
-	Uart_Write("Error");
+	Print("Error");
 	if(Argument != NULL) {
-		Uart_Write(" in agument ");
-		Uart_Write((const char *)Argument);
+		Print(" in agument ");
+		Print((const char *)Argument);
 	}
-	Uart_Write(": ");
+	Print(": ");
 
 	switch(Result) {
-		case Cmd_OK:									Uart_Write("OK");								break;
-		case Cmd_NotReady:								Uart_Write("Not ready");						break;
-		case Cmd_UnknownCommand:						Uart_Write("Unknown command");					break;
-		case Cmd_NoInput:								Uart_Write("No input");							break;
-		case Cmd_Overflow:								Uart_Write("Overflow");							break;
-		case Cmd_MissingArgument:						Uart_Write("Missing arg");						break;
-		case Cmd_Underflow:								Uart_Write("Underflow");						break;
-		case Cmd_ParseError:							Uart_Write("Parse error");						break;
-		case Cmd_ExpectedHex:							Uart_Write("Expected Hex");						break;
-		case Cmd_ExpectedDec:							Uart_Write("Expected Dec");						break;
-		case Cmd_ReceivedACK:							Uart_Write("Received ACK");						break;
-		case Cmd_ReceivedNAK:							Uart_Write("Received NAK");						break;
+		case Cmd_OK:									Print("OK");								break;
+		case Cmd_NotReady:								Print("Not ready");						break;
+		case Cmd_UnknownCommand:						Print("Unknown command");					break;
+		case Cmd_NoInput:								Print("No input");							break;
+		case Cmd_Overflow:								Print("Overflow");							break;
+		case Cmd_MissingArgument:						Print("Missing arg");						break;
+		case Cmd_Underflow:								Print("Underflow");						break;
+		case Cmd_ParseError:							Print("Parse error");						break;
+		case Cmd_ExpectedHex:							Print("Expected Hex");						break;
+		case Cmd_ExpectedDec:							Print("Expected Dec");						break;
+		case Cmd_ReceivedACK:							Print("Received ACK");						break;
+		case Cmd_ReceivedNAK:							Print("Received NAK");						break;
 	}
 }
 

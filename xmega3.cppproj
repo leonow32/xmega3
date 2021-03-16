@@ -177,6 +177,7 @@
       <Value>C_CLOCK</Value>
       <Value>C_CONSOLE</Value>
       <Value>C_PERIPHERALS</Value>
+      <Value>C_PRINT</Value>
       <Value>C_UART_SINGLE</Value>
       <Value>C_UCOSMOS</Value>
     </ListValues>
@@ -245,6 +246,15 @@
     <Compile Include="peripherals\peripherals.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="print\print.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="print\print.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="print\print_config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uart\uart_multi.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -291,6 +301,7 @@
     <Folder Include="clock" />
     <Folder Include="console" />
     <Folder Include="config" />
+    <Folder Include="print" />
     <Folder Include="uCosmos" />
     <Folder Include="peripherals" />
     <Folder Include="uart" />

@@ -42,7 +42,7 @@ task_t Peripherals_TaskRed(runmode_t RunMode) {
 		// Wywo³anie identyfikacyjne
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
-			Uart_Write("LedR");
+			Print("LedR");
 			return TaskOK;
 		#endif
 
@@ -65,7 +65,7 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 		// Wywo³anie identyfikacyjne
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
-			Uart_Write("LedY");
+			Print("LedY");
 			return TaskOK;
 		#endif
 
@@ -88,7 +88,7 @@ task_t Peripherals_TaskGreen(runmode_t RunMode) {
 		// Wywo³anie identyfikacyjne
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
-			Uart_Write("LedG");
+			Print("LedG");
 			return TaskOK;
 		#endif
 
@@ -111,7 +111,7 @@ task_t Peripherals_TaskBlue(runmode_t RunMode) {
 		// Wywo³anie identyfikacyjne
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
-			Uart_Write("LedB");
+			Print("LedB");
 			return TaskOK;
 		#endif
 
@@ -136,7 +136,7 @@ task_t Peripherals_TaskBlue(runmode_t RunMode) {
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
-		Uart_Write("ioset peripheral[ASC1] state[0/1]");
+		Print("ioset peripheral[ASC1] state[0/1]");
 		return;
 	}
 	
@@ -147,7 +147,7 @@ void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 		case 'b':		if(*argv[2] == '1')		{LED_BLUE_ON;}				else 	LED_BLUE_OFF;	break;
 		case 'i':		if(*argv[2] == '1')		{INT_ON;}					else 	INT_OFF;		break;
 		case 'p':		if(*argv[2] == '1')		{PWM_ON;}					else 	PWM_OFF;		break;
-		default:		Uart_Write("Wrong arg");													return;
+		default:		Print("Wrong arg");															return;
 	}
 }
 
@@ -155,17 +155,17 @@ void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 // Odczytanie stanu pinów
 void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	
-	Uart_Write("SW0\t=\t");
-	Uart_Write(KEY_SW0_READ ? '1' : '0');
+	Print("SW0\t=\t");
+	Print(KEY_SW0_READ ? '1' : '0');
 	
-	Uart_Write("\r\nSW1\t=\t");
-	Uart_Write(KEY_SW1_READ ? '1' : '0');
+	Print("\r\nSW1\t=\t");
+	Print(KEY_SW1_READ ? '1' : '0');
 }
 
 
 // Testowe odbijanie pierwszego argumentu
 void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
-	Uart_Write((const char *)argv[1]);
+	Print((const char *)argv[1]);
 }
 #endif
 #endif
@@ -200,7 +200,7 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 		// Wywo³anie identyfikacyjne
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
-			Uart_Write("LedY");
+			Print("LedY");
 			return TaskOK;
 		#endif
 
@@ -225,27 +225,27 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
-		Uart_Write("ioset peripheral[ASC1] state[0/1]");
+		Print("ioset peripheral[ASC1] state[0/1]");
 		return;
 	}
 	
 	switch(*argv[1]) {
 		case 'y':		if(*argv[2] == '1')		{LED_YELLOW_ON;}			else 	LED_YELLOW_OFF;	break;
-		default:		Uart_Write("Wrong arg");													return;
+		default:		Print("Wrong arg");															return;
 	}
 }
 
 
 // Odczytanie stanu pinów
 void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
-	Uart_Write("SW0\t=\t");
-	Uart_Write(KEY_SW0_READ ? '1' : '0');
+	Print("SW0\t=\t");
+	Print(KEY_SW0_READ ? '1' : '0');
 }
 
 
 // Testowe odbijanie pierwszego argumentu
 void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
-	Uart_Write((const char *)argv[1]);
+	Print((const char *)argv[1]);
 }
 #endif
 
