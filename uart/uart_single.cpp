@@ -152,15 +152,15 @@ void Uart_Write(uint8_t Data) {
 			asm volatile("break");												// Zatrzymanie jeœli bufor przepe³niony
 		#endif
 	}
-		
+	
 	cli();																		// Wy³¹czenie przerwañ, aby nie dopuœciæ do sytuacji, kiedy TxBuffer by³by jednoczeœnie modyfikowany w przerwaniu
 	UART_ProgBuf.TxBufferCnt++;													// Zwiêkszenie licznika znaków w buforze nadawczym
 	UART_ProgBuf.TxBuffer[UART_ProgBuf.TxBufferHead] = Data;					// Wpisanie znaku do bufora na pocz¹tek kolejki FIFO
-		
+	
 	if(++UART_ProgBuf.TxBufferHead == UART_TX_BUFFER_LENGTH) {					// Zapis ++TxBufferHead oszczêdza pamiêæ o 4B
 		UART_ProgBuf.TxBufferHead = 0;											// Przekreœcenie siê bufora pierœcieniowego
 	}
-		
+	
 	USARTX.CTRLA	=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
 						USART_RXCIE_bm |										// ...a RX...
 						USART_TXCIE_bm;											// ...oraz TX ju¿ wczeœniej by³o w³¹czone

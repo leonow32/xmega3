@@ -13,6 +13,8 @@ HARDWARE
 
 #if C_PRINT
 
+#include "print_config.h"
+
 // Include
 #if C_UART_SINGLE
 	#include	"../uart/uart_single.h"
@@ -23,9 +25,11 @@ HARDWARE
 #endif
 
 
-// Funkcje
-void Print_Init(void);
-void Print(const char Char);
+// Pusta inicjalizacja
+void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data));
+
+// Funkcje odpowiedzialne za printowanie ró¿nych danych
+void Print(const uint8_t Data);
 void Print(const char * Text);
 void Print_NL(void);
 void Print_Dec(uint32_t Value);

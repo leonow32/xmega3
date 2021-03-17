@@ -4,20 +4,43 @@
 
 #include "print.h"
 
-// Inicjalizacja
-void Print_Init(void) {
+// WskaŸnik do funkji, która ma wyœwietlaæ znaki
+void (*Print_Pointer)(const uint8_t Data) = PRINT_DEFAULT_STREAM;
+
+
+// Ustawienie wskaŸnika
+// Je¿eli zostanie podany NULL wówczas ustawiany jest wskaŸnik do domyœlnego strumienia wyjœciowego, zdefiniowany w konfiguracji
+#if PRINT_USE_STREAM_SINGLE
+void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
 	return;
 }
+#elif PRINT_USE_STREAM_MULTI
+void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
+	if(NewPrintPointer == NULL) {
+		Print_Pointer = PRINT_DEFAULT_STREAM;
+	}
+	else {
+		Print_Pointer = NewPrintPointer;
+	}
+}
+#endif
 
 
 // Zapis dojedynczego znaku
-void Print(const char Char) {
-	Uart_Write(Char);
+void Print(const uint8_t Data) {
+	
+	#if PRINT_USE_STREAM_SINGLE
+		PRINT_DEFAULT_STREAM(Char);
+	#endif
+	
+	#if PRINT_USE_STREAM_MULTI
+		Print_Pointer(Data);
+	#endif
 }
 
 // Zapis ci¹gu znaków
 void Print(const char * Text) {
-	while(*Text) Uart_Write(*Text++);
+	while(*Text) Print(*Text++);
 }
 
 

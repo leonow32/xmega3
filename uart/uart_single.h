@@ -164,28 +164,6 @@ void		Uart_WaitForTxComplete(void);
 #define		Uart_WriteProgmem(x)	Uart_Write(x)
 #define		Uart_WriteTxt(x)		Uart_Write(x)
 
-// Mockupy w celu kompatybilnoœci z bibliotek¹ w wersji multi
-/*
-#define		Uart_TxDisable(...)													Uart_TxDisable()
-#define		Uart_TxEnable(...)													Uart_TxEnable()
-#define		Uart_RxDisable(...)													Uart_RxDisable()
-#define		Uart_RxEnable(...)													Uart_RxEnable()
-#define		Uart_Write(Data, ...)													Uart_Write(Data)
-#define		Uart_WriteNL(...)														Uart_WriteNL()
-#define		Uart_WriteDec(Value, ...)												Uart_WriteDec(Value)
-#define		Uart_WriteDecSigned(Value, ...)										Uart_WriteDecSigned(Value)
-#define		Uart_WriteBin(Data, Separator, ...)									Uart_WriteBin(Data, Separator)
-#define		Uart_WriteHex(Data, ...)									Uart_WriteHex(Data)
-#define		Uart_WriteHex(Data, Separator, ...)									Uart_WriteHex(Data, Separator)
-#define		Uart_WriteHexString(String, Length, Separator, BytesInRow, ...)		Uart_WriteHexString(String, Length, Separator, BytesInRow)
-#define		Uart_Dump(String, Length, AddressStartValue, ...)						Uart_Dump(String, Length, AddressStartValue)
-#define		Uart_Resend(...)														Uart_Resend()
-#define		Uart_Read(...)														Uart_Read()
-#define		Uart_ReceivedCnt(...)													Uart_ReceivedCnt()
-#define		Uart_RxBufferFlush(...)												Uart_RxBufferFlush()
-#define		Uart_TxBufferFlush(...)												Uart_TxBufferFlush()
-#define		Uart_WaitForTxComplete(...)											Uart_WaitForTxComplete()*/
-
 // Kontrola b³êdów
 #if C_UART_SINGLE && C_UART_MULTI
 	#error "Can't use C_UART_SINGLE and C_UART_MULTI at the same time"

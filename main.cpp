@@ -75,10 +75,6 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
-	#if C_PRINT
-		
-	#endif
-	
 	#if C_UCOSMOS
 		Os_Init();
 		Os_ConsoleInit();
