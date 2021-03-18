@@ -186,7 +186,7 @@ ISR(USARTX_DRE_vect) {
 	} 
 	else {																		// Bufor programowy pusty, koniec transmisji (ale bajty w buforze sprzêtowym ca³y czas s¹ jeszcze wysy³ane!)
 		USARTX.CTRLA		=	USART_RXCIE_bm |								// W³¹czenie przerwañ od DRE...
-							USART_TXCIE_bm;										// ...a RX oraz TX ju¿ wczeœniej by³o w³¹czone
+								USART_TXCIE_bm;									// ...a RX oraz TX ju¿ wczeœniej by³o w³¹czone
 	}
 }
 

@@ -147,14 +147,14 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 			// Czyszczenie bufora odbiorczego
 			// !! Kasowanie kolejnych poleceñ, które mog³y zostaæ odebrane podczas wykonywania poprzedniego polecenia
 			Uart_RxBufferFlush(ConsoleInstance->UartInstance);
-
+			
 			// Przywrócenie domyœlnego portu UART
 			UART_PortOverride = NULL;
-
+			
 			// Czyszczenie aktualnego bufora wiersza poleceñ
 			memset(ConsoleInstance->Buffer, 0, CMD_LINE_BUFFER_LENGTH);
 			ConsoleInstance->ReceivedCnt = 0;
-
+			
 			// Prompt by zasygnalizowaæ gotowoœæ do przyjêcia kolejnego polecenia
 			if(ConsoleInstance->Flags & FLAGS_USE_HMI) {
 				Console_PromptShow(ConsoleInstance);
@@ -163,7 +163,7 @@ void Console_TaskHandler(Console_Struct * ConsoleInstance) {
 			// Czyszczenie wszystkich flag, pozostawiaj¹c flagi HMI i M2M takie jak by³y wczeœniej
 			ConsoleInstance->Flags = ConsoleInstance->Flags & (FLAGS_USE_HMI | FLAGS_USE_M2M);
 		}
-
+		
 		// Wciœniêto ESCAPE
 		else if(Console_Result == Console_InputCancelled) {
 			//Print("[Console ");

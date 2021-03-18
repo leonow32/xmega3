@@ -26,7 +26,7 @@ HARDWARE
 
 
 // Pusta inicjalizacja
-void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data));
+void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data) = NULL);
 
 // Funkcje odpowiedzialne za printowanie ró¿nych danych
 void Print(const uint8_t Data);

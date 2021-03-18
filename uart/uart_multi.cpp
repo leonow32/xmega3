@@ -61,10 +61,10 @@ static volatile UART_Buffer_t * Uart__GetProgBuffer(USART_t * Port) {
 		}
 	#endif	
 	
-	Uart_Write("Uart__GetProgBuffer ");
-	Uart_WriteHex((uint16_t)Port);
-	asm volatile("wdr");
-	_delay_ms(100);
+// 	Uart_Write("Uart__GetProgBuffer ");
+// 	Uart_WriteHex((uint16_t)Port);
+// 	asm volatile("wdr");
+// 	_delay_ms(100);
 	
 	
 	//return &UART2_ProgBuf;
@@ -96,7 +96,7 @@ static void Uart__InitUsartPeripheral(USART_t * Port, UART_Buffer_t * Buffer, ui
 							USART_RS485_OFF_gc;									// RS485 Mode
 
 	Port->CTRLB			=	USART_RXEN_bm |										// Receiver Enable
-						  //USART_TXEN_bm |										// Transmitter Enable
+							USART_TXEN_bm |										// Transmitter Enable
 							USART_SFDEN_bm |									// Start Frame Detection Enable
 						  //USART_ODME_bm |										// Open Drain Mode Enable
 							USART_RXMODE_NORMAL_gc ;							// Receiver Mode
@@ -287,61 +287,61 @@ void Uart_Init() {
 
 
 // Wy³¹czenie transmitera (domyœlnie po inicjalizacji jest w³¹czony)
-void Uart_TxDisable(USART_t * Port) {
-	cli();
-	Port->CTRLB		&=	~USART_TXEN_bm;
-	sei();
-}
+// void Uart_TxDisable(USART_t * Port) {
+// 	cli();
+// 	Port->CTRLB		&=	~USART_TXEN_bm;
+// 	sei();
+// }
 
 
 // W³¹czenie transmitera (domyœlnie po inicjalizacji jest w³¹czony)
-void Uart_TxEnable(USART_t * Port) {
-	cli();
-
-	// W³¹czenie nadajnika
-	Port->CTRLB		|=	USART_TXEN_bm;
-
-	// Po wy³¹czeniu nadajnika UART pin Tx ustawiany jest automatycznie jako wejœcie i trzeba go ponownie skonfigurowaæ jako wyjœcie
-	// UWAGA - chyba jest tu jakiœ problem z procesorem, bo jeœli ustawienie pinów bêdzie przez ponownym w³¹czeniem nadajnika,
-	// to wpisanie 1 do rejestru DIR nie daje efektu!?
-	#if UART0_USE
-		if(Port == &USART0) {
-			Uart__InitPinsForUsart0();
-		}
-	#endif
-	
-	#if UART1_USE
-		if(Port == &USART1) {
-			Uart__InitPinsForUsart1();
-		}
-	#endif
-	
-	#if UART2_USE
-		if(Port == &USART2) {
-			Uart__InitPinsForUsart2();
-		}
-	#endif
-	
-	#if UART3_USE
-		if(Port == &USART3) {
-			Uart__InitPinsForUsart3();
-		}
-	#endif	
-
-	sei();
-}
+// void Uart_TxEnable(USART_t * Port) {
+// 	cli();
+// 
+// 	// W³¹czenie nadajnika
+// 	Port->CTRLB		|=	USART_TXEN_bm;
+// 
+// 	// Po wy³¹czeniu nadajnika UART pin Tx ustawiany jest automatycznie jako wejœcie i trzeba go ponownie skonfigurowaæ jako wyjœcie
+// 	// UWAGA - chyba jest tu jakiœ problem z procesorem, bo jeœli ustawienie pinów bêdzie przez ponownym w³¹czeniem nadajnika,
+// 	// to wpisanie 1 do rejestru DIR nie daje efektu!?
+// 	#if UART0_USE
+// 		if(Port == &USART0) {
+// 			Uart__InitPinsForUsart0();
+// 		}
+// 	#endif
+// 	
+// 	#if UART1_USE
+// 		if(Port == &USART1) {
+// 			Uart__InitPinsForUsart1();
+// 		}
+// 	#endif
+// 	
+// 	#if UART2_USE
+// 		if(Port == &USART2) {
+// 			Uart__InitPinsForUsart2();
+// 		}
+// 	#endif
+// 	
+// 	#if UART3_USE
+// 		if(Port == &USART3) {
+// 			Uart__InitPinsForUsart3();
+// 		}
+// 	#endif	
+// 
+// 	sei();
+// }
 
 
 // Wy³¹czenie odbiornika (domyœlnie po inicjalizacji jest w³¹czony)
-void Uart_RxDisable(USART_t * Port) {
-	Port->CTRLB		&=	~USART_RXEN_bm;
-}
+// void Uart_RxDisable(USART_t * Port) {
+// 	Port->CTRLB		&=	~USART_RXEN_bm;
+// }
 
 
 // W³¹czenie odbiornika (domyœlnie po inicjalizacji jest w³¹czony)
-void Uart_RxEnable(USART_t * Port) {
-	Port->CTRLB		|=	USART_RXEN_bm;
-}
+// void Uart_RxEnable(USART_t * Port) {
+// 	Port->CTRLB		|=	USART_RXEN_bm;
+// }
 
 
 
@@ -358,15 +358,18 @@ void Uart_Write(uint8_t Data, USART_t * Port) {
 		Port = UART_PortOverride;
 	}
 	
+	// Ustawienie flagi zajêtoœci transmitera
+	Port->TXPLCTRL = UART_TX_BUSY;
+	
 	// Je¿eli obecnie transmiter jest wy³¹czony, to go w³¹czamy 
-	if((Port->CTRLB & USART_TXEN_bm) == 0) {								
-		Uart_TxEnable(Port);													
-
-		// Je¿eli jest u¿ywana blokada uœpienia
-		#if UART_USE_UCOSMOS_SLEEP
-			OS_SLEEP_DISABLE;													// Ustawienie blokady uœpienia
-		#endif
-	}
+// 	if((Port->CTRLB & USART_TXEN_bm) == 0) {								
+// 		Uart_TxEnable(Port);													
+// 
+// 		// Je¿eli jest u¿ywana blokada uœpienia
+// 		#if UART_USE_UCOSMOS_SLEEP
+// 			OS_SLEEP_DISABLE;													// Ustawienie blokady uœpienia
+// 		#endif
+// 	}
 
 	// WskaŸnik do bufora pierœcieniowego
 	volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
@@ -401,10 +404,39 @@ void Uart_Write(uint8_t Data, USART_t * Port) {
 //	}
 	
 	// Aktualizacja CRC
-	Data = Data ^ uint8_t(Buffer->TxBufferCRC);
-	Data = Data ^ (Data << 4);
-	Buffer->TxBufferCRC = (Buffer->TxBufferCRC >> 8) ^ (Data << 8) ^ (Data << 3) ^ (Data >> 4);
+// 	Data = Data ^ uint8_t(Buffer->TxBufferCRC);
+// 	Data = Data ^ (Data << 4);
+// 	Buffer->TxBufferCRC = (Buffer->TxBufferCRC >> 8) ^ (Data << 8) ^ (Data << 3) ^ (Data >> 4);
 }
+
+
+// Wysy³anie znaku przez UART0
+#if UART0_USE
+void Uart0_Write(uint8_t Data) {
+	Uart_Write(Data, &USART0);
+}
+#endif
+
+// Wysy³anie znaku przez UART1
+#if UART1_USE
+void Uart1_Write(uint8_t Data) {
+	Uart_Write(Data, &USART1);
+}
+#endif
+
+// Wysy³anie znaku przez UART2
+#if UART2_USE
+void Uart2_Write(uint8_t Data) {
+	Uart_Write(Data, &USART2);
+}
+#endif
+
+// Wysy³anie znaku przez UART3
+#if UART3_USE
+void Uart3_Write(uint8_t Data) {
+	Uart_Write(Data, &USART3);
+}
+#endif
 
 
 // Funkcja obs³uguj¹ca przerwania od zwolnienia siê miejsca w buforze
@@ -469,17 +501,20 @@ ISR(USART3_DRE_vect) {
 
 // Funkcja obs³uguj¹ca przerwanie od zakoñczenia transmisji
 static void Uart__InterruptTx(USART_t * Port) {
-
+	
 	// Kasowanie flagi przerwania
 	Port->STATUS	=	USART_TXCIF_bm;
-
+	
 	// Wy³¹czenie transmitera
-	Port->CTRLB		&= ~USART_TXEN_bm;
-
+	//Port->CTRLB		&= ~USART_TXEN_bm;
+	
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
 		OS_SLEEP_ENABLE;														// Zwolnienie blokady uœpienia
 	#endif
+	
+	// Czyszczenie flagi zajêtoœci transmitera
+	Port->TXPLCTRL = 0;
 }
 
 
@@ -518,174 +553,7 @@ ISR(USART3_TXC_vect) {
 // Funkcje wy¿szego poziomu do wysy³ania przez UART
 // ================================================
 
-
-// Zapis ci¹gu znaków
-void Uart_Write(const char * Text, USART_t * Port) {
-	while(*Text) Uart_Write(*Text++, Port);
-}
-
-
-// Nowa linia
-void Uart_WriteNL(USART_t * Port) {
-	Uart_Write("\r\n", Port);
-}
-
-
-// Liczba dziesiêtna bez znaku
-void Uart_WriteDec(uint32_t Value, USART_t * Port) {
-	if(Value==0) {
-		Uart_Write('0', Port);
-		return;
-	}
-	
-	uint8_t cyfra[10];
-	memset(cyfra, 0, sizeof(cyfra));
-	int8_t i=0;
-	
-	while(Value) {
-		cyfra[i] = (uint8_t)(Value%10);
-		Value = Value / 10;
-		++i;
-	}
-	
-	while(i--) {
-		Uart_Write(cyfra[i]+48, Port);
-	}
-}
-
-// Liczba dziesiêtna ze znakiem
-void Uart_WriteDecSigned(int8_t Value, USART_t * Port) {
-	if(Value < 0) {
-		Uart_Write('-', Port);
-		Value = -Value;
-	}
-	Uart_WriteDec(uint8_t(Value), Port);
-}
-
-// Liczba dziesiêtna ze znakiem
-void Uart_WriteDecSigned(int32_t Value, USART_t * Port) {
-	if(Value < 0) {
-		Uart_Write('-', Port);
-		Value = -Value;
-	}
-	Uart_WriteDec(uint32_t(Value), Port);
-}
-
-
-// Zapis liczny binarnej
-void Uart_WriteBin(uint8_t Data, const uint8_t Separator, USART_t * Port) {
-	for(uint8_t BitMask = 0b10000000; BitMask; BitMask = BitMask >> 1) {
-		Uart_Write(Data & BitMask ? '1' : '0', Port);
-	}
-	if(Separator) Uart_Write(Separator, Port);
-}
-
-
-void Uart__WriteNibble(uint8_t Nibble, USART_t * Port) {
-	if(Nibble <= 9) Uart_Write(Nibble + '0', Port);
-	else Uart_Write(Nibble + 55, Port);
-}
-
-// Liczba HEX 8-bitowa
-void Uart_WriteHex(const uint8_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart__WriteNibble((Data & 0xF0) >> 4, Port);
-	Uart__WriteNibble((Data & 0x0F) >> 0, Port);
-	if(Separator) Uart_Write(Separator, Port); 
-}
-
-
-// Liczba HEX 16-bitowa
-void Uart_WriteHex(const uint16_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart_WriteHex(uint8_t((Data & 0xFF00) >> 8), 0, Port);
-	Uart_WriteHex(uint8_t((Data & 0x00FF)     ), Separator, Port);
-}
-
-
-// Liczba HEX 32-bitowa
-void Uart_WriteHex(const uint32_t Data, const uint8_t Separator, USART_t * Port) {
-	Uart_WriteHex(uint8_t((Data & 0xFF000000) >> 24), 0, Port);
-	Uart_WriteHex(uint8_t((Data & 0x00FF0000) >> 16), 0, Port);
-	Uart_WriteHex(uint8_t((Data & 0x0000FF00) >> 8 ), 0, Port);
-	Uart_WriteHex(uint8_t((Data & 0x000000FF)      ), Separator, Port);
-}
-
-
-// Ci¹g znaków prezentowany jako HEX
-void Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow, USART_t * Port) {
-	
-	for(uint16_t i=0; i<Length; i++) {
-		
-		// Przejœcie do nowej linii (nie dotyczny pierwszego wyœwietlanego znaku)
-		if((i%BytesInRow == 0) && i != 0) {
-			Uart_WriteNL(Port);
-		}
-
-		// Wyœwietlenie znaku
-		Uart_WriteHex(*(String+i), Separator, Port);
-	}
-}
-
-
-// Ci¹g znaków prezentowany jako HEX, wraz z nag³ówkiem i adresowaniem
-void Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue, USART_t * Port) {
-	
-	uint8_t * wskaznik		= (uint8_t *)String;
-	uint16_t LengthForHex	= Length;
-	uint16_t LengthForAscii	= Length;
-	uint16_t i = 0;
-
-	Uart_Write("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F", Port);
-
-	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
-	do {
-		
-		// Zejœcie do nowej linii
-		Uart_WriteNL(Port);
-
-		// Wyœwietlenie adresu
-		Uart_WriteHex(uint16_t(i + AddressStartValue), ':', Port);
-		Uart_Write(' ', Port);
-
-		// Wyœwietlenie HEX
-		for(uint8_t h=0; h<=15; h++) {
-			
-			// Sprawdzanie czy nie zosta³y wyœwietlone ju¿ wszystkie znaki
-			if(LengthForHex) {
-				LengthForHex--;
-				Uart_WriteHex(*(wskaznik+h), ' ', Port);
-			}
-			else {
-				// Wyœwietlanie trzech spacji, aby potem mo¿na by³o wyœwietliæ ASCII we w³aœciwym miejscu
-				Uart_Write("   ");
-			}
-		}
-		
-		// Wyœwietlenie ASCII
-		for(uint8_t h=0; h<=15; h++) {
-			if((*(wskaznik+h) >= ' ') && (*(wskaznik+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
-				Uart_Write(*(wskaznik+h), Port);
-			} 
-			else {
-				Uart_Write(' ', Port);
-			}
-			
-			if(--LengthForAscii == 0) {
-				break;
-			}
-		}
-		
-		// Inkrementacja wskaŸników
-		wskaznik += 16;
-		i += 16;
-
-		// Reset watchdoga
-		asm volatile("wdr");
-	} while(i <= Length-1 && i != 0);		// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
-
-
-}
-
-
+/*
 // Ponowne wys³anie ca³ej zawartoœci bufora TX
 // Aby ta operacja dzia³a³a prawid³owo, wczeœniej nale¿y wywo³aæ Uart_TxBufferFlush i d³ugoœæ wysy³anego
 // ci¹gu znaków nie mo¿e przekroczyæ d³ugoœci bufora UART_TX_BUFFER_LENGTH
@@ -756,6 +624,7 @@ void Uart_Resend(USART_t * Port) {
 	
 //	Uart_Write((const char *)Buffer->TxBuffer);
 }
+*/
 
 
 // ====================
@@ -907,7 +776,7 @@ void Uart_TxBufferFlush(volatile UART_Buffer_t * ProgBuf) {
 	ProgBuf->TxBufferHead	=	0;
 	ProgBuf->TxBufferTail	=	0;
 	ProgBuf->TxBufferCnt	=	0;
-	ProgBuf->TxBufferCRC	=	0x6363;
+//	ProgBuf->TxBufferCRC	=	0x6363;
 	sei();
 }
 
@@ -921,10 +790,7 @@ void Uart_TxBufferFlush(USART_t * Port) {
 
 // Czekanie a¿ transmisja dobiegnie koñca (przydatne przed wejœciem w stan uœpienia) - wersja dla wskazanego UART
 void Uart_WaitForTxComplete(USART_t * Port) {
-	if(Uart__GetProgBuffer(Port)->TxBufferCnt == 0) {
-		return;
-	}
-	while(Port->CTRLB & USART_TXEN_bm);
+	while(Port->TXPLCTRL);
 }
 
 
@@ -932,32 +798,32 @@ void Uart_WaitForTxComplete(USART_t * Port) {
 void Uart_WaitForTxComplete(void) {
 
 	#if UART0_USE
-		while(USART0.CTRLB & USART_TXEN_bm);
+		Uart_WaitForTxComplete(&USART0);
 	#endif
 	
 	#if UART1_USE
-		while(USART1.CTRLB & USART_TXEN_bm);
+		Uart_WaitForTxComplete(&USART1);
 	#endif
 	
 	#if UART2_USE
-		while(USART2.CTRLB & USART_TXEN_bm);
+		Uart_WaitForTxComplete(&USART2);
 	#endif
 	
 	#if UART3_USE
-		while(USART3.CTRLB & USART_TXEN_bm);
+		Uart_WaitForTxComplete(&USART3);
 	#endif
 }
 
 
 // Zerowanie kontrolnego CRC
-void Uart_TxCrcClear(USART_t * Port) {
-	Uart__GetProgBuffer(Port)->TxBufferCRC = 0x6363;
-}
-
-
+// void Uart_TxCrcClear(USART_t * Port) {
+// 	Uart__GetProgBuffer(Port)->TxBufferCRC = 0x6363;
+// }
+// 
+// 
 // Odczytywanie kontrolnego CRC
-uint16_t Uart_TxCrcGet(USART_t * Port) {
-	return Uart__GetProgBuffer(Port)->TxBufferCRC;
-}
+// uint16_t Uart_TxCrcGet(USART_t * Port) {
+// 	return Uart__GetProgBuffer(Port)->TxBufferCRC;
+// }
 
 #endif

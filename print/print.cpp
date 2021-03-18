@@ -30,13 +30,14 @@ void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
 void Print(const uint8_t Data) {
 	
 	#if PRINT_USE_STREAM_SINGLE
-		PRINT_DEFAULT_STREAM(Char);
+		PRINT_DEFAULT_STREAM(Data);
 	#endif
 	
 	#if PRINT_USE_STREAM_MULTI
 		Print_Pointer(Data);
 	#endif
 }
+
 
 // Zapis ci¹gu znaków
 void Print(const char * Text) {

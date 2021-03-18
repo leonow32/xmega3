@@ -4,7 +4,7 @@
 #define PRINT_CONFIG_H_
 
 
-#if B_XNANO
+#if TEMPLATE
 	
 	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
 	#define PRINT_USE_STREAM_SINGLE					0
@@ -16,7 +16,19 @@
 #endif
 
 
-#if TEMPLATE
+#if P_AVRIOT
+	
+	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
+	#define PRINT_USE_STREAM_SINGLE					0
+	#define PRINT_USE_STREAM_MULTI					1
+	
+	// Domyœlny strumieñ wyjœciowy
+	#define PRINT_DEFAULT_STREAM					Uart2_Write
+	
+#endif
+
+
+#if P_XNANO
 	
 	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
 	#define PRINT_USE_STREAM_SINGLE					0

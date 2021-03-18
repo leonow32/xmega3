@@ -94,6 +94,18 @@ int main(void) {
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
 	Os_ResetSourceClear();
 	
+	Print_SetStream(Uart1_Write);
+	Print("To jest wyslane przez UART1\r\n");
+	Print_SetStream(Uart2_Write);
+	Print("To jest wyslane przez UART2\r\n");
+	Print_SetStream(Uart1_Write);
+	Print("To znowu jest wyslane przez UART1\r\n");
+	Print_SetStream(Uart2_Write);
+	Print("To znowu jest wyslane przez UART2\r\n");
+	Print_SetStream();
+	Print("To znowu jest wyslane przez UART domyslny\r\n");
+	
+	
 	// Peripherals demo tasks
 	#if B_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskRed,		1000);
@@ -112,7 +124,7 @@ int main(void) {
 	// ========================================
 	
 // 	while(1) {
-// 		Uart_Write("0123456789");
+// 		Print("0123456789");
 // 		_delay_ms(1000);
 // 	}
 	
