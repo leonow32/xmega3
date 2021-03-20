@@ -1,0 +1,10 @@
+
+					AVR-IoT		CURIO48049	XNANO
+CLOCK				x			x			x
+CONSOLE				x			x			x
+PERIPHERALS			x			x			x
+PRINT_SIGNLE
+PRINT_MULTI
+UART_SINGLE
+UART_MULTI
+UCOSMOS				x			x			x

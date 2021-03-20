@@ -3,10 +3,9 @@
 #include "peripherals.h"
 
 
-// =======
-// AVR-IoT 
-// =======
-
+// ========================================
+// Dev Board AVR-IoT
+// ========================================
 
 #if B_AVRIOT
 
@@ -17,25 +16,22 @@ void Peripherals_Init(void) {
 	LED_YELLOW_INIT;
 	LED_GREEN_INIT;
 	LED_BLUE_INIT;
-
+	
 	// Przyciski
 	KEY_SW0_INIT;
 	KEY_SW1_INIT;
-
+	
 	// Piny IO
 	PWM_INIT;
 	INT_INIT;
 	
 }
 
-// ==========================
-// PERIPHERALS_USE_DEMO_TASKS
-// ==========================
 
 #if PERIPHERALS_USE_DEMO_TASKS
 // Task demonstracyjny do mrugania diodami
 task_t Peripherals_TaskRed(runmode_t RunMode) {
-
+	
 	// Tryb wywo³ania
 	switch(RunMode) {
 		
@@ -45,7 +41,7 @@ task_t Peripherals_TaskRed(runmode_t RunMode) {
 			Print("LedR");
 			return TaskOK;
 		#endif
-
+	
 		// Normalne wywo³anie przez Scheduler
 		default:
 			LED_RED_TGL;
@@ -58,7 +54,7 @@ task_t Peripherals_TaskRed(runmode_t RunMode) {
 
 // Task demonstracyjny do mrugania diodami
 task_t Peripherals_TaskYellow(runmode_t RunMode) {
-
+	
 	// Tryb wywo³ania
 	switch(RunMode) {
 		
@@ -68,20 +64,20 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 			Print("LedY");
 			return TaskOK;
 		#endif
-
+	
 		// Normalne wywo³anie przez Scheduler
 		default:
 			LED_YELLOW_TGL;
 			return TaskOK;
 	}
-
+	
 	return TaskOK;
 } 
 
 
 // Task demonstracyjny do mrugania diodami
 task_t Peripherals_TaskGreen(runmode_t RunMode) {
-
+	
 	// Tryb wywo³ania
 	switch(RunMode) {
 		
@@ -91,20 +87,20 @@ task_t Peripherals_TaskGreen(runmode_t RunMode) {
 			Print("LedG");
 			return TaskOK;
 		#endif
-
+	
 		// Normalne wywo³anie przez Scheduler
 		default:
 			LED_GREEN_TGL;
 			return TaskOK;
 	}
-
+	
 	return TaskOK;
 } 
 
 
 // Task demonstracyjny do mrugania diodami
 task_t Peripherals_TaskBlue(runmode_t RunMode) {
-
+	
 	// Tryb wywo³ania
 	switch(RunMode) {
 		
@@ -114,21 +110,16 @@ task_t Peripherals_TaskBlue(runmode_t RunMode) {
 			Print("LedB");
 			return TaskOK;
 		#endif
-
+	
 		// Normalne wywo³anie przez Scheduler
 		default:
 			LED_BLUE_TGL;
 			return TaskOK;
 	}
-
+	
 	return TaskOK;
 } 
 #endif
-
-
-// =============================
-// PERIPHERALS_USE_DEMO_COMMANDS
-// =============================
 
 
 #if PERIPHERALS_USE_DEMO_COMMANDS
@@ -170,9 +161,10 @@ void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
 #endif
 #endif
 
-// =====
-// XNANO
-// =====
+
+// ========================================
+// Dev Board XNANO
+// ========================================
 
 
 #if B_XNANO
@@ -185,10 +177,6 @@ void Peripherals_Init(void) {
 	// Przyciski
 	KEY_SW0_INIT;
 }
-
-// ==========================
-// PERIPHERALS_USE_DEMO_TASKS
-// ==========================
 
 #if PERIPHERALS_USE_DEMO_TASKS
 // Task demonstracyjny do mrugania diodami
@@ -203,13 +191,13 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 			Print("LedY");
 			return TaskOK;
 		#endif
-
+	
 		// Normalne wywo³anie przez Scheduler
 		default:
 			LED_YELLOW_TGL;
 			return TaskOK;
 	}
-
+	
 	return TaskOK;
 } 
 #endif

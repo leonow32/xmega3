@@ -5,12 +5,11 @@
 
 #include "../config/config.h"
 
-
-// ========
+// ========================================
 // Template
-// ========
+// ========================================
 
-#if TEMPLATE
+#if P_TEMPLATE
 	
 	#if HW_CPU_ATtinyXX12
 		#define	UART0_USE					1
@@ -120,9 +119,9 @@
 	#define		UART_RX_BUFFER_LENGTH		128
 #endif
 
-//
-//
-// 
+// ========================================
+// Dev Board AVR-IoT
+// ========================================
 
 #if B_AVRIOT
 	
@@ -167,11 +166,17 @@
 	#define		UART_RX_BUFFER_LENGTH		128
 #endif
 
+// ========================================
+// Dev Board Curiosity ATmega4809
+// ========================================
 
-// =====
-// XNANO
-// =====
+#if P_CURIO4809
+	#error "Not ready"
+#endif
 
+// ========================================
+// Dev Board XNANO
+// ========================================
 
 #if B_XNANO
 	#define	UART0_USE					1
