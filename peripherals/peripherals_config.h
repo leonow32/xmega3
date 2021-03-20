@@ -71,6 +71,16 @@
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
+	// Diody LED
+	#define		LED_YELLOW_ON			VPORTF.OUT	|=  PIN5_bm
+	#define		LED_YELLOW_OFF			VPORTF.OUT	&= ~PIN5_bm
+	#define		LED_YELLOW_TGL			VPORTF.OUT	^=  PIN5_bm
+	#define		LED_YELLOW_INIT			VPORTF.DIR	|=	PIN5_bm;	PORTF.PIN5CTRL = PORT_INVEN_bm;
+	
+	// Przyciski
+	#define		KEY_SW0_READ			(VPORTF.IN	&	PIN6_bm)
+	#define		KEY_SW0_INIT			PORTF.PIN6CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
+	
 #endif
 
 // ========================================

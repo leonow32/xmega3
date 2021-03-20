@@ -44,7 +44,7 @@
 	#define PRINT_USE_STREAM_MULTI					1
 	
 	// Domyœlny strumieñ wyjœciowy
-	#define PRINT_DEFAULT_STREAM					Uart2_Write
+	#define PRINT_DEFAULT_STREAM					Uart3_Write
 	
 #endif
 

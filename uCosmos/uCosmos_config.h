@@ -123,7 +123,7 @@
 	
 	// Konsola systemowa
 	#define		OS_USE_CONSOLE					1			// Czy mam byæ wykorzystywana konsola systemowa przez UART
-	#define		OS_CONSOLE_UART_INSTANCE		USART2		// Który port UART ma byæ wykorzystywany do konsoli
+	#define		OS_CONSOLE_UART_INSTANCE		USART3		// Który port UART ma byæ wykorzystywany do konsoli
 
 	// Watchdog
 	#define		OS_USE_WATCHDOG					0			// W³¹czenia watchdoga podczas inisjalizacji i jego reset w Schedulerze

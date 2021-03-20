@@ -49,7 +49,7 @@ task_t Peripherals_TaskRed(runmode_t RunMode) {
 	}
 
 	return TaskOK;
-} 
+}
 
 
 // Task demonstracyjny do mrugania diodami
@@ -72,7 +72,7 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 	}
 	
 	return TaskOK;
-} 
+}
 
 
 // Task demonstracyjny do mrugania diodami
@@ -95,7 +95,7 @@ task_t Peripherals_TaskGreen(runmode_t RunMode) {
 	}
 	
 	return TaskOK;
-} 
+}
 
 
 // Task demonstracyjny do mrugania diodami
@@ -153,11 +153,71 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	Print(KEY_SW1_READ ? '1' : '0');
 }
 
+#endif
+#endif
 
-// Testowe odbijanie pierwszego argumentu
-void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
-	Print((const char *)argv[1]);
+
+// ========================================
+// Dev Board Curiosity ATmega4809
+// ========================================
+
+#if P_CURIO4809
+void Peripherals_Init(void) {
+	
+	// Diody LED
+	LED_YELLOW_INIT;
+	
+	// Przyciski
+	KEY_SW0_INIT;
 }
+
+#if PERIPHERALS_USE_DEMO_TASKS
+// Task demonstracyjny do mrugania diodami
+task_t Peripherals_TaskYellow(runmode_t RunMode) {
+
+	// Tryb wywo³ania
+	switch(RunMode) {
+		
+		// Wywo³anie identyfikacyjne
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("LedY");
+			return TaskOK;
+		#endif
+	
+		// Normalne wywo³anie przez Scheduler
+		default:
+			LED_YELLOW_TGL;
+			return TaskOK;
+	}
+	
+	return TaskOK;
+} 
+#endif
+
+
+#if PERIPHERALS_USE_DEMO_COMMANDS
+// Ustawienie pinów wyjœciowych
+void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		Print("ioset peripheral[ASC1] state[0/1]");
+		return;
+	}
+	
+	switch(*argv[1]) {
+		case 'y':		if(*argv[2] == '1')		{LED_YELLOW_ON;}			else 	LED_YELLOW_OFF;	break;
+		default:		Print("Wrong arg");															return;
+	}
+}
+
+
+// Odczytanie stanu pinów
+void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
+	Print("SW0\t=\t");
+	Print(KEY_SW0_READ ? '1' : '0');
+}
+
 #endif
 #endif
 
@@ -203,11 +263,6 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 #endif
 
 
-// =============================
-// PERIPHERALS_USE_DEMO_COMMANDS
-// =============================
-
-
 #if PERIPHERALS_USE_DEMO_COMMANDS
 // Ustawienie pinów wyjœciowych
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
@@ -230,11 +285,6 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	Print(KEY_SW0_READ ? '1' : '0');
 }
 
-
-// Testowe odbijanie pierwszego argumentu
-void Peripherals_Echo(uint8_t argc, uint8_t * argv[]) {
-	Print((const char *)argv[1]);
-}
 #endif
 
 #endif

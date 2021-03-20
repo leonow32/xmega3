@@ -107,14 +107,18 @@ int main(void) {
 	
 	
 	// Peripherals demo tasks
-	#if B_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
+	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskRed,		1000);
 		TaskAddMs(Peripherals_TaskYellow,	1100);
 		TaskAddMs(Peripherals_TaskGreen,	1200);
 		TaskAddMs(Peripherals_TaskBlue,		1300);
 	#endif
 	
-	#if B_XNANO && PERIPHERALS_USE_DEMO_TASKS
+	#if P_XNANO && PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
+	
+	#if P_CURIO4809 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
