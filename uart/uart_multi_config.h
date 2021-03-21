@@ -191,8 +191,8 @@
 	
 	#if UART2_USE
 		#define	UART2_BAUD				115200			// Connected to...
-		#define	UART2_PORTF_01			1
-		#define	UART2_PORTF_45			0
+		#define	UART2_PORTF_01			0
+		#define	UART2_PORTF_45			1
 	#endif
 	
 	#if UART3_USE

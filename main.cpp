@@ -94,17 +94,16 @@ int main(void) {
 	Os_ResetSourceShow(RSTCTRL.RSTFR);
 	Os_ResetSourceClear();
 	
-	Print_SetStream(Uart1_Write);
-	Print("To jest wyslane przez UART1\r\n");
-	Print_SetStream(Uart2_Write);
-	Print("To jest wyslane przez UART2\r\n");
-	Print_SetStream(Uart1_Write);
-	Print("To znowu jest wyslane przez UART1\r\n");
-	Print_SetStream(Uart2_Write);
-	Print("To znowu jest wyslane przez UART2\r\n");
-	Print_SetStream();
-	Print("To znowu jest wyslane przez UART domyslny\r\n");
-	
+// 	Print_SetStream(Uart1_Write);
+// 	Print("To jest wyslane przez UART1\r\n");
+// 	Print_SetStream(Uart2_Write);
+// 	Print("To jest wyslane przez UART2\r\n");
+// 	Print_SetStream(Uart1_Write);
+// 	Print("To znowu jest wyslane przez UART1\r\n");
+// 	Print_SetStream(Uart2_Write);
+// 	Print("To znowu jest wyslane przez UART2\r\n");
+// 	Print_SetStream();
+// 	Print("To znowu jest wyslane przez UART domyslny\r\n");
 	
 	// Peripherals demo tasks
 	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
@@ -138,6 +137,30 @@ int main(void) {
 // 			Uart_Write(Uart_Read());
 // 		}
 // 	}
+	
+	while(1) {
+			Print_SetStream(&Uart0_Write);
+			Print("UART0_UUU");
+			Print_SetStream(&Uart1_Write);
+			Print("UART1_UUU");
+			Print_SetStream(&Uart2_Write);
+			Print("UART2_UUU");
+			Print_SetStream(&Uart3_Write);
+			Print("UART3_UUU");
+			Print_SetStream();
+			_delay_ms(1000);
+
+// 			Print_SetStream(&Uart0_Write);
+// 			Print("UART0 012345678901234567890123456789");
+// 			Print_SetStream(&Uart1_Write);
+// 			Print("UART1 012345678901234567890123456789");
+// 			Print_SetStream(&Uart2_Write);
+// 			Print("UART2 012345678901234567890123456789");
+// 			Print_SetStream(&Uart3_Write);
+// 			Print("UART3 012345678901234567890123456789");
+			Print_SetStream();
+			_delay_ms(1000);
+	}
 	
 	while(1) {
 		TaskScheduler();
