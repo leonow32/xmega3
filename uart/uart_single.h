@@ -114,14 +114,6 @@ HARDWARE
 // TODO: Zoptymalizowaæ to
 #define UART_DEFAULT_PORT	NULL
 
-// DEBUG
-#define PIN_A_INIT		PORTB.DIRSET = PIN1_bm
-#define PIN_A_ON		VPORTB.OUT	|=	PIN1_bm
-#define PIN_A_OFF		VPORTB.OUT	&= ~PIN1_bm
-#define PIN_B_INIT		PORTB.DIRSET = PIN4_bm
-#define PIN_B_ON		VPORTB.OUT	|=	PIN4_bm
-#define PIN_B_OFF		VPORTB.OUT	&= ~PIN4_bm
-
 // Definicje statusów
 // Zapisywanie w rejestrze TXPLCTRL, który s³u¿y do IR, ale nie wykorzystujemy tej mo¿liwoœci
 #define UART_TX_BUSY		uint8_t(0b00000001)

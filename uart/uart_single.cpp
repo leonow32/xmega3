@@ -14,10 +14,6 @@ USART_t * UART_PortOverride = NULL;
 // Inicjalizacja zgodnie z konfiguracj¹ w pliku configS
 void Uart_Init(void) {
 	
-	// DEBUG
-	PIN_A_INIT;
-	PIN_B_INIT;
-	
 	// Konfiguracja dla ATtinyXX14/16/17/18 - port podstawowy
 	#if UART0_PORTB_23 && (HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
 		PORTMUX.CTRLB	&= ~PORTMUX_USART0_ALTERNATE_gc;
