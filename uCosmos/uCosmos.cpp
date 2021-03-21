@@ -116,12 +116,6 @@ void TaskScheduler(void) {
 		uint32_t IIR;
 	#endif
 
-
-	// !! Debug na XNANO
-	#if B_XNANO
-		PA6_ON;
-	#endif
-
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
 		if(Task[i].Pending) {
 			if(Task[i].Pending != OS_RUN_EVERY_CYCLE) {
@@ -141,21 +135,21 @@ void TaskScheduler(void) {
 								
 				// Debug
 				#if OS_DEBUG_MESSAGES_SHOW
-					Uart_WriteNL();
+					Print_NL();
 
 					#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 						Os_TimePrint();
 					#endif
 
-					Uart_Write("Task(");
+					Print("Task(");
 
 					#if OS_USE_TASK_IDENTIFY
 						Task[i].TaskPtr(Identify);
 					#else
-						Uart_WriteHex((uint16_t)Task[i].TaskPtr);
+						Print_Hex((uint16_t)Task[i].TaskPtr);
 					#endif
 
-					Uart_Write(") = Done");
+					Print(") = Done");
 				#endif
 				
 				TaskClear(i);							// Je¿eli proces siê zakoñczy³ to czyœcimy jego slot
@@ -204,11 +198,6 @@ void TaskScheduler(void) {
 		#endif
 	}
 
-	// !! Debug na XNANO
-	#if B_XNANO
-		PA6_OFF;
-	#endif
-
 	// W konfiguracji mo¿na ustawiæ, by sleep uruchomiæ w Schedularze, zamiast w main()
 	#if OS_USE_SLEEP && OS_SLEEP_INDISE_SCHEDULER
 		
@@ -256,21 +245,21 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 	
 	// Wyœwietlanie komunikatów
 	#if OS_DEBUG_MESSAGES_SHOW
-		Uart_WriteNL();
+		Print_NL();
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 			Os_TimePrint();
 		#endif
-		Uart_Write("TaskAdd(");
+		Print("TaskAdd(");
 		#if OS_USE_TASK_IDENTIFY
 			TaskPtr(Identify);
 		#else
-			Uart_WriteHex((uint16_t)TaskPtr);
+			Print_Hex((uint16_t)TaskPtr);
 		#endif
-		Uart_Write(',');
-		Uart_WriteDec(Period);
-		Uart_Write(',');
-		Uart_WriteDec(InitCounter);
-		Uart_Write(") = ");
+		Print(',');
+		Print_Dec(Period);
+		Print(',');
+		Print_Dec(InitCounter);
+		Print(") = ");
 	#endif
 
 	// Ca³oœæ jest wykonywana przy wy³¹czonych przerwaniach
@@ -283,7 +272,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		
 		// Debug - task zosta³ ju¿ utworzony wczeœniej
 		#if OS_DEBUG_MESSAGES_SHOW
-			Uart_Write("TaskAlreadyCreated");
+			Print("TaskAlreadyCreated");
 		#endif
 
 		return OsTaskAlreadyCreated;
@@ -297,7 +286,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		
 		// Debug
 		#if OS_DEBUG_MESSAGES_SHOW
-			Uart_Write("NoFreeSlot");
+			Print("NoFreeSlot");
 		#endif
 
 		return OsNoFreeSlot;
@@ -345,7 +334,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		
 		case TaskOK:
 			#if OS_DEBUG_MESSAGES_SHOW
-				Uart_Write("OK");
+				Print("OK");
 			#endif
 
 			return OsOK;			
@@ -353,14 +342,14 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		case TaskDone:
 			TaskClear(SlotNumber);
 			#if OS_DEBUG_MESSAGES_SHOW
-				Uart_Write("TaskDone");
+				Print("TaskDone");
 			#endif			
 			return OsTaskDoneWhenFirstRun;
 			
 		case TaskError:
 			TaskClear(SlotNumber);
 			#if OS_DEBUG_MESSAGES_SHOW
-				Uart_Write("Error");
+				Print("Error");
 			#endif			
 			return OsTaskErrorWhenFirstRun;			
 	}
@@ -402,21 +391,21 @@ os_t TaskClear(uint8_t SlotNumber) {
 os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 
 	#if OS_DEBUG_MESSAGES_SHOW
-		Uart_WriteNL();
+		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 			Os_TimePrint();
 		#endif
 
-		Uart_Write("TaskClose(");
+		Print("TaskClose(");
 
 		#if OS_USE_TASK_IDENTIFY
 			TaskPtr(Identify);
 		#else
-			Uart_WriteHex((uint16_t)TaskPtr);
+			Print_Hex((uint16_t)TaskPtr);
 		#endif
 
-		Uart_Write(") = ");
+		Print(") = ");
 	#endif
 	
 	// Szukanie tasku - wersja jeœli nie dozwolone dodawanie wielu tych samych tasków
@@ -426,7 +415,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 			
 			// Debug
 			#if OS_DEBUG_MESSAGES_SHOW
-				Uart_Write("NotFound");
+				Print("NotFound");
 			#endif
 
 			return OsNotFound;
@@ -440,7 +429,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 			
 			// Debug
 			#if OS_DEBUG_MESSAGES_SHOW
-				Uart_Write("NotFound");
+				Print("NotFound");
 			#endif
 			
 			return OsNotFound;
@@ -455,7 +444,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		
 		// Debug
 		#if OS_DEBUG_MESSAGES_SHOW
-			Uart_Write("OK");
+			Print("OK");
 		#endif
 
 		return TaskClear(SlotNumber);
@@ -465,7 +454,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		
 		// Debug
 		#if OS_DEBUG_MESSAGES_SHOW
-			Uart_Write("NotConfirmed");
+			Print("NotConfirmed");
 		#endif
 		
 		return OsCloseNotConfirmed;
@@ -505,25 +494,25 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 	// Debug
 	#if OS_DEBUG_MESSAGES_SHOW
 
-		Uart_WriteNL();
+		Print_NL();
 
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 			Os_TimePrint();
 		#endif
 
-		Uart_Write("TaskPeriodChange(");
+		Print("TaskPeriodChange(");
 
 		#if OS_USE_TASK_IDENTIFY
 			Task[SlotNumber].TaskPtr(Identify);
 		#else
-			Uart_WriteHex((uint16_t)Task[SlotNumber].TaskPtr);
+			Print_Hex((uint16_t)Task[SlotNumber].TaskPtr);
 		#endif
 
-		Uart_Write(',');
-		Uart_WriteDec(Period);
-		Uart_Write(',');
-		Uart_WriteDec(Counter);
-		Uart_Write(")");
+		Print(',');
+		Print_Dec(Period);
+		Print(',');
+		Print_Dec(Counter);
+		Print(")");
 	#endif
 
 	return OsOK;
@@ -665,7 +654,7 @@ task_t TaskConsole(runmode_t RunMode) {
 	// Identyfikacja
 	#if OS_USE_TASK_IDENTIFY
 	else if(RunMode == Identify) {
-		Uart_Write("OsConsole");
+		Print("OsConsole");
 	}
 	#endif
 	
@@ -719,9 +708,9 @@ static uint32_t Os__DebugShowPercentUsage(uint8_t SlotNumber) {
 	uint32_t TimeInSecond = CallsPerSecond * AverageTime;										// Sumaryczny czas zajêty przez task w ci¹gu sekundy (podany w us)
 	TimeInSecond = TimeInSecond / 1000;															// Sumaryczny czas zajêty przez task w ci¹gu sekundy (podany w ms)
 	
-	Uart_WriteDec(TimeInSecond / 10);
-	Uart_Write('.');
-	Uart_WriteDec(TimeInSecond % 10);
+	Print_Dec(TimeInSecond / 10);
+	Print('.');
+	Print_Dec(TimeInSecond % 10);
 
 	return TimeInSecond;
 }
@@ -738,57 +727,57 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 	#endif
 
 	// Nag³ówek tabeli
-	Uart_Write("No\tPtr\tPend\t");
+	Print("No\tPtr\tPend\t");
 
 	#if OS_TASK_MONITOR_CNT
-		Uart_Write("Cnt\t");
+		Print("Cnt\t");
 	#endif
 
-	Uart_Write("Per\t");
+	Print("Per\t");
 	
 	#if OS_TASK_MONITOR_MIN_MAX
-		Uart_Write("Tmax\tTmin\t");
+		Print("Tmax\tTmin\t");
 	#endif
 	
 	#if OS_TASK_MONITOR_AVG_PROC
-		Uart_Write("Tavg\tProc\t");
+		Print("Tavg\tProc\t");
 	#endif
 	
 	#if OS_USE_TASK_IDENTIFY
-		Uart_Write("Id");
+		Print("Id");
 	#endif
 
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
-		Uart_WriteNL();
-		Uart_WriteDec(i); 
-		Uart_Write("\t");
-		Uart_WriteHex((uint16_t)(Task[i].TaskPtr));
-		Uart_Write("\t");
-		Uart_WriteDec(Task[i].Pending);
-		Uart_Write("\t");
+		Print_NL();
+		Print_Dec(i); 
+		Print("\t");
+		Print_Hex((uint16_t)(Task[i].TaskPtr));
+		Print("\t");
+		Print_Dec(Task[i].Pending);
+		Print("\t");
 		
 		#if OS_TASK_MONITOR_CNT
-			Uart_WriteDec(Task[i].Counter);
-			Uart_Write("\t");
+			Print_Dec(Task[i].Counter);
+			Print("\t");
 		#endif
 
-		//Uart_WriteDec(Task[i].Period * OS_TICK_DELAY);
-		Uart_WriteDec(Task[i].Period);
-		Uart_Write("\t");
+		//Print_Dec(Task[i].Period * OS_TICK_DELAY);
+		Print_Dec(Task[i].Period);
+		Print("\t");
 		
 		#if OS_TASK_MONITOR_MIN_MAX
-			Uart_WriteDec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeMax));
-			Uart_Write("\t");
-			Uart_WriteDec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeMin));
-			Uart_Write("\t");
+			Print_Dec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeMax));
+			Print("\t");
+			Print_Dec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeMin));
+			Print("\t");
 		#endif
 		
 		#if OS_TASK_MONITOR_AVG_PROC
-			Uart_WriteDec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeAvg));
-			Uart_Write("\t");
+			Print_Dec(Os__DebugConvertTicksToMicroseconds(Task[i].TimeAvg));
+			Print("\t");
 			Percentage = Os__DebugShowPercentUsage(i);
 			PercentageSum += Percentage;
-			Uart_Write("\t");
+			Print("\t");
 		#endif 
 		
 		#if OS_USE_TASK_IDENTIFY
@@ -796,25 +785,25 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 		#endif
 	}
 	
-	Uart_Write("\r\nF_CPU:\t\t");
-	Uart_WriteDec(F_CPU / 1000000);
-// 	Uart_Write('.');
-// 	Uart_WriteDec(F_CPU % 1000000);
+	Print("\r\nF_CPU:\t\t");
+	Print_Dec(F_CPU / 1000000);
+// 	Print('.');
+// 	Print_Dec(F_CPU % 1000000);
 	
-	Uart_Write("\r\nTickTime:\t");
-	Uart_WriteDec(OS_TICK_DELAY);
+	Print("\r\nTickTime:\t");
+	Print_Dec(OS_TICK_DELAY);
 
 	#if OS_TASK_MONITOR_TASKMAXCNT
-		Uart_Write("\r\nMaxTasks:\t");
-		Uart_WriteDec(Os_DebugMaxTaskCnt);
+		Print("\r\nMaxTasks:\t");
+		Print_Dec(Os_DebugMaxTaskCnt);
 	#endif
 
 	#if OS_TASK_MONITOR_AVG_PROC
-		Uart_Write("\r\nCPU usage:\t");
-		Uart_WriteDec(PercentageSum / 10);
-		Uart_Write('.');
-		Uart_WriteDec(PercentageSum % 10);
-		Uart_Write('%');
+		Print("\r\nCPU usage:\t");
+		Print_Dec(PercentageSum / 10);
+		Print('.');
+		Print_Dec(PercentageSum % 10);
+		Print('%');
 	#endif
 }
 
@@ -856,9 +845,9 @@ ISR(RTC_CNT_vect) {													// Przerwanie wywo³ywane na koniec uœpienia prze
 				#if OS_DEBUG_MESSAGES_SHOW
 				else {
 					// Przepe³nienie zmiennej pending
-					Uart_Write("\r\nPending overflow on slot ");
-					Uart_WriteDec(i);
-					asm volatile("break");
+					Print("\r\nPending overflow on slot ");
+					Print_Dec(i);
+					//asm volatile("break");
 					// !! Domyœlny UART musi mieæ najwy¿szy priorytet, bo inaczej w tym miejscy mo¿e dojœæ do zawieszenia siê programu
 				}
 				#endif
@@ -903,8 +892,8 @@ ISR(RTC_PIT_vect) {													// Przerwanie wywo³ywane co 1 sekundê
 
 // Na potrzeby Os_TimePrint(), ¿eby zaoszczêdziæ trochê miejsca programu
 static void Os__DecXXprint(uint8_t Dec) {
-	Uart_Write(Dec / 10 + '0');
-	Uart_Write(Dec % 10 + '0');
+	Print(Dec / 10 + '0');
+	Print(Dec % 10 + '0');
 }
 
 
@@ -917,18 +906,18 @@ void Os_TimePrint(time_t Time) {
 	
 	Os__DecXXprint(20);
 	Os__DecXXprint(TimeStruct.tm_year - 100);
- 	Uart_Write('-');
+ 	Print('-');
 	Os__DecXXprint(TimeStruct.tm_mon + 1);
-	Uart_Write('-');
+	Print('-');
 	Os__DecXXprint(TimeStruct.tm_mday);
-	Uart_Write(' ');
+	Print(' ');
 	Os__DecXXprint(TimeStruct.tm_hour);
-	Uart_Write(':');
+	Print(':');
 	Os__DecXXprint(TimeStruct.tm_min);
-	Uart_Write(':');
+	Print(':');
 	Os__DecXXprint(TimeStruct.tm_sec);
 
-//	Uart_Write("2000-00-00 00:00:00 INV ");
+//	Print("2000-00-00 00:00:00 INV ");
 	
 }
 
@@ -936,14 +925,14 @@ void Os_TimePrint(time_t Time) {
 // Wyœwietlenie czasu w formacie YYYY-MM-DD hh:mm:ss
 void Os_TimePrint(uint8_t argc, uint8_t * argv[]) {
 	
-//	Uart_Write("0000000000");
+//	Print("0000000000");
 	Os_TimePrint(Os_Time);
 	
 // 	if(Os_TimeValid != Os_Valid) {
-// 		Uart_Write(" INV");
+// 		Print(" INV");
 // 	}
 // 
-// 	Uart_Write(' ');
+// 	Print(' ');
 }
 
 
@@ -1040,7 +1029,7 @@ task_t Os_TimeRecovery(runmode_t RunMode) {
 	// Identyfikacja
 	#if OS_USE_TASK_IDENTIFY
 	else if(RunMode == Identify) {
-		Uart_Write("TimeRecov");
+		Print("TimeRecov");
 	}
 	#endif
 	
@@ -1056,7 +1045,7 @@ void Os_TimeSet(uint8_t argc, uint8_t * argv[]) {
 	// Kontrola czy przekazano wszystkie argumenty
 	if(argc != 7) {
 		#if CMD_USE_HELP
-			Uart_Write("timeset YY MM DD hh mm ss");
+			Print("timeset YY MM DD hh mm ss");
 		#endif
 		return;
 	}
@@ -1143,12 +1132,12 @@ void Os_Sleep(OS_SLEEP_TIMER_TYPE SleepTime, uint8_t SleepMode) {
 
 // Pokazuje Ÿród³o resetu. Po wywo³aniu tej funkji, je¿eli Ÿród³o resetu nie jest ju¿ potrzebne, nale¿y wywo³aæ Os_ResetSourceClear()
 void Os_ResetSourceShow(uint8_t Register) {
-	if(Register & RSTCTRL_PORF_bm)		Uart_Write("PWR ");
-	if(Register & RSTCTRL_BORF_bm)		Uart_Write("BRO ");
-	if(Register & RSTCTRL_EXTRF_bm)		Uart_Write("EXT ");
-	if(Register & RSTCTRL_WDRF_bm)		Uart_Write("WDR ");
-	if(Register & RSTCTRL_SWRF_bm)		Uart_Write("SOFT ");
-	if(Register & RSTCTRL_UPDIRF_bm)	Uart_Write("UPDI ");
+	if(Register & RSTCTRL_PORF_bm)		Print("PWR ");
+	if(Register & RSTCTRL_BORF_bm)		Print("BRO ");
+	if(Register & RSTCTRL_EXTRF_bm)		Print("EXT ");
+	if(Register & RSTCTRL_WDRF_bm)		Print("WDR ");
+	if(Register & RSTCTRL_SWRF_bm)		Print("SOFT ");
+	if(Register & RSTCTRL_UPDIRF_bm)	Print("UPDI ");
 }
 
 

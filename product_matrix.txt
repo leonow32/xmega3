@@ -1,0 +1,12 @@
+All products matrix
+
+Product				AVR-IoT		CURIO48049	XNANO
+Board				AVR-IoT		CURIO48049	XNANO
+
+Clock				x			x			x
+Console				x			x			x
+Peripherals			x			x			x
+Print				x			x			x
+UartSingle			o						x
+UartMulti			o			x			
+uCosmos				x			x			x

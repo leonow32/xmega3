@@ -5,11 +5,6 @@
 # so most of the project and solution files are the same as VS files,
 # only prefixed by an `at`.
 
-#Build Directories
-[Dd]ebug/
-[Rr]elease/
-AVR-IoT/
-
 #Build Results
 *.o
 *.d
@@ -18,6 +13,9 @@ AVR-IoT/
 *.hex
 *.map
 *.srec
+*.mk
+*.lss
+*/Makefile
 
 #User Specific Files
 *.atsuo

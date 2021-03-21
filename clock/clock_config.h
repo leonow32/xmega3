@@ -3,8 +3,38 @@
 #ifndef CLOCK_CONFIG_H_
 #define CLOCK_CONFIG_H_
 
+// ========================================
+// Template
+// ========================================
 
-#if B_AVRIOT
+#if P_TEMPLATE
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+#endif
+
+// ========================================
+// Dev Board AVR-IoT
+// ========================================
+
+#if P_AVRIOT
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+#endif
+
+// ========================================
+// Dev Board Curiosity ATmega4809
+// ========================================
+
+#if P_CURIO4809
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+#endif
+
+// ========================================
+// Dev Board XNANO
+// ========================================
+
+#if P_XNANO
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
 #endif

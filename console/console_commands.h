@@ -346,12 +346,6 @@ const Console_NamePointer_t Console_CommandList[] = {
 // Oszczêdzanie energii
 	//{"osslp",			Peripherals_OsSleepTest},
 	//{"powerdown",		Peripherals_Demo_powerdown},
-
-// Testowe z peripherals
-#if B_XNANO
-	{"e",				Peripherals_Echo},
-	{"callback",		ConsoleDemo_CmdRemoteCommand},
-#endif
 	
 	
 // £adowarka baterii 

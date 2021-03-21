@@ -15,6 +15,8 @@ UWAGI I POMYS£Y
 
 
 CHANGELOG
+3.0.0	+	Utworzenie wersji signle i multi
+2.18	-	Optymalizacja uart_config.h
 2.17	+	Dodanie funkcji CRC kontrolnego
 2.16	+	Dodanie funkcji XOR Kontrolny
 		+	void Uart_Resend(USART_t * Port);
@@ -89,20 +91,24 @@ HARDWARE
 		-	przerwania
 */
 
-#ifndef UART_H_
-#define UART_H_
+#ifndef UART_MULTI_H_
+#define UART_MULTI_H_
+
+#if C_UART_MULTI
 
 #include	<avr/io.h>
 #include	<avr/interrupt.h>
 #include	<string.h>
 #include	<util/delay.h>
-#include	"uart_config.h"
+#include	"uart_multi_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
- #include	"uCosmos.h"
+	#include	"../uCosmos/uCosmos.h"
 #endif
 
-
+// Definicje statusów
+// Zapisywanie w rejestrze TXPLCTRL, który s³u¿y do IR, ale nie wykorzystujemy tej mo¿liwoœci
+#define UART_TX_BUSY		uint8_t(0b00000001)
 
 // Definicja struktury bufora pieœcieniowego, u¿ywanego przez wszystkie UARTy
 struct UART_Buffer_t {
@@ -114,32 +120,40 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferHead;
 	uint8_t		TxBufferTail;
 	uint8_t		TxBufferCnt;
-	uint16_t	TxBufferCRC;
+//	uint16_t	TxBufferCRC;
 };
 
+// TODO: spróbowaæ to wywaliæ
 extern USART_t * UART_PortOverride;
 
 // Inicjalizacja
 void		Uart_Init();
-void		Uart_TxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_TxEnable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_RxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_RxEnable(USART_t * Port = &UART_DEFAULT_PORT);
+// void		Uart_TxDisable(USART_t * Port = &UART_DEFAULT_PORT);
+// void		Uart_TxEnable(USART_t * Port = &UART_DEFAULT_PORT);
+// void		Uart_RxDisable(USART_t * Port = &UART_DEFAULT_PORT);
+// void		Uart_RxEnable(USART_t * Port = &UART_DEFAULT_PORT);
 
 // Zapisywanie
 void		Uart_Write(uint8_t Data, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Write(const char * Text, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteNL(USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDec(uint32_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int8_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteDecSigned(int32_t Value, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteBin(uint8_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint8_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint16_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHex(const uint32_t Data, const uint8_t Separator = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_WriteHexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue = 0, USART_t * Port = &UART_DEFAULT_PORT);
-void		Uart_Resend(USART_t * Port);
+
+#if UART0_USE
+	void Uart0_Write(uint8_t Data);
+#endif
+
+#if UART1_USE
+	void Uart1_Write(uint8_t Data);
+#endif
+
+#if UART2_USE
+	void Uart2_Write(uint8_t Data);
+#endif
+
+#if UART3_USE
+	void Uart3_Write(uint8_t Data);
+#endif
+
+
+//void		Uart_Resend(USART_t * Port);
 
 // Odczytywanie
 uint8_t		Uart_Read(USART_t * Port = &UART_DEFAULT_PORT);
@@ -150,15 +164,22 @@ void		Uart_RxBufferFlush(volatile UART_Buffer_t * ProgBuf);
 void		Uart_RxBufferFlush(USART_t * Port);
 void		Uart_TxBufferFlush(volatile UART_Buffer_t * ProgBuf);
 void		Uart_TxBufferFlush(USART_t * Port);
-void		Uart_WaitForTxComplete(USART_t * Port);		
+void		Uart_WaitForTxComplete(USART_t * Port);
 void		Uart_WaitForTxComplete(void);
 
 // CRC kontrolne
-void		Uart_TxCrcClear(USART_t * Port);
-uint16_t	Uart_TxCrcGet(USART_t * Port);
+// void		Uart_TxCrcClear(USART_t * Port);
+// uint16_t	Uart_TxCrcGet(USART_t * Port);
 
 // Wycofane, definicje dla kompatybilnoœci wstecznej
 #define		Uart_WriteProgmem(x)	Uart_Write(x)
 #define		Uart_WriteTxt(x)		Uart_Write(x)
 
-#endif /* UART_H_ */
+// Kontrola b³êdów
+#if C_UART_SINGLE && C_UART_MULTI
+	#error "Can't use C_UART_SINGLE and C_UART_MULTI at the same time"
+#endif
+
+#endif
+
+#endif /* UART_MULTI_H_ */
