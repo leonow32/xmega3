@@ -149,15 +149,6 @@ int main(void) {
 			Print("UART3_UUU");
 			Print_SetStream();
 			_delay_ms(1000);
-
-// 			Print_SetStream(&Uart0_Write);
-// 			Print("UART0 012345678901234567890123456789");
-// 			Print_SetStream(&Uart1_Write);
-// 			Print("UART1 012345678901234567890123456789");
-// 			Print_SetStream(&Uart2_Write);
-// 			Print("UART2 012345678901234567890123456789");
-// 			Print_SetStream(&Uart3_Write);
-// 			Print("UART3 012345678901234567890123456789");
 			Print_SetStream();
 			_delay_ms(1000);
 	}

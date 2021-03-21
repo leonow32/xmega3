@@ -5,6 +5,7 @@ Board				AVR-IoT		CURIO48049	XNANO
 
 Clock				x			x			x
 Console				x			x			x
+Interpreter			
 Peripherals			x			x			x
 Print				x			x			x
 UartSingle			o						x
