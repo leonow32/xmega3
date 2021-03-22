@@ -39,6 +39,10 @@
 	#include	"console/console.h"
 #endif
 
+#if C_INTERPRETER
+	#include	"interpreter/interpreter.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"uCosmos/uCosmos.h"
 #endif
@@ -79,7 +83,11 @@ int main(void) {
 		Os_Init();
 		Os_ConsoleInit();
 	#endif
-
+	
+	#if C_INTERPRETER
+		Interpreter_Init();
+	#endif
+	
 	// ========================================
 	// External Hardware init
 	// ========================================
@@ -138,20 +146,20 @@ int main(void) {
 // 		}
 // 	}
 	
-	while(1) {
-			Print_SetStream(&Uart0_Write);
-			Print("UART0_UUU");
-			Print_SetStream(&Uart1_Write);
-			Print("UART1_UUU");
-			Print_SetStream(&Uart2_Write);
-			Print("UART2_UUU");
-			Print_SetStream(&Uart3_Write);
-			Print("UART3_UUU");
-			Print_SetStream();
-			_delay_ms(1000);
-			Print_SetStream();
-			_delay_ms(1000);
-	}
+// 	while(1) {
+// 			Print_SetStream(&Uart0_Write);
+// 			Print("UART0_UUU");
+// 			Print_SetStream(&Uart1_Write);
+// 			Print("UART1_UUU");
+// 			Print_SetStream(&Uart2_Write);
+// 			Print("UART2_UUU");
+// 			Print_SetStream(&Uart3_Write);
+// 			Print("UART3_UUU");
+// 			Print_SetStream();
+// 			_delay_ms(1000);
+// 			Print_SetStream();
+// 			_delay_ms(1000);
+// 	}
 	
 	while(1) {
 		TaskScheduler();

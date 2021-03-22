@@ -659,7 +659,7 @@ task_t TaskConsole(runmode_t RunMode) {
 	#endif
 	
 	return TaskOK;
-} 
+}
 
 
 #endif

@@ -58,19 +58,12 @@ HARDWARE
 #include <avr/io.h>
 #include <string.h>
 #include "console_config.h"
+#include "../common/ascii.h"
 
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #else 
 	#error		"Component CONSOLE requires uCSOMOS" 
-#endif
-
-#if C_UART_SINGLE
-	#include	"../uart/uart_single.h"
-#elif C_UART_MULTI
-	#include	"../uart/uart_multi.h"
-#else
-	#error		"This module requires UART component"
 #endif
 
 #if C_PRINT
@@ -79,9 +72,9 @@ HARDWARE
 	#error		"This module requires PRINT component"
 #endif
 
-#if C_REMOTE
-	#include "remote.h"
-#endif
+// #if C_REMOTE
+// 	#include "remote.h"
+// #endif
 
 // Struktura do budowy tablicy poleceñ
 struct Console_NamePointer_t {
@@ -145,50 +138,6 @@ struct Console_Struct {
 #define		FLAGS_USE_M2M				0b01000000			// Konsola ma reagowaæ na znaki u¿ywane w trybie M2M
 #define		FLAGS_USE_HMI				0b10000000			// Konsola ma reagowaæ na znaki u¿ywane podczas wpisywania poleceñ z klawiatury
 
-
-
-// Definicje znaków specjalnych ASCII
-#define		NUL			uint8_t(0)
-#define		SOH			uint8_t(1)
-#define		STX			uint8_t(2)
-#define		ETX			uint8_t(3)
-#define		EOT			uint8_t(4)
-#define		ENQ			uint8_t(5)
-#define		ACK			uint8_t(6)
-#define		BEL			uint8_t(7)
-#define		BS			uint8_t(8)
-#define		HT			uint8_t(9)
-#define		LF			uint8_t(10)
-#define		VT			uint8_t(11)
-#define		FF			uint8_t(12)
-#define		CR			uint8_t(13)
-#define		SO			uint8_t(14)
-#define		SI			uint8_t(15)
-#define		DLE			uint8_t(16)
-#define		DC1			uint8_t(17)
-#define		DC2			uint8_t(18)
-#define		DC3			uint8_t(19)
-#define		DC4			uint8_t(20)
-#define		NAK			uint8_t(21)
-#define		SYN			uint8_t(22)
-#define		ETB			uint8_t(23)
-#define		CAN			uint8_t(24)
-#define		EM			uint8_t(25)
-#define		SUB			uint8_t(26)
-#define		ESC			uint8_t(27)
-#define		FS			uint8_t(28)
-#define		GS			uint8_t(29)
-#define		RS			uint8_t(30)
-#define		US			uint8_t(31)
-#define		DEL			uint8_t(127)
-
-#define		LINEFEED	uint8_t(10)
-#define		ENTER		uint8_t(13)
-#define		ESCAPE		uint8_t(27)
-#define		TAB			uint8_t(9)
-#define		BACKSPACE1	uint8_t(8)
-#define		BACKSPACE2	uint8_t(127)
-#define		CTRL_Z		uint8_t(26)
 
 // Funkcja wywo³ywana z tasków poszczególnych instancji konsoli
 void			Console_TaskHandler(Console_Struct * ConsoleInstance);
