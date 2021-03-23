@@ -45,12 +45,12 @@
 	#define		OS_SLEEP_INDISE_SCHEDULER		1			// Wchodzenie w tryb uœpienia wewn¹trz Schedulera (aby nie trzeba by³o tego robiæ w main() lub w innych miejscach)
 	
 	// Debugowanie
-	#define		OS_DEBUG_MESSAGES_SHOW			1			// Komunikaty u tworzeniu i zamykaniu tasków
-	#define		OS_DEBUG_MESSAGES_TIMESTAMP		1			// W komunikatach o b³êdach bêdzie podana data i godzina
+	#define		OS_DEBUG_MESSAGES_SHOW			0			// Komunikaty u tworzeniu i zamykaniu tasków
+	#define		OS_DEBUG_MESSAGES_TIMESTAMP		0			// W komunikatach o b³êdach bêdzie podana data i godzina
 	#define		OS_USE_TASK_IDENTIFY			1			// Identyfikacja tasków poprzez wyso³anie z argumentem Identify 
 	#define		OS_TASK_MONITOR_USE				1			// Wyœwietlanie na UART tablicy tasków
 	#define		OS_TASK_MONITOR_CNT				0			// Pokazywanie aktualnego licznika CNT poszczególnych tasków
-	#define		OS_TASK_MONITOR_MIN_MAX			1			// Pokazywanie czasu min i max procesów
+	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
 #endif
@@ -95,12 +95,12 @@
 	#define		OS_SLEEP_INDISE_SCHEDULER		1			// Wchodzenie w tryb uœpienia wewn¹trz Schedulera (aby nie trzeba by³o tego robiæ w main() lub w innych miejscach)
 	
 	// Debugowanie
-	#define		OS_DEBUG_MESSAGES_SHOW			1			// Komunikaty u tworzeniu i zamykaniu tasków
-	#define		OS_DEBUG_MESSAGES_TIMESTAMP		1			// W komunikatach o b³êdach bêdzie podana data i godzina
+	#define		OS_DEBUG_MESSAGES_SHOW			0			// Komunikaty u tworzeniu i zamykaniu tasków
+	#define		OS_DEBUG_MESSAGES_TIMESTAMP		0			// W komunikatach o b³êdach bêdzie podana data i godzina
 	#define		OS_USE_TASK_IDENTIFY			1			// Identyfikacja tasków poprzez wyso³anie z argumentem Identify 
 	#define		OS_TASK_MONITOR_USE				1			// Wyœwietlanie na UART tablicy tasków
 	#define		OS_TASK_MONITOR_CNT				0			// Pokazywanie aktualnego licznika CNT poszczególnych tasków
-	#define		OS_TASK_MONITOR_MIN_MAX			1			// Pokazywanie czasu min i max procesów
+	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
 #endif
@@ -145,12 +145,12 @@
 	#define		OS_SLEEP_INDISE_SCHEDULER		1			// Wchodzenie w tryb uœpienia wewn¹trz Schedulera (aby nie trzeba by³o tego robiæ w main() lub w innych miejscach)
 	
 	// Debugowanie
-	#define		OS_DEBUG_MESSAGES_SHOW			1			// Komunikaty u tworzeniu i zamykaniu tasków
-	#define		OS_DEBUG_MESSAGES_TIMESTAMP		1			// W komunikatach o b³êdach bêdzie podana data i godzina
+	#define		OS_DEBUG_MESSAGES_SHOW			0			// Komunikaty u tworzeniu i zamykaniu tasków
+	#define		OS_DEBUG_MESSAGES_TIMESTAMP		0			// W komunikatach o b³êdach bêdzie podana data i godzina
 	#define		OS_USE_TASK_IDENTIFY			1			// Identyfikacja tasków poprzez wyso³anie z argumentem Identify 
 	#define		OS_TASK_MONITOR_USE				1			// Wyœwietlanie na UART tablicy tasków
 	#define		OS_TASK_MONITOR_CNT				0			// Pokazywanie aktualnego licznika CNT poszczególnych tasków
-	#define		OS_TASK_MONITOR_MIN_MAX			1			// Pokazywanie czasu min i max procesów
+	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
 #endif
@@ -194,12 +194,12 @@
 	#define		OS_SLEEP_INDISE_SCHEDULER		1			// Wchodzenie w tryb uœpienia wewn¹trz Schedulera (aby nie trzeba by³o tego robiæ w main() lub w innych miejscach)
 	
 	// Debugowanie
-	#define		OS_DEBUG_MESSAGES_SHOW			1			// Komunikaty u tworzeniu i zamykaniu tasków
-	#define		OS_DEBUG_MESSAGES_TIMESTAMP		1			// W komunikatach o b³êdach bêdzie podana data i godzina
+	#define		OS_DEBUG_MESSAGES_SHOW			0			// Komunikaty u tworzeniu i zamykaniu tasków
+	#define		OS_DEBUG_MESSAGES_TIMESTAMP		0			// W komunikatach o b³êdach bêdzie podana data i godzina
 	#define		OS_USE_TASK_IDENTIFY			1			// Identyfikacja tasków poprzez wyso³anie z argumentem Identify 
 	#define		OS_TASK_MONITOR_USE				1			// Wyœwietlanie na UART tablicy tasków
 	#define		OS_TASK_MONITOR_CNT				0			// Pokazywanie aktualnego licznika CNT poszczególnych tasków
-	#define		OS_TASK_MONITOR_MIN_MAX			1			// Pokazywanie czasu min i max procesów
+	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
 #endif

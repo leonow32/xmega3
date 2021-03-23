@@ -11,20 +11,15 @@
 	#include "log.h"
 #endif
 
-#if C_WIFI
-	#include "wifi.h"
-#endif
-
-// Tablica tasków
+// Task table
 static volatile TaskControlBlock_t Task[OS_TASK_MAXCOUNT];
 
-// Zmienne globalne
+// Globals
 volatile uint8_t Os_Ticks = 0;
 
-// Czas syst6emowy
+// CSystem time
 #if OS_USE_TIME
 	volatile time_t Os_Time = 0;
-	os_valid_t Os_TimeValid = Os_Invalid;
 #endif
 
 #if OS_USE_SLEEP
@@ -57,7 +52,7 @@ void Os_Init(void) {
  									CLKCTRL_ENABLE_bm;				// W³¹cz
 		RTC.CLKSEL				=	RTC_CLKSEL_TOSC32K_gc;	
 	#endif
-
+	
 	// Jeœli wybrano generator ULP
 	#if OS_GENERATOR_ULP
 		RTC.CLKSEL				=	RTC_CLKSEL_INT32K_gc;			// Taktowanie zegarem ULP 
@@ -79,12 +74,12 @@ void Os_Init(void) {
 									RTC_PERIOD_CYC32768_gc;			// Preskaler 32768 czyli przerwanie bêdzie generowane co 1 sekundê	
 		RTC.PITINTCTRL			=	RTC_PI_bm;						// Periodic interrupt is enabled
 	#endif
-
+	
 	// Inicjalizacja tablicy tasków
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
 		TaskClear(i);
 	}
-
+	
 	// Watchdog
 	#if OS_USE_WATCHDOG
 		CCP						=	CCP_IOREG_gc;					// Odblokowanie chronionych rejestrow
@@ -98,15 +93,6 @@ void Os_Init(void) {
 }
 
 
-// Inicjalizacja konsoli systemowej
-void Os_ConsoleInit(void) {
-	// Je¿eli wykorzystujemy konsolê systemow¹
-	#if OS_USE_CONSOLE
-		TaskAdd(TaskConsole, 0);
-	#endif
-}
-
-
 // Scheduler wywo³ywany z funkcji main()
 void TaskScheduler(void) {
 	
@@ -115,17 +101,17 @@ void TaskScheduler(void) {
 		uint16_t RTC_After;
 		uint16_t TaskTime;
 	#endif
-
+	
 	#if OS_TASK_MONITOR_AVG_PROC && OS_TASK_MONITOR_USE
 		uint32_t IIR;
 	#endif
-
+	
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
 		if(Task[i].Pending) {
 			if(Task[i].Pending != OS_RUN_EVERY_CYCLE) {
 				Task[i].Pending--;
 			}
-
+			
 			// Zapisanie zegara RTC przed wywo³aniem procesu
 			#if (OS_TASK_MONITOR_MIN_MAX || OS_TASK_MONITOR_AVG_PROC) && OS_TASK_MONITOR_USE
 				cli();
@@ -133,36 +119,36 @@ void TaskScheduler(void) {
 				RTC_Before = RTC.CNT; 
 				sei();
 			#endif
-
+			
 			// Wywo³anie tasku
 			if(Task[i].TaskPtr(Run) == TaskDone) {			// Wywo³anie procesu
 								
 				// Debug
 				#if OS_DEBUG_MESSAGES_SHOW
 					Print_NL();
-
+					
 					#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 						Os_TimePrint();
 					#endif
-
+					
 					Print("Task(");
-
+					
 					#if OS_USE_TASK_IDENTIFY
 						Task[i].TaskPtr(Identify);
 					#else
 						Print_Hex((uint16_t)Task[i].TaskPtr);
 					#endif
-
+					
 					Print(") = Done");
 				#endif
 				
 				TaskClear(i);							// Je¿eli proces siê zakoñczy³ to czyœcimy jego slot
-
+				
 				#if (OS_TASK_MONITOR_MIN_MAX || OS_TASK_MONITOR_AVG_PROC) && OS_TASK_MONITOR_USE
 					continue;								// Aby przejœæ do kolejnego obiegu pêtli z pominiêciem oblicznia czasów, skoro task ju¿ siê zakoñczy³
 				#endif
 			}
-
+			
 			// Obliczenie czasu, który zaj¹³ proces
 			#if (OS_TASK_MONITOR_MIN_MAX || OS_TASK_MONITOR_AVG_PROC) && OS_TASK_MONITOR_USE
 				
@@ -176,13 +162,13 @@ void TaskScheduler(void) {
 					TaskTime = (Os_DebugTimer - 1) * RTC.PER + (32768 - RTC_Before + RTC_After);
 				}
 				sei();
-
+				
 				// Pomiar czasu maksymalnego i minimalnego
 				#if OS_TASK_MONITOR_MIN_MAX && OS_TASK_MONITOR_USE
 					if(TaskTime > Task[i].TimeMax) Task[i].TimeMax = TaskTime;
 					if(TaskTime < Task[i].TimeMin) Task[i].TimeMin = TaskTime;
 				#endif
-
+				
 				// Filtr IIR dla czasu œredniego
 				#if OS_TASK_MONITOR_AVG_PROC
 					IIR = Task[i].TimeAvg;
@@ -191,9 +177,7 @@ void TaskScheduler(void) {
 					IIR = IIR / 8;
 					Task[i].TimeAvg = (uint16_t)IIR;
 				#endif
-
 			#endif
-
 		}
 		
 		// Je¿eli jest u¿ywany Watchdog, to powinien byæ on resetowany tylko w tym miejscu
@@ -204,15 +188,8 @@ void TaskScheduler(void) {
 
 	// W konfiguracji mo¿na ustawiæ, by sleep uruchomiæ w Schedularze, zamiast w main()
 	#if OS_USE_SLEEP && OS_SLEEP_INDISE_SCHEDULER
-		
 		cli();
 		if(OS_SLEEP_GPIOR == 0) {
-
-			#if B_AVRIOT
-// 				INT_ON;
-// 				LED_BLUE_ON;
-			#endif
-
 			SLPCTRL.CTRLA	=	SLPCTRL_SEN_bm |							// Zezwolenie na uœpienie
 								SLPCTRL_SMODE_IDLE_gc;						// Tryb uœpienia IDLE
 //								SLPCTRL_SMODE_STDBY_gc;						// Tryb uœpienia STANDBY (!! dodaæ najpierw kontrolê programowego zezwolenia na uœpienie)
@@ -220,14 +197,8 @@ void TaskScheduler(void) {
 							
 			sei();
 			asm volatile("sleep");											// Œpimy
-		
-			#if B_AVRIOT
-// 				INT_OFF;
-// 				LED_BLUE_OFF;
-			#endif
-
 		}
-
+		
 		// !! wywo³ywane tylko je¿eli nie mo¿na by³o wejœæ w tryb uœpienia
 // 		else {
 // 			PWM_ON;
@@ -235,7 +206,7 @@ void TaskScheduler(void) {
 // 			PWM_OFF;
 // 		}
 		sei();
-
+		
 	#endif
 }
 
@@ -265,10 +236,10 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		Print_Dec(InitCounter);
 		Print(") = ");
 	#endif
-
+	
 	// Ca³oœæ jest wykonywana przy wy³¹czonych przerwaniach
 	cli();
-
+	
 	// Szukanie czy task ju¿ istnieje
 	#if !OS_MULTIPLE_TASKS_ALLOWED
 	if(TaskFind(TaskPtr) != OsNotFound) {
@@ -278,11 +249,11 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		#if OS_DEBUG_MESSAGES_SHOW
 			Print("TaskAlreadyCreated");
 		#endif
-
+	
 		return OsTaskAlreadyCreated;
 	}
 	#endif
-
+	
 	// Szukanie pierwszego wolnego slotu
 	uint8_t SlotNumber;
 	if(TaskFindFreeSlot(&SlotNumber) == OsNoFreeSlot) {
@@ -292,10 +263,10 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		#if OS_DEBUG_MESSAGES_SHOW
 			Print("NoFreeSlot");
 		#endif
-
+		
 		return OsNoFreeSlot;
 	}
-
+	
 	// Zwracanie numeru slotu przez wskaŸnik
 	if(ReturnSlotNumber != NULL) {
 		*ReturnSlotNumber = SlotNumber;
@@ -312,7 +283,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		// Proces ma siê wywo³ywaæ w ka¿dym obiegu Schedulera
 		Task[SlotNumber].Pending	=	OS_RUN_EVERY_CYCLE;
 	}
-
+	
 	// Zliczanie procesów - aby w task monitorze pokazywaæ najwiêksz¹ liczbê procesów dzia³aj¹cych jednoczeœnie
 	#if OS_TASK_MONITOR_TASKMAXCNT
 		uint8_t TaskCount = 0;
@@ -322,7 +293,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 				TaskCount++;
 			}
 		}
-
+		
 		if(TaskCount > Os_DebugMaxTaskCnt) {
 			Os_DebugMaxTaskCnt = TaskCount;
 		}
@@ -330,7 +301,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 	
 	// W³¹czenie przerwañ
 	sei();
-
+	
 	// Wywo³anie inicjalizacyjne (konstruktor tasku)
 	// Podczas inicjalizacji task mo¿e zwróciæ TaskOK (czyli utworzy³ siê prawid³owo), 
 	// TaskDone (czyli zakoñczy³ siê podczas wywo³ania konstruktora) lub TaskError
@@ -340,7 +311,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 			#if OS_DEBUG_MESSAGES_SHOW
 				Print("OK");
 			#endif
-
+		
 			return OsOK;			
 			
 		case TaskDone:
@@ -357,7 +328,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 			#endif			
 			return OsTaskErrorWhenFirstRun;			
 	}
-
+	
 	return OsError;
 }
 
@@ -369,22 +340,22 @@ os_t TaskClear(uint8_t SlotNumber) {
 	if(SlotNumber >= OS_TASK_MAXCOUNT) {
 		return OsSlotNumberOverRange;
 	}
-
+	
 	cli();
 	Task[SlotNumber].TaskPtr		=	0;
 	Task[SlotNumber].Counter		=	0;
 	Task[SlotNumber].Period			=	0;
 	Task[SlotNumber].Pending		=	0;	
-
+	
 	#if OS_TASK_MONITOR_MIN_MAX && OS_TASK_MONITOR_USE
 		Task[SlotNumber].TimeMax	=	0;
 		Task[SlotNumber].TimeMin	=	0xFFFF;
 	#endif
-
+	
 	#if OS_TASK_MONITOR_AVG_PROC
 		Task[SlotNumber].TimeAvg	=	0;
 	#endif
-
+	
 	sei();
 	return OsOK;
 }
@@ -393,22 +364,22 @@ os_t TaskClear(uint8_t SlotNumber) {
 // Zakoñczenie tasku. Przed usuniêciem task jest wywo³ywany z argumentem Runmode.Close i oczekiwane jest zwrócenie wyniku TaskDone.
 // W przeciwym wypadku funkcja zwraca OsCloseNotConfirmed
 os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
-
+	
 	#if OS_DEBUG_MESSAGES_SHOW
 		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 			Os_TimePrint();
 		#endif
-
+		
 		Print("TaskClose(");
-
+		
 		#if OS_USE_TASK_IDENTIFY
 			TaskPtr(Identify);
 		#else
 			Print_Hex((uint16_t)TaskPtr);
 		#endif
-
+		
 		Print(") = ");
 	#endif
 	
@@ -421,11 +392,11 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 			#if OS_DEBUG_MESSAGES_SHOW
 				Print("NotFound");
 			#endif
-
+			
 			return OsNotFound;
 		}
 	#endif
-
+	
 	// Szukanie tasku - wersja jeœli dozwolone dodawanie wielu tych samych tasków
 	#if OS_MULTIPLE_TASKS_ALLOWED == 1
 		uint8_t SlotNumber;
@@ -439,7 +410,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 			return OsNotFound;
 		}
 	#endif
-
+	
 	// Wywo³anie tasku z argumentem Close
 	task_t CloseResult = Task[SlotNumber].TaskPtr(Close);
 	if(CloseResult == TaskDone || CloseResult == TaskOK) {
@@ -450,7 +421,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		#if OS_DEBUG_MESSAGES_SHOW
 			Print("OK");
 		#endif
-
+		
 		return TaskClear(SlotNumber);
 	}
 	else {
@@ -476,7 +447,7 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 	if(Task[SlotNumber].TaskPtr == NULL) {
 		return OsNotFound;
 	}
-
+	
 	// Zmiana timingu - wszystkie operacje przy wy³¹czonych przerwaniach
 	cli();
 	if(Period) {
@@ -486,7 +457,7 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 		Task[SlotNumber].Period		=	0;
 		Task[SlotNumber].Pending	=	OS_RUN_EVERY_CYCLE;
 	}
-
+	
 	if(Counter == 0) {
 		Task[SlotNumber].Counter = Period;
 	}
@@ -494,31 +465,31 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 		Task[SlotNumber].Counter = Counter;
 	}
 	sei();
-
+	
 	// Debug
 	#if OS_DEBUG_MESSAGES_SHOW
-
+		
 		Print_NL();
-
+		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
 			Os_TimePrint();
 		#endif
-
+		
 		Print("TaskPeriodChange(");
-
+		
 		#if OS_USE_TASK_IDENTIFY
 			Task[SlotNumber].TaskPtr(Identify);
 		#else
 			Print_Hex((uint16_t)Task[SlotNumber].TaskPtr);
 		#endif
-
+		
 		Print(',');
 		Print_Dec(Period);
 		Print(',');
 		Print_Dec(Counter);
 		Print(")");
 	#endif
-
+	
 	return OsOK;
 }
 
@@ -551,7 +522,7 @@ os_t TaskFindFreeSlot(uint8_t * SlotNumber) {
 			return OsOK;
 		}
 	}
-
+	
 	// Brak wolnych slotów
 	return OsNoFreeSlot;
 }
@@ -574,7 +545,7 @@ os_t TaskFind(task_t (*TaskPtr)(runmode_t), uint8_t * SlotNumber) {
 			FoundCount++;
 		}
 	}
-
+	
 	// Zwracanie wyniku
 	#if OS_MULTIPLE_TASKS_ALLOWED
 		if(FoundCount == 0) {
@@ -607,7 +578,7 @@ uint8_t TaskGetSlotNumber(task_t (*TaskPtr)(runmode_t)) {
 			return i;
 		}
 	}
-
+	
 	// Nic nie znaleziono
 	return 0;
 }
@@ -619,54 +590,6 @@ Os_Timer_t TaskMsToTicks(uint16_t Time_ms) {
 	if(Ticks == 0) Ticks = 1;
 	return Ticks;
 }
-
-
-// =================
-// Konsola systemowa
-// =================
-
-#if OS_USE_CONSOLE
-
-
-// Instancja konsoli
-Console_Struct Os_Console(&OS_CONSOLE_UART_INSTANCE, FLAGS_USE_HMI | FLAGS_USE_M2M); 
-
-
-// Proces obs³uguj¹cy konsolê
-task_t TaskConsole(runmode_t RunMode) {
-	
-	// Normalne wywo³anie
-	if(RunMode == Run) {
-		Console_TaskHandler(&Os_Console);
-	}
-	
-	// Konstruktor
-	else if(RunMode == FirstRun) {
-		
-		// !! w³aczenie UART?
-
-		//memset(&Os_Console, 0, sizeof(Os_Console));  
-		//Os_Console.UartInstance = &OS_CONSOLE_UART_INSTANCE;
-		Console_PromptShow(&Os_Console);						// !! zrobiæ coœ, ¿eby prompt nie pokazywa³ siê w trakcie wysy³ania komunikatu o utworzeniu tasku
-	}
-	
-	// Destruktor
-	else if(RunMode == Close) {
-		// !! wy³¹czenie UART?
-	}
-	
-	// Identyfikacja
-	#if OS_USE_TASK_IDENTIFY
-	else if(RunMode == Identify) {
-		Print("OsConsole");
-	}
-	#endif
-	
-	return TaskOK;
-}
-
-
-#endif
 
 
 // ===========
@@ -920,40 +843,12 @@ void Os_TimePrint(time_t Time) {
 	Os__DecXXprint(TimeStruct.tm_min);
 	Print(':');
 	Os__DecXXprint(TimeStruct.tm_sec);
-
-//	Print("2000-00-00 00:00:00 INV ");
-	
 }
 
 
 // Wyœwietlenie czasu w formacie YYYY-MM-DD hh:mm:ss
 void Os_TimePrint(uint8_t argc, uint8_t * argv[]) {
-	
-//	Print("0000000000");
 	Os_TimePrint(Os_Time);
-	
-// 	if(Os_TimeValid != Os_Valid) {
-// 		Print(" INV");
-// 	}
-// 
-// 	Print(' ');
-}
-
-
-// Sprawdzenie czy czas zosta³ ustawiony po w³¹czeniu zasilania
-bool Os_TimeValidCheck(void) {
-	if(Os_TimeValid == Os_Valid) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-
-// Usuniêcie flagi walidacji czasu
-void Os_TimeInvalid(void) {
-	Os_TimeValid = Os_Invalid;
 }
 
 
@@ -969,7 +864,6 @@ void Os_TimeSet(uint8_t YY, uint8_t MM, uint8_t DD, uint8_t hh, uint8_t mm, uint
 
 	cli();
 	Os_Time = mk_gmtime(&NewTime);
-	Os_TimeValid = Os_Valid;
 	sei();
 }
 
@@ -977,7 +871,6 @@ void Os_TimeSet(uint8_t YY, uint8_t MM, uint8_t DD, uint8_t hh, uint8_t mm, uint
 void Os_TimeSet(tm * NewTime) {
 	cli();
 	Os_Time = mk_gmtime(NewTime);
-	Os_TimeValid = Os_Valid;
 	sei();
 }
 
@@ -1081,7 +974,6 @@ void Os_TimeSet(uint8_t argc, uint8_t * argv[]) {
 	// Ustawienie czasu w systemie
  	cli();
  	Os_Time = mk_gmtime(&NewTime);
- 	Os_TimeValid = Os_Valid;
 	 
 	#if OS_USE_TIME_RECOVERY
 		Os_TimeRecoverySave();
@@ -1186,13 +1078,6 @@ void Os_WatchdogDisable(uint8_t argc, uint8_t * argv[]) {
 		while(WDT.STATUS & WDT_SYNCBUSY_bm);
 	#endif
 }
-
-
-// ===
-// Log
-// ===
-
-
 
 
 #endif

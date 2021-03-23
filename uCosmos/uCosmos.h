@@ -134,54 +134,50 @@ void		TaskScheduler(void);																												// 406B
 os_t		TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCounter = 0, uint8_t * ReturnSlotNumber = NULL);
 os_t		TaskClear(uint8_t SlotNumber);
 os_t		TaskClose(task_t (*TaskPtr)(runmode_t));
-os_t		TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter = 0);
+os_t		TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter = 0);		// TODO niepotrzebne
 os_t		TaskPeriodChange(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t Counter = 0);
 os_t		TaskFindFreeSlot(uint8_t * SlotNumber);
 os_t		TaskFind(task_t (*TaskPtr)(runmode_t), uint8_t * SlotNumber = NULL);
 uint8_t		TaskGetSlotNumber(task_t (*TaskPtr)(runmode_t));
 Os_Timer_t	TaskMsToTicks(uint16_t Time_ms);
 
-// Konsola systemowa
-#if OS_USE_CONSOLE
- task_t		TaskConsole(runmode_t RunMode);
-#endif
-
 // Licznik ticków systemowych
 extern volatile uint8_t Os_Ticks;
 
 // Obs³uga czasu
 #if OS_USE_TIME
- extern volatile time_t Os_Time;
- void		Os_TimePrint(uint8_t argc = 0, uint8_t * argv[] = NULL);
- void		Os_TimePrint(time_t Time);
- bool		Os_TimeValidCheck(void);
- void		Os_TimeInvalid(void);
- void		Os_TimeSet(uint8_t argc, uint8_t * argv[]);
- void		Os_TimeSet(tm * NewTime);
- #if OS_USE_TIME_RECOVERY
-  void Os_TimeRecoverySave(void);
-  task_t		Os_TimeRecovery(runmode_t RunMode);
- #endif
+	extern volatile time_t Os_Time;
+	void		Os_TimePrint(uint8_t argc = 0, uint8_t * argv[] = NULL);
+	void		Os_TimePrint(time_t Time);
+	bool		Os_TimeValidCheck(void);
+	void		Os_TimeInvalid(void);
+	void		Os_TimeSet(uint8_t argc, uint8_t * argv[]);
+	void		Os_TimeSet(tm * NewTime);
+	
+	#if OS_USE_TIME_RECOVERY
+		void Os_TimeRecoverySave(void);
+		task_t		Os_TimeRecovery(runmode_t RunMode);
+	#endif
 #endif
 
 // Oszczêdzanie energii
 #if OS_USE_SLEEP
- void		Os_Sleep(OS_SLEEP_TIMER_TYPE SleepTime, uint8_t SleepMode);
+	void		Os_Sleep(OS_SLEEP_TIMER_TYPE SleepTime, uint8_t SleepMode);
 #endif
 
 // Debugowanie
 #if OS_TASK_MONITOR_USE
- void		Os_Monitor(uint8_t argc = 0, uint8_t * argv[] = NULL);
+	void		Os_Monitor(uint8_t argc = 0, uint8_t * argv[] = NULL);
 #endif
 
 #if OS_TASK_MONITOR_AVG || OS_TASK_MONITOR_MIN_MAX
- void		Os_DebugTimeClear(void);
+	void		Os_DebugTimeClear(void);
 #endif 
 
 // extern volatile uint8_t Os_DebugTimer;
 
 #if OS_TASK_MONITOR_TASKMAXCNT
- extern uint8_t Os_DebugMaxTaskCnt;
+	extern uint8_t Os_DebugMaxTaskCnt;
 #endif
 
 // Reset
