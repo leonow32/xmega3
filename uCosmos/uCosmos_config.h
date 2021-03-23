@@ -22,7 +22,7 @@
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
 	
 	// Konsola systemowa
-	#define		OS_USE_CONSOLE					1			// Czy mam byæ wykorzystywana konsola systemowa przez UART
+	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
 	#define		OS_CONSOLE_UART_INSTANCE		USART2		// Który port UART ma byæ wykorzystywany do konsoli
 	
 	// Watchdog
@@ -72,7 +72,7 @@
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
 	
 	// Konsola systemowa
-	#define		OS_USE_CONSOLE					1			// Czy mam byæ wykorzystywana konsola systemowa przez UART
+	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
 	#define		OS_CONSOLE_UART_INSTANCE		USART2		// Który port UART ma byæ wykorzystywany do konsoli
 	
 	// Watchdog
@@ -122,7 +122,7 @@
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
 	
 	// Konsola systemowa
-	#define		OS_USE_CONSOLE					1			// Czy mam byæ wykorzystywana konsola systemowa przez UART
+	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
 	#define		OS_CONSOLE_UART_INSTANCE		USART3		// Który port UART ma byæ wykorzystywany do konsoli
 
 	// Watchdog
@@ -171,7 +171,7 @@
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
 	
 	// Konsola systemowa
-	#define		OS_USE_CONSOLE					1			// Czy mam byæ wykorzystywana konsola systemowa przez UART
+	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
 	#define		OS_CONSOLE_UART_INSTANCE		USART0		// Który port UART ma byæ wykorzystywany do konsoli
 	
 	// Watchdog

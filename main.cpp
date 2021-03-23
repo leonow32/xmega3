@@ -71,9 +71,7 @@ int main(void) {
 		Uart_Init();
 	#endif
 	
-	// Przerwania
-	CPUINT.CTRLA |=	CPUINT_LVL0RR_bm;			// Algorytm round-robin dla przerwañ o tym samym priorytecie
-	sei();
+	
 	
 	// ========================================
 	// Internal Software Init
@@ -81,7 +79,7 @@ int main(void) {
 	
 	#if C_UCOSMOS
 		Os_Init();
-		Os_ConsoleInit();
+		//Os_ConsoleInit();
 	#endif
 	
 	#if C_INTERPRETER
@@ -99,8 +97,8 @@ int main(void) {
 	// ========================================
 	
 	Print("\r\n=== START ===\r\n");
-	Os_ResetSourceShow(RSTCTRL.RSTFR);
-	Os_ResetSourceClear();
+// 	Os_ResetSourceShow(RSTCTRL.RSTFR);
+// 	Os_ResetSourceClear();
 	
 // 	Print_SetStream(Uart1_Write);
 // 	Print("To jest wyslane przez UART1\r\n");

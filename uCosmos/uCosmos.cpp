@@ -91,6 +91,10 @@ void Os_Init(void) {
 		WDT.CTRLA				=	WDT_PERIOD_1KCLK_gc;
 		while(WDT.STATUS & WDT_SYNCBUSY_bm);
 	#endif
+	
+	// Przerwania
+	CPUINT.CTRLA |=	CPUINT_LVL0RR_bm;			// Algorytm round-robin dla przerwañ o tym samym priorytecie
+	sei();
 }
 
 
@@ -1085,7 +1089,7 @@ void Os_TimeSet(uint8_t argc, uint8_t * argv[]) {
 	
  	sei();	
 	 
-	Console_ResponseOK();
+	//Console_ResponseOK();
 
 }
 #endif

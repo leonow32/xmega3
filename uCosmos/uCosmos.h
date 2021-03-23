@@ -96,9 +96,13 @@ HARDWARE
 #include		"uCosmos_config.h"
 
 #if C_PRINT
-#include	"../print/print.h"
+	#include	"../print/print.h"
 #else
-#error		"This module requires PRINT component"
+	#error		"This module requires PRINT component"
+#endif
+
+#if C_INTERPRETER
+	#include	"../interpreter/interpreter.h"
 #endif
 
 #if C_PERIPHERALS
@@ -110,14 +114,14 @@ HARDWARE
 //#define		LOG_OS_Reset	0x01
 //#endif
 
-#if OS_USE_CONSOLE
-	#include	"../console/console.h"
-#endif
+// #if OS_USE_CONSOLE
+// 	#include	"../console/console.h"
+// #endif
 
 // TODO: Po co to jest?
-#if OS_USE_TIMESET_COMMAND || OS_USE_TIME_COMMAND
- #include		"../console/console.h"
-#endif
+// #if OS_USE_TIMESET_COMMAND || OS_USE_TIME_COMMAND
+//  #include		"../console/console.h"
+// #endif
 
 #if OS_USE_TIME && OS_USE_TIME_RECOVERY
  #include	"eeprom.h"

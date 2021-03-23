@@ -12,7 +12,6 @@
 static inline CmdRes_t Console_SplitArguments(Console_Struct * ConsoleInstance, uint8_t * argc, uint8_t * argv[]);
 static inline bool Console_StrCmp(const char *String1, const char *String2);
 static inline void (*Console_FindPointer(uint8_t * EnteredName))(uint8_t argc, uint8_t * argv[]);
-static inline bool Console_StrCmp(const char *String1, const char *String2);
 
 // Konstruktor
 Console_Struct::Console_Struct(USART_t * UartInstance, uint8_t Flags) {
