@@ -39,10 +39,6 @@
 	#include	"console/console.h"
 #endif
 
-#if C_INTERPRETER
-	#include	"interpreter/interpreter.h"
-#endif
-
 #if C_UCOSMOS
 	#include	"uCosmos/uCosmos.h"
 #endif
@@ -79,11 +75,10 @@ int main(void) {
 	
 	#if C_UCOSMOS
 		Os_Init();
-		//Os_ConsoleInit();
 	#endif
 	
-	#if C_INTERPRETER
-		Interpreter_Init();
+	#if C_CONSOLE
+		Console_Init();
 	#endif
 	
 	// ========================================

@@ -95,18 +95,18 @@ HARDWARE
 #include		"uCosmos_defines.h"
 #include		"uCosmos_config.h"
 
-#if C_PRINT
-	#include	"../print/print.h"
-#else
-	#error		"This module requires PRINT component"
-#endif
-
-#if C_INTERPRETER
-	#include	"../interpreter/interpreter.h"
+#if C_CONSOLE
+	#include	"../console/console.h"
 #endif
 
 #if C_PERIPHERALS
 	#include	"../peripherals/peripherals.h"
+#endif
+
+#if C_PRINT
+	#include	"../print/print.h"
+#else
+	#error		"This module requires PRINT component"
 #endif
 
 //#if C_LOG

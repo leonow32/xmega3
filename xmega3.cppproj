@@ -254,7 +254,7 @@
       <Value>NAME=\"Curio4809\"</Value>
       <Value>VERSION=100</Value>
       <Value>C_CLOCK</Value>
-      <Value>C_INTERPRETER</Value>
+      <Value>C_CONSOLE</Value>
       <Value>C_PERIPHERALS</Value>
       <Value>C_PRINT</Value>
       <Value>C_UART_MULTI</Value>
@@ -317,18 +317,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="console\console_config.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="interpreter\interpreter.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="interpreter\interpreter.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="interpreter\interpreter_commands.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="interpreter\interpreter_config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.cpp">
@@ -401,7 +389,6 @@
     <Folder Include="clock" />
     <Folder Include="console" />
     <Folder Include="config" />
-    <Folder Include="interpreter" />
     <Folder Include="common" />
     <Folder Include="print" />
     <Folder Include="uCosmos" />
