@@ -150,14 +150,15 @@ void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_
 
 
 // Ci¹g znaków prezentowany jako HEX, wraz z nag³ówkiem i adresowaniem
-void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue) {
+void Print_Dump(const uint8_t * String, uint16_t Length) {
 	
-	uint8_t * wskaznik		= (uint8_t *)String;
+	uint8_t * Pointer		= (uint8_t *)String;
 	uint16_t LengthForHex	= Length;
 	uint16_t LengthForAscii	= Length;
 	uint16_t i = 0;
 	
-	Print("       0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
+	// Print header
+	Print("         0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
 	
 	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
 	do {
@@ -166,7 +167,8 @@ void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVa
 		Print_NL();
 		
 		// Wyœwietlenie adresu
-		Print(' ');
+		Print_Hex(uint16_t(Pointer));
+		Print('\t');
 		
 		// Wyœwietlenie HEX
 		for(uint8_t h=0; h<=15; h++) {
@@ -174,7 +176,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVa
 			// Sprawdzanie czy nie zosta³y wyœwietlone ju¿ wszystkie znaki
 			if(LengthForHex) {
 				LengthForHex--;
-				Print_Hex(*(wskaznik+h), ' ');
+				Print_Hex(*(Pointer+h), ' ');
 			}
 			else {
 				// Wyœwietlanie trzech spacji, aby potem mo¿na by³o wyœwietliæ ASCII we w³aœciwym miejscu
@@ -184,8 +186,8 @@ void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVa
 		
 		// Wyœwietlenie ASCII
 		for(uint8_t h=0; h<=15; h++) {
-			if((*(wskaznik+h) >= ' ') && (*(wskaznik+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
-				Print(*(wskaznik+h));
+			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
+				Print(*(Pointer+h));
 			} 
 			else {
 				Print(' ');
@@ -197,7 +199,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartVa
 		}
 		
 		// Inkrementacja wskaŸników
-		wskaznik += 16;
+		Pointer += 16;
 		i += 16;
 		
 		// Reset watchdoga

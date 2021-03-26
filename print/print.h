@@ -39,8 +39,8 @@ void Print_Bin(uint8_t Data, const uint8_t Separator);
 void Print_Hex(const uint8_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint16_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint32_t Data, const uint8_t Separator = 0);
-void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow);
-void Print_Dump(const uint8_t * String, uint16_t Length, uint16_t AddressStartValue);
+void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 16);
+void Print_Dump(const uint8_t * String, uint16_t Length);
 #endif /* C_PRINT */
 #endif /* PRINT_H_ */
 

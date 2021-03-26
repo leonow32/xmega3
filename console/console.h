@@ -82,6 +82,7 @@ void		Console_BufferFlush(void);
 
 // Argument parsers
 void		Parse_Debug(const Parse_t Result, const uint8_t * Argument);
+
 Parse_t		Parse_Hex8(const uint8_t * Argument, uint8_t * Output);
 Parse_t		Parse_Hex16(const uint8_t * Argument, uint16_t * Output);
 Parse_t		Parse_Hex32(const uint8_t * Argument, uint32_t * Output);
@@ -98,11 +99,21 @@ Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, 
 
 // Demo commands
 #if CONSOLE_USE_COMMAND_ALL
-void Console_All(uint8_t argc, uint8_t * argv[]);
+void Console_CmdAll(uint8_t argc, uint8_t * argv[]);
 #endif
 
 #if CONSOLE_USE_DEMO_COMMANDS
-void Console_Args(uint8_t argc, uint8_t * argv[]);
+void Console_CmdArgs(uint8_t argc, uint8_t * argv[]);
+void Console_CmdEcho(uint8_t argc, uint8_t * argv[]);
+
+void Console_CmdHex8(uint8_t argc, uint8_t * argv[]);
+void Console_CmdHex16(uint8_t argc, uint8_t * argv[]);
+void Console_CmdHex32(uint8_t argc, uint8_t * argv[]);
+void Console_CmdDec8(uint8_t argc, uint8_t * argv[]);
+void Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
+void Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
+void Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
+void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
 #endif
 
 #endif

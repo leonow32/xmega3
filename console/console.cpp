@@ -33,7 +33,7 @@ static inline bool Console_StrCmp(const char *String1, const char *String2) {
 
 
 // Pobieranie jednego znaku z UART i kopiowanie do bufora lub wykonywanie akcji
-Console_t Console_UartInput(void) {
+Console_t Console_CharInput(void) {
 	
 	uint8_t ReceivedChar = Uart_Read();
 	
@@ -47,6 +47,7 @@ Console_t Console_UartInput(void) {
 		else {
 			// Dodawanie znaków do bufora 
 			Inter.Buffer[Inter.ReceivedCnt++] = ReceivedChar;
+			Print(ReceivedChar);
 			return Console_OK;
 		}
 	}
@@ -68,6 +69,7 @@ Console_t Console_UartInput(void) {
 			if(Inter.ReceivedCnt) {
 				Inter.ReceivedCnt--;
 				Inter.Buffer[Inter.ReceivedCnt] = 0;
+				Print(ReceivedChar);
 			}
 			break;
 		
@@ -204,7 +206,7 @@ void Console_TaskHandler(void) {
 		
 		// Przekazywanie znaków z bufora UART do bufora konsoli i podejmywanie dalszych dzia³a w zale¿noœci od Console_Result
 		Console_t Console_Result;
-		Console_Result =  Console_UartInput();
+		Console_Result =  Console_CharInput();
 		
 		// Je¿eli zakoñczono odbieranie polecenia
 		if(Console_Result == Console_ReceivedCommand) {
@@ -360,7 +362,7 @@ static Parse_t Parse_HexChar(const uint8_t * InputChar, uint8_t * OutputChar) {
 }
 
 
-
+// TODO po co to jest?
 static Parse_t Parse_HexChar_new(const uint8_t * InputChar, uint8_t * OutputChar, bool HighNibble) {
 	uint8_t Temp = *InputChar;
 	
@@ -460,15 +462,6 @@ Parse_t Parse_Hex16(const uint8_t * Argument, uint16_t * Output) {
 Parse_t Parse_Hex32(const uint8_t * Argument, uint32_t * Output) {
 	*Output = 0;
 	return Parse_HexNum(Argument, Output, 8);
-}
-
-
-// Parsowanie liczby HEX 64-bitowej
-// - Argument	- WskaŸnik do argumentu, który ma byæ przetworzony
-// - Output		- WskaŸnik do zmiennej, w której bêdzie zwrócony wynik
-Parse_t Parse_Hex64(const uint8_t * Argument, uint64_t * Output) {
-	*Output = 0;
-	return Parse_HexNum(Argument, Output, 16);
 }
 
 
@@ -601,57 +594,6 @@ Parse_t Parse_Dec32(const uint8_t * Argument, uint32_t * Output, const uint32_t 
 	uint8_t Digit; 	
 	uint32_t Temp = 0;
 	uint32_t Temp2;
-	Parse_t Result;
-	
-	// Kontrola czy podano argument
-	if(Argument == NULL) {
-		Result = Parse_MissingArgument;
-		goto End;
-	}
-	
-	// Przetwarzamy wszystkie znaki po kolei
-	while(*Argument != 0) {
-		Result = Parse_DecChar(Argument++, &Digit);
-		if(Result) {
-			goto End;
-		}
-		
-		Temp2 = Temp * 10 + Digit;
-		if(Temp <= Temp2) {
-			Temp = Temp2;
-		}
-		else {
-			Result = Parse_Overflow;
-			goto End;
-		}
-	}
-	
-	// Zwracanie wyniku
-	if(Temp <= MaxValue) {
-		*Output = Temp;
-	}
-	else {
-		Result = Parse_Overflow;
-	}
-	
-	// Wyœwietlenie informacji o ewentualnym b³êdzie i zwrócenie wyniku
-	End:
-	if(Result) {
-		Parse_Debug(Result, OrgArgument);
-	}
-	return Result;
-}
-
-
-// Parsowanie liczby dziesiêtnej 64-bitowej
-// - Argument	- WskaŸnik do argumentu, który ma byæ przetworzony
-// - Output		- WskaŸnik do zmiennej, w której bêdzie zwrócony wynik
-Parse_t Parse_Dec64(const uint8_t * Argument, uint64_t * Output, const uint64_t MaxValue) {
-	
-	const uint8_t * OrgArgument = Argument;
-	uint8_t Digit; 	
-	uint64_t Temp = 0;
-	uint64_t Temp2;
 	Parse_t Result;
 	
 	// Kontrola czy podano argument
@@ -856,7 +798,9 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 // ========================================
 
 #if CONSOLE_USE_COMMAND_ALL
-void Console_All(uint8_t argc, uint8_t * argv[]) {
+
+// Print all known commands
+void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
 	for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
 		Print_Dec(i);
 		Print(":\t");
@@ -870,7 +814,9 @@ void Console_All(uint8_t argc, uint8_t * argv[]) {
 
 
 #if CONSOLE_USE_DEMO_COMMANDS
-void Console_Args(uint8_t argc, uint8_t * argv[]) {
+
+// Print all provided arguments
+void Console_CmdArgs(uint8_t argc, uint8_t * argv[]) {
 	Print("\r\nShow all passed arguments\r\nargc = ");
 	Print_Dec(argc);
 	for(uint8_t i=0; i<CONSOLE_MAX_ARGUMENTS; i++) {
@@ -884,7 +830,144 @@ void Console_Args(uint8_t argc, uint8_t * argv[]) {
 		}
 	}
 }
-#endif
 
+
+// Print first argument
+void Console_CmdEcho(uint8_t argc, uint8_t * argv[]) {
+	if(argc != 1) {
+		Print((const char *)argv[1]);
+	}
+}
+
+
+// 
+void Console_CmdHex8(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t Value;
+	Parse_t Result;
+	
+	Result = Parse_Hex8(argv[1], &Value);
+	//Result = Parse_HexNum(argv[1], &Value, 2);
+	if(Result) {
+		//////Command_Debug(Result, argv[1]);
+		return;
+	}
+
+	Print_Dec(Value);
+}
+
+
+void Console_CmdHex16(uint8_t argc, uint8_t * argv[]) {
+	
+	uint16_t Value;
+	Parse_t Result;
+	
+	Result = Parse_Hex16(argv[1], &Value);
+	//Result = Parse_HexNum(argv[1], &Value, 4);
+	if(Result) {
+		//////Command_Debug(Result, argv[1]);
+		return;
+	}
+
+	Print_Dec(Value);
+}
+
+
+void Console_CmdHex32(uint8_t argc, uint8_t * argv[]) {
+	
+	uint32_t Value;
+	Parse_t Result;
+	
+	Result = Parse_Hex32(argv[1], &Value);
+	//Result = Parse_HexNum(argv[1], &Value, 8);
+	if(Result) {
+		//////Command_Debug(Result, argv[1]);
+		return;
+	}
+
+	Print_Dec(Value);
+}
+
+
+
+
+
+void Console_CmdDec8(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t Value = 0;
+	Parse_t Result;
+	
+	Result = Parse_Dec8(argv[1], &Value, 100);
+	if(Result) {
+		return;
+	}
+	
+	Print_Dec(Value);
+}
+
+
+void Console_CmdDec16(uint8_t argc, uint8_t * argv[]) {
+	
+	uint16_t Value = 0;
+	Parse_t Result;
+	
+	Result = Parse_Dec16(argv[1], &Value, 10000);
+	if(Result) {
+		return;
+	}
+	
+	Print_Dec(Value);
+}
+
+
+void Console_CmdDec32(uint8_t argc, uint8_t * argv[]) {
+	
+	uint32_t Value = 0;
+	Parse_t Result;
+	
+	Result = Parse_Dec32(argv[1], &Value, 1000000);
+	if(Result) {
+		return;
+	}
+	
+	Print_Dec(Value);
+}
+
+
+void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
+	uint8_t Buffer[64];
+	uint8_t Length;
+	Parse_t Result;
+	
+	Result = Parse_HexString(argv[1], Buffer, &Length);
+	if(Result) {
+		return;
+	}
+	
+	Print("Length: ");
+	Print_Dec(Length);
+	Print_NL();
+	Print_Dump(Buffer, Length);
+}
+
+
+void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
+	uint8_t Buffer[16];
+	uint8_t Length;
+	Parse_t Result;
+	
+	Result = Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3);
+	if(Result) {
+		return;
+	}
+	
+	Print("Length: ");
+	Print_Dec(Length);
+	Print_NL();
+	Print_Dump(Buffer, Length);
+}
+
+
+#endif
 
 #endif
