@@ -851,4 +851,40 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 }
 
 
+// ========================================
+// Demo commands
+// ========================================
+
+#if CONSOLE_USE_COMMAND_ALL
+void Console_All(uint8_t argc, uint8_t * argv[]) {
+	for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
+		Print_Dec(i);
+		Print(":\t");
+		Print_Hex(uint16_t(Console_CommandList[i].Pointer));
+		Print('\t');
+		Print((const char *)Console_CommandList[i].Name);
+		Print_NL();
+	}
+}
+#endif
+
+
+#if CONSOLE_USE_DEMO_COMMANDS
+void Console_Args(uint8_t argc, uint8_t * argv[]) {
+	Print("\r\nShow all passed arguments\r\nargc = ");
+	Print_Dec(argc);
+	for(uint8_t i=0; i<CONSOLE_MAX_ARGUMENTS; i++) {
+		Print_NL();
+		Print_Dec(i);
+		Print(":\t");
+		Print_Hex((uint16_t)argv[i]);
+		if(argv[i]) {
+			Print('\t');
+			Print((const char *)argv[i]);
+		}
+	}
+}
+#endif
+
+
 #endif

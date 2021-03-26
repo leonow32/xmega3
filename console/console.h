@@ -96,7 +96,14 @@ Parse_t		Parse_Dec32S(const uint8_t * Argument, int32_t * Output); //, const int
 Parse_t		Parse_HexString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 
+// Demo commands
+#if CONSOLE_USE_COMMAND_ALL
+void Console_All(uint8_t argc, uint8_t * argv[]);
+#endif
 
+#if CONSOLE_USE_DEMO_COMMANDS
+void Console_Args(uint8_t argc, uint8_t * argv[]);
+#endif
 
 #endif
 #endif /* CONSOLE_H_ */

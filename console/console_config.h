@@ -32,6 +32,9 @@
 	#define CONSOLE_UART_INSTANCE			USART3
 	
 	#define CONSOLE_USE_CTRL_Z				1
+	
+	#define CONSOLE_USE_COMMAND_ALL			1
+	#define CONSOLE_USE_DEMO_COMMANDS		1
 #endif
 
 // ========================================

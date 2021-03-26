@@ -10,7 +10,22 @@
 // Tablica wszystkich poleceñ obs³ugiwanych przez interpreter
 const Console_NamePointer_t Console_CommandList[] = {
 
-// Systemowe
+// ========================================
+// Console demo commands
+// ========================================
+
+#if CONSOLE_USE_COMMAND_ALL
+	{"all",				Console_All},
+#endif
+
+#if CONSOLE_USE_DEMO_COMMANDS
+	{"args",			Console_Args},
+#endif
+
+// ========================================
+// System AVR uCosmos
+// ========================================
+
 #if OS_TASK_MONITOR_USE
 	{"`",				Os_Monitor},
 #endif
