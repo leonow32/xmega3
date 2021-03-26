@@ -60,7 +60,9 @@ enum Parse_t {
 struct Console_Struct {
 	uint16_t			ReceivedCnt;							// Aktualna liczba znaków w tablicy Buffer
 	uint8_t 			Buffer[CONSOLE_COMMAND_LENGTH];		// Buffer for currently processed command
-	uint8_t				Buffer2[CONSOLE_COMMAND_LENGTH];	// Buffer for last processed command, recalled with CTRL-Z
+	#if CONSOLE_USE_CTRL_Z
+		uint8_t			Buffer2[CONSOLE_COMMAND_LENGTH];	// Buffer for last processed command, recalled with CTRL-Z
+	#endif
 };
 
 // Struct used to build table of commands and pointers to specified functions
@@ -72,9 +74,7 @@ struct Console_NamePointer_t {
 // Command list
 extern const Console_NamePointer_t	Console_CommandList[];
 
-
 // Command line interpreter
-
 void		Console_Init(void);
 task_t		Console_Task(runmode_t RunMode);
 void		Console_PromptShow(void);
@@ -82,38 +82,32 @@ void		Console_BufferFlush(void);
 
 // Argument parsers
 void		Parse_Debug(const Parse_t Result, const uint8_t * Argument);
-
 Parse_t		Parse_Hex8(const uint8_t * Argument, uint8_t * Output);
 Parse_t		Parse_Hex16(const uint8_t * Argument, uint16_t * Output);
 Parse_t		Parse_Hex32(const uint8_t * Argument, uint32_t * Output);
-Parse_t		Parse_Hex64(const uint8_t * Argument, uint64_t * Output);
-
 Parse_t		Parse_Dec8(const uint8_t * Argument, uint8_t * Output, const uint8_t MaxValue = 255);
 Parse_t		Parse_Dec16(const uint8_t * Argument, uint16_t * Output, const uint16_t MaxValue = 65535);
 Parse_t		Parse_Dec32(const uint8_t * Argument, uint32_t * Output, const uint32_t MaxValue = 4294967295UL);
-Parse_t		Parse_Dec64(const uint8_t * Argument, uint64_t * Output, const uint64_t MaxValue = 18446744073709551615UL);
 Parse_t		Parse_Dec32S(const uint8_t * Argument, int32_t * Output); //, const int32_t MaxValue = 268435455L);
-
 Parse_t		Parse_HexString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 
 // Demo commands
 #if CONSOLE_USE_COMMAND_ALL
-void Console_CmdAll(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdAll(uint8_t argc, uint8_t * argv[]);
 #endif
 
 #if CONSOLE_USE_DEMO_COMMANDS
-void Console_CmdArgs(uint8_t argc, uint8_t * argv[]);
-void Console_CmdEcho(uint8_t argc, uint8_t * argv[]);
-
-void Console_CmdHex8(uint8_t argc, uint8_t * argv[]);
-void Console_CmdHex16(uint8_t argc, uint8_t * argv[]);
-void Console_CmdHex32(uint8_t argc, uint8_t * argv[]);
-void Console_CmdDec8(uint8_t argc, uint8_t * argv[]);
-void Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
-void Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
-void Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
-void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
+void		Console_CmdArgs(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdEcho(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdHex8(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdHex16(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdHex32(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdDec8(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
+void		Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
 #endif
 
 #endif

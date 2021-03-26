@@ -158,7 +158,15 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	uint16_t i = 0;
 	
 	// Print header
-	Print("         0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
+	Print("\t");
+	for(uint8_t i='0'; i<='F'; i++) {
+		Print(' ');
+		Print(i);
+		Print(' ');
+		if(i == '9') {
+			i = 'A' - 1;
+		}
+	}
 	
 	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
 	do {

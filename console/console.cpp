@@ -74,7 +74,7 @@ Console_t Console_CharInput(void) {
 			break;
 		
 		// Przywrócenie ostatnio wpisywanego polecenia
-		// !! niech to bêdzie opcjonalne
+		#if CONSOLE_USE_CTRL_Z
 		case CTRL_Z:	
 			// Kasowanie dotychczas wpisanego polecenia
 			while(Inter.ReceivedCnt) {
@@ -90,6 +90,7 @@ Console_t Console_CharInput(void) {
 			// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
 			Print((const char *)Inter.Buffer);
 			break;
+		#endif
 		
 		// ESCAPE - to samo, ale wprowadzone z klawiatury przez u¿ytkownika
 		case ESC:
@@ -221,7 +222,9 @@ void Console_TaskHandler(void) {
 			memset(argv, 0, sizeof(argv));
 			
 			// Kopiowanie do bufora CTRL-Z
-			memcpy(Inter.Buffer2, Inter.Buffer, CONSOLE_COMMAND_LENGTH);
+			#if CONSOLE_USE_CTRL_Z
+				memcpy(Inter.Buffer2, Inter.Buffer, CONSOLE_COMMAND_LENGTH);
+			#endif
 			
 			// Dzielenie bufora na poszczególne argumenty
 			Console_SplitArguments(&argc, argv);
@@ -317,10 +320,10 @@ void Console_BufferFlush(void) {
 void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 	Print("Error");
 	if(Argument != NULL) {
-		Print(" in agument ");
+		Print(" in agument \"");
 		Print((const char *)Argument);
 	}
-	Print(": ");
+	Print("\": ");
 	
 	switch(Result) {
 		case Parse_OK:									Print("OK");								break;
@@ -363,7 +366,7 @@ static Parse_t Parse_HexChar(const uint8_t * InputChar, uint8_t * OutputChar) {
 
 
 // TODO po co to jest?
-static Parse_t Parse_HexChar_new(const uint8_t * InputChar, uint8_t * OutputChar, bool HighNibble) {
+static Parse_t Parse_HexChar(const uint8_t * InputChar, uint8_t * OutputChar, bool HighNibble) {
 	uint8_t Temp = *InputChar;
 	
 	// Interpretowanie zaku ASCII
@@ -420,7 +423,7 @@ Parse_t Parse_HexNum(const uint8_t * Argument, void * Output, uint8_t Characters
 	do {
 		
 		uint8_t HighNibble = Characters & 0x01;
-		Result = Parse_HexChar_new(--Argument, (uint8_t*)Output, HighNibble);
+		Result = Parse_HexChar(--Argument, (uint8_t*)Output, HighNibble);
 		if(Result) {
 			goto End;
 		}
@@ -952,7 +955,7 @@ void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
 
 
 void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
-	uint8_t Buffer[16];
+	uint8_t Buffer[32];
 	uint8_t Length;
 	Parse_t Result;
 	
