@@ -14,6 +14,10 @@
 	#include	"clock/clock.h"
 #endif
 
+#if C_EEPROM
+	#include	"eeprom/eeprom.h"
+#endif
+
 #if C_PERIPHERALS
 	#include	"peripherals/peripherals.h"
 #endif
@@ -58,16 +62,18 @@ int main(void) {
 	#if C_CLOCK
 		Clock_Init();
 	#endif
-
+	
+	#if C_EEPROM
+		EEPROM_Init();
+	#endif
+	
 	#if C_PERIPHERALS
 		Peripherals_Init();
 	#endif
-
+	
 	#if C_UART_MULTI || C_UART_SINGLE
 		Uart_Init();
 	#endif
-	
-	
 	
 	// ========================================
 	// Internal Software Init

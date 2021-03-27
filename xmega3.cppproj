@@ -255,6 +255,7 @@
       <Value>VERSION=100</Value>
       <Value>C_CLOCK</Value>
       <Value>C_CONSOLE</Value>
+      <Value>C_EEPROM</Value>
       <Value>C_PERIPHERALS</Value>
       <Value>C_PRINT</Value>
       <Value>C_UART_MULTI</Value>
@@ -317,6 +318,21 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="console\console_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom\eeprom.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom\eeprom.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom\eeprom_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom\eeprom_demo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom\eeprom_demo.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.cpp">
@@ -390,6 +406,7 @@
     <Folder Include="console" />
     <Folder Include="config" />
     <Folder Include="common" />
+    <Folder Include="eeprom" />
     <Folder Include="print" />
     <Folder Include="uCosmos" />
     <Folder Include="peripherals" />

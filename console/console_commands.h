@@ -3,6 +3,10 @@
 
 #include	"console.h"
 
+#if C_EEPROM
+	#include	"../eeprom/eeprom_demo.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
@@ -29,6 +33,23 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"dec32",			Console_CmdDec32},
 	{"hexstr",			Console_CmdHexString},
 	{"ascstr",			Console_CmdAsciiString},
+#endif
+
+// ========================================
+// Internal EEPROM demo commands
+// ========================================
+
+#if EEPROM_USE_COMMAND_DUMP
+	{"ee",				EEPROM_Demo_Dump},
+#endif
+
+#if EEPROM_USE_COMMAND_READ_WRITE
+	{"ee-r",			EEPROM_Demo_ReadByte},
+	{"ee-rs",			EEPROM_Demo_ReadString},
+	{"ee-w",			EEPROM_Demo_WriteByte},
+	{"ee-ws",			EEPROM_Demo_WriteString},
+	{"ee-er",			EEPROM_Demo_Erase},
+	{"ee-fill",			EEPROM_Demo_Fill},
 #endif
 
 // ========================================

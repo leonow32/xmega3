@@ -8,7 +8,14 @@
 // ========================================
 
 #if P_TEMPLATE
-	
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			1
+	#define CONSOLE_INPUT_STREAM				Uart_Read
+	#define CONSOLE_INPUT_RECEIVED_CNT			Uart_ReceivedCnt
 #endif
 
 // ========================================
@@ -16,7 +23,20 @@
 // ========================================
 
 #if P_AVRIOT
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			1
 	
+	#if C_UART_SINGLE
+		#define CONSOLE_INPUT_STREAM			Uart_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart_ReceivedCnt
+	#elif C_UART_MULTI
+		#define CONSOLE_INPUT_STREAM			Uart2_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart2_ReceivedCnt
+	#endif
 #endif
 
 // ========================================
@@ -26,6 +46,7 @@
 #if P_CURIO4809
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
 	#define CONSOLE_USE_CTRL_Z					1
 	#define CONSOLE_USE_COMMAND_ALL				1
 	#define CONSOLE_USE_DEMO_COMMANDS			1
@@ -37,7 +58,6 @@
 		#define CONSOLE_INPUT_STREAM			Uart3_Read
 		#define CONSOLE_INPUT_RECEIVED_CNT		Uart3_ReceivedCnt
 	#endif
-
 #endif
 
 // ========================================
@@ -45,7 +65,14 @@
 // ========================================
 
 #if P_XNANO
-	
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			1
+	#define CONSOLE_INPUT_STREAM				Uart_Read
+	#define CONSOLE_INPUT_RECEIVED_CNT			Uart_ReceivedCnt
 #endif
 
 
