@@ -7,10 +7,6 @@
 // Bufor programowy
 volatile UART_Buffer_t UART_ProgBuf;
 
-// TODO: Wyci¹æ to
-USART_t * UART_PortOverride = NULL;
-
-
 // Inicjalizacja zgodnie z konfiguracj¹ w pliku configS
 void Uart_Init(void) {
 	
@@ -201,74 +197,6 @@ ISR(USARTX_TXC_vect) {
 	// Czyszczenie flagi zajêtoœci transmitera
 	USARTX.TXPLCTRL = 0;
 }
-
-
-// ================================================
-// Funkcje wy¿szego poziomu do wysy³ania przez UART
-// ================================================
-
-/*
-// Ponowne wys³anie ca³ej zawartoœci bufora TX
-// Aby ta operacja dzia³a³a prawid³owo, wczeœniej nale¿y wywo³aæ Uart_TxBufferFlush i d³ugoœæ wysy³anego
-// ci¹gu znaków nie mo¿e przekroczyæ d³ugoœci bufora UART_TX_BUFFER_LENGTH
-void Uart_Resend(USART_t * Port) {
-	
-	//volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-	
-	// Wy³¹czenie przerwañ
-	cli();
-	
-	// Zerowanie wskaŸnika tail
-	
-	UART_ProgBuf.TxBufferTail = 0;
-	
-	
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-
-	// Usuwanie ACK doklejonego na koñcu bufora
-// 	if(Buffer->TxBuffer[Buffer->TxBufferHead - 1] == ACK) {
-// 		Buffer->TxBuffer[--Buffer->TxBufferHead] = NUL;
-// 	}
-	
-	UART_ProgBuf.TxBufferCnt = UART_ProgBuf.TxBufferHead;
-	
-	// Aktywowanie wysy³ania
-	Port->CTRLA		=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
-						USART_RXCIE_bm |										// ...a RX...
-						USART_TXCIE_bm;											// ...oraz TX ju¿ wczeœniej by³o w³¹czone
-	
-	// W³¹czenie przerwañ
-	sei();
-	
-	
-	
-	
-	//Uart_Write('x', Port);
-	
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-	
-//	Uart_Write((const char *)Buffer->TxBuffer);
-}
-*/
 
 
 // ====================

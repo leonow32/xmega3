@@ -130,15 +130,11 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferCnt;
 };
 
-// TODO: spróbowaæ to wywaliæ
-extern USART_t * UART_PortOverride;
-
 // Inicjalizacja
 void		Uart_Init();
 
 // Zapisywanie
 void		Uart_Write(uint8_t Data);
-//void		Uart_Resend(USART_t * Port);
 
 // Odczytywanie
 uint8_t		Uart_Read(USART_t * Port = UART_DEFAULT_PORT);

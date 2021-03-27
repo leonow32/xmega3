@@ -212,13 +212,9 @@ void Console_TaskHandler(void) {
 		// Je¿eli zakoñczono odbieranie polecenia
 		if(Console_Result == Console_ReceivedCommand) {
 			
-			// !! wyrzuciæ to
-			//_delay_us(250);
-			
 			// Zmienne
 			uint8_t			argc = 0;												// Liczba wpisanych argumentów
-			uint8_t *		argv[CONSOLE_MAX_ARGUMENTS];								// Tablica wskaŸników do argumentów
-			//void			(*CommandPointer)(uint8_t argc, uint8_t * argv[]);		// WskaŸnik do funkcji, która ma byæ wywo³ana
+			uint8_t *		argv[CONSOLE_MAX_ARGUMENTS];							// Tablica wskaŸników do argumentów
 			memset(argv, 0, sizeof(argv));
 			
 			// Kopiowanie do bufora CTRL-Z
@@ -235,19 +231,11 @@ void Console_TaskHandler(void) {
 			// Zejœcie do nowej linii, ¿eby w trybie rêcznym ³adnie wygl¹da³o w terminalu
 			Print_NL();
 			
-			// Ustawienie portu UART, który ma otrzymaæ odpowiedŸ
-			//UART_PortOverride = Inter.UartInstance;
-			
 			// Wykonanie polecenia, jeœli rozpoznano
 			if(CommandPointer) {
 				
-				// Prolog odpowiedzi
-				Uart_TxBufferFlush(&CONSOLE_UART_INSTANCE);
-				
-				
 				// Wywo³anie funkcji odpowiadaj¹cej poleceniu
 				CommandPointer(argc, argv);
-				
 			}
 			
 			// Je¿eli nie rozpoznano polecenia
@@ -281,7 +269,7 @@ task_t Console_Task(runmode_t RunMode) {
 	
 	// Constructor
 	else if(RunMode == FirstRun) {
-		Console_PromptShow();						// !! zrobiæ coœ, ¿eby prompt nie pokazywa³ siê w trakcie wysy³ania komunikatu o utworzeniu tasku
+		Console_PromptShow();						// TODO zrobiæ coœ, ¿eby prompt nie pokazywa³ siê w trakcie wysy³ania komunikatu o utworzeniu tasku
 	}
 	
 	// Destructor
