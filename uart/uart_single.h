@@ -101,11 +101,11 @@ HARDWARE
 
 #if C_UART_SINGLE
 
-#include	<avr/io.h>
-#include	<avr/interrupt.h>
-#include	<string.h>
-#include	<util/delay.h>
-#include	"uart_single_config.h"
+#include		<avr/io.h>
+#include		<avr/interrupt.h>
+#include		<string.h>
+#include		<util/delay.h>
+#include		"uart_single_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"
@@ -113,14 +113,6 @@ HARDWARE
 
 // TODO: Zoptymalizowaæ to
 #define UART_DEFAULT_PORT	NULL
-
-// DEBUG
-#define PIN_A_INIT		PORTB.DIRSET = PIN1_bm
-#define PIN_A_ON		VPORTB.OUT	|=	PIN1_bm
-#define PIN_A_OFF		VPORTB.OUT	&= ~PIN1_bm
-#define PIN_B_INIT		PORTB.DIRSET = PIN4_bm
-#define PIN_B_ON		VPORTB.OUT	|=	PIN4_bm
-#define PIN_B_OFF		VPORTB.OUT	&= ~PIN4_bm
 
 // Definicje statusów
 // Zapisywanie w rejestrze TXPLCTRL, który s³u¿y do IR, ale nie wykorzystujemy tej mo¿liwoœci
@@ -138,15 +130,11 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferCnt;
 };
 
-// TODO: spróbowaæ to wywaliæ
-extern USART_t * UART_PortOverride;
-
 // Inicjalizacja
 void		Uart_Init();
 
 // Zapisywanie
 void		Uart_Write(uint8_t Data);
-//void		Uart_Resend(USART_t * Port);
 
 // Odczytywanie
 uint8_t		Uart_Read(USART_t * Port = UART_DEFAULT_PORT);

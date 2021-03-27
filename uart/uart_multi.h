@@ -96,11 +96,11 @@ HARDWARE
 
 #if C_UART_MULTI
 
-#include	<avr/io.h>
-#include	<avr/interrupt.h>
-#include	<string.h>
-#include	<util/delay.h>
-#include	"uart_multi_config.h"
+#include		<avr/io.h>
+#include		<avr/interrupt.h>
+#include		<string.h>
+#include		<util/delay.h>
+#include		"uart_multi_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"
@@ -120,44 +120,38 @@ struct UART_Buffer_t {
 	uint8_t		TxBufferHead;
 	uint8_t		TxBufferTail;
 	uint8_t		TxBufferCnt;
-//	uint16_t	TxBufferCRC;
 };
 
-// TODO: spróbowaæ to wywaliæ
-extern USART_t * UART_PortOverride;
-
-// Inicjalizacja
+// Funkcje podstawowe
 void		Uart_Init();
-// void		Uart_TxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-// void		Uart_TxEnable(USART_t * Port = &UART_DEFAULT_PORT);
-// void		Uart_RxDisable(USART_t * Port = &UART_DEFAULT_PORT);
-// void		Uart_RxEnable(USART_t * Port = &UART_DEFAULT_PORT);
-
-// Zapisywanie
 void		Uart_Write(uint8_t Data, USART_t * Port = &UART_DEFAULT_PORT);
+uint8_t		Uart_Read(USART_t * Port = &UART_DEFAULT_PORT);
+uint8_t		Uart_ReceivedCnt(USART_t * Port = &UART_DEFAULT_PORT);
 
+// Funckje specyficzne dla poszczególnych instacji
 #if UART0_USE
-	void Uart0_Write(uint8_t Data);
+	void	Uart0_Write(uint8_t Data);
+	uint8_t	Uart0_Read(void);
+	uint8_t	Uart0_ReceivedCnt(void);
 #endif
 
 #if UART1_USE
-	void Uart1_Write(uint8_t Data);
+	void	Uart1_Write(uint8_t Data);
+	uint8_t	Uart1_Read(void);
+	uint8_t	Uart1_ReceivedCnt(void);
 #endif
 
 #if UART2_USE
-	void Uart2_Write(uint8_t Data);
+	void	Uart2_Write(uint8_t Data);
+	uint8_t	Uart2_Read(void);
+	uint8_t	Uart2_ReceivedCnt(void);
 #endif
 
 #if UART3_USE
-	void Uart3_Write(uint8_t Data);
+	void	Uart3_Write(uint8_t Data);
+	uint8_t	Uart3_Read(void);
+	uint8_t	Uart3_ReceivedCnt(void);
 #endif
-
-
-//void		Uart_Resend(USART_t * Port);
-
-// Odczytywanie
-uint8_t		Uart_Read(USART_t * Port = &UART_DEFAULT_PORT);
-uint8_t		Uart_ReceivedCnt(USART_t * Port = &UART_DEFAULT_PORT);
 
 // Funkcje pomocnicze
 void		Uart_RxBufferFlush(volatile UART_Buffer_t * ProgBuf);
@@ -166,10 +160,6 @@ void		Uart_TxBufferFlush(volatile UART_Buffer_t * ProgBuf);
 void		Uart_TxBufferFlush(USART_t * Port);
 void		Uart_WaitForTxComplete(USART_t * Port);
 void		Uart_WaitForTxComplete(void);
-
-// CRC kontrolne
-// void		Uart_TxCrcClear(USART_t * Port);
-// uint16_t	Uart_TxCrcGet(USART_t * Port);
 
 // Wycofane, definicje dla kompatybilnoœci wstecznej
 #define		Uart_WriteProgmem(x)	Uart_Write(x)

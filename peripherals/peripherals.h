@@ -41,6 +41,10 @@ CHANGELOG
 	#error		"This module requires PRINT component"
 #endif
 
+#if C_UCOSMOS
+	#include	"../uCosmos/uCosmos.h"
+#endif
+
 // ========================================
 // Dev Board AVR-IoT
 // ========================================

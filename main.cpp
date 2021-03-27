@@ -67,9 +67,7 @@ int main(void) {
 		Uart_Init();
 	#endif
 	
-	// Przerwania
-	CPUINT.CTRLA |=	CPUINT_LVL0RR_bm;			// Algorytm round-robin dla przerwañ o tym samym priorytecie
-	sei();
+	
 	
 	// ========================================
 	// Internal Software Init
@@ -77,9 +75,12 @@ int main(void) {
 	
 	#if C_UCOSMOS
 		Os_Init();
-		Os_ConsoleInit();
 	#endif
-
+	
+	#if C_CONSOLE
+		Console_Init();
+	#endif
+	
 	// ========================================
 	// External Hardware init
 	// ========================================
@@ -91,8 +92,8 @@ int main(void) {
 	// ========================================
 	
 	Print("\r\n=== START ===\r\n");
-	Os_ResetSourceShow(RSTCTRL.RSTFR);
-	Os_ResetSourceClear();
+// 	Os_ResetSourceShow(RSTCTRL.RSTFR);
+// 	Os_ResetSourceClear();
 	
 // 	Print_SetStream(Uart1_Write);
 // 	Print("To jest wyslane przez UART1\r\n");
@@ -138,29 +139,20 @@ int main(void) {
 // 		}
 // 	}
 	
-	while(1) {
-			Print_SetStream(&Uart0_Write);
-			Print("UART0_UUU");
-			Print_SetStream(&Uart1_Write);
-			Print("UART1_UUU");
-			Print_SetStream(&Uart2_Write);
-			Print("UART2_UUU");
-			Print_SetStream(&Uart3_Write);
-			Print("UART3_UUU");
-			Print_SetStream();
-			_delay_ms(1000);
-
+// 	while(1) {
 // 			Print_SetStream(&Uart0_Write);
-// 			Print("UART0 012345678901234567890123456789");
+// 			Print("UART0_UUU");
 // 			Print_SetStream(&Uart1_Write);
-// 			Print("UART1 012345678901234567890123456789");
+// 			Print("UART1_UUU");
 // 			Print_SetStream(&Uart2_Write);
-// 			Print("UART2 012345678901234567890123456789");
+// 			Print("UART2_UUU");
 // 			Print_SetStream(&Uart3_Write);
-// 			Print("UART3 012345678901234567890123456789");
-			Print_SetStream();
-			_delay_ms(1000);
-	}
+// 			Print("UART3_UUU");
+// 			Print_SetStream();
+// 			_delay_ms(1000);
+// 			Print_SetStream();
+// 			_delay_ms(1000);
+// 	}
 	
 	while(1) {
 		TaskScheduler();

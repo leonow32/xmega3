@@ -7,16 +7,8 @@
 // Bufor programowy
 volatile UART_Buffer_t UART_ProgBuf;
 
-// TODO: Wyci¹æ to
-USART_t * UART_PortOverride = NULL;
-
-
 // Inicjalizacja zgodnie z konfiguracj¹ w pliku configS
 void Uart_Init(void) {
-	
-	// DEBUG
-	PIN_A_INIT;
-	PIN_B_INIT;
 	
 	// Konfiguracja dla ATtinyXX14/16/17/18 - port podstawowy
 	#if UART0_PORTB_23 && (HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
@@ -27,7 +19,7 @@ void Uart_Init(void) {
 		VPORTB.OUT		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 		VPORTB.DIR		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATtinyXX12/14/16/17/18 - port alternatywny
 	#if UART0_PORTA_12 && (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
 		PORTMUX.CTRLB	|=	PORTMUX_USART0_ALTERNATE_gc;
@@ -47,7 +39,7 @@ void Uart_Init(void) {
 		VPORTC.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTC.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART1_PORTC_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART1_ALT1_gc;
@@ -67,7 +59,7 @@ void Uart_Init(void) {
 		VPORTF.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTF.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART2_ALT1_gc;
@@ -87,7 +79,7 @@ void Uart_Init(void) {
 		VPORTB.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTB.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART3_ALT1_gc;
@@ -107,14 +99,14 @@ void Uart_Init(void) {
 								  //USART_LBME_bm |								// Loop-back Mode Enable
 								  //USART_ABEIE_bm |							// Auto-baud Error Interrupt Enable
 									USART_RS485_OFF_gc;							// RS485 Mode
-
+	
 	USARTX.CTRLB				=	USART_RXEN_bm |								// Receiver Enable
 									USART_TXEN_bm |								// Transmitter Enable
 									USART_SFDEN_bm |							// Start Frame Detection Enable
 								  //USART_ODME_bm |								// Open Drain Mode Enable
 									USART_RXMODE_NORMAL_gc ;					// Receiver Mode
 								  //USART_MPCM_bp;								// Multi-Processor Communication Mode
-
+	
 	USARTX.CTRLC				=	USART_CMODE_ASYNCHRONOUS_gc |				// USART Communication Mode
 									USART_PMODE_DISABLED_gc |					// Parity Mode
 									USART_SBMODE_1BIT_gc |						// Stop Bit Mode
@@ -123,13 +115,6 @@ void Uart_Init(void) {
 	#if UART_DEBUG_RUN
 		USARTX.DBGCTRL			=	USART_DBGRUN_bm;							// Ma dzia³aæ podczas breakpointów
 	#endif	
-	
-	// Czyszczenie bufora
-	//memset(UART_ProgBuf, 0, sizeof(UART_ProgBuf));
-	
-	CPUINT.LVL1VEC				=	UART_CONSOLE_INT;							// Jeœli wrzucamy coœ do bufora UART w przerwaniu, 
-																				// to przerwanie opró¿nienia bufora musi mieæ wiêkszy priortet, 
-																				// bo inaczej w przypadku przepe³nienia bufora procesor siê zawiesi
 }
 
 
@@ -207,74 +192,6 @@ ISR(USARTX_TXC_vect) {
 }
 
 
-// ================================================
-// Funkcje wy¿szego poziomu do wysy³ania przez UART
-// ================================================
-
-/*
-// Ponowne wys³anie ca³ej zawartoœci bufora TX
-// Aby ta operacja dzia³a³a prawid³owo, wczeœniej nale¿y wywo³aæ Uart_TxBufferFlush i d³ugoœæ wysy³anego
-// ci¹gu znaków nie mo¿e przekroczyæ d³ugoœci bufora UART_TX_BUFFER_LENGTH
-void Uart_Resend(USART_t * Port) {
-	
-	//volatile UART_Buffer_t * Buffer = Uart__GetProgBuffer(Port);
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-	
-	// Wy³¹czenie przerwañ
-	cli();
-	
-	// Zerowanie wskaŸnika tail
-	
-	UART_ProgBuf.TxBufferTail = 0;
-	
-	
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-
-	// Usuwanie ACK doklejonego na koñcu bufora
-// 	if(Buffer->TxBuffer[Buffer->TxBufferHead - 1] == ACK) {
-// 		Buffer->TxBuffer[--Buffer->TxBufferHead] = NUL;
-// 	}
-	
-	UART_ProgBuf.TxBufferCnt = UART_ProgBuf.TxBufferHead;
-	
-	// Aktywowanie wysy³ania
-	Port->CTRLA		=	USART_DREIE_bm |										// W³¹czenie przerwañ od DRE...
-						USART_RXCIE_bm |										// ...a RX...
-						USART_TXCIE_bm;											// ...oraz TX ju¿ wczeœniej by³o w³¹czone
-	
-	// W³¹czenie przerwañ
-	sei();
-	
-	
-	
-	
-	//Uart_Write('x', Port);
-	
-// 	Uart_Write("\r\nHead: ");
-// 	Uart_WriteDec(Buffer->TxBufferHead);
-// 	Uart_Write("\r\nTail: ");
-// 	Uart_WriteDec(Buffer->TxBufferTail);
-// 	Uart_Write("\r\nCnt: ");
-// 	Uart_WriteDec(Buffer->TxBufferCnt);
-// 	Uart_WriteNL();
-	
-//	Uart_Write((const char *)Buffer->TxBuffer);
-}
-*/
-
-
 // ====================
 // Odbiór danych z UART
 // ====================
@@ -316,7 +233,7 @@ uint8_t Uart_Read(USART_t * Port) {
 
 // Przerwanie od RXC w celu skopiowanie znaku odebranego przez UART do bufora programowego
 ISR(USARTX_RXC_vect) {
-
+	
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
 		if(UART_ProgBuf.RxBufferCnt == 0) {										// Je¿eli bufor wczeœniej by³ pusty

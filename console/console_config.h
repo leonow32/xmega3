@@ -1,23 +1,14 @@
-// Wersja 0.22
+// Version 0.01
 
-#ifndef COMMAND_CONFIG_H_
-#define COMMAND_CONFIG_H_
+#ifndef CONSOLE_CONFIG_H_
+#define CONSOLE_CONFIG_H_
 
 // ========================================
 // Template
 // ========================================
 
 #if P_TEMPLATE
-	// Definicje konfiguracyjne
-	#define		CMD_LINE_BUFFER_LENGTH			250
-	#define		CMD_MAX_ARGUMENTS				10
-
-	// Reakcje interpretera
-	#define		CMD_USE_ACK_NAK					1			// Wysy³anie znaku ACK/NAK po poprawnym lub niepoprawnym zinterpretowaniu polecenia
-
-	// Human-machine interface
-	#define		CMD_USE_ALL						1			// Polecenie "all" wyœwietlaj¹ce wszystkie dostêpne polecenia
-	#define		CMD_USE_HELP					1			// Je¿eli polecenie zostanie wpisane bez argumentów, to wyœwietli siê pomoc na ich temat; mo¿na wy³¹czyæ, by zaoszczêdziæ miejsce
+	
 #endif
 
 // ========================================
@@ -25,16 +16,7 @@
 // ========================================
 
 #if P_AVRIOT
-	// Definicje konfiguracyjne
-	#define		CMD_LINE_BUFFER_LENGTH			250
-	#define		CMD_MAX_ARGUMENTS				10
-
-	// Reakcje interpretera
-	#define		CMD_USE_ACK_NAK					1			// Wysy³anie znaku ACK/NAK po poprawnym lub niepoprawnym zinterpretowaniu polecenia
-
-	// Human-machine interface
-	#define		CMD_USE_ALL						1			// Polecenie "all" wyœwietlaj¹ce wszystkie dostêpne polecenia
-	#define		CMD_USE_HELP					1			// Je¿eli polecenie zostanie wpisane bez argumentów, to wyœwietli siê pomoc na ich temat; mo¿na wy³¹czyæ, by zaoszczêdziæ miejsce
+	
 #endif
 
 // ========================================
@@ -42,16 +24,20 @@
 // ========================================
 
 #if P_CURIO4809
-	// Definicje konfiguracyjne
-	#define		CMD_LINE_BUFFER_LENGTH			250
-	#define		CMD_MAX_ARGUMENTS				10
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			1
+	
+	#if C_UART_SINGLE
+		#define CONSOLE_INPUT_STREAM			Uart_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart_ReceivedCnt
+	#elif C_UART_MULTI
+		#define CONSOLE_INPUT_STREAM			Uart3_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart3_ReceivedCnt
+	#endif
 
-	// Reakcje interpretera
-	#define		CMD_USE_ACK_NAK					1			// Wysy³anie znaku ACK/NAK po poprawnym lub niepoprawnym zinterpretowaniu polecenia
-
-	// Human-machine interface
-	#define		CMD_USE_ALL						1			// Polecenie "all" wyœwietlaj¹ce wszystkie dostêpne polecenia
-	#define		CMD_USE_HELP					1			// Je¿eli polecenie zostanie wpisane bez argumentów, to wyœwietli siê pomoc na ich temat; mo¿na wy³¹czyæ, by zaoszczêdziæ miejsce
 #endif
 
 // ========================================
@@ -59,17 +45,8 @@
 // ========================================
 
 #if P_XNANO
-	// Definicje konfiguracyjne
-	#define		CMD_LINE_BUFFER_LENGTH			250
-	#define		CMD_MAX_ARGUMENTS				10
-
-	// Reakcje interpretera
-	#define		CMD_USE_ACK_NAK					1			// Wysy³anie znaku ACK/NAK po poprawnym lub niepoprawnym zinterpretowaniu polecenia
-
-	// Human-machine interface
-	#define		CMD_USE_ALL						1			// Polecenie "all" wyœwietlaj¹ce wszystkie dostêpne polecenia
-	#define		CMD_USE_HELP					1			// Je¿eli polecenie zostanie wpisane bez argumentów, to wyœwietli siê pomoc na ich temat; mo¿na wy³¹czyæ, by zaoszczêdziæ miejsce
+	
 #endif
 
 
-#endif /* COMMAND_CONFIG_H_ */
+#endif /* CONSOLE_CONFIG_H_ */

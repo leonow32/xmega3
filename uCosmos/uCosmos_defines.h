@@ -16,7 +16,7 @@ enum task_t {
 };
 
 
-// Rodzaj wywo³ania tasku, przekazywaniy jako argument
+// Rodzaj wywo³ania tasku, przekazywany jako argument
 enum runmode_t {
 	Run = 0,
 	FirstRun,
