@@ -19,7 +19,7 @@ void Uart_Init(void) {
 		VPORTB.OUT		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 		VPORTB.DIR		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATtinyXX12/14/16/17/18 - port alternatywny
 	#if UART0_PORTA_12 && (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
 		PORTMUX.CTRLB	|=	PORTMUX_USART0_ALTERNATE_gc;
@@ -39,7 +39,7 @@ void Uart_Init(void) {
 		VPORTC.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTC.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART1_PORTC_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART1_ALT1_gc;
@@ -59,7 +59,7 @@ void Uart_Init(void) {
 		VPORTF.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTF.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART2_ALT1_gc;
@@ -79,7 +79,7 @@ void Uart_Init(void) {
 		VPORTB.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTB.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	#endif
-
+	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
 	#if UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART3_ALT1_gc;
@@ -99,14 +99,14 @@ void Uart_Init(void) {
 								  //USART_LBME_bm |								// Loop-back Mode Enable
 								  //USART_ABEIE_bm |							// Auto-baud Error Interrupt Enable
 									USART_RS485_OFF_gc;							// RS485 Mode
-
+	
 	USARTX.CTRLB				=	USART_RXEN_bm |								// Receiver Enable
 									USART_TXEN_bm |								// Transmitter Enable
 									USART_SFDEN_bm |							// Start Frame Detection Enable
 								  //USART_ODME_bm |								// Open Drain Mode Enable
 									USART_RXMODE_NORMAL_gc ;					// Receiver Mode
 								  //USART_MPCM_bp;								// Multi-Processor Communication Mode
-
+	
 	USARTX.CTRLC				=	USART_CMODE_ASYNCHRONOUS_gc |				// USART Communication Mode
 									USART_PMODE_DISABLED_gc |					// Parity Mode
 									USART_SBMODE_1BIT_gc |						// Stop Bit Mode
@@ -115,13 +115,6 @@ void Uart_Init(void) {
 	#if UART_DEBUG_RUN
 		USARTX.DBGCTRL			=	USART_DBGRUN_bm;							// Ma dzia³aæ podczas breakpointów
 	#endif	
-	
-	// Czyszczenie bufora
-	//memset(UART_ProgBuf, 0, sizeof(UART_ProgBuf));
-	
-	CPUINT.LVL1VEC				=	UART_CONSOLE_INT;							// Jeœli wrzucamy coœ do bufora UART w przerwaniu, 
-																				// to przerwanie opró¿nienia bufora musi mieæ wiêkszy priortet, 
-																				// bo inaczej w przypadku przepe³nienia bufora procesor siê zawiesi
 }
 
 
@@ -240,7 +233,7 @@ uint8_t Uart_Read(USART_t * Port) {
 
 // Przerwanie od RXC w celu skopiowanie znaku odebranego przez UART do bufora programowego
 ISR(USARTX_RXC_vect) {
-
+	
 	// Je¿eli jest u¿ywana blokada uœpienia
 	#if UART_USE_UCOSMOS_SLEEP
 		if(UART_ProgBuf.RxBufferCnt == 0) {										// Je¿eli bufor wczeœniej by³ pusty

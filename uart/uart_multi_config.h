@@ -101,10 +101,7 @@
 	#endif
 	
 	// Domyœlny port
-	#define		UART_DEFAULT_PORT			USART2
-	
-	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
-	#define		UART_CONSOLE_INT			USART2_DRE_vect_num
+	#define		UART_DEFAULT_PORT			USART0
 	
 	// Konfiguracja
 	#define		UART_CLEAR_BYTE_AFTER_READ	0				// W celach debugowych, czyœci bajty z TxBuffer i RxBuffer po ich wys³aniu/odebraniu
@@ -149,9 +146,6 @@
 	
 	// Domyœlny port
 	#define		UART_DEFAULT_PORT			USART2
-	
-	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
-	#define		UART_CONSOLE_INT			USART2_DRE_vect_num
 	
 	// Konfiguracja
 	#define		UART_CLEAR_BYTE_AFTER_READ	0				// W celach debugowych, czyœci bajty z TxBuffer i RxBuffer po ich wys³aniu/odebraniu
@@ -204,9 +198,6 @@
 	// Domyœlny port
 	#define		UART_DEFAULT_PORT			USART3
 	
-	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
-	#define		UART_CONSOLE_INT			USART3_DRE_vect_num
-	
 	// Konfiguracja
 	#define		UART_CLEAR_BYTE_AFTER_READ	0				// W celach debugowych, czyœci bajty z TxBuffer i RxBuffer po ich wys³aniu/odebraniu
 	#define		UART_BREAK_ON_BUFFER_FULL	0				// W celach debugowych, zatrzymuje program jeœli bufor zostaje zape³niony
@@ -232,9 +223,6 @@
 	
 	// Domyœlny port
 	#define		UART_DEFAULT_PORT			USART0
-	
-	// Przerwanie z priorytetem (ustawiæ tu port do konsoli systemowej)
-	#define		UART_CONSOLE_INT			USART0_DRE_vect_num
 	
 	// Konfiguracja
 	#define		UART_CLEAR_BYTE_AFTER_READ	0				// W celach debugowych, czyœci bajty z TxBuffer i RxBuffer po ich wys³aniu/odebraniu

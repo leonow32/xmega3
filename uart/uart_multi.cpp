@@ -15,7 +15,7 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 
 
 // ========================================
-// Stuff dedicated for  UART0
+// Stuff dedicated for UART0
 // ========================================
 
 
@@ -101,7 +101,7 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 #endif
 
 // ========================================
-// Stuff dedicated for  UART1
+// Stuff dedicated for UART1
 // ========================================
 
 #if UART1_USE
@@ -164,7 +164,7 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 #endif
 
 // ========================================
-// Stuff dedicated for  UART2
+// Stuff dedicated for UART2
 // ========================================
 
 #if UART2_USE
@@ -229,7 +229,7 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 #endif
 
 // ========================================
-// Stuff dedicated for  UART3
+// Stuff dedicated for UART3
 // ========================================
 	
 #if UART3_USE
@@ -402,11 +402,6 @@ void Uart_Init() {
 		Uart3_InitPins();
 		Uart__InitUsartPeripheral(&USART3, &UART3_ProgBuf, uint16_t((F_CPU * 4) / (UART3_BAUD)));
 	#endif
-	
-	// Przerwania
-	CPUINT.LVL1VEC	=	UART_CONSOLE_INT;										// Jeœli wrzucamy coœ do bufora UART w przerwaniu, 
-																				// to przerwanie opró¿nienia bufora musi mieæ wiêkszy priortet, 
-																				// bo inaczej w przypadku przepe³nienia bufora procesor siê zawiesi
 }
 
 

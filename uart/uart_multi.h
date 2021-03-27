@@ -96,11 +96,11 @@ HARDWARE
 
 #if C_UART_MULTI
 
-#include	<avr/io.h>
-#include	<avr/interrupt.h>
-#include	<string.h>
-#include	<util/delay.h>
-#include	"uart_multi_config.h"
+#include		<avr/io.h>
+#include		<avr/interrupt.h>
+#include		<string.h>
+#include		<util/delay.h>
+#include		"uart_multi_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"

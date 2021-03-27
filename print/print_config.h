@@ -44,7 +44,11 @@
 	#define PRINT_USE_STREAM_MULTI					1
 	
 	// Domyœlny strumieñ wyjœciowy
-	#define PRINT_DEFAULT_STREAM					Uart3_Write
+	#if C_UART_SINGLE
+		#define PRINT_DEFAULT_STREAM				Uart_Write
+	#elif C_UART_MULTI
+		#define PRINT_DEFAULT_STREAM				Uart3_Write
+	#endif
 	
 #endif
 

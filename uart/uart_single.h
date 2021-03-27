@@ -101,11 +101,11 @@ HARDWARE
 
 #if C_UART_SINGLE
 
-#include	<avr/io.h>
-#include	<avr/interrupt.h>
-#include	<string.h>
-#include	<util/delay.h>
-#include	"uart_single_config.h"
+#include		<avr/io.h>
+#include		<avr/interrupt.h>
+#include		<string.h>
+#include		<util/delay.h>
+#include		"uart_single_config.h"
 
 #if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"
