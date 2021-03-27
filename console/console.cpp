@@ -32,10 +32,10 @@ static inline bool Console_StrCmp(const char *String1, const char *String2) {
 }
 
 
-// Pobieranie jednego znaku z UART i kopiowanie do bufora lub wykonywanie akcji
+// Pobieranie jednego znaku z bufora wejœciowego i kopiowanie do bufora konsoli lub wykonywanie akcji
 Console_t Console_CharInput(void) {
 	
-	uint8_t ReceivedChar = Uart_Read();
+	uint8_t ReceivedChar = CONSOLE_INPUT_STREAM();
 	
 	// Znaki printable dodajemy do bufora
 	if(ReceivedChar >= ' ' && ReceivedChar <= '~') {
@@ -202,10 +202,10 @@ static inline void (*Console_FindPointer(uint8_t * EnteredName))(uint8_t argc, u
 // Funkcja wywo³ywana z tasku obs³uguj¹cego konsolê
 void Console_TaskHandler(void) {
 	
-	// Pobieranie danych z UART
-	while(Uart_ReceivedCnt(&CONSOLE_UART_INSTANCE)) {
+	// Pobieranie danych
+	while(CONSOLE_INPUT_RECEIVED_CNT()) {
 		
-		// Przekazywanie znaków z bufora UART do bufora konsoli i podejmywanie dalszych dzia³a w zale¿noœci od Console_Result
+		// Przekazywanie znaków z bufora wejœciowego do bufora konsoli i podejmywanie dalszych dzia³a w zale¿noœci od Console_Result
 		Console_t Console_Result;
 		Console_Result =  Console_CharInput();
 		

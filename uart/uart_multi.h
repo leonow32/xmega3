@@ -138,16 +138,19 @@ uint8_t		Uart_ReceivedCnt(USART_t * Port = &UART_DEFAULT_PORT);
 #if UART1_USE
 	void	Uart1_Write(uint8_t Data);
 	uint8_t	Uart1_Read(void);
+	uint8_t	Uart1_ReceivedCnt(void);
 #endif
 
 #if UART2_USE
 	void	Uart2_Write(uint8_t Data);
 	uint8_t	Uart2_Read(void);
+	uint8_t	Uart2_ReceivedCnt(void);
 #endif
 
 #if UART3_USE
 	void	Uart3_Write(uint8_t Data);
 	uint8_t	Uart3_Read(void);
+	uint8_t	Uart3_ReceivedCnt(void);
 #endif
 
 // Funkcje pomocnicze
