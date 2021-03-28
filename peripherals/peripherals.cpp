@@ -1,4 +1,4 @@
-// Wersja 1.18
+// Version 2.0.0
 
 #include "peripherals.h"
 
@@ -7,17 +7,17 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if B_AVRIOT
+#if P_AVRIOT
 
 void Peripherals_Init(void) {
 	
-	// Diody LED
+	// LED diodes
 	LED_RED_INIT;
 	LED_YELLOW_INIT;
 	LED_GREEN_INIT;
 	LED_BLUE_INIT;
 	
-	// Przyciski
+	// Buttons
 	KEY_SW0_INIT;
 	KEY_SW1_INIT;
 	
@@ -29,20 +29,20 @@ void Peripherals_Init(void) {
 
 
 #if PERIPHERALS_USE_DEMO_TASKS
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskRed(runmode_t RunMode) {
 	
-	// Tryb wywo³ania
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedR");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_RED_TGL;
 			return TaskOK;
@@ -52,20 +52,20 @@ task_t Peripherals_TaskRed(runmode_t RunMode) {
 }
 
 
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskYellow(runmode_t RunMode) {
 	
-	// Tryb wywo³ania
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedY");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_YELLOW_TGL;
 			return TaskOK;
@@ -75,20 +75,20 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 }
 
 
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskGreen(runmode_t RunMode) {
 	
-	// Tryb wywo³ania
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedG");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_GREEN_TGL;
 			return TaskOK;
@@ -98,20 +98,20 @@ task_t Peripherals_TaskGreen(runmode_t RunMode) {
 }
 
 
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskBlue(runmode_t RunMode) {
 	
-	// Tryb wywo³ania
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedB");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_BLUE_TGL;
 			return TaskOK;
@@ -123,7 +123,7 @@ task_t Peripherals_TaskBlue(runmode_t RunMode) {
 
 
 #if PERIPHERALS_USE_DEMO_COMMANDS
-// Ustawienie pinów wyjœciowych
+// Setting of GPIOs
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -143,7 +143,7 @@ void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Odczytanie stanu pinów
+// Reading GPIOs
 void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	
 	Print("SW0\t=\t");
@@ -164,28 +164,28 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 #if P_CURIO4809
 void Peripherals_Init(void) {
 	
-	// Diody LED
+	// LED diodes
 	LED_YELLOW_INIT;
 	
-	// Przyciski
+	// Buttons
 	KEY_SW0_INIT;
 }
 
 #if PERIPHERALS_USE_DEMO_TASKS
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskYellow(runmode_t RunMode) {
 
-	// Tryb wywo³ania
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedY");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_YELLOW_TGL;
 			return TaskOK;
@@ -197,7 +197,7 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 
 
 #if PERIPHERALS_USE_DEMO_COMMANDS
-// Ustawienie pinów wyjœciowych
+// Setting of GPIOs
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -212,7 +212,7 @@ void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Odczytanie stanu pinów
+// Reading GPIOs
 void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	Print("SW0\t=\t");
 	Print(KEY_SW0_READ ? '1' : '0');
@@ -227,32 +227,32 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 // ========================================
 
 
-#if B_XNANO
+#if P_XNANO
 
 void Peripherals_Init(void) {
 	
-	// Diody LED
+	// LED diodes
 	LED_YELLOW_INIT;
 	
-	// Przyciski
+	// Buttons
 	KEY_SW0_INIT;
 }
 
 #if PERIPHERALS_USE_DEMO_TASKS
-// Task demonstracyjny do mrugania diodami
+// Demonstration task to blink LEDs
 task_t Peripherals_TaskYellow(runmode_t RunMode) {
-
-	// Tryb wywo³ania
+	
+	// Call mode
 	switch(RunMode) {
 		
-		// Wywo³anie identyfikacyjne
+		// Identification
 		#if OS_USE_TASK_IDENTIFY
 		case Identify:
 			Print("LedY");
 			return TaskOK;
 		#endif
 	
-		// Normalne wywo³anie przez Scheduler
+		// Normal execution
 		default:
 			LED_YELLOW_TGL;
 			return TaskOK;
@@ -264,7 +264,7 @@ task_t Peripherals_TaskYellow(runmode_t RunMode) {
 
 
 #if PERIPHERALS_USE_DEMO_COMMANDS
-// Ustawienie pinów wyjœciowych
+// Setting of GPIOs
 void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -279,7 +279,7 @@ void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Odczytanie stanu pinów
+// Reading GPIOs
 void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 	Print("SW0\t=\t");
 	Print(KEY_SW0_READ ? '1' : '0');
