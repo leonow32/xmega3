@@ -7,6 +7,10 @@
 	#include	"../eeprom/eeprom_demo.h"
 #endif
 
+#if C_I2C_MASTER
+	#include	"../i2c_master/i2c_master_commands.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
@@ -50,6 +54,14 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"ee-ws",			EEPROM_Demo_WriteString},
 	{"ee-er",			EEPROM_Demo_Erase},
 	{"ee-fill",			EEPROM_Demo_Fill},
+#endif
+
+// ========================================
+// I2C master demo commands
+// ========================================
+
+#if I2C_MASTER_USE_COMMANDS
+	{"i2c-scan",		I2C_CmdScan},
 #endif
 
 // ========================================

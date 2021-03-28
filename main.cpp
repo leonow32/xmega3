@@ -18,6 +18,10 @@
 	#include	"eeprom/eeprom.h"
 #endif
 
+#if C_I2C_MASTER
+	#include	"i2c_master/i2c_master.h"
+#endif
+
 #if C_PERIPHERALS
 	#include	"peripherals/peripherals.h"
 #endif
@@ -38,7 +42,7 @@
 // ========================================
 
 #if C_CONSOLE
-#include	"console/console.h"
+	#include	"console/console.h"
 #endif
 
 #if C_PRINT
@@ -51,17 +55,21 @@
 
 // Main
 int main(void) {
-
+	
 	// ========================================
 	// Internal Hardware init
 	// ========================================
-
+	
 	#if C_CLOCK
 		Clock_Init();
 	#endif
 	
 	#if C_EEPROM
 		EEPROM_Init();
+	#endif
+	
+	#if C_I2C_MASTER
+		I2C_Init();
 	#endif
 	
 	#if C_PERIPHERALS
