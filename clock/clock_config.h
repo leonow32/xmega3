@@ -1,4 +1,4 @@
-// Wersja 1.01
+// Version 2.0.0
 
 #ifndef CLOCK_CONFIG_H_
 #define CLOCK_CONFIG_H_
