@@ -1,4 +1,4 @@
-// Wersja 0.01
+// Version 1.0.0
 
 #ifndef PRINT_CONFIG_H_
 #define PRINT_CONFIG_H_
@@ -9,11 +9,11 @@
 
 #if P_TEMPLATE
 	
-	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
+	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
 	#define PRINT_USE_STREAM_MULTI					1
 	
-	// Domyœlny strumieñ wyjœciowy
+	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
 #endif
@@ -24,11 +24,11 @@
 
 #if P_AVRIOT
 	
-	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
+	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
 	#define PRINT_USE_STREAM_MULTI					1
 	
-	// Domyœlny strumieñ wyjœciowy
+	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart2_Write
 	
 #endif
@@ -39,11 +39,11 @@
 
 #if P_CURIO4809
 	
-	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
+	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
 	#define PRINT_USE_STREAM_MULTI					1
 	
-	// Domyœlny strumieñ wyjœciowy
+	// Default output stream
 	#if C_UART_SINGLE
 		#define PRINT_DEFAULT_STREAM				Uart_Write
 	#elif C_UART_MULTI
@@ -58,11 +58,11 @@
 
 #if P_XNANO
 	
-	// Czy u¿ywaæ jednego strumienia wyjœciowego zawsze czy ma byæ mo¿liwoœæ zmiany
+	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
 	#define PRINT_USE_STREAM_MULTI					1
 	
-	// Domyœlny strumieñ wyjœciowy
+	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
 #endif

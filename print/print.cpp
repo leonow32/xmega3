@@ -1,32 +1,32 @@
-// Wersja 0.01
+// Version 1.0.0
 
 #if C_PRINT
 
 #include "print.h"
 
-// WskaŸnik do funkji, która ma wyœwietlaæ znaki
+// Pointer to a function which has to print the characters
 void (*Print_Pointer)(const uint8_t Data) = PRINT_DEFAULT_STREAM;
 
 
-// Ustawienie wskaŸnika
-// Je¿eli zostanie podany NULL wówczas ustawiany jest wskaŸnik do domyœlnego strumienia wyjœciowego, zdefiniowany w konfiguracji
+// Pointer setting
+// If NULL is passed as an argument then default the defeult pointer is set (see configuration)
 #if PRINT_USE_STREAM_SINGLE
-void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
-	return;
-}
+	void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
+		return;
+	}
 #elif PRINT_USE_STREAM_MULTI
 void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data)) {
-	if(NewPrintPointer == NULL) {
-		Print_Pointer = PRINT_DEFAULT_STREAM;
+		if(NewPrintPointer == NULL) {
+			Print_Pointer = PRINT_DEFAULT_STREAM;
+		}
+		else {
+			Print_Pointer = NewPrintPointer;
+		}
 	}
-	else {
-		Print_Pointer = NewPrintPointer;
-	}
-}
 #endif
 
 
-// Zapis dojedynczego znaku
+// Print single character
 void Print(const uint8_t Data) {
 	
 	#if PRINT_USE_STREAM_SINGLE
@@ -39,19 +39,19 @@ void Print(const uint8_t Data) {
 }
 
 
-// Zapis ci¹gu znaków
+// Print string
 void Print(const char * Text) {
 	while(*Text) Print(*Text++);
 }
 
 
-// Nowa linia
+// NEw line
 void Print_NL(void) {
 	Print("\r\n");
 }
 
 
-// Liczba dziesiêtna bez znaku
+// Unsigned decimal number
 void Print_Dec(uint32_t Value) {
 	if(Value==0) {
 		Print('0');
@@ -74,7 +74,7 @@ void Print_Dec(uint32_t Value) {
 }
 
 
-// Liczba dziesiêtna ze znakiem
+// Signed decimal number
 void Print_DecSigned(int8_t Value) {
 	if(Value < 0) {
 		Print('-');
@@ -84,7 +84,7 @@ void Print_DecSigned(int8_t Value) {
 }
 
 
-// Liczba dziesiêtna ze znakiem
+// Signed decimal number
 void Print_DecSigned(int32_t Value) {
 	if(Value < 0) {
 		Print('-');
@@ -94,7 +94,7 @@ void Print_DecSigned(int32_t Value) {
 }
 
 
-// Zapis liczny binarnej
+// Binary number
 void Print_Bin(uint8_t Data, const uint8_t Separator) {
 	for(uint8_t BitMask = 0b10000000; BitMask; BitMask = BitMask >> 1) {
 		Print(Data & BitMask ? '1' : '0');
@@ -103,13 +103,13 @@ void Print_Bin(uint8_t Data, const uint8_t Separator) {
 }
 
 
-// Zapis po³ówki bajtu jako ASCII HEX
+// Print half-byte as ASCII HEX
 void Print_Nibble(uint8_t Nibble) {
 	if(Nibble <= 9) Print(Nibble + '0');
 	else Print(Nibble + 55);
 }
 
-// Liczba HEX 8-bitowa
+// 8-bit HEX number
 void Print_Hex(const uint8_t Data, const uint8_t Separator) {
 	Print_Nibble((Data & 0xF0) >> 4);
 	Print_Nibble((Data & 0x0F) >> 0);
@@ -117,14 +117,14 @@ void Print_Hex(const uint8_t Data, const uint8_t Separator) {
 }
 
 
-// Liczba HEX 16-bitowa
+// 16-bit HEX number
 void Print_Hex(const uint16_t Data, const uint8_t Separator) {
 	Print_Hex(uint8_t((Data & 0xFF00) >> 8), 0);
 	Print_Hex(uint8_t((Data & 0x00FF)     ), Separator);
 }
 
 
-// Liczba HEX 32-bitowa
+// 32-bit HEX number
 void Print_Hex(const uint32_t Data, const uint8_t Separator) {
 	Print_Hex(uint8_t((Data & 0xFF000000) >> 24), 0);
 	Print_Hex(uint8_t((Data & 0x00FF0000) >> 16), 0);
@@ -133,23 +133,23 @@ void Print_Hex(const uint32_t Data, const uint8_t Separator) {
 }
 
 
-// Ci¹g znaków prezentowany jako HEX
+// String printed as HEX numbers
 void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator, const uint8_t BytesInRow) {
 	
 	for(uint16_t i=0; i<Length; i++) {
 		
-		// Przejœcie do nowej linii (nie dotyczny pierwszego wyœwietlanego znaku)
+		// New line after printing defined number of bytes
 		if((i%BytesInRow == 0) && i != 0) {
 			Print_NL();
 		}
 		
-		// Wyœwietlenie znaku
+		// Print byte as HEX
 		Print_Hex(*(String+i), Separator);
 	}
 }
 
 
-// Ci¹g znaków prezentowany jako HEX, wraz z nag³ówkiem i adresowaniem
+// Byte array printed as HEX with the header and address
 void Print_Dump(const uint8_t * String, uint16_t Length) {
 	
 	uint8_t * Pointer		= (uint8_t *)String;
@@ -168,33 +168,33 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		}
 	}
 	
-	// Wyœwietlanie w pêtli po 16 znaków na ka¿d¹ liniê
+	// Loop for 16 bytes
 	do {
 		
-		// Zejœcie do nowej linii
+		// New line
 		Print_NL();
 		
-		// Wyœwietlenie adresu
+		// Print address
 		Print_Hex(uint16_t(Pointer));
 		Print('\t');
 		
-		// Wyœwietlenie HEX
+		// Print as HEX
 		for(uint8_t h=0; h<=15; h++) {
 			
-			// Sprawdzanie czy nie zosta³y wyœwietlone ju¿ wszystkie znaki
+			// If all bytes are printed
 			if(LengthForHex) {
 				LengthForHex--;
 				Print_Hex(*(Pointer+h), ' ');
 			}
 			else {
-				// Wyœwietlanie trzech spacji, aby potem mo¿na by³o wyœwietliæ ASCII we w³aœciwym miejscu
+				// Print 3 spaces as a separator between HEX and ASCII visualization
 				Print("   ");
 			}
 		}
 		
-		// Wyœwietlenie ASCII
+		// Print as ASCII
 		for(uint8_t h=0; h<=15; h++) {
-			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {				// Omijanie znaków specjanych <32 i <127
+			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {				// Ignore special characters with codes <32 and >127
 				Print(*(Pointer+h));
 			} 
 			else {
@@ -206,13 +206,13 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 			}
 		}
 		
-		// Inkrementacja wskaŸników
+		// Increment pointers
 		Pointer += 16;
 		i += 16;
 		
-		// Reset watchdoga
+		// Watchdog reset
 		asm volatile("wdr");
-	} while(i <= Length-1 && i != 0);											// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
+	} while(i <= Length-1 && i != 0);
 }
 
 

@@ -1,4 +1,4 @@
-// Wersja 1.01
+// Version 2.0.0
 
 #ifndef CLOCK_CONFIG_H_
 #define CLOCK_CONFIG_H_
@@ -9,7 +9,7 @@
 
 #if P_TEMPLATE
 	#define CLOCK_PRESCALER				1
-	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 #endif
 
 // ========================================
@@ -18,7 +18,7 @@
 
 #if P_AVRIOT
 	#define CLOCK_PRESCALER				1
-	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 #endif
 
 // ========================================
@@ -27,7 +27,7 @@
 
 #if P_CURIO4809
 	#define CLOCK_PRESCALER				1
-	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 #endif
 
 // ========================================
@@ -36,7 +36,7 @@
 
 #if P_XNANO
 	#define CLOCK_PRESCALER				1
-	#define CLOCK_CLKOUT_ENABLE			0			// Wyjœcie zagara na pinie CLKOUT
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 #endif
 
 

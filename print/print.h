@@ -1,8 +1,6 @@
 /*
-UWAGI I POMYS£Y
-
 CHANGELOG
-0.00	+	Pocz¹tki
+1.0.0		Comments translated to English
 		
 HARDWARE
 		-	UART
@@ -15,7 +13,7 @@ HARDWARE
 
 #include "print_config.h"
 
-// Include
+// Includes
 #if C_UART_SINGLE
 	#include	"../uart/uart_single.h"
 #elif C_UART_MULTI
@@ -24,11 +22,10 @@ HARDWARE
 	#error		"This module requires UART component"
 #endif
 
-
-// Pusta inicjalizacja
+// Set output stream pointer. If NULL then set to default (see config)
 void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data) = NULL);
 
-// Funkcje odpowiedzialne za printowanie ró¿nych danych
+// Functions to print various types of data
 void Print(const uint8_t Data);
 void Print(const char * Text);
 void Print_NL(void);

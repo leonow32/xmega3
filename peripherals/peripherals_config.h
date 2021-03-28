@@ -7,7 +7,7 @@
 
 #if P_TEMPLATE
 	
-	// Demostracje
+	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
@@ -19,11 +19,11 @@
 
 #if P_AVRIOT
 	
-	// Demostracje
+	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
-	// Diody LED
+	// LED diodes
 	#define		LED_RED_ON				VPORTD.OUT	|=  PIN0_bm
 	#define		LED_RED_OFF				VPORTD.OUT	&= ~PIN0_bm
 	#define		LED_RED_TGL				VPORTD.OUT	^=  PIN0_bm
@@ -44,7 +44,7 @@
 	#define		LED_BLUE_TGL			VPORTD.OUT	^=  PIN3_bm
 	#define		LED_BLUE_INIT			VPORTD.DIR	|=	PIN3_bm;	PORTD.PIN3CTRL = PORT_INVEN_bm;
 	
-	// Przyciski
+	// Buttons
 	#define		KEY_SW0_READ			(VPORTF.IN	&	PIN6_bm)
 	#define		KEY_SW0_INIT			PORTF.PIN6CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
 	
@@ -67,17 +67,17 @@
 
 #if P_CURIO4809
 	
-	// Demostracje
+	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
-	// Diody LED
+	// LED diodes
 	#define		LED_YELLOW_ON			VPORTF.OUT	|=  PIN5_bm
 	#define		LED_YELLOW_OFF			VPORTF.OUT	&= ~PIN5_bm
 	#define		LED_YELLOW_TGL			VPORTF.OUT	^=  PIN5_bm
 	#define		LED_YELLOW_INIT			VPORTF.DIR	|=	PIN5_bm;	PORTF.PIN5CTRL = PORT_INVEN_bm;
 	
-	// Przyciski
+	// Buttons
 	#define		KEY_SW0_READ			(VPORTF.IN	&	PIN6_bm)
 	#define		KEY_SW0_INIT			PORTF.PIN6CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
 	
@@ -89,17 +89,17 @@
 
 #if P_XNANO
 	
-	// Demostracje
+	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
-	// Diody LED
+	// LED diodes
 	#define		LED_YELLOW_ON			VPORTB.OUT	|=  PIN5_bm
 	#define		LED_YELLOW_OFF			VPORTB.OUT	&= ~PIN5_bm
 	#define		LED_YELLOW_TGL			VPORTB.OUT	^=  PIN5_bm
 	#define		LED_YELLOW_INIT			VPORTB.DIR	|=	PIN5_bm;	PORTB.PIN5CTRL = PORT_INVEN_bm;
 	
-	// Przyciski
+	// Buttons
 	#define		KEY_SW0_READ			(VPORTB.IN	&	PIN4_bm)
 	#define		KEY_SW0_INIT			PORTB.PIN4CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
 	

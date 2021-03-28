@@ -1,10 +1,6 @@
 /*
-UWAGI I POMYS£Y
-		-	
-
 CHANGELOG
-1.00	*	Obs³uga wszystkich procesorów z architektur¹ xmega3 (stan na 2019.01.01)
-		
+1.0.0	*	Added all MCUs based on xmega3 architecture (2019.01.01)
 */
 
 #ifndef GENERAL_CONFIG_H_
