@@ -1,50 +1,41 @@
-// Wersja 1.01
+// Wersja 2.0.0
 
 #include "clock.h"
 #include "clock_config.h"
 
 void Clock_Init(void) {
 	
-	// Je¿eli sygna³ zegarowy ma byæ dostêpny na pinie CLKOUT
+	// If CPU clock has to be connected to CLKOUT pin
 	#if CLOCK_CLKOUT_ENABLE
 		
-		#if   HW_CPU_ATtinyXX12
+		#if HW_CPU_ATtinyXX12
 			#error "CLKOUT not supported on ATtinyXX12"
-
 		#elif HW_CPU_ATtinyXX14
 			#error "CLKOUT not supported on ATtinyXX14"
-
 		#elif HW_CPU_ATtinyXX16
 			VPORTB.OUT					|=	PIN5_bm;	
-				
 		#elif HW_CPU_ATtinyXX17
 			VPORTB.OUT					|=	PIN5_bm;
-
 		#elif HW_CPU_ATmegaXX08_28pin
 			VPORTA.OUT					|=	PIN7_bm;
-
 		#elif HW_CPU_ATmegaXX08_32pin
 			VPORTA.OUT					|=	PIN7_bm;
-
 		#elif HW_CPU_ATmegaXX09
 			VPORTA.OUT					|=	PIN7_bm;
-
 		#else
 			#error "CPU not supported by clock.cpp"
 		#endif	
-
-		CPU_CCP						=	CCP_IOREG_gc;					// Odblokowanie chronionych rejestrow
-		CLKCTRL.MCLKCTRLA			=	CLKCTRL_CLKOUT_bm |				// Wyjscie zegara na pinie CLKOUT
-										CLKCTRL_CLKSEL_OSC20M_gc;		// Wybór generatora RC 16MHz/20MHz	
 		
+		CPU_CCP						=	CCP_IOREG_gc;					// Unlock protected registers
+		CLKCTRL.MCLKCTRLA			=	CLKCTRL_CLKOUT_bm |				// Activate CLK output
+										CLKCTRL_CLKSEL_OSC20M_gc;		// Select clock source to RC 16MHz/20MHz
 	#else
-		CPU_CCP						=	CCP_IOREG_gc;					// Odblokowanie chronionych rejestrow
-		CLKCTRL.MCLKCTRLA			=	CLKCTRL_CLKSEL_OSC20M_gc;		// Wybór generatora RC 16MHz/20MHz	
+		CPU_CCP						=	CCP_IOREG_gc;					// Unlock protected registers
+		CLKCTRL.MCLKCTRLA			=	CLKCTRL_CLKSEL_OSC20M_gc;		// Select clock source to RC 16MHz/20MHz
 	#endif
-
 	
-	// Ustawienie preskalera
-	CPU_CCP						=	CCP_IOREG_gc;						// Odblokowanie chronionych rejestrow							
+	// Preskaler setting
+	CPU_CCP						=	CCP_IOREG_gc;						// Unlock protected registers
 	#if CLOCK_PRESCALER	  == 1
 		CLKCTRL.MCLKCTRLB		=	0;	
 	#elif CLOCK_PRESCALER == 2

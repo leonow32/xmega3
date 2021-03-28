@@ -1,5 +1,5 @@
 // ========================================
-// AVR_GCC Includes
+// AVR GCC Includes
 // ========================================
 
 #include <avr/io.h>
@@ -26,8 +26,6 @@
 	#include	"uart/uart_single.h"
 #elif C_UART_MULTI
 	#include	"uart/uart_multi.h"
-#else
-	#error		"This module requires UART component"
 #endif
 
 // ========================================
@@ -40,17 +38,16 @@
 // ========================================
 
 #if C_CONSOLE
-	#include	"console/console.h"
-#endif
-
-#if C_UCOSMOS
-	#include	"uCosmos/uCosmos.h"
+#include	"console/console.h"
 #endif
 
 #if C_PRINT
 	#include	"print/print.h"
 #endif
 
+#if C_UCOSMOS
+	#include	"uCosmos/uCosmos.h"
+#endif
 
 // Main
 int main(void) {
@@ -98,19 +95,8 @@ int main(void) {
 	// ========================================
 	
 	Print("\r\n=== START ===\r\n");
-// 	Os_ResetSourceShow(RSTCTRL.RSTFR);
-// 	Os_ResetSourceClear();
-	
-// 	Print_SetStream(Uart1_Write);
-// 	Print("To jest wyslane przez UART1\r\n");
-// 	Print_SetStream(Uart2_Write);
-// 	Print("To jest wyslane przez UART2\r\n");
-// 	Print_SetStream(Uart1_Write);
-// 	Print("To znowu jest wyslane przez UART1\r\n");
-// 	Print_SetStream(Uart2_Write);
-// 	Print("To znowu jest wyslane przez UART2\r\n");
-// 	Print_SetStream();
-// 	Print("To znowu jest wyslane przez UART domyslny\r\n");
+	Os_ResetSourceShow(RSTCTRL.RSTFR);
+	Os_ResetSourceClear();
 	
 	// Peripherals demo tasks
 	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
@@ -128,37 +114,9 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
-	
 	// ========================================
 	// Main loop
 	// ========================================
-	
-// 	while(1) {
-// 		Print("0123456789");
-// 		_delay_ms(1000);
-// 	}
-	
-// 	while(1) {
-// 		uint8_t Received = Uart_ReceivedCnt();
-// 		if(Received > 10) {
-// 			Uart_Write(Uart_Read());
-// 		}
-// 	}
-	
-// 	while(1) {
-// 			Print_SetStream(&Uart0_Write);
-// 			Print("UART0_UUU");
-// 			Print_SetStream(&Uart1_Write);
-// 			Print("UART1_UUU");
-// 			Print_SetStream(&Uart2_Write);
-// 			Print("UART2_UUU");
-// 			Print_SetStream(&Uart3_Write);
-// 			Print("UART3_UUU");
-// 			Print_SetStream();
-// 			_delay_ms(1000);
-// 			Print_SetStream();
-// 			_delay_ms(1000);
-// 	}
 	
 	while(1) {
 		TaskScheduler();
