@@ -36,6 +36,9 @@
 // External Hardware Includes
 // ========================================
 
+#if C_MCP9808
+	#include	"mcp9808/mcp9808.h"
+#endif
 
 // ========================================
 // Software includes

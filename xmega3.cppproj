@@ -108,6 +108,7 @@
       <Value>C_CONSOLE</Value>
       <Value>C_EEPROM</Value>
       <Value>C_I2C_MASTER</Value>
+      <Value>C_MCP9808</Value>
       <Value>C_PERIPHERALS</Value>
       <Value>C_PRINT</Value>
       <Value>C_UART_MULTI</Value>
@@ -354,6 +355,15 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mcp9808\mcp9808.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp9808\mcp9808.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp9808\mcp9808_config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="peripherals\peripherals.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -424,6 +434,7 @@
     <Folder Include="common" />
     <Folder Include="eeprom" />
     <Folder Include="i2c_master" />
+    <Folder Include="mcp9808" />
     <Folder Include="print" />
     <Folder Include="uCosmos" />
     <Folder Include="peripherals" />
