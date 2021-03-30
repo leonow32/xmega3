@@ -25,5 +25,6 @@ uint8_t		I2C_Start(uint8_t Address);
 void		I2C_Write(uint8_t Data);
 uint8_t		I2C_Read(void);
 void		I2C_Stop(void);
+uint8_t		I2C_CheckNACK(void);
 
 #endif /* I2C_MASTER_H_ */

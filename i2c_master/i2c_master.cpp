@@ -45,8 +45,8 @@ void I2C_Init(void) {
 
 
 // Start of transmission
-// result=0 - correct
-// result>0 - error
+// result=0 - correct, ACK
+// result>0 - error, NACK
 uint8_t I2C_Start(uint8_t Address) {
 	TWI0.MSTATUS			=	TWI_RIF_bm |						// Clean read interrupt flag
 								TWI_WIF_bm |						// Clean write interrupt flag
@@ -81,5 +81,12 @@ void I2C_Stop(void) {
 	TWI0.MCTRLB		=	TWI_ACKACT_NACK_gc | TWI_MCMD_STOP_gc;		// Master sends NACK and finishes the transmission
 }
 
+
+// Get ACK bit
+// = 0 - ACK
+// > 0 - NACK
+uint8_t I2C_CheckNACK(void) {
+	return TWI0.MSTATUS & TWI_RXACK_bm;
+}
 
 #endif

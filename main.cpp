@@ -87,6 +87,10 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
+	Print("\r\n=== START ===\r\n");
+	Os_ResetSourceShow(RSTCTRL.RSTFR);
+	Os_ResetSourceClear();
+	
 	#if C_UCOSMOS
 		Os_Init();
 	#endif
@@ -104,10 +108,6 @@ int main(void) {
 	// ========================================
 	// Software init
 	// ========================================
-	
-	Print("\r\n=== START ===\r\n");
-	Os_ResetSourceShow(RSTCTRL.RSTFR);
-	Os_ResetSourceClear();
 	
 	// Peripherals demo tasks
 	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
