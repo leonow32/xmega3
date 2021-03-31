@@ -58,9 +58,12 @@ uint8_t I2C_Start(uint8_t Address) {
 
 
 // Write data to the bus
-void I2C_Write(uint8_t Data) {
+// = 0 - ACK
+// > 0 - NACK
+uint8_t I2C_Write(uint8_t Data) {
 	TWI0.MDATA = Data;
 	while (!(TWI0.MSTATUS & TWI_WIF_bm));							// Wait until done
+	return TWI0.MSTATUS & TWI_RXACK_bm;
 }
 
 
@@ -81,12 +84,5 @@ void I2C_Stop(void) {
 	TWI0.MCTRLB		=	TWI_ACKACT_NACK_gc | TWI_MCMD_STOP_gc;		// Master sends NACK and finishes the transmission
 }
 
-
-// Get ACK bit
-// = 0 - ACK
-// > 0 - NACK
-uint8_t I2C_CheckNACK(void) {
-	return TWI0.MSTATUS & TWI_RXACK_bm;
-}
 
 #endif

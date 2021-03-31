@@ -110,17 +110,17 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("i2c xxx");
+			Print("i2c senddata[HEXSTR] (readcnt[DEC8])");
 		#endif
 		return;
 	}
 	
 	// Argument 1 - Address or data to send
-	uint8_t SendBuffer[128];
-	uint8_t SendBufferLength;
-	if(Parse_HexString(argv[1], SendBuffer, &SendBufferLength, sizeof(SendBuffer), 1)) return;
+	uint8_t Buffer[128];
+	uint8_t BufferLength;
+	if(Parse_HexString(argv[1], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
 	
-	// Argument 2 - Number of bytes to read (only if read address provided)
+	// Argument 2 - Number of bytes to read
 	uint8_t ReadLength;
 	if(argc < 3) {
 		// Second argument not provided
@@ -128,33 +128,33 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	}
 	else {
 		// Second argument is provided
-		if(Parse_Dec8(argv[2], &ReadLength, sizeof(SendBuffer))) return;
+		if(Parse_Dec8(argv[2], &ReadLength, sizeof(Buffer))) return;
 	}
 	
 	// Debug
 	Print("Send[");
-	Print_Dec(SendBufferLength);
+	Print_Dec(BufferLength);
 	Print("]: ");
-	Print_HexString(SendBuffer, SendBufferLength, ' ');
+	Print_HexString(Buffer, BufferLength, ' ');
 	Print_NL();
 	
-	
-	
 	// If user wants to write
-	if(!(SendBuffer[0] & 0x01)) {
+	if((Buffer[0] & 0x01) == 0) {
 		
 		// Start transmission
-		if(I2C_Start(SendBuffer[0])) {
-			Print("NACK");
+		if(I2C_Start(Buffer[0])) {
+			Print("NACK, adr ");
+			Print_Hex(Buffer[0]);
+			Print_NL();
 		}
 		
-		for(uint8_t i=1; i<SendBufferLength; i++) {
-			I2C_Write(SendBuffer[i]);
-			if(I2C_CheckNACK()) {
+		// Send all given bytes
+		for(uint8_t i=1; i<BufferLength; i++) {
+			if(I2C_Write(Buffer[i])) {
 				Print("NACK, write[");
 				Print_Dec(i);
 				Print("]=");
-				Print_Hex(SendBuffer[i]);
+				Print_Hex(Buffer[i]);
 				Print_NL();
 			}
 		}
@@ -164,23 +164,19 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// If user wants to read some data
-	if(ReadLength) {
-		I2C_Start(SendBuffer[0] | 0x01);
-		if(I2C_CheckNACK()) {
+	if(ReadLength || (Buffer[0] & 0x01)) {
+		
+		// Start transmission
+		if(I2C_Start(Buffer[0] | 0x01)) {
 			Print("NACK");
 			I2C_Stop();
 			return;
 		}
 		
+		// Read as many bytes as specified in argument 2
 		uint8_t i=0;
 		for(; i<ReadLength; i++) {
-			SendBuffer[i] = I2C_Read();
-			if(I2C_CheckNACK()) {
-				Print("NACK, read[");
-				Print_Dec(i);
-				Print("]");
-				Print_NL();
-			}
+			Buffer[i] = I2C_Read();
 		}
 		
 		// Stop transmission
@@ -190,8 +186,7 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 		Print("Read[");
 		Print_Dec(i);
 		Print("]: ");
-		Print_HexString(SendBuffer, i, ' ');
-		
+		Print_HexString(Buffer, i, ' ');
 	}
 }
 
