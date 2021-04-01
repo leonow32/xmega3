@@ -11,6 +11,10 @@
 	#include	"../i2c_master/i2c_master_commands.h"
 #endif
 
+#if C_MCP9808
+	#include	"../mcp9808/mcp9808_commands.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
@@ -63,6 +67,17 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if I2C_MASTER_USE_COMMANDS
 	{"i2c",				I2C_CmdTransmit},
 	{"i2c-scan",		I2C_CmdScan},
+#endif
+
+// ========================================
+// MCP9808 demo commands
+// ========================================
+
+#if MCP9808_USE_COMMANDS
+	{"mcp9808",			MCP9808_CmdTemp},
+	{"mcp9808-r",		MCP9808_CmdRead},
+	{"mcp9808-w",		MCP9808_CmdWrite},
+	{"mcp9808-dump",	MCP9808_CmdDump},
 #endif
 
 // ========================================

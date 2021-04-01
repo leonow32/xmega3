@@ -103,7 +103,9 @@ int main(void) {
 	// External Hardware init
 	// ========================================
 	
-	
+	#if C_MCP9808
+		MCP9808_Init();
+	#endif
 	
 	// ========================================
 	// Software init

@@ -23,13 +23,16 @@
 		#define				I2C_PORTA_23			1
 		#define				I2C_PORTC_23			0
 	#endif
+	
+	#define		I2C_MASTER_SCL_FREQUENCY		100000
+	#define		I2C_MASTER_USE_COMMANDS			1
 #endif
 
 // ========================================
 // Dev Board AVR-IoT
 // ========================================
 
-#if B_AVRIOT
+#if P_AVRIOT
 	#define		I2C_PORTA_23					1
 	#define		I2C_MASTER_SCL_FREQUENCY		157000
 	#define		I2C_MASTER_USE_COMMANDS			1

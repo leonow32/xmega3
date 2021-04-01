@@ -16,7 +16,6 @@ REQUIREMENTS
 #include <avr/io.h>
 #include <string.h>
 #include "console_config.h"
-
 #include "../common/ascii.h"
 
 #if C_UCOSMOS
