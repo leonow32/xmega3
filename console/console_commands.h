@@ -63,10 +63,6 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if I2C_MASTER_USE_COMMANDS
 	{"i2c",				I2C_CmdTransmit},
 	{"i2c-scan",		I2C_CmdScan},
-	{"i2c-s",			I2C_CmdStart},
-	{"i2c-r",			I2C_CmdRead},
-	{"i2c-w",			I2C_CmdWrite},
-	{"i2c-p",			I2C_CmdStop},
 #endif
 
 // ========================================

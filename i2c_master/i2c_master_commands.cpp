@@ -24,88 +24,19 @@ void I2C_CmdScan(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Start I2C
-void I2C_CmdStart(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("i2c-s adr[HEX8]");
-		#endif
-		return;
-	}
-	
-	// Argument 1 - Address
-	uint8_t Address;
-	if(Parse_Hex8(argv[1], &Address)) return;
-	
-	// Execute command
-	uint8_t Result;
-	Result = I2C_Start(Address);
-	if(Result) {
-		Print_Hex(Result);
-	}
-	else {
-		Print("OK");
-	}
-}
-
-
-// Read I2C
-void I2C_CmdRead(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("i2c-r count[DEC8]");
-		#endif
-		return;
-	}
-	
-// 	// Argument 1 - Address
-// 	uint8_t Address;
-// 	if(Parse_Hex8(argv[1], &Address)) return;
-	
-	// Execute command
-	uint8_t Result;
-	Result = I2C_Read();
-	Print_Hex(Result);
-}
-
-
-// Write I2C
-void I2C_CmdWrite(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("i2c-w byte[HEX8]");
-		#endif
-		return;
-	}
-	
-	// Argument 1 - Address
-	uint8_t Data;
-	if(Parse_Hex8(argv[1], &Data)) return;
-	
-	// Execute command
-	I2C_Write(Data);
-}
-
-
-// Stop I2C
-void I2C_CmdStop(uint8_t argc, uint8_t * argv[]) {
-	
-	// Execute command
-	I2C_Stop();
-	Print("OK");
-}
-
-
 // I2C automatic tranmission composer
 // Arguments:
 // 1) Address of the device or address with array of bytes to be written
 // 2) Optional, number of bytes to read
 // Example of use:
 // - i2c 30
-//   invoke device with address 30
+//   Start transmission, call address 30 and stop. If no device acknowledgesm then print NACK
+// - i2c 30112233
+//   Start transmission, call address 30, transmit bytes 112233 and stop
+// - i2c 31 4
+//   Start transmission, call address 31 and read 4 bytes
+// - i2c 30112233 4
+//   Start transmission, call address 30, transmit bytes 112233, stop, start address 31 and read 4 bytes
 void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -168,9 +99,9 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 		
 		// Start transmission
 		if(I2C_Start(Buffer[0] | 0x01)) {
-			Print("NACK");
-			I2C_Stop();
-			return;
+			Print("NACK, adr ");
+			Print_Hex(uint8_t(Buffer[0] | 0x01));
+			Print_NL();
 		}
 		
 		// Read as many bytes as specified in argument 2
