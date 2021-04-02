@@ -60,6 +60,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -90,6 +92,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -123,6 +127,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -150,6 +156,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -209,6 +217,14 @@
 	#define USARTX_RXC_vect		USART3_RXC_vect
 #else
 	#error "No UART instance selected"
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef UART_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 #endif /* UART_SINGLE_CONFIG_H_ */

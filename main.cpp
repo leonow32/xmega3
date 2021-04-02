@@ -36,6 +36,9 @@
 // External Hardware Includes
 // ========================================
 
+#if C_MCP9808
+	#include	"mcp9808/mcp9808.h"
+#endif
 
 // ========================================
 // Software includes
@@ -84,6 +87,10 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
+	Print("\r\n=== START ===\r\n");
+	Os_ResetSourceShow(RSTCTRL.RSTFR);
+	Os_ResetSourceClear();
+	
 	#if C_UCOSMOS
 		Os_Init();
 	#endif
@@ -96,15 +103,13 @@ int main(void) {
 	// External Hardware init
 	// ========================================
 	
-	
+	#if C_MCP9808
+		MCP9808_Init();
+	#endif
 	
 	// ========================================
 	// Software init
 	// ========================================
-	
-	Print("\r\n=== START ===\r\n");
-	Os_ResetSourceShow(RSTCTRL.RSTFR);
-	Os_ResetSourceClear();
 	
 	// Peripherals demo tasks
 	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS

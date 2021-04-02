@@ -114,6 +114,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -158,6 +160,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -209,6 +213,8 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
 #endif
 
 // ========================================
@@ -235,6 +241,16 @@
 	// Bufory (max 254)
 	#define		UART_TX_BUFFER_LENGTH		255
 	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef UART_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 
