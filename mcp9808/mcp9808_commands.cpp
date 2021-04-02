@@ -5,7 +5,6 @@
 
 // Debug errors
 void MCP9808_Debug(MCP9808_t Result) {
-	
 	switch(Result) {
 		case MCP9808_OK:									Print("OK");								break;
 		case MCP9808_StartNACK:								Print("StartNACK");							break;
@@ -88,7 +87,47 @@ void MCP9808_CmdDump(uint8_t argc, uint8_t * argv[]) {
 void MCP9808_CmdTemp(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
+	int32_t Temperature;
 	
+	MCP9808_t Result = MCP9808_TemperatureGet(&Temperature);
+	if(Result) {
+		MCP9808_Debug(Result);
+		return;
+	}
+	
+	// Display result
+	
+//	Temperature = 0b0000000000000000;		//  0,0000
+//	Temperature = 0b0000000000010000;		//  1,0000
+//	Temperature = 0b0000000000000001;		//  0,0625
+//	Temperature = 0b0000000000010001;		//  1,0625
+//	Temperature = 0b0001111111111111;		// -0,0625
+//	Temperature = 0b0001111111101111;		// -1,0625
+	//int32_t Temp32 = MCP9808_RegisterToTemperature(Temperature);
+	
+	// Print sign
+	if(Temperature < 0) {
+		Print('-');
+		Temperature = -Temperature;
+	}
+	
+	// Print integer part
+	uint32_t Integer = Temperature / 10000;
+	Print_Dec(Integer);
+	Print('.');
+	
+	// Print factorial part
+	uint32_t Factorial = Temperature - Integer * 10000;
+	if(Factorial == 0) {
+		Print("0000");
+	}
+	else if(Factorial < 1000) {
+		Print('0');
+		Print_Dec(Factorial);
+	}
+	else {
+		Print_Dec(Factorial);
+	}
 }
 
 

@@ -33,5 +33,6 @@ enum MCP9808_t {
 void MCP9808_Init(void);
 MCP9808_t MCP9808_Read(uint8_t Register, uint16_t * Data);
 MCP9808_t MCP9808_Write(uint8_t Register, uint16_t Data);
+MCP9808_t MCP9808_TemperatureGet(int32_t * Temperature);
 #endif
 #endif /* MCP9808_H_ */

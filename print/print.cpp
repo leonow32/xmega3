@@ -58,29 +58,19 @@ void Print_Dec(uint32_t Value) {
 		return;
 	}
 	
-	uint8_t cyfra[10];
-	memset(cyfra, 0, sizeof(cyfra));
+	uint8_t Digit[10];
+	memset(Digit, 0, sizeof(Digit));
 	int8_t i=0;
 	
 	while(Value) {
-		cyfra[i] = (uint8_t)(Value%10);
+		Digit[i] = (uint8_t)(Value%10);
 		Value = Value / 10;
 		++i;
 	}
 	
 	while(i--) {
-		Print(cyfra[i]+48);
+		Print(Digit[i]+48);
 	}
-}
-
-
-// Signed decimal number
-void Print_DecSigned(int8_t Value) {
-	if(Value < 0) {
-		Print('-');
-		Value = -Value;
-	}
-	Print_Dec(uint8_t(Value));
 }
 
 
