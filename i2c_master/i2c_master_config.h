@@ -26,6 +26,7 @@
 	
 	#define		I2C_MASTER_SCL_FREQUENCY		100000
 	#define		I2C_MASTER_USE_COMMANDS			1
+	#define		I2C_MASTER_CONFIG_DONE
 #endif
 
 // ========================================
@@ -36,6 +37,15 @@
 	#define		I2C_PORTA_23					1
 	#define		I2C_MASTER_SCL_FREQUENCY		157000
 	#define		I2C_MASTER_USE_COMMANDS			1
+	#define		I2C_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef I2C_MASTER_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 

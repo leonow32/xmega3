@@ -11,6 +11,8 @@
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
 	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
 	
+	#define		PERIPHERALS_CONFIG_DONE
+	
 #endif
 
 // ========================================
@@ -59,6 +61,8 @@
 	#define		INT_ON					VPORTD.OUT	|=  PIN6_bm
 	#define		INT_OFF					VPORTD.OUT	&= ~PIN6_bm
 	#define		INT_INIT				VPORTD.DIR	|=	PIN6_bm
+	
+	#define		PERIPHERALS_CONFIG_DONE
 #endif
 
 // ========================================
@@ -80,6 +84,8 @@
 	// Buttons
 	#define		KEY_SW0_READ			(VPORTF.IN	&	PIN6_bm)
 	#define		KEY_SW0_INIT			PORTF.PIN6CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
+	
+	#define		PERIPHERALS_CONFIG_DONE
 	
 #endif
 
@@ -103,6 +109,16 @@
 	#define		KEY_SW0_READ			(VPORTB.IN	&	PIN4_bm)
 	#define		KEY_SW0_INIT			PORTB.PIN4CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
 	
+	#define		PERIPHERALS_CONFIG_DONE
+	
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef PERIPHERALS_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 

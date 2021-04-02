@@ -16,6 +16,8 @@
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
+	#define PRINT_CONFIG_DONE
+	
 #endif
 
 // ========================================
@@ -30,6 +32,8 @@
 	
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart2_Write
+	
+	#define PRINT_CONFIG_DONE
 	
 #endif
 
@@ -50,6 +54,8 @@
 		#define PRINT_DEFAULT_STREAM				Uart3_Write
 	#endif
 	
+	#define PRINT_CONFIG_DONE
+	
 #endif
 
 // ========================================
@@ -65,9 +71,18 @@
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
+	#define PRINT_CONFIG_DONE
+	
 #endif
 
-// Kontrola b³êdów
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef PRINT_CONFIG_DONE
+	#error "Missing config"
+#endif
+
 #if PRINT_USE_STREAM_SINGLE && PRINT_USE_STREAM_MULTI
 	#error "Can't use PRINT_USE_STREAM_SINGLE and PRINT_USE_STREAM_MULTI at the same time"
 #endif

@@ -53,6 +53,8 @@
 	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
+	
+	#define		OS_CONFIG_DONE
 #endif
 
 // ========================================
@@ -103,6 +105,8 @@
 	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
+	
+	#define		OS_CONFIG_DONE
 #endif
 
 // ========================================
@@ -153,6 +157,8 @@
 	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
+	
+	#define		OS_CONFIG_DONE
 #endif
 
 // ========================================
@@ -202,8 +208,17 @@
 	#define		OS_TASK_MONITOR_MIN_MAX			0			// Pokazywanie czasu min i max procesów
 	#define		OS_TASK_MONITOR_AVG_PROC		1			// Pokazywanie czasu œredniego procesów 
 	#define		OS_TASK_MONITOR_TASKMAXCNT		1			// Pokazywanie najwiêkszej liczby tasków dzia³aj¹cych jednoczeœnie
+	
+	#define		OS_CONFIG_DONE
 #endif
 
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef OS_CONFIG_DONE
+	#error "Missing config"
+#endif
 
 
 

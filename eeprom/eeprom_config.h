@@ -10,6 +10,7 @@
 #if P_TEMPLATE
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_CONFIG_DONE
 #endif
 
 // ========================================
@@ -19,6 +20,7 @@
 #if P_AVRIOT
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_CONFIG_DONE
 #endif
 
 // ========================================
@@ -28,6 +30,7 @@
 #if P_CURIO4809
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_CONFIG_DONE
 #endif
 
 // ========================================
@@ -37,6 +40,15 @@
 #if P_XNANO
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_CONFIG_DONE
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef EEPROM_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 #endif /* EEPROM_CONFIG_H_ */

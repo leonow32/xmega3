@@ -74,7 +74,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if MCP9808_USE_COMMANDS
-	{"mcp9808",			MCP9808_CmdTemp},
+	{"mcp9808",			MCP9808_CmdTemperature},
 	{"mcp9808-r",		MCP9808_CmdRead},
 	{"mcp9808-w",		MCP9808_CmdWrite},
 	{"mcp9808-dump",	MCP9808_CmdDump},

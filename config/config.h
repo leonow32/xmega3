@@ -18,6 +18,7 @@ CHANGELOG
 	#define HW_CPU_ATmegaXX08_28pin				0
 	#define HW_CPU_ATmegaXX08_32pin				1
 	#define HW_CPU_ATmegaXX09					0
+	#define HW_CONFIG_DONE
 #endif
 
 // ========================================
@@ -32,6 +33,7 @@ CHANGELOG
 	#define HW_CPU_ATmegaXX08_28pin				0
 	#define HW_CPU_ATmegaXX08_32pin				1
 	#define HW_CPU_ATmegaXX09					0
+	#define HW_CONFIG_DONE
 #endif
 
 // ========================================
@@ -46,6 +48,7 @@ CHANGELOG
 	#define HW_CPU_ATmegaXX08_28pin				0
 	#define HW_CPU_ATmegaXX08_32pin				0
 	#define HW_CPU_ATmegaXX09					1
+	#define HW_CONFIG_DONE
 #endif
 
 // ========================================
@@ -60,10 +63,17 @@ CHANGELOG
 	#define HW_CPU_ATmegaXX08_28pin				0
 	#define HW_CPU_ATmegaXX08_32pin				0
 	#define HW_CPU_ATmegaXX09					0
+	#define HW_CONFIG_DONE
 #endif
 
+// ========================================
+// Error handling
+// ========================================
 
-// Komunikaty o b³êdach
+#ifndef HW_CONFIG_DONE
+	#error "Missing config"
+#endif
+
 #if HW_CPU_ATtinyXX12 + HW_CPU_ATtinyXX14 + HW_CPU_ATtinyXX16 + HW_CPU_ATtinyXX17 + HW_CPU_ATmegaXX09 + HW_CPU_ATmegaXX08_28pin + HW_CPU_ATmegaXX08_32pin > 1
 	#error "Selected more than one CPU"
 #endif

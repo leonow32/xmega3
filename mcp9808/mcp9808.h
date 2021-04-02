@@ -30,9 +30,9 @@ enum MCP9808_t {
 #define MCP9808_REG_RESOLUTION					uint8_t(0x08)
 
 // Functions
-void MCP9808_Init(void);
-MCP9808_t MCP9808_Read(uint8_t Register, uint16_t * Data);
-MCP9808_t MCP9808_Write(uint8_t Register, uint16_t Data);
-MCP9808_t MCP9808_TemperatureGet(int32_t * Temperature);
+void		MCP9808_Init(void);
+MCP9808_t	MCP9808_Read(uint8_t Register, uint16_t * Data);
+MCP9808_t	MCP9808_Write(uint8_t Register, uint16_t Data);
+MCP9808_t	MCP9808_TemperatureGet(int32_t * Temperature);
 #endif
 #endif /* MCP9808_H_ */

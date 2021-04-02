@@ -32,6 +32,6 @@
 void MCP9808_CmdRead(uint8_t argc, uint8_t * argv[]);
 void MCP9808_CmdWrite(uint8_t argc, uint8_t * argv[]);
 void MCP9808_CmdDump(uint8_t argc, uint8_t * argv[]);
-void MCP9808_CmdTemp(uint8_t argc, uint8_t * argv[]);
+void MCP9808_CmdTemperature(uint8_t argc, uint8_t * argv[]);
 
 #endif /* MCP9808_COMMANDS_H_ */

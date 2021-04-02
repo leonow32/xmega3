@@ -16,6 +16,7 @@
 	#define CONSOLE_USE_DEMO_COMMANDS			1
 	#define CONSOLE_INPUT_STREAM				Uart_Read
 	#define CONSOLE_INPUT_RECEIVED_CNT			Uart_ReceivedCnt
+	#define CONSOLE_CONFIG_DONE
 #endif
 
 // ========================================
@@ -29,6 +30,7 @@
 	#define CONSOLE_USE_CTRL_Z					1
 	#define CONSOLE_USE_COMMAND_ALL				1
 	#define CONSOLE_USE_DEMO_COMMANDS			1
+	#define CONSOLE_CONFIG_DONE
 	
 	#if C_UART_SINGLE
 		#define CONSOLE_INPUT_STREAM			Uart_Read
@@ -50,6 +52,7 @@
 	#define CONSOLE_USE_CTRL_Z					1
 	#define CONSOLE_USE_COMMAND_ALL				1
 	#define CONSOLE_USE_DEMO_COMMANDS			1
+	#define CONSOLE_CONFIG_DONE
 	
 	#if C_UART_SINGLE
 		#define CONSOLE_INPUT_STREAM			Uart_Read
@@ -73,6 +76,15 @@
 	#define CONSOLE_USE_DEMO_COMMANDS			1
 	#define CONSOLE_INPUT_STREAM				Uart_Read
 	#define CONSOLE_INPUT_RECEIVED_CNT			Uart_ReceivedCnt
+	#define CONSOLE_CONFIG_DONE
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef CONSOLE_CONFIG_DONE
+	#error "Missing config"
 #endif
 
 
