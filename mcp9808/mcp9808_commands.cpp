@@ -6,7 +6,7 @@
 // Debug errors
 void MCP9808_Debug(MCP9808_t Result) {
 	switch(Result) {
-		case MCP9808_OK:									Print("OK");								break;
+		case MCP9808_OK:									Print_ResponseOK();							break;
 		case MCP9808_StartNACK:								Print("StartNACK");							break;
 		case MCP9808_TransmissionError:						Print("TransmissionError");					break;
 	}

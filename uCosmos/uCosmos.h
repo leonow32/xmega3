@@ -144,6 +144,10 @@ Os_Timer_t	TaskMsToTicks(uint16_t Time_ms);
 // Licznik ticków systemowych
 extern volatile uint8_t Os_Ticks;
 
+#if OS_SHOW_SPLASH_SCREEN_AT_START
+	void Os_SplashScreen(void);
+#endif
+
 // Obs³uga czasu
 #if OS_USE_TIME
 	extern volatile time_t Os_Time;

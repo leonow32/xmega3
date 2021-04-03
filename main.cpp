@@ -87,14 +87,6 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
-	Print_Format(FormatBold);
-	Print_Format(ForegroundCyan);
-	Print("\r\n=== START ===\r\n");
-	Print_Format(ForegroundBlue);
-	Os_ResetSourceShow(RSTCTRL.RSTFR);
-	Print_Format(FormatReset);
-	Os_ResetSourceClear();
-	
 	#if C_UCOSMOS
 		Os_Init();
 	#endif

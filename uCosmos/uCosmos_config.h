@@ -20,6 +20,8 @@
 	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
+	#define		OS_SHOW_RESET_SOURCE_AT_START	1			// Czy pokazywaæ Ÿród³o resetu na starcie
+	#define		OS_SHOW_SPLASH_SCREEN_AT_START	1			// Czy pokazywaæ logo systemu na starcie
 	
 	// Konsola systemowa
 	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
@@ -72,6 +74,8 @@
 	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
+	#define		OS_SHOW_RESET_SOURCE_AT_START	1			// Czy pokazywaæ Ÿród³o resetu na starcie
+	#define		OS_SHOW_SPLASH_SCREEN_AT_START	1			// Czy pokazywaæ logo systemu na starcie
 	
 	// Konsola systemowa
 	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
@@ -124,6 +128,8 @@
 	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
+	#define		OS_SHOW_RESET_SOURCE_AT_START	1			// Czy pokazywaæ Ÿród³o resetu na starcie
+	#define		OS_SHOW_SPLASH_SCREEN_AT_START	1			// Czy pokazywaæ logo systemu na starcie
 	
 	// Konsola systemowa
 	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART
@@ -175,6 +181,8 @@
 	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
+	#define		OS_SHOW_RESET_SOURCE_AT_START	1			// Czy pokazywaæ Ÿród³o resetu na starcie
+	#define		OS_SHOW_SPLASH_SCREEN_AT_START	1			// Czy pokazywaæ logo systemu na starcie
 	
 	// Konsola systemowa
 	#define		OS_USE_CONSOLE					0			// Czy mam byæ wykorzystywana konsola systemowa przez UART

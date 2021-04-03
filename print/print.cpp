@@ -148,9 +148,9 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	uint16_t i = 0;
 	
 	// Print header
+	Print_Format(ForegroundWhiteBright);
+	Print_Format(FormatUnderline);
 	Print("\t");
-	Print_Format(ForegroundCyan);
-	Print_Format(FormatBold);
 	for(uint8_t i='0'; i<='F'; i++) {
 		Print(' ');
 		Print(i);
@@ -168,7 +168,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		Print_NL();
 		
 		// Print address
-		Print_Format(ForegroundCyan);
+		Print_Format(ForegroundWhiteBright);
 		Print_Hex(uint16_t(Pointer));
 		Print_Format(FormatReset);
 		
@@ -190,7 +190,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		
 		// Print as ASCII
 		for(uint8_t h=0; h<=15; h++) {
-			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {				// Ignore special characters with codes <32 and >127
+			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {                             // Ignore special characters with codes <32 and >127
 				Print(*(Pointer+h));
 			} 
 			else {

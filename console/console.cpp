@@ -241,6 +241,7 @@ void Console_TaskHandler(void) {
 			
 			// Je¿eli nie rozpoznano polecenia
 			else {
+				//Print_Format
 				Print_ResponseUnknown();
 			}
 			
@@ -291,7 +292,7 @@ task_t Console_Task(runmode_t RunMode) {
 // Display command line prompt
 void Console_PromptShow(void) {
 	Print(FormatReset);
-	Print_Format(ForegroundYellow);
+	Print_Format(ForegroundYellowBright);
 	Print_Format(FormatBold);
 	Print("\r\n/> ");
 }
@@ -318,9 +319,8 @@ void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 	Print_ResponseError();
 	if(Argument != NULL) {
 		Print(" in agument ");
-		Print_Format(FormatBold);
+		Print_Format(ForegroundRedBright);
 		Print((const char *)Argument);
-		Print_Format(FormatReset);
 		Print_Format(ForegroundRed);
 	}
 	Print(": ");
@@ -907,13 +907,43 @@ void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
 }
 
 
-void Console_CmdColor(uint8_t arc, uint8_t * argv[]) {
+void Console_CmdColor(uint8_t argc, uint8_t * argv[]) {
 	uint8_t ColorCode;
 	if(Parse_Dec8(argv[1], &ColorCode)) return;
 	Print_Format(PrintFormat_t(ColorCode));
 	Print("Test");
 }
 
+
+// Show all ASCII codes
+void Console_CmdAscii(uint8_t argc, uint8_t * argv[]) {
+	
+	// Print header
+	Print_Format(FormatBold);
+	Print_Format(FormatUnderline);
+	Print("\t");
+	for(uint8_t i='0'; i<='F'; i++) {
+		Print(' ');
+		Print(i);
+		if(i == '9') {
+			i = 'A' - 1;
+		}
+	}
+	Print_Format(FormatReset);
+	
+	for(uint16_t Character = 16; Character < 256; Character++) {
+		if(Character % 16 == 0) {
+			Print_Format(FormatBold);
+			Print_NL();
+			Print_Hex(uint8_t(Character));
+			Print('\t');
+			Print_Format(FormatReset);
+		}
+		
+		Print(uint8_t(Character));
+		Print(' ');
+	}
+}
 
 #endif
 
