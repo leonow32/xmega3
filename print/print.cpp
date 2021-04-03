@@ -149,6 +149,8 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	
 	// Print header
 	Print("\t");
+	Print_Format(ForegroundCyan);
+	Print_Format(FormatBold);
 	for(uint8_t i='0'; i<='F'; i++) {
 		Print(' ');
 		Print(i);
@@ -157,6 +159,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 			i = 'A' - 1;
 		}
 	}
+	Print_Format(FormatReset);
 	
 	// Loop for 16 bytes
 	do {
@@ -165,7 +168,10 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		Print_NL();
 		
 		// Print address
+		Print_Format(ForegroundCyan);
 		Print_Hex(uint16_t(Pointer));
+		Print_Format(FormatReset);
+		
 		Print('\t');
 		
 		// Print as HEX
@@ -206,13 +212,43 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 }
 
 
-// Chane text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
+// Change text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
+#if PRINT_USE_COLORS
 void Print_Format(PrintFormat_t Code) {
 	Print(ESC);
 	Print('[');
 	Print_Dec(uint8_t(Code));
 	Print('m');
 }
+#endif
 
+
+// ========================================
+// Frequently used responses
+// ========================================
+
+
+void Print_ResponseOK(void) {
+	Print_Format(ForegroundGreen);
+	Print("OK");
+}
+
+
+void Print_ResponseError(void) {
+	Print_Format(ForegroundRed);
+	Print("Error");
+}
+
+
+void Print_ResponseNotFound(void) {
+	Print_Format(ForegroundRed);
+	Print("Not found");
+}
+
+
+void Print_ResponseUnknown(void) {
+	Print_Format(ForegroundRed);
+	Print("Unknown");
+}
 
 #endif

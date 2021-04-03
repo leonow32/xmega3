@@ -82,8 +82,18 @@ void Print_Hex(const uint32_t Data, const uint8_t Separator = 0);
 void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 16);
 void Print_Dump(const uint8_t * String, uint16_t Length);
 
-// Chane text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
-void Print_Format(PrintFormat_t Code);
+// Change text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
+#if PRINT_USE_COLORS
+	void Print_Format(PrintFormat_t Code);
+#else
+	#define Print_Format(x) ;
+#endif
+
+// Frequently used responses
+void Print_ResponseOK(void);
+void Print_ResponseError(void);
+void Print_ResponseNotFound(void);
+void Print_ResponseUnknown(void);
 
 #endif /* C_PRINT */
 #endif /* PRINT_H_ */

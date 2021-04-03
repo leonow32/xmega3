@@ -16,7 +16,6 @@
 		EEPROM_Erase();
 	}
 	
-	
 	// WyFill EEPROM with patters
 	void EEPROM_Demo_Fill(uint8_t argc, uint8_t * argv[]) {
 	

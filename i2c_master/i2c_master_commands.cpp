@@ -63,9 +63,11 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// Debug
+	Print_Format(FormatBold);
 	Print("Send[");
 	Print_Dec(BufferLength);
 	Print("]: ");
+	Print_Format(FormatReset);
 	Print_HexString(Buffer, BufferLength, ' ');
 	Print_NL();
 	
@@ -114,9 +116,11 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 		I2C_Stop();
 		
 		// Print result
+		Print_Format(FormatBold);
 		Print("Read[");
 		Print_Dec(i);
 		Print("]: ");
+		Print_Format(FormatReset);
 		Print_HexString(Buffer, i, ' ');
 	}
 }

@@ -1,14 +1,3 @@
-/*
-
-
-CHANGELOG
-0.00	+	Pocz¹tki
-		
-REQUIREMENTS
-		-	Print
-		-	UART
-*/
-
 #ifndef CONSOLE_H_
 #define CONSOLE_H_
 #if C_CONSOLE

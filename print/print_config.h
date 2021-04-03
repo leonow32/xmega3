@@ -16,6 +16,9 @@
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -32,6 +35,9 @@
 	
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart2_Write
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
 	
 	#define PRINT_CONFIG_DONE
 	
@@ -54,6 +60,9 @@
 		#define PRINT_DEFAULT_STREAM				Uart3_Write
 	#endif
 	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -70,6 +79,9 @@
 	
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
 	
 	#define PRINT_CONFIG_DONE
 	

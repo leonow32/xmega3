@@ -19,7 +19,7 @@
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
-// Tablica wszystkich poleceñ obs³ugiwanych przez interpreter
+// Table of all command names and function pointers
 const Console_NamePointer_t Console_CommandList[] = {
 
 // ========================================

@@ -1,5 +1,3 @@
-// Wersja 0.01
-
 #if C_CONSOLE
 
 #include "console.h"
@@ -87,7 +85,7 @@ Console_t Console_CharInput(void) {
 			memcpy(Inter.Buffer, Inter.Buffer2, CONSOLE_COMMAND_LENGTH);
 			Inter.ReceivedCnt = strlen((const char *)Inter.Buffer);
 			
-			// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
+			// Wyœwietlenie zawartoœci bufora dla informacji
 			Print((const char *)Inter.Buffer);
 			break;
 		#endif
@@ -234,13 +232,16 @@ void Console_TaskHandler(void) {
 			// Wykonanie polecenia, jeœli rozpoznano
 			if(CommandPointer) {
 				
+				// Przywrócenie domyœlnego foamrtowania konsoli
+				Print_Format(FormatReset);
+				
 				// Wywo³anie funkcji odpowiadaj¹cej poleceniu
 				CommandPointer(argc, argv);
 			}
 			
 			// Je¿eli nie rozpoznano polecenia
 			else {
-				Print("Bad command");
+				Print_ResponseUnknown();
 			}
 			
 			// Czyszczenie aktualnego bufora wiersza poleceñ
@@ -289,7 +290,10 @@ task_t Console_Task(runmode_t RunMode) {
 
 // Display command line prompt
 void Console_PromptShow(void) {
-	Print("\r\n > ");
+	Print(FormatReset);
+	Print_Format(ForegroundYellow);
+	Print_Format(FormatBold);
+	Print("\r\n/> ");
 }
 
 
@@ -306,15 +310,22 @@ void Console_BufferFlush(void) {
 
 // Debugowanie b³êdów
 void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
-	Print("Error");
-	if(Argument != NULL) {
-		Print(" in agument \"");
-		Print((const char *)Argument);
+	if(Result == Parse_OK) {
+		Print_ResponseOK();
+		return;
 	}
-	Print("\": ");
+	
+	Print_ResponseError();
+	if(Argument != NULL) {
+		Print(" in agument ");
+		Print_Format(FormatBold);
+		Print((const char *)Argument);
+		Print_Format(FormatReset);
+		Print_Format(ForegroundRed);
+	}
+	Print(": ");
 	
 	switch(Result) {
-		case Parse_OK:									Print("OK");								break;
 		case Parse_NotReady:							Print("Not ready");							break;
 		case Parse_UnknownCommand:						Print("Unknown command");					break;
 		case Parse_NoInput:								Print("No input");							break;
@@ -326,9 +337,9 @@ void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 		case Parse_ExpectedDec:							Print("Expected Dec");						break;
 		case Parse_ReceivedACK:							Print("Received ACK");						break;
 		case Parse_ReceivedNAK:							Print("Received NAK");						break;
+		default:										Print_ResponseUnknown();					break;
 	}
 }
-
 
 
 // Funkcja przekszta³ca znak ASCII HEX na wartoœæ binarn¹
