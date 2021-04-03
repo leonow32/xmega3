@@ -833,94 +833,43 @@ void Console_CmdEcho(uint8_t argc, uint8_t * argv[]) {
 
 // 
 void Console_CmdHex8(uint8_t argc, uint8_t * argv[]) {
-	
 	uint8_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex8(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 2);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
+	if(Parse_Hex8(argv[1], &Value)) return;
 	Print_Dec(Value);
 }
 
 
 void Console_CmdHex16(uint8_t argc, uint8_t * argv[]) {
-	
 	uint16_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex16(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 4);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
+	if(Parse_Hex16(argv[1], &Value)) return;
 	Print_Dec(Value);
 }
 
 
 void Console_CmdHex32(uint8_t argc, uint8_t * argv[]) {
-	
 	uint32_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex32(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 8);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
+	if(Parse_Hex32(argv[1], &Value)) return;
 	Print_Dec(Value);
 }
 
 
-
-
-
 void Console_CmdDec8(uint8_t argc, uint8_t * argv[]) {
-	
 	uint8_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec8(argv[1], &Value, 100);
-	if(Result) {
-		return;
-	}
-	
+	if(Parse_Dec8(argv[1], &Value, 100)) return;
 	Print_Dec(Value);
 }
 
 
 void Console_CmdDec16(uint8_t argc, uint8_t * argv[]) {
-	
 	uint16_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec16(argv[1], &Value, 10000);
-	if(Result) {
-		return;
-	}
-	
+	if(Parse_Dec16(argv[1], &Value, 10000)) return;
 	Print_Dec(Value);
 }
 
 
 void Console_CmdDec32(uint8_t argc, uint8_t * argv[]) {
-	
 	uint32_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec32(argv[1], &Value, 1000000);
-	if(Result) {
-		return;
-	}
-	
+	if(Parse_Dec32(argv[1], &Value, 1000000)) return;
 	Print_Dec(Value);
 }
 
@@ -928,13 +877,7 @@ void Console_CmdDec32(uint8_t argc, uint8_t * argv[]) {
 void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
 	uint8_t Buffer[64];
 	uint8_t Length;
-	Parse_t Result;
-	
-	Result = Parse_HexString(argv[1], Buffer, &Length);
-	if(Result) {
-		return;
-	}
-	
+	if(Parse_HexString(argv[1], Buffer, &Length)) return;
 	Print("Length: ");
 	Print_Dec(Length);
 	Print_NL();
@@ -945,17 +888,19 @@ void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
 void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
 	uint8_t Buffer[32];
 	uint8_t Length;
-	Parse_t Result;
-	
-	Result = Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3);
-	if(Result) {
-		return;
-	}
-	
+	if(Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3)) return;
 	Print("Length: ");
 	Print_Dec(Length);
 	Print_NL();
 	Print_Dump(Buffer, Length);
+}
+
+
+void Console_CmdColor(uint8_t arc, uint8_t * argv[]) {
+	uint8_t ColorCode;
+	if(Parse_Dec8(argv[1], &ColorCode)) return;
+	Print_Format(PrintFormat_t(ColorCode));
+	Print("Test");
 }
 
 

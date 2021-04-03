@@ -42,7 +42,7 @@ enum Console_t {
 // Result type for argument parser
 enum Parse_t {
 	Parse_OK = 0,									// Zwracane przez wszystkie funkcje, je¿eli zakoñczy³y siê prawid³owo
-	Parse_NotReady,								// Zwracane przez Command_LineInput(), kiedy nie podano znaku ENTER
+	Parse_NotReady,									// Zwracane przez Command_LineInput(), kiedy nie podano znaku ENTER
 	Parse_UnknownCommand,							// Zwracane przez Command_Interpreter(), kiedy nie rozpozna polecenia
 	Parse_NoInput,
 	Parse_MissingArgument,
@@ -107,6 +107,7 @@ void		Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
 void		Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
 void		Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
 void		Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
+void		Console_CmdColor(uint8_t arc, uint8_t * argv[]);
 #endif
 
 #endif

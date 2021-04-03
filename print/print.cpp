@@ -206,4 +206,13 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 }
 
 
+// Chane text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
+void Print_Format(PrintFormat_t Code) {
+	Print(ESC);
+	Print('[');
+	Print_Dec(uint8_t(Code));
+	Print('m');
+}
+
+
 #endif

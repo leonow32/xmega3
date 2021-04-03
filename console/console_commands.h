@@ -41,6 +41,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"dec32",			Console_CmdDec32},
 	{"hexstr",			Console_CmdHexString},
 	{"ascstr",			Console_CmdAsciiString},
+	{"color",			Console_CmdColor},
 #endif
 
 // ========================================
