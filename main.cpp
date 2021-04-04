@@ -26,6 +26,10 @@
 	#include	"peripherals/peripherals.h"
 #endif
 
+#if C_SPI_MASTER
+	#include	"spi_master/spi_master.h"
+#endif
+
 #if C_UART_SINGLE
 	#include	"uart/uart_single.h"
 #elif C_UART_MULTI
@@ -77,6 +81,10 @@ int main(void) {
 	
 	#if C_PERIPHERALS
 		Peripherals_Init();
+	#endif
+	
+	#if C_SPI_MASTER
+		Spi_Init();
 	#endif
 	
 	#if C_UART_MULTI || C_UART_SINGLE

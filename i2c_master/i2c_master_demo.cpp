@@ -24,7 +24,7 @@ void I2C_CmdScan(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// I2C automatic tranmission composer
+// I2C automatic transmission composer
 // Arguments:
 // 1) Address of the device or address with array of bytes to be written
 // 2) Optional, number of bytes to read
