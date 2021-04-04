@@ -16,6 +16,12 @@
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -33,6 +39,12 @@
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart2_Write
 	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -41,7 +53,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
@@ -53,6 +65,12 @@
 	#elif C_UART_MULTI
 		#define PRINT_DEFAULT_STREAM				Uart3_Write
 	#endif
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
 	
 	#define PRINT_CONFIG_DONE
 	
@@ -70,6 +88,12 @@
 	
 	// Default output stream
 	#define PRINT_DEFAULT_STREAM					Uart_Write
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
 	
 	#define PRINT_CONFIG_DONE
 	

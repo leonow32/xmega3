@@ -23,7 +23,9 @@
 // Console Commands
 // ========================================
 
-void I2C_CmdScan(uint8_t argc, uint8_t * argv[]);
-void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]);
+#if I2C_MASTER_USE_DEMO_COMMANDS
+	void I2C_CmdScan(uint8_t argc, uint8_t * argv[]);
+	void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]);
+#endif
 
 #endif /* I2C_MASTER_COMMANDS_H_ */

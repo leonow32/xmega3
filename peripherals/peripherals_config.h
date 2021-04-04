@@ -69,7 +69,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1

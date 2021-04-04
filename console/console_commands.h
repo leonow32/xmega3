@@ -1,25 +1,40 @@
 #ifndef INTERPRETER_COMMANDS_H_
 #define INTERPRETER_COMMANDS_H_
 
-#include	"console.h"
+// ========================================
+// Includes
+// ========================================
+
+#include		"console.h"
+
+#if C_CONSOLE
+	#include	"../console/console_demo.h"
+#endif
 
 #if C_EEPROM
 	#include	"../eeprom/eeprom_demo.h"
 #endif
 
 #if C_I2C_MASTER
-	#include	"../i2c_master/i2c_master_commands.h"
+	#include	"../i2c_master/i2c_master_demo.h"
 #endif
 
 #if C_MCP9808
-	#include	"../mcp9808/mcp9808_commands.h"
+	#include	"../mcp9808/mcp9808_demo.h"
+#endif
+
+#if C_PRINT
+	#include	"../print/print_demo.h"
 #endif
 
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
-// Tablica wszystkich poleceñ obs³ugiwanych przez interpreter
+// ========================================
+// Command names and function pointers
+// ========================================
+
 const Console_NamePointer_t Console_CommandList[] = {
 
 // ========================================
@@ -51,7 +66,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"ee",				EEPROM_Demo_Dump},
 #endif
 
-#if EEPROM_USE_COMMAND_READ_WRITE
+#if EEPROM_USE_DEMO_COMMANDS
 	{"ee-r",			EEPROM_Demo_ReadByte},
 	{"ee-rs",			EEPROM_Demo_ReadString},
 	{"ee-w",			EEPROM_Demo_WriteByte},
@@ -64,7 +79,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // I2C master demo commands
 // ========================================
 
-#if I2C_MASTER_USE_COMMANDS
+#if I2C_MASTER_USE_DEMO_COMMANDS
 	{"i2c",				I2C_CmdTransmit},
 	{"i2c-scan",		I2C_CmdScan},
 #endif
@@ -73,11 +88,20 @@ const Console_NamePointer_t Console_CommandList[] = {
 // MCP9808 demo commands
 // ========================================
 
-#if MCP9808_USE_COMMANDS
+#if MCP9808_USE_DEMO_COMMANDS
 	{"mcp9808",			MCP9808_CmdTemperature},
 	{"mcp9808-r",		MCP9808_CmdRead},
 	{"mcp9808-w",		MCP9808_CmdWrite},
 	{"mcp9808-dump",	MCP9808_CmdDump},
+#endif
+
+// ========================================
+// Print demo commands
+// ========================================
+
+#if PRINT_USE_DEMO_COMMANDS
+	{"color",			Print_CmdColor},
+	{"ascii",			Print_CmdAscii},
 #endif
 
 // ========================================

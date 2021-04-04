@@ -148,6 +148,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	uint16_t i = 0;
 	
 	// Print header
+	Print_Format(ForegroundWhiteBright);
 	Print("\t");
 	for(uint8_t i='0'; i<='F'; i++) {
 		Print(' ');
@@ -157,6 +158,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 			i = 'A' - 1;
 		}
 	}
+	Print_Format(FormatReset);
 	
 	// Loop for 16 bytes
 	do {
@@ -165,7 +167,10 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		Print_NL();
 		
 		// Print address
+		Print_Format(ForegroundWhiteBright);
 		Print_Hex(uint16_t(Pointer));
+		Print_Format(FormatReset);
+		
 		Print('\t');
 		
 		// Print as HEX
@@ -184,7 +189,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		
 		// Print as ASCII
 		for(uint8_t h=0; h<=15; h++) {
-			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {				// Ignore special characters with codes <32 and >127
+			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {                             // Ignore special characters with codes <32 and >127
 				Print(*(Pointer+h));
 			} 
 			else {
@@ -205,5 +210,44 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	} while(i <= Length-1 && i != 0);
 }
 
+
+// Change text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
+#if PRINT_USE_COLORS
+void Print_Format(PrintFormat_t Code) {
+	Print(ESC);
+	Print('[');
+	Print_Dec(uint8_t(Code));
+	Print('m');
+}
+#endif
+
+
+// ========================================
+// Frequently used responses
+// ========================================
+
+
+void Print_ResponseOK(void) {
+	Print_Format(ForegroundGreen);
+	Print("OK");
+}
+
+
+void Print_ResponseError(void) {
+	Print_Format(ForegroundRed);
+	Print("Error");
+}
+
+
+void Print_ResponseNotFound(void) {
+	Print_Format(ForegroundRed);
+	Print("Not found");
+}
+
+
+void Print_ResponseUnknown(void) {
+	Print_Format(ForegroundRed);
+	Print("Unknown");
+}
 
 #endif

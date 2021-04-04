@@ -90,6 +90,24 @@ void Os_Init(void) {
 	// Przerwania
 	CPUINT.CTRLA |=	CPUINT_LVL0RR_bm;			// Algorytm round-robin dla przerwaÒ o tym samym priorytecie
 	sei();
+	
+	// Spash screen
+	Print_Format(ForegroundGreen);
+	#if OS_SHOW_SPLASH_SCREEN_AT_START
+		Os_SplashScreen();
+	#endif
+	
+	// èrÛd≥o resetu
+	#if OS_SHOW_RESET_SOURCE_AT_START
+		Print_Format(ForegroundCyanBright);
+		Print("Reset source: ");
+		Print_Format(ForegroundCyan);
+		Os_ResetSourceShow(RSTCTRL.RSTFR);
+		Print_Format(FormatReset);
+		Os_ResetSourceClear();
+	#endif
+	
+	Print_NL();
 }
 
 
@@ -309,7 +327,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		
 		case TaskOK:
 			#if OS_DEBUG_MESSAGES_SHOW
-				Print("OK");
+				Print_ResponseOK();
 			#endif
 		
 			return OsOK;			
@@ -419,7 +437,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		
 		// Debug
 		#if OS_DEBUG_MESSAGES_SHOW
-			Print("OK");
+			Print_ResponseOK();
 		#endif
 		
 		return TaskClear(SlotNumber);
@@ -652,14 +670,15 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 		uint32_t Percentage;
 		uint32_t PercentageSum = 0;			// Procentowe zajÍtoúÊ procesora sumarycznie dla wszystkich taskÛw
 	#endif
-
+	
 	// Nag≥Ûwek tabeli
+	Print_Format(ForegroundWhiteBright);
 	Print("No\tPtr\tPend\t");
-
+	
 	#if OS_TASK_MONITOR_CNT
 		Print("Cnt\t");
 	#endif
-
+	
 	Print("Per\t");
 	
 	#if OS_TASK_MONITOR_MIN_MAX
@@ -673,7 +692,9 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 	#if OS_USE_TASK_IDENTIFY
 		Print("Id");
 	#endif
-
+	
+	Print_Format(FormatReset);
+	
 	for(uint8_t i=0; i<OS_TASK_MAXCOUNT; i++) {
 		Print_NL();
 		Print_Dec(i); 
@@ -687,7 +708,7 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 			Print_Dec(Task[i].Counter);
 			Print("\t");
 		#endif
-
+		
 		//Print_Dec(Task[i].Period * OS_TICK_DELAY);
 		Print_Dec(Task[i].Period);
 		Print("\t");
@@ -712,21 +733,29 @@ void Os_Monitor(uint8_t argc, uint8_t * argv[]) {
 		#endif
 	}
 	
+	Print_Format(ForegroundWhiteBright);
 	Print("\r\nF_CPU:\t\t");
-	Print_Dec(F_CPU / 1000000);
-// 	Print('.');
-// 	Print_Dec(F_CPU % 1000000);
+	Print_Format(FormatReset);
+	Print_Dec(F_CPU);
+	Print("Hz");
 	
+	Print_Format(ForegroundWhiteBright);
 	Print("\r\nTickTime:\t");
+	Print_Format(FormatReset);
 	Print_Dec(OS_TICK_DELAY);
-
+	Print("ms");
+	
 	#if OS_TASK_MONITOR_TASKMAXCNT
+		Print_Format(ForegroundWhiteBright);
 		Print("\r\nMaxTasks:\t");
+		Print_Format(FormatReset);
 		Print_Dec(Os_DebugMaxTaskCnt);
 	#endif
-
+	
 	#if OS_TASK_MONITOR_AVG_PROC
+		Print_Format(ForegroundWhiteBright);
 		Print("\r\nCPU usage:\t");
+		Print_Format(FormatReset);
 		Print_Dec(PercentageSum / 10);
 		Print('.');
 		Print_Dec(PercentageSum % 10);
@@ -795,6 +824,34 @@ ISR(RTC_CNT_vect) {													// Przerwanie wywo≥ywane na koniec uúpienia prze
 		Os_DebugTimer++;			// ZwiÍkszanie z kaødym tickiem systemowym
 	#endif
 	
+}
+
+
+// =============
+// Splash screen
+// =============
+
+
+void Os_SplashScreen(void) {
+	Print_Format(ForegroundYellow);
+	Print_NL();
+	Print_NL();
+	Print("     ___ _    ______           __________  _____ __  _______  _____\r\n");
+	Print("    /   | |  / / __ \\   __  __/ ____/ __ \\/ ___//  |/  / __ \\/ ___/\r\n");
+	Print("   / /| | | / / /_/ /  / / / / /   / / / /\\__ \\/ /|_/ / / / /\\__ \\\r\n");
+	Print("  / __| | |/ / _  _/  / /_/ / /___/ /_/ /___/ / /  / / /_/ /___/ /\r\n");
+	Print(" /_/  |_|___/_/ |_|  / ____/\\____/\\____//____/_/  /_/\\____//____/\r\n");
+	Print_Format(ForegroundCyan);
+	for(uint8_t i=0; i<21; i++) {
+		Print('-');
+	}
+	Print_Format(ForegroundYellow);
+	Print("\\/");
+	Print_Format(ForegroundCyan);
+	for(uint8_t i=0; i<44; i++) {
+		Print('-');
+	}
+	Print_NL();
 }
 
 

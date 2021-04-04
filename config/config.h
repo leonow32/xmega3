@@ -40,7 +40,7 @@ CHANGELOG
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
 	#define HW_CPU_ATtinyXX16					0

@@ -10,7 +10,7 @@
 #if TEMPATE
 	#define		MCP9808_ADDRESS_READ			uint8_t(0x31)
 	#define		MCP9808_ADDRESS_WRITE			uint8_t(0x30)
-	#define		MCP9808_USE_COMMANDS			1
+	#define		MCP9808_USE_DEMO_COMMANDS		1
 	#define		MCP9808_CONFIG_DONE
 #endif
 
@@ -21,7 +21,7 @@
 #if P_AVRIOT
 	#define		MCP9808_ADDRESS_READ			uint8_t(0x31)
 	#define		MCP9808_ADDRESS_WRITE			uint8_t(0x30)
-	#define		MCP9808_USE_COMMANDS			1
+	#define		MCP9808_USE_DEMO_COMMANDS		1
 	#define		MCP9808_CONFIG_DONE
 #endif
 

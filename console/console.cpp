@@ -1,5 +1,3 @@
-// Wersja 0.01
-
 #if C_CONSOLE
 
 #include "console.h"
@@ -87,7 +85,7 @@ Console_t Console_CharInput(void) {
 			memcpy(Inter.Buffer, Inter.Buffer2, CONSOLE_COMMAND_LENGTH);
 			Inter.ReceivedCnt = strlen((const char *)Inter.Buffer);
 			
-			// Wyœwietlenie zawartoœci bufora tylko dla cz³owieka
+			// Wyœwietlenie zawartoœci bufora dla informacji
 			Print((const char *)Inter.Buffer);
 			break;
 		#endif
@@ -234,13 +232,17 @@ void Console_TaskHandler(void) {
 			// Wykonanie polecenia, jeœli rozpoznano
 			if(CommandPointer) {
 				
+				// Przywrócenie domyœlnego foamrtowania konsoli
+				Print_Format(FormatReset);
+				
 				// Wywo³anie funkcji odpowiadaj¹cej poleceniu
 				CommandPointer(argc, argv);
 			}
 			
 			// Je¿eli nie rozpoznano polecenia
 			else {
-				Print("Bad command");
+				//Print_Format
+				Print_ResponseUnknown();
 			}
 			
 			// Czyszczenie aktualnego bufora wiersza poleceñ
@@ -289,7 +291,10 @@ task_t Console_Task(runmode_t RunMode) {
 
 // Display command line prompt
 void Console_PromptShow(void) {
-	Print("\r\n > ");
+	Print(FormatReset);
+	Print_Format(ForegroundYellowBright);
+	Print_Format(FormatBold);
+	Print("\r\n/> ");
 }
 
 
@@ -306,15 +311,21 @@ void Console_BufferFlush(void) {
 
 // Debugowanie b³êdów
 void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
-	Print("Error");
-	if(Argument != NULL) {
-		Print(" in agument \"");
-		Print((const char *)Argument);
+	if(Result == Parse_OK) {
+		Print_ResponseOK();
+		return;
 	}
-	Print("\": ");
+	
+	Print_ResponseError();
+	if(Argument != NULL) {
+		Print(" in agument ");
+		Print_Format(ForegroundRedBright);
+		Print((const char *)Argument);
+		Print_Format(ForegroundRed);
+	}
+	Print(": ");
 	
 	switch(Result) {
-		case Parse_OK:									Print("OK");								break;
 		case Parse_NotReady:							Print("Not ready");							break;
 		case Parse_UnknownCommand:						Print("Unknown command");					break;
 		case Parse_NoInput:								Print("No input");							break;
@@ -326,9 +337,9 @@ void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 		case Parse_ExpectedDec:							Print("Expected Dec");						break;
 		case Parse_ReceivedACK:							Print("Received ACK");						break;
 		case Parse_ReceivedNAK:							Print("Received NAK");						break;
+		default:										Print_ResponseUnknown();					break;
 	}
 }
-
 
 
 // Funkcja przekszta³ca znak ASCII HEX na wartoœæ binarn¹
@@ -785,180 +796,25 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 
 
 // ========================================
-// Demo commands
+// Commands
 // ========================================
 
 #if CONSOLE_USE_COMMAND_ALL
-
-// Print all known commands
-void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
-	for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
-		Print_Dec(i);
-		Print(":\t");
-		Print_Hex(uint16_t(Console_CommandList[i].Pointer));
-		Print('\t');
-		Print((const char *)Console_CommandList[i].Name);
-		Print_NL();
-	}
-}
-#endif
-
-
-#if CONSOLE_USE_DEMO_COMMANDS
-
-// Print all provided arguments
-void Console_CmdArgs(uint8_t argc, uint8_t * argv[]) {
-	Print("\r\nShow all passed arguments\r\nargc = ");
-	Print_Dec(argc);
-	for(uint8_t i=0; i<CONSOLE_MAX_ARGUMENTS; i++) {
-		Print_NL();
-		Print_Dec(i);
-		Print(":\t");
-		Print_Hex((uint16_t)argv[i]);
-		if(argv[i]) {
+	
+	// Print all known commands
+	void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
+		Print_Format(ForegroundWhiteBright);
+		Print("Num\tPointer\tName\r\n");
+		Print_Format(FormatReset);
+		for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
+			Print_Dec(i);
+			Print(":\t");
+			Print_Hex(uint16_t(Console_CommandList[i].Pointer));
 			Print('\t');
-			Print((const char *)argv[i]);
+			Print((const char *)Console_CommandList[i].Name);
+			Print_NL();
 		}
 	}
-}
-
-
-// Print first argument
-void Console_CmdEcho(uint8_t argc, uint8_t * argv[]) {
-	if(argc != 1) {
-		Print((const char *)argv[1]);
-	}
-}
-
-
-// 
-void Console_CmdHex8(uint8_t argc, uint8_t * argv[]) {
+	#endif
 	
-	uint8_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex8(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 2);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHex16(uint8_t argc, uint8_t * argv[]) {
-	
-	uint16_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex16(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 4);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHex32(uint8_t argc, uint8_t * argv[]) {
-	
-	uint32_t Value;
-	Parse_t Result;
-	
-	Result = Parse_Hex32(argv[1], &Value);
-	//Result = Parse_HexNum(argv[1], &Value, 8);
-	if(Result) {
-		//////Command_Debug(Result, argv[1]);
-		return;
-	}
-
-	Print_Dec(Value);
-}
-
-
-
-
-
-void Console_CmdDec8(uint8_t argc, uint8_t * argv[]) {
-	
-	uint8_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec8(argv[1], &Value, 100);
-	if(Result) {
-		return;
-	}
-	
-	Print_Dec(Value);
-}
-
-
-void Console_CmdDec16(uint8_t argc, uint8_t * argv[]) {
-	
-	uint16_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec16(argv[1], &Value, 10000);
-	if(Result) {
-		return;
-	}
-	
-	Print_Dec(Value);
-}
-
-
-void Console_CmdDec32(uint8_t argc, uint8_t * argv[]) {
-	
-	uint32_t Value = 0;
-	Parse_t Result;
-	
-	Result = Parse_Dec32(argv[1], &Value, 1000000);
-	if(Result) {
-		return;
-	}
-	
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Buffer[64];
-	uint8_t Length;
-	Parse_t Result;
-	
-	Result = Parse_HexString(argv[1], Buffer, &Length);
-	if(Result) {
-		return;
-	}
-	
-	Print("Length: ");
-	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
-}
-
-
-void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
-	uint8_t Buffer[32];
-	uint8_t Length;
-	Parse_t Result;
-	
-	Result = Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3);
-	if(Result) {
-		return;
-	}
-	
-	Print("Length: ");
-	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
-}
-
-
-#endif
-
 #endif

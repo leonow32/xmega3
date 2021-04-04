@@ -9,13 +9,12 @@
 	}
 #endif
 
-#if EEPROM_USE_COMMAND_READ_WRITE
+#if EEPROM_USE_DEMO_COMMANDS
 	
 	// Erase EEPROM
 	void EEPROM_Demo_Erase(uint8_t argc, uint8_t * argv[]) {
 		EEPROM_Erase();
 	}
-	
 	
 	// WyFill EEPROM with patters
 	void EEPROM_Demo_Fill(uint8_t argc, uint8_t * argv[]) {
