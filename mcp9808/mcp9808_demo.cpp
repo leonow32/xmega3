@@ -1,6 +1,6 @@
 #if C_MCP9808
-#include "mcp9808_commands.h"
-#if MCP9808_USE_COMMANDS
+#include "mcp9808_demo.h"
+#if MCP9808_USE_DEMO_COMMANDS
 
 
 // Debug errors

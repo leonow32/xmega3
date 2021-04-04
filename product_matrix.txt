@@ -1,4 +1,4 @@
-All products matrix
+Matrix of all products
 
 Product				AVR-IoT		CURIO48049	XNANO
 Clock				x			x			x

@@ -29,7 +29,7 @@
 	void EEPROM_Demo_Dump(uint8_t argc, uint8_t * argv[]);
 #endif
 
-#if EEPROM_USE_COMMAND_READ_WRITE
+#if EEPROM_USE_DEMO_COMMANDS
 	void EEPROM_Demo_Erase(uint8_t argc, uint8_t * argv[]);
 	void EEPROM_Demo_Fill(uint8_t argc, uint8_t * argv[]);
 	void EEPROM_Demo_ReadByte(uint8_t argc, uint8_t * argv[]);

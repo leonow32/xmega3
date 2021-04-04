@@ -1,6 +1,6 @@
 #if C_I2C_MASTER 
-#include "i2c_master_commands.h"
-#if I2C_MASTER_USE_COMMANDS
+#include "i2c_master_demo.h"
+#if I2C_MASTER_USE_DEMO_COMMANDS
 
 
 // Test all addressed on I2C and check if anything 

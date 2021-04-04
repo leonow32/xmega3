@@ -168,7 +168,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	#define		UART0_USE				1
 	#define		UART1_USE				1

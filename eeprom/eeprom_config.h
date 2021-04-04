@@ -9,7 +9,7 @@
 
 #if P_TEMPLATE
 	#define		EEPROM_USE_COMMAND_DUMP				1
-	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
 #endif
 
@@ -19,7 +19,7 @@
 
 #if P_AVRIOT
 	#define		EEPROM_USE_COMMAND_DUMP				1
-	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
 #endif
 
@@ -27,9 +27,9 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	#define		EEPROM_USE_COMMAND_DUMP				1
-	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
 #endif
 
@@ -39,7 +39,7 @@
 
 #if P_XNANO
 	#define		EEPROM_USE_COMMAND_DUMP				1
-	#define		EEPROM_USE_COMMAND_READ_WRITE		1
+	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
 #endif
 

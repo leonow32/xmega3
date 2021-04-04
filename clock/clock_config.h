@@ -27,7 +27,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE

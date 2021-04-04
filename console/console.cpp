@@ -796,155 +796,25 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 
 
 // ========================================
-// Demo commands
+// Commands
 // ========================================
 
 #if CONSOLE_USE_COMMAND_ALL
-
-// Print all known commands
-void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
-	for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
-		Print_Dec(i);
-		Print(":\t");
-		Print_Hex(uint16_t(Console_CommandList[i].Pointer));
-		Print('\t');
-		Print((const char *)Console_CommandList[i].Name);
-		Print_NL();
-	}
-}
-#endif
-
-
-#if CONSOLE_USE_DEMO_COMMANDS
-
-// Print all provided arguments
-void Console_CmdArgs(uint8_t argc, uint8_t * argv[]) {
-	Print("\r\nShow all passed arguments\r\nargc = ");
-	Print_Dec(argc);
-	for(uint8_t i=0; i<CONSOLE_MAX_ARGUMENTS; i++) {
-		Print_NL();
-		Print_Dec(i);
-		Print(":\t");
-		Print_Hex((uint16_t)argv[i]);
-		if(argv[i]) {
+	
+	// Print all known commands
+	void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
+		Print_Format(ForegroundWhiteBright);
+		Print("Num\tPointer\tName\r\n");
+		Print_Format(FormatReset);
+		for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
+			Print_Dec(i);
+			Print(":\t");
+			Print_Hex(uint16_t(Console_CommandList[i].Pointer));
 			Print('\t');
-			Print((const char *)argv[i]);
-		}
-	}
-}
-
-
-// Print first argument
-void Console_CmdEcho(uint8_t argc, uint8_t * argv[]) {
-	if(argc != 1) {
-		Print((const char *)argv[1]);
-	}
-}
-
-
-// 
-void Console_CmdHex8(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Value;
-	if(Parse_Hex8(argv[1], &Value)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHex16(uint8_t argc, uint8_t * argv[]) {
-	uint16_t Value;
-	if(Parse_Hex16(argv[1], &Value)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHex32(uint8_t argc, uint8_t * argv[]) {
-	uint32_t Value;
-	if(Parse_Hex32(argv[1], &Value)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdDec8(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Value = 0;
-	if(Parse_Dec8(argv[1], &Value, 100)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdDec16(uint8_t argc, uint8_t * argv[]) {
-	uint16_t Value = 0;
-	if(Parse_Dec16(argv[1], &Value, 10000)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdDec32(uint8_t argc, uint8_t * argv[]) {
-	uint32_t Value = 0;
-	if(Parse_Dec32(argv[1], &Value, 1000000)) return;
-	Print_Dec(Value);
-}
-
-
-void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Buffer[64];
-	uint8_t Length;
-	if(Parse_HexString(argv[1], Buffer, &Length)) return;
-	Print("Length: ");
-	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
-}
-
-
-void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
-	uint8_t Buffer[32];
-	uint8_t Length;
-	if(Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3)) return;
-	Print("Length: ");
-	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
-}
-
-
-void Console_CmdColor(uint8_t argc, uint8_t * argv[]) {
-	uint8_t ColorCode;
-	if(Parse_Dec8(argv[1], &ColorCode)) return;
-	Print_Format(PrintFormat_t(ColorCode));
-	Print("Test");
-}
-
-
-// Show all ASCII codes
-void Console_CmdAscii(uint8_t argc, uint8_t * argv[]) {
-	
-	// Print header
-	Print_Format(FormatBold);
-	Print_Format(FormatUnderline);
-	Print("\t");
-	for(uint8_t i='0'; i<='F'; i++) {
-		Print(' ');
-		Print(i);
-		if(i == '9') {
-			i = 'A' - 1;
-		}
-	}
-	Print_Format(FormatReset);
-	
-	for(uint16_t Character = 16; Character < 256; Character++) {
-		if(Character % 16 == 0) {
-			Print_Format(FormatBold);
+			Print((const char *)Console_CommandList[i].Name);
 			Print_NL();
-			Print_Hex(uint8_t(Character));
-			Print('\t');
-			Print_Format(FormatReset);
 		}
-		
-		Print(uint8_t(Character));
-		Print(' ');
 	}
-}
-
-#endif
-
+	#endif
+	
 #endif

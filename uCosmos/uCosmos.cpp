@@ -96,11 +96,9 @@ void Os_Init(void) {
 	#if OS_SHOW_SPLASH_SCREEN_AT_START
 		Os_SplashScreen();
 	#endif
-	//Print("\r\n=== START ===\r\n");
 	
 	// èrÛd≥o resetu
 	#if OS_SHOW_RESET_SOURCE_AT_START
-		
 		Print_Format(ForegroundCyanBright);
 		Print("Reset source: ");
 		Print_Format(ForegroundCyan);
@@ -108,6 +106,8 @@ void Os_Init(void) {
 		Print_Format(FormatReset);
 		Os_ResetSourceClear();
 	#endif
+	
+	Print_NL();
 }
 
 

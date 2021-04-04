@@ -100,7 +100,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	#if HW_CPU_ATmegaXX09
 		#define	UART0_PORTA_01				0

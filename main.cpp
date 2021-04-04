@@ -119,7 +119,7 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
-	#if P_CURIO4809 && PERIPHERALS_USE_DEMO_TASKS
+	#if P_CURIOSITY_M4809 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	

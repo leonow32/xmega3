@@ -117,7 +117,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1

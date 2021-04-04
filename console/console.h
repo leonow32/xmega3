@@ -82,23 +82,10 @@ Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, 
 
 // Demo commands
 #if CONSOLE_USE_COMMAND_ALL
-void		Console_CmdAll(uint8_t argc, uint8_t * argv[]);
+	void	Console_CmdAll(uint8_t argc, uint8_t * argv[]);
 #endif
 
-#if CONSOLE_USE_DEMO_COMMANDS
-void		Console_CmdArgs(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdEcho(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdHex8(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdHex16(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdHex32(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdDec8(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
-void		Console_CmdColor(uint8_t argc, uint8_t * argv[]);
-void		Console_CmdAscii(uint8_t argc, uint8_t * argv[]);
-#endif
+
 
 #endif
 #endif /* CONSOLE_H_ */

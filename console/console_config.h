@@ -45,7 +45,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1

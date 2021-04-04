@@ -161,7 +161,7 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 void Peripherals_Init(void) {
 	
 	// LED diodes

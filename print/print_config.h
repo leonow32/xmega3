@@ -19,6 +19,9 @@
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
 	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -39,6 +42,9 @@
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
 	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
+	
 	#define PRINT_CONFIG_DONE
 	
 #endif
@@ -47,7 +53,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIO4809
+#if P_CURIOSITY_M4809
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
@@ -62,6 +68,9 @@
 	
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
 	
 	#define PRINT_CONFIG_DONE
 	
@@ -82,6 +91,9 @@
 	
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
 	
 	#define PRINT_CONFIG_DONE
 	

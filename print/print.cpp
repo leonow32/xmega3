@@ -149,7 +149,6 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	
 	// Print header
 	Print_Format(ForegroundWhiteBright);
-	Print_Format(FormatUnderline);
 	Print("\t");
 	for(uint8_t i='0'; i<='F'; i++) {
 		Print(' ');
