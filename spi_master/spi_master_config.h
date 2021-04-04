@@ -12,23 +12,23 @@
 
 #if TEMPLATE
 	#if HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14
-		#define			SPI_PORTA_13			0
+		#define		SPI_PORTA_13					0
 	#endif
 	
 	#if HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17
-		#define			SPI_PORTA_13			0
-		#define			SPI_PORTC_02			0
+		#define		SPI_PORTA_13					0
+		#define		SPI_PORTC_02					0
 	#endif
 	
 	#if HW_CPU_ATmegaXX09
-		#define			SPI_PORTA_46			0
-		#define			SPI_PORTC_02			1
-		#define			SPI_PORTE_02			0
+		#define		SPI_PORTA_46					0
+		#define		SPI_PORTC_02					1
+		#define		SPI_PORTE_02					0
 	#endif
 	
 	#if HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin
-		#define			SPI_PORTA_46			0
-		#define			SPI_PORTC_02			1
+		#define		SPI_PORTA_46					0
+		#define		SPI_PORTC_02					1
 	#endif
 	
 	#define			SPI_MASTER_USE_DEMO_COMMANDS	1
