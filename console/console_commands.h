@@ -27,6 +27,10 @@
 	#include	"../print/print_demo.h"
 #endif
 
+#if C_SPI_MASTER
+	#include	"../spi_master/spi_master_demo.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
@@ -76,7 +80,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// I2C master demo commands
+// I2C Master demo commands
 // ========================================
 
 #if I2C_MASTER_USE_DEMO_COMMANDS
@@ -102,6 +106,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if PRINT_USE_DEMO_COMMANDS
 	{"color",			Print_CmdColor},
 	{"ascii",			Print_CmdAscii},
+#endif
+
+// ========================================
+// SPI Master demo commands
+// ========================================
+
+#if SPI_MASTER_USE_DEMO_COMMANDS
+	{"spi1",				Spi_CmdTransmit1},
+	{"spi",					Spi_CmdStream},
 #endif
 
 // ========================================

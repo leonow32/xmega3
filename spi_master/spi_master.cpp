@@ -54,6 +54,13 @@ void Spi_Init(void) {
 									SPI_PRESC_DIV4_gc |				// F_SCK = F_CPU/2
 									SPI_ENABLE_bm					// SPI Enable
 									;
+	
+	// Initialization of CS pin for demo commands
+	// All SPI devices should have init of cCS pin in their own Init() function
+	#if SPI_MASTER_USE_DEMO_COMMANDS
+		SPI_DEMO_DIR_SET;
+		SPI_DEMO_CHIP_DESELECT;
+	#endif
 }	
 
 
@@ -139,13 +146,16 @@ uint8_t Spi_5(const uint8_t Byte1, const uint8_t Byte2, const uint8_t Byte3, con
 
 
 // Send and receive array of bytes. It has sense only when Length > 2
-void Spi_Stream(uint8_t * TxBuffer, uint8_t * RxBuffer, const uint16_t Length) {
+void Spi_Transmit(uint8_t * TxBuffer, uint8_t * RxBuffer, const uint16_t Length) {
 	
 	// Disable interrupts
 	asm volatile("cli");	
 	
-	// Check if there are minimum 2 bytes
-	if(Length < 2) {
+	// Sanity check
+	if(Length == 0) {
+		return;
+	}
+	else if(Length < 2) {
 		*RxBuffer = Spi_1(*TxBuffer);
 		return;
 	}
@@ -179,14 +189,61 @@ void Spi_Stream(uint8_t * TxBuffer, uint8_t * RxBuffer, const uint16_t Length) {
 }
 
 
-// Send array of bytes. It has sense only when Length > 2
-void Spi_Transmit(const uint8_t * TxBuffer, const uint16_t Length) {
+// Read array of bytes while sending 0x00 bytes. It has sense only when Length > 2
+void Spi_Read(uint8_t * RxBuffer, const uint16_t Length) {
 	
 	// Disable interrupts
 	asm volatile("cli");
 	
-	// Check if there are minimum 2 bytes
-	if(Length < 2) {
+	// Sanity check
+	if(Length == 0) {
+		return;
+	}
+	else if(Length < 2) {
+		*RxBuffer = Spi_1(0x00);
+		return;
+	}
+	
+	// Clear flags
+	SPI0.INTFLAGS			=		SPI_RXCIF_bm;
+	
+	// Limiter
+	uint8_t * Limit			=		RxBuffer + Length;
+	
+	// Put first two bytes to hardware buffer without witing for anything
+	SPI0.DATA				=		0x00;
+	SPI0.DATA				=		0x00;
+
+	// Transmit in a loop
+	while(RxBuffer != Limit) {
+		while(!(SPI0.INTFLAGS & SPI_DREIF_bm));
+		SPI0.DATA			=		0x00;
+		*RxBuffer++			=		SPI0.DATA;
+	}
+	
+	// Read two last bytes after RXC flag is set
+	while(!(SPI0.INTFLAGS & SPI_RXCIF_bm));
+	*RxBuffer++				=		SPI0.DATA;
+	
+	while(!(SPI0.INTFLAGS & SPI_RXCIF_bm));
+	*RxBuffer++				=		SPI0.DATA;
+	
+	// Enable interrupts
+	asm volatile("sei");
+}
+
+
+// Send array of bytes. It has sense only when Length > 2
+void Spi_Write(const uint8_t * TxBuffer, const uint16_t Length) {
+	
+	// Disable interrupts
+	asm volatile("cli");
+	
+	// Sanity check
+	if(Length == 0) {
+		return;
+	}
+	else if(Length < 2) {
 		Spi_1(*TxBuffer);
 		return;
 	}

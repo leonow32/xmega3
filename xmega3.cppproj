@@ -410,6 +410,12 @@
     <Compile Include="spi_master\spi_master_config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="spi_master\spi_master_demo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="spi_master\spi_master_demo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uart\uart_multi.cpp">
       <SubType>compile</SubType>
     </Compile>

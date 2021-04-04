@@ -241,7 +241,7 @@ void Console_TaskHandler(void) {
 			
 			// Je¿eli nie rozpoznano polecenia
 			else {
-				//Print_Format
+				Print_Format(FormatReset);
 				Print_ResponseUnknown();
 			}
 			
