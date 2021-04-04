@@ -189,8 +189,8 @@ void Spi_Transmit(uint8_t * TxBuffer, uint8_t * RxBuffer, const uint16_t Length)
 }
 
 
-// Read array of bytes while sending 0x00 bytes. It has sense only when Length > 2
-void Spi_Read(uint8_t * RxBuffer, const uint16_t Length) {
+// Read array of bytes while sending dummy bytes. It has sense only when Length > 2
+void Spi_Read(uint8_t * RxBuffer, const uint16_t Length, uint8_t DummyByte) {
 	
 	// Disable interrupts
 	asm volatile("cli");
@@ -200,7 +200,7 @@ void Spi_Read(uint8_t * RxBuffer, const uint16_t Length) {
 		return;
 	}
 	else if(Length < 2) {
-		*RxBuffer = Spi_1(0x00);
+		*RxBuffer = Spi_1(DummyByte);
 		return;
 	}
 	
@@ -208,16 +208,16 @@ void Spi_Read(uint8_t * RxBuffer, const uint16_t Length) {
 	SPI0.INTFLAGS			=		SPI_RXCIF_bm;
 	
 	// Limiter
-	uint8_t * Limit			=		RxBuffer + Length;
+	uint8_t * Limit			=		RxBuffer + Length - 2;
 	
 	// Put first two bytes to hardware buffer without witing for anything
-	SPI0.DATA				=		0x00;
-	SPI0.DATA				=		0x00;
+	SPI0.DATA				=		DummyByte;
+	SPI0.DATA				=		DummyByte;
 
 	// Transmit in a loop
 	while(RxBuffer != Limit) {
 		while(!(SPI0.INTFLAGS & SPI_DREIF_bm));
-		SPI0.DATA			=		0x00;
+		SPI0.DATA			=		DummyByte;
 		*RxBuffer++			=		SPI0.DATA;
 	}
 	
