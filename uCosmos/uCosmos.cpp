@@ -327,7 +327,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 		
 		case TaskOK:
 			#if OS_DEBUG_MESSAGES_SHOW
-				Print("OK");
+				Print_ResponseOK();
 			#endif
 		
 			return OsOK;			
@@ -437,7 +437,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		
 		// Debug
 		#if OS_DEBUG_MESSAGES_SHOW
-			Print("OK");
+			Print_ResponseOK();
 		#endif
 		
 		return TaskClear(SlotNumber);
