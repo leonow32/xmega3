@@ -827,15 +827,15 @@ Parse_t Parse_AsciiCharacter(const uint8_t * Argument, uint8_t * Output) {
 	// Print all known commands
 	void Console_CmdAll(uint8_t argc, uint8_t * argv[]) {
 		Print_Format(ForegroundWhiteBright);
-		Print("Num\tPointer\tName\r\n");
+		Print("Num\tPointer\tName");
 		Print_Format(FormatReset);
 		for(uint16_t i=0; i<(sizeof(Console_CommandList)/sizeof(Console_NamePointer_t)); i++) {
+			Print_NL();
 			Print_Dec(i);
 			Print(":\t");
 			Print_Hex(uint16_t(Console_CommandList[i].Pointer));
 			Print('\t');
 			Print((const char *)Console_CommandList[i].Name);
-			Print_NL();
 		}
 	}
 	#endif
