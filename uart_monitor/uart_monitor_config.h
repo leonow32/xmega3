@@ -5,7 +5,7 @@
 // Template
 // ========================================
 
-#if TEMPLATE
+#if PRODUCT_TEMPLATE
 	#define UART_MONITOR_PERIPHERAL		USART1			// UART instance
 	#define UART_MONITOR_READ_PERIOD	500				// Time in ms to periodically check UART buffer
 	#define UART_MONITOR_CONFIG_DONE
@@ -15,7 +15,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define UART_MONITOR_PERIPHERAL		USART1			// UART instance
 	#define UART_MONITOR_READ_PERIOD	500				// Time in ms to periodically check UART buffer
 	#define UART_MONITOR_CONFIG_DONE

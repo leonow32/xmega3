@@ -7,7 +7,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 
 void Peripherals_Init(void) {
 	
@@ -161,7 +161,7 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 void Peripherals_Init(void) {
 	
 	// LED diodes
@@ -227,7 +227,7 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 // ========================================
 
 
-#if P_XNANO
+#if PRODUCT_XNANO
 
 void Peripherals_Init(void) {
 	

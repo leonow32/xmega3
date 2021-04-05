@@ -10,7 +10,7 @@ CHANGELOG
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
 	#define HW_CPU_ATtinyXX16					0
@@ -25,7 +25,7 @@ CHANGELOG
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
 	#define HW_CPU_ATtinyXX16					0
@@ -40,7 +40,7 @@ CHANGELOG
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
 	#define HW_CPU_ATtinyXX16					0
@@ -55,7 +55,7 @@ CHANGELOG
 // Dev Board XNANO
 // ========================================
 
-#if B_XNANO
+#if BOARD_XNANO
 	#define HW_CPU_ATtinyXX12					0
 	#define HW_CPU_ATtinyXX14					0
 	#define HW_CPU_ATtinyXX16					1

@@ -1,4 +1,4 @@
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 
 #include "console.h"
 

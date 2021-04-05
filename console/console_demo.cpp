@@ -1,4 +1,4 @@
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 #include "console_demo.h"
 
 #if CONSOLE_USE_DEMO_COMMANDS

@@ -5,7 +5,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	
 	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
@@ -19,7 +19,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
@@ -69,7 +69,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1
@@ -93,7 +93,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	
 	// Demos
 	#define		PERIPHERALS_USE_DEMO_TASKS				1

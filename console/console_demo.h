@@ -5,13 +5,13 @@
 // Includes
 // ========================================
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console.h"
 #else
 	#error		"This module requires CONSOLE component"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"

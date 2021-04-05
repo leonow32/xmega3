@@ -1,6 +1,6 @@
 // Version 3.0.0
 
-#if C_SPI_MASTER
+#if COMPONENT_SPI_MASTER
 
 #include "spi_master.h"
 

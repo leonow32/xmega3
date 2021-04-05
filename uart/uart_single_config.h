@@ -9,7 +9,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	
 	#if HW_CPU_ATtinyXX12
 		#define	UART0_PORTA_12				1
@@ -68,7 +68,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	#if HW_CPU_ATmegaXX08_32pin
 		#define	UART0_PORTA_01				0
@@ -100,7 +100,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	#if HW_CPU_ATmegaXX09
 		#define	UART0_PORTA_01				0
@@ -135,7 +135,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	
 	#if HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17
 		#define	UART0_PORTA_12				0

@@ -9,15 +9,15 @@ HARDWARE
 #ifndef PRINT_H_
 #define PRINT_H_
 
-#if C_PRINT
+#if COMPONENT_PRINT
 
 #include "print_config.h"
 #include "../common/ascii.h"
 
 // Includes
-#if C_UART_SINGLE
+#if COMPONENT_UART_SINGLE
 	#include	"../uart/uart_single.h"
-#elif C_UART_MULTI
+#elif COMPONENT_UART_MULTI
 	#include	"../uart/uart_multi.h"
 #else
 	#error		"This module requires UART component"
@@ -95,6 +95,6 @@ void Print_ResponseError(void);
 void Print_ResponseNotFound(void);
 void Print_ResponseUnknown(void);
 
-#endif /* C_PRINT */
+#endif /* COMPONENT_PRINT */
 #endif /* PRINT_H_ */
 

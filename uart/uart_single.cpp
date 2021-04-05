@@ -1,6 +1,6 @@
 // Wersja 2.17
 
-#if C_UART_SINGLE
+#if COMPONENT_UART_SINGLE
 
 #include "uart_single.h"
 

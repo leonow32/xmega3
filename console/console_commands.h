@@ -7,35 +7,35 @@
 
 #include		"console.h"
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console_demo.h"
 #endif
 
-#if C_EEPROM
+#if COMPONENT_EEPROM
 	#include	"../eeprom/eeprom_demo.h"
 #endif
 
-#if C_I2C_MASTER
+#if COMPONENT_I2C_MASTER
 	#include	"../i2c_master/i2c_master_demo.h"
 #endif
 
-#if C_MCP9808
+#if COMPONENT_MCP9808
 	#include	"../mcp9808/mcp9808_demo.h"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print_demo.h"
 #endif
 
-#if C_SPI_MASTER
+#if COMPONENT_SPI_MASTER
 	#include	"../spi_master/spi_master_demo.h"
 #endif
 
-#if C_UART_MONITOR
+#if COMPONENT_UART_MONITOR
 	#include	"../uart_monitor/uart_monitor.h"
 #endif
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
@@ -139,7 +139,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // UART Monitor
 // ========================================
 
-#if C_UART_MONITOR
+#if COMPONENT_UART_MONITOR
 	{"uart-h",			UartMonitor_CmdSendHex},
 	{"uart-a",			UartMonitor_CmdSendAscii},
 #endif

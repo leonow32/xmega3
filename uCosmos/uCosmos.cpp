@@ -1,6 +1,6 @@
 // Wersja 1.18
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 
 #include "../config/config.h"
 #include "uCosmos_defines.h"

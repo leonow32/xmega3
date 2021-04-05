@@ -7,19 +7,19 @@
 
 #include		"mcp9808.h"
 
-#if C_I2C_MASTER
+#if COMPONENT_I2C_MASTER
 	#include		"../i2c_master/i2c_master.h"
 #else
 	#error		"This module requires I2C_MASTER component"
 #endif
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console.h"
 #else
 	#error		"This module requires CONSOLE component"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"

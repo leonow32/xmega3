@@ -7,7 +7,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
@@ -17,7 +17,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
@@ -27,7 +27,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE
@@ -37,7 +37,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	#define		EEPROM_USE_COMMAND_DUMP				1
 	#define		EEPROM_USE_DEMO_COMMANDS			1
 	#define		EEPROM_CONFIG_DONE

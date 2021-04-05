@@ -1,6 +1,6 @@
 #ifndef UART_MONITOR_H_
 #define UART_MONITOR_H_
-#if C_UART_MONITOR
+#if COMPONENT_UART_MONITOR
 
 // ========================================
 // Includes
@@ -10,25 +10,25 @@
 #include	"../config/config.h"
 #include	"uart_monitor_config.h"
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console.h"
 #else
 	#error		"This module requires CONSOLE component"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"
 #endif
 
-#if C_UART_MULTI
+#if COMPONENT_UART_MULTI
 	#include	"../uart/uart_multi.h"
 #else
 	#error		"This module requires UART_MULTI component"
 #endif
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #else
 	#error		"This module requires UCOSMOS component"

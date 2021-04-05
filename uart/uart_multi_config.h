@@ -9,7 +9,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	
 	#if HW_CPU_ATtinyXX12
 		#define	UART0_USE					1
@@ -122,7 +122,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if B_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	// Które porty UART maj¹ byæ u¿ywane
 	#define		UART0_USE					0
@@ -168,7 +168,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	#define		UART0_USE				1
 	#define		UART1_USE				1
@@ -221,7 +221,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if B_XNANO
+#if PRODUCT_XNANO
 	#define	UART0_USE					1
 	#define	UART0_BAUD					115200			// Connected to...
 	#define	UART0_PORTA_12				1

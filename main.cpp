@@ -10,29 +10,29 @@
 // Internal Hardware Includes
 // ========================================
 
-#if C_CLOCK
+#if COMPONENT_CLOCK
 	#include	"clock/clock.h"
 #endif
 
-#if C_EEPROM
+#if COMPONENT_EEPROM
 	#include	"eeprom/eeprom.h"
 #endif
 
-#if C_I2C_MASTER
+#if COMPONENT_I2C_MASTER
 	#include	"i2c_master/i2c_master.h"
 #endif
 
-#if C_PERIPHERALS
+#if COMPONENT_PERIPHERALS
 	#include	"peripherals/peripherals.h"
 #endif
 
-#if C_SPI_MASTER
+#if COMPONENT_SPI_MASTER
 	#include	"spi_master/spi_master.h"
 #endif
 
-#if C_UART_SINGLE
+#if COMPONENT_UART_SINGLE
 	#include	"uart/uart_single.h"
-#elif C_UART_MULTI
+#elif COMPONENT_UART_MULTI
 	#include	"uart/uart_multi.h"
 #endif
 
@@ -40,7 +40,7 @@
 // External Hardware Includes
 // ========================================
 
-#if C_MCP9808
+#if COMPONENT_MCP9808
 	#include	"mcp9808/mcp9808.h"
 #endif
 
@@ -48,19 +48,19 @@
 // Software includes
 // ========================================
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"console/console.h"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"print/print.h"
 #endif
 
-#if C_UART_MONITOR
+#if COMPONENT_UART_MONITOR
 	#include	"uart_monitor/uart_monitor.h"
 #endif
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 	#include	"uCosmos/uCosmos.h"
 #endif
 
@@ -71,27 +71,27 @@ int main(void) {
 	// Internal Hardware init
 	// ========================================
 	
-	#if C_CLOCK
+	#if COMPONENT_CLOCK
 		Clock_Init();
 	#endif
 	
-	#if C_EEPROM
+	#if COMPONENT_EEPROM
 		EEPROM_Init();
 	#endif
 	
-	#if C_I2C_MASTER
+	#if COMPONENT_I2C_MASTER
 		I2C_Init();
 	#endif
 	
-	#if C_PERIPHERALS
+	#if COMPONENT_PERIPHERALS
 		Peripherals_Init();
 	#endif
 	
-	#if C_SPI_MASTER
+	#if COMPONENT_SPI_MASTER
 		Spi_Init();
 	#endif
 	
-	#if C_UART_MULTI || C_UART_SINGLE
+	#if COMPONENT_UART_MULTI || COMPONENT_UART_SINGLE
 		Uart_Init();
 	#endif
 	
@@ -99,11 +99,11 @@ int main(void) {
 	// Internal Software Init
 	// ========================================
 	
-	#if C_UCOSMOS
+	#if COMPONENT_UCOSMOS
 		Os_Init();
 	#endif
 	
-	#if C_CONSOLE
+	#if COMPONENT_CONSOLE
 		Console_Init();
 	#endif
 	
@@ -111,7 +111,7 @@ int main(void) {
 	// External Hardware init
 	// ========================================
 	
-	#if C_MCP9808
+	#if COMPONENT_MCP9808
 		MCP9808_Init();
 	#endif
 	
@@ -119,22 +119,22 @@ int main(void) {
 	// Software init
 	// ========================================
 	
-	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
+	#if PRODUCT_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskRed,		1000);
 		TaskAddMs(Peripherals_TaskYellow,	1100);
 		TaskAddMs(Peripherals_TaskGreen,	1200);
 		TaskAddMs(Peripherals_TaskBlue,		1300);
 	#endif
 	
-	#if P_XNANO && PERIPHERALS_USE_DEMO_TASKS
+	#if PRODUCT_XNANO && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
-	#if P_CURIOSITY_M4809 && PERIPHERALS_USE_DEMO_TASKS
+	#if PRODUCT_CURIOSITY_M4809 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
-	#if C_UART_MONITOR
+	#if COMPONENT_UART_MONITOR
 		UartMonitor_Init();
 	#endif
 	

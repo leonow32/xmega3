@@ -1,6 +1,6 @@
 // Version 1.0.0
 
-#if C_PRINT
+#if COMPONENT_PRINT
 
 #include "print.h"
 

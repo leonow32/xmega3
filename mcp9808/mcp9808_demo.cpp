@@ -1,4 +1,4 @@
-#if C_MCP9808
+#if COMPONENT_MCP9808
 #include "mcp9808_demo.h"
 #if MCP9808_USE_DEMO_COMMANDS
 

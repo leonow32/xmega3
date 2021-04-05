@@ -9,7 +9,7 @@
 // Template
 // ========================================
 
-#if TEMPLATE
+#if PRODUCT_TEMPLATE
 	#if HW_CPU_ATtinyXX12
 		#define				I2C_PORTA_12			0
 	#endif
@@ -33,7 +33,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define		I2C_PORTA_23						1
 	#define		I2C_MASTER_SCL_FREQUENCY			157000
 	#define		I2C_MASTER_USE_DEMO_COMMANDS		1

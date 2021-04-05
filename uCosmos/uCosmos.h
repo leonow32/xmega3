@@ -95,15 +95,15 @@ HARDWARE
 #include		"uCosmos_defines.h"
 #include		"uCosmos_config.h"
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console.h"
 #endif
 
-#if C_PERIPHERALS
+#if COMPONENT_PERIPHERALS
 	#include	"../peripherals/peripherals.h"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"

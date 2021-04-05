@@ -1,4 +1,4 @@
-#if C_UART_MONITOR
+#if COMPONENT_UART_MONITOR
 
 #include "uart_monitor.h"
 

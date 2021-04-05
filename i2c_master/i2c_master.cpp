@@ -1,6 +1,6 @@
 // Version 3.00
 
-#if C_I2C_MASTER
+#if COMPONENT_I2C_MASTER
 
 #include "i2c_master.h"
 

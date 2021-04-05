@@ -7,7 +7,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
@@ -30,7 +30,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
@@ -53,16 +53,16 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0
 	#define PRINT_USE_STREAM_MULTI					1
 	
 	// Default output stream
-	#if C_UART_SINGLE
+	#if COMPONENT_UART_SINGLE
 		#define PRINT_DEFAULT_STREAM				Uart_Write
-	#elif C_UART_MULTI
+	#elif COMPONENT_UART_MULTI
 		#define PRINT_DEFAULT_STREAM				Uart3_Write
 	#endif
 	
@@ -80,7 +80,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					0

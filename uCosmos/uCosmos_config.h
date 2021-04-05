@@ -9,7 +9,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1
@@ -63,7 +63,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1
@@ -117,7 +117,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1
@@ -171,7 +171,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if B_XNANO
+#if BOARD_XNANO
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1
 	#define		OS_GENERATOR_XOSC32				0

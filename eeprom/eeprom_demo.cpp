@@ -1,5 +1,5 @@
 // Wersja 1.08
-#if C_EEPROM
+#if COMPONENT_EEPROM
 #include "eeprom_demo.h"
 
 #if EEPROM_USE_COMMAND_DUMP

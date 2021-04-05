@@ -9,17 +9,17 @@ CHANGELOG
 #include <avr/io.h>
 #include "peripherals_config.h"
 
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 	#include	"../console/console.h"
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"
 #endif
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
@@ -27,7 +27,7 @@ CHANGELOG
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	
 	// Functions
 	void Peripherals_Init(void);
@@ -52,7 +52,7 @@ CHANGELOG
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	
 	// Functions
 	void Peripherals_Init(void);
@@ -76,7 +76,7 @@ CHANGELOG
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	
 	// Functions
 	void Peripherals_Init(void);

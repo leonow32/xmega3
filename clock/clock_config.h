@@ -7,7 +7,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE
@@ -17,7 +17,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE
@@ -27,7 +27,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE
@@ -37,7 +37,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE

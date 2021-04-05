@@ -7,7 +7,7 @@
 // Template
 // ========================================
 
-#if P_TEMPLATE
+#if PRODUCT_TEMPLATE
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1
@@ -23,7 +23,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1
@@ -32,10 +32,10 @@
 	#define CONSOLE_USE_DEMO_COMMANDS			1
 	#define CONSOLE_CONFIG_DONE
 	
-	#if C_UART_SINGLE
+	#if COMPONENT_UART_SINGLE
 		#define CONSOLE_INPUT_STREAM			Uart_Read
 		#define CONSOLE_INPUT_RECEIVED_CNT		Uart_ReceivedCnt
-	#elif C_UART_MULTI
+	#elif COMPONENT_UART_MULTI
 		#define CONSOLE_INPUT_STREAM			Uart2_Read
 		#define CONSOLE_INPUT_RECEIVED_CNT		Uart2_ReceivedCnt
 	#endif
@@ -45,7 +45,7 @@
 // Dev Board Curiosity ATmega4809
 // ========================================
 
-#if P_CURIOSITY_M4809
+#if PRODUCT_CURIOSITY_M4809
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1
@@ -54,10 +54,10 @@
 	#define CONSOLE_USE_DEMO_COMMANDS			1
 	#define CONSOLE_CONFIG_DONE
 	
-	#if C_UART_SINGLE
+	#if COMPONENT_UART_SINGLE
 		#define CONSOLE_INPUT_STREAM			Uart_Read
 		#define CONSOLE_INPUT_RECEIVED_CNT		Uart_ReceivedCnt
-	#elif C_UART_MULTI
+	#elif COMPONENT_UART_MULTI
 		#define CONSOLE_INPUT_STREAM			Uart3_Read
 		#define CONSOLE_INPUT_RECEIVED_CNT		Uart3_ReceivedCnt
 	#endif
@@ -67,7 +67,7 @@
 // Dev Board XNANO
 // ========================================
 
-#if P_XNANO
+#if PRODUCT_XNANO
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1

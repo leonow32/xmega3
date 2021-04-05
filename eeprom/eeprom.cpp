@@ -1,6 +1,6 @@
 // Version 2.0.0
 
-#if C_EEPROM
+#if COMPONENT_EEPROM
 
 #include "eeprom.h"
 

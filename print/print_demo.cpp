@@ -1,4 +1,4 @@
-#if C_PRINT
+#if COMPONENT_PRINT
 #include "print_demo.h"
 #if PRINT_USE_DEMO_COMMANDS
 

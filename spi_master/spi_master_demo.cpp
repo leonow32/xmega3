@@ -1,4 +1,4 @@
-#if C_SPI_MASTER
+#if COMPONENT_SPI_MASTER
 #include "spi_master_demo.h"
 #if SPI_MASTER_USE_DEMO_COMMANDS
 

@@ -1,19 +1,19 @@
 #ifndef CONSOLE_H_
 #define CONSOLE_H_
-#if C_CONSOLE
+#if COMPONENT_CONSOLE
 
 #include <avr/io.h>
 #include <string.h>
 #include "console_config.h"
 #include "../common/ascii.h"
 
-#if C_UCOSMOS
+#if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #else 
 	#error		"Component CONSOLE requires uCSOMOS" 
 #endif
 
-#if C_PRINT
+#if COMPONENT_PRINT
 	#include	"../print/print.h"
 #else
 	#error		"This module requires PRINT component"

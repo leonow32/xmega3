@@ -99,7 +99,7 @@ HARDWARE
 #ifndef UART_SINGLE_H_
 #define UART_SINGLE_H_
 
-#if C_UART_SINGLE
+#if COMPONENT_UART_SINGLE
 
 #include		<avr/io.h>
 #include		<avr/interrupt.h>
@@ -107,7 +107,7 @@ HARDWARE
 #include		<util/delay.h>
 #include		"uart_single_config.h"
 
-#if C_UCOSMOS && UART_USE_UCOSMOS_SLEEP
+#if COMPONENT_UCOSMOS && UART_USE_UCOSMOS_SLEEP
 	#include	"../uCosmos/uCosmos.h"
 #endif
 
@@ -153,8 +153,8 @@ void		Uart_WaitForTxComplete(void);
 #define		Uart_WriteTxt(x)		Uart_Write(x)
 
 // Kontrola b³êdów
-#if C_UART_SINGLE && C_UART_MULTI
-	#error "Can't use C_UART_SINGLE and C_UART_MULTI at the same time"
+#if COMPONENT_UART_SINGLE && COMPONENT_UART_MULTI
+	#error "Can't use COMPONENT_UART_SINGLE and COMPONENT_UART_MULTI at the same time"
 #endif
 
 #endif

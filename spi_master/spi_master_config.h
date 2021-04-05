@@ -10,7 +10,7 @@
 // Template
 // ========================================
 
-#if TEMPLATE
+#if PRODUCT_TEMPLATE
 	#if HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14
 		#define		SPI_PORTA_13					0
 	#endif
@@ -39,7 +39,7 @@
 // Dev Board AVR-IoT
 // ========================================
 
-#if P_AVRIOT
+#if PRODUCT_AVRIOT
 	#define			SPI_PORTA_46					1
 	#define			SPI_MASTER_USE_DEMO_COMMANDS	1
 	
