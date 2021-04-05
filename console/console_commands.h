@@ -63,8 +63,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"dec16",			Console_CmdDec16},
 	{"dec32",			Console_CmdDec32},
 	{"hexstr",			Console_CmdHexString},
-	{"ascchr",			Console_CmdAsciiCharacter},
 	{"ascstr",			Console_CmdAsciiString},
+	{"ascchr",			Console_CmdAsciiCharacter},
 #endif
 
 // ========================================
