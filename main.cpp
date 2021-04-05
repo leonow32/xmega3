@@ -134,6 +134,10 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
+	#if PRODUCT_CURIOSITY_T1627 && PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
+	
 	#if PRODUCT_CURIOSITY_T3217 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
