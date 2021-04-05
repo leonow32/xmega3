@@ -21,7 +21,7 @@ void Spi_CmdStream(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-		Print("spi ");
+			Print("spi data[HEX] readcnt[DEC8] dummy[HEX8]");
 		#endif
 		return;
 	}
@@ -51,7 +51,7 @@ void Spi_CmdStream(uint8_t argc, uint8_t * argv[]) {
 	
 	// Print data to send
 	Print_Format(ForegroundWhiteBright);
-	Print("Send[");
+	Print("SPI Tx[");
 	Print_Dec(BufferLength + ReadCount);
 	Print("]: ");
 	Print_Format(FormatReset);
@@ -69,7 +69,7 @@ void Spi_CmdStream(uint8_t argc, uint8_t * argv[]) {
 	
 	// Print result
 	Print_Format(ForegroundWhiteBright);
-	Print("Read[");
+	Print("SPI Rx[");
 	Print_Dec(BufferLength + ReadCount);
 	Print("]: ");
 	Print_Format(FormatReset);

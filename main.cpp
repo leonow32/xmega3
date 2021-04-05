@@ -56,6 +56,10 @@
 	#include	"print/print.h"
 #endif
 
+#if C_UART_MONITOR
+	#include	"uart_monitor/uart_monitor.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"uCosmos/uCosmos.h"
 #endif
@@ -115,7 +119,6 @@ int main(void) {
 	// Software init
 	// ========================================
 	
-	// Peripherals demo tasks
 	#if P_AVRIOT && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskRed,		1000);
 		TaskAddMs(Peripherals_TaskYellow,	1100);
@@ -129,6 +132,10 @@ int main(void) {
 	
 	#if P_CURIOSITY_M4809 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
+	
+	#if C_UART_MONITOR
+		UartMonitor_Init();
 	#endif
 	
 	// ========================================

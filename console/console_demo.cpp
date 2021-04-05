@@ -82,7 +82,7 @@ void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
+void Console_CmdAsciiString(uint8_t argc, uint8_t * argv[]) {
 	uint8_t Buffer[32];
 	uint8_t Length;
 	if(Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3)) return;
@@ -90,6 +90,13 @@ void Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]) {
 	Print_Dec(Length);
 	Print_NL();
 	Print_Dump(Buffer, Length);
+}
+
+
+void Console_CmdAsciiCharacter(uint8_t argc, uint8_t * argv[]) {
+	uint8_t Character;
+	if(Parse_AsciiCharacter(argv[1], &Character)) return;
+	Print(Character);
 }
 
 

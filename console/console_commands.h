@@ -31,6 +31,10 @@
 	#include	"../spi_master/spi_master_demo.h"
 #endif
 
+#if C_UART_MONITOR
+	#include	"../uart_monitor/uart_monitor.h"
+#endif
+
 #if C_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #endif
@@ -42,7 +46,7 @@
 const Console_NamePointer_t Console_CommandList[] = {
 
 // ========================================
-// Console demo commands
+// Console demo
 // ========================================
 
 #if CONSOLE_USE_COMMAND_ALL
@@ -59,11 +63,12 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"dec16",			Console_CmdDec16},
 	{"dec32",			Console_CmdDec32},
 	{"hexstr",			Console_CmdHexString},
+	{"ascchr",			Console_CmdAsciiCharacter},
 	{"ascstr",			Console_CmdAsciiString},
 #endif
 
 // ========================================
-// Internal EEPROM demo commands
+// Internal EEPROM demo
 // ========================================
 
 #if EEPROM_USE_COMMAND_DUMP
@@ -80,7 +85,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// I2C Master demo commands
+// I2C Master demo
 // ========================================
 
 #if I2C_MASTER_USE_DEMO_COMMANDS
@@ -89,7 +94,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// MCP9808 demo commands
+// MCP9808 demo
 // ========================================
 
 #if MCP9808_USE_DEMO_COMMANDS
@@ -100,7 +105,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// Print demo commands
+// Print demo
 // ========================================
 
 #if PRINT_USE_DEMO_COMMANDS
@@ -109,7 +114,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// SPI Master demo commands
+// SPI Master demo
 // ========================================
 
 #if SPI_MASTER_USE_DEMO_COMMANDS
@@ -129,6 +134,16 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif	
 
 	{"reset",			Os_ResetExecute},
+
+// ========================================
+// UART Monitor
+// ========================================
+
+#if C_UART_MONITOR
+	{"uart-h",			UartMonitor_CmdSendHex},
+	{"uart-a",			UartMonitor_CmdSendAscii},
+#endif
+
 };
 
 #endif /* INTERPRETER_COMMANDS_H_ */

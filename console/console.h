@@ -79,6 +79,7 @@ Parse_t		Parse_Dec32(const uint8_t * Argument, uint32_t * Output, const uint32_t
 Parse_t		Parse_Dec32S(const uint8_t * Argument, int32_t * Output); //, const int32_t MaxValue = 268435455L);
 Parse_t		Parse_HexString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
+Parse_t		Parse_AsciiCharacter(const uint8_t * Argument, uint8_t * Output);
 
 // Demo commands
 #if CONSOLE_USE_COMMAND_ALL
