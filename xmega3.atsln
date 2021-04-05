@@ -9,6 +9,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AVR-IoT|AVR = AVR-IoT|AVR
 		CuriosityM4809|AVR = CuriosityM4809|AVR
+		CuriosityT3217|AVR = CuriosityT3217|AVR
 		XNANO|AVR = XNANO|AVR
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -16,6 +17,8 @@ Global
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.AVR-IoT|AVR.Build.0 = AVR-IoT|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.CuriosityM4809|AVR.ActiveCfg = CuriosityM4809|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.CuriosityM4809|AVR.Build.0 = CuriosityM4809|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.CuriosityT3217|AVR.ActiveCfg = CuriosityT3217|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.CuriosityT3217|AVR.Build.0 = CuriosityT3217|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.XNANO|AVR.ActiveCfg = XNANO|AVR
 		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.XNANO|AVR.Build.0 = XNANO|AVR
 	EndGlobalSection

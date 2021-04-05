@@ -134,6 +134,10 @@ int main(void) {
 		TaskAddMs(Peripherals_TaskYellow,	1000);
 	#endif
 	
+	#if PRODUCT_CURIOSITY_T3217 && PERIPHERALS_USE_DEMO_TASKS
+		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
+	
 	#if COMPONENT_UART_MONITOR
 		UartMonitor_Init();
 	#endif

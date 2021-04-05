@@ -34,6 +34,16 @@
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny3217
+// ========================================
+
+#if PRODUCT_CURIOSITY_T3217
+	#define		EEPROM_USE_COMMAND_DUMP				1
+	#define		EEPROM_USE_DEMO_COMMANDS			1
+	#define		EEPROM_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board XNANO
 // ========================================
 

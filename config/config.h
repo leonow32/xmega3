@@ -52,6 +52,21 @@ CHANGELOG
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny3217
+// ========================================
+
+#if PRODUCT_CURIOSITY_T3217
+	#define HW_CPU_ATtinyXX12					0
+	#define HW_CPU_ATtinyXX14					0
+	#define HW_CPU_ATtinyXX16					0
+	#define HW_CPU_ATtinyXX17					1
+	#define HW_CPU_ATmegaXX08_28pin				0
+	#define HW_CPU_ATmegaXX08_32pin				0
+	#define HW_CPU_ATmegaXX09					0
+	#define HW_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board XNANO
 // ========================================
 
