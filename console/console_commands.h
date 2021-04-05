@@ -111,6 +111,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if PRINT_USE_DEMO_COMMANDS
 	{"color",			Print_CmdColor},
 	{"ascii",			Print_CmdAscii},
+	{"dump",			Print_CmdDump},
 #endif
 
 // ========================================

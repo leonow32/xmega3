@@ -23,5 +23,6 @@
 
 void Print_CmdColor(uint8_t argc, uint8_t * argv[]);
 void Print_CmdAscii(uint8_t argc, uint8_t * argv[]);
+void Print_CmdDump(uint8_t argc, uint8_t * argv[]);
 
 #endif /* PRINT_DEMO_H_ */

@@ -171,9 +171,8 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		Print_Hex(uint16_t(Pointer));
 		Print_Format(FormatReset);
 		
-		Print('\t');
-		
 		// Print as HEX
+		Print('\t');
 		for(uint8_t h=0; h<=15; h++) {
 			
 			// If all bytes are printed
@@ -188,6 +187,7 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		}
 		
 		// Print as ASCII
+		Print('\t');
 		for(uint8_t h=0; h<=15; h++) {
 			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {                             // Ignore special characters with codes <32 and >127
 				Print(*(Pointer+h));
