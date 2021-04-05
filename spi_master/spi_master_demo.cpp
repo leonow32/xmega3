@@ -17,7 +17,7 @@
 //    Send bytes 1122330000 and print 5 bytes which were read during transmission
 //  - spi 112233 2 FF
 //    Send bytes 112233FFFF and print 5 bytes which were read during transmission
-void Spi_CmdStream(uint8_t argc, uint8_t * argv[]) {
+void Spi_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP

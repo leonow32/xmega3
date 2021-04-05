@@ -118,7 +118,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if SPI_MASTER_USE_DEMO_COMMANDS
-	{"spi",					Spi_CmdStream},
+	{"spi",					Spi_CmdTransmit},
 #endif
 
 // ========================================

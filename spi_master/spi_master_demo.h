@@ -24,7 +24,7 @@
 // ========================================
 
 #if SPI_MASTER_USE_DEMO_COMMANDS
-	void Spi_CmdStream(uint8_t argc, uint8_t * argv[]);
+	void Spi_CmdTransmit(uint8_t argc, uint8_t * argv[]);
 #endif
 
 #endif /* SPI_MASTER_DEMO_H_ */
