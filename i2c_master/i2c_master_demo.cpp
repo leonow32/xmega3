@@ -64,7 +64,7 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 	
 	// Debug
 	Print_Format(ForegroundWhiteBright);
-	Print("Send[");
+	Print("I2C Tx[");
 	Print_Dec(BufferLength);
 	Print("]: ");
 	Print_Format(FormatReset);
@@ -117,7 +117,7 @@ void I2C_CmdTransmit(uint8_t argc, uint8_t * argv[]) {
 		
 		// Print result
 		Print_Format(ForegroundWhiteBright);
-		Print("Read[");
+		Print("I2C Rx[");
 		Print_Dec(i);
 		Print("]: ");
 		Print_Format(FormatReset);

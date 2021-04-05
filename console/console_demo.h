@@ -31,7 +31,8 @@
 	void		Console_CmdDec16(uint8_t argc, uint8_t * argv[]);
 	void		Console_CmdDec32(uint8_t argc, uint8_t * argv[]);
 	void		Console_CmdHexString(uint8_t argc, uint8_t * argv[]);
-	void		Console_CmdAsciiString(uint8_t argtc, uint8_t * argv[]);
+	void		Console_CmdAsciiString(uint8_t argc, uint8_t * argv[]);
+	void		Console_CmdAsciiCharacter(uint8_t argc, uint8_t * argv[]);
 #endif
 
 

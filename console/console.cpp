@@ -295,6 +295,7 @@ void Console_PromptShow(void) {
 	Print_Format(ForegroundYellowBright);
 	Print_Format(FormatBold);
 	Print("\r\n/> ");
+	Print((const char *)Inter.Buffer);
 }
 
 
@@ -568,7 +569,7 @@ Parse_t Parse_Dec16(const uint8_t * Argument, uint16_t * Output, const uint16_t 
 			goto End;
 			//return Parse_Overflow;
 		}
-	} 
+	}
 	
 	// Zwracanie wyniku
 	if(Temp <= MaxValue) {
@@ -790,6 +791,28 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 	End:
 	if(Result) {
 		Parse_Debug(Result, OrgArgument);
+	}
+	return Result;
+}
+
+
+// Parse a single character
+Parse_t Parse_AsciiCharacter(const uint8_t * Argument, uint8_t * Output) {
+	
+	Parse_t Result;
+	
+	// Kontrola czy podano argument
+	if(Argument == NULL) {
+		Result = Parse_MissingArgument;
+	}
+	else {
+		Result = Parse_OK;
+		*Output = *Argument;
+	}
+	
+	// Wyœwietlenie informacji o ewentualnym b³êdzie i zwrócenie wyniku
+	if(Result) {
+		Parse_Debug(Result, Argument);
 	}
 	return Result;
 }

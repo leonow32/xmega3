@@ -112,6 +112,7 @@
       <Value>C_PERIPHERALS</Value>
       <Value>C_PRINT</Value>
       <Value>C_SPI_MASTER</Value>
+      <Value>C_UART_MONITOR</Value>
       <Value>C_UART_MULTI</Value>
       <Value>C_UCOSMOS</Value>
     </ListValues>
@@ -434,6 +435,15 @@
     <Compile Include="uart\uart_single_config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="uart_monitor\uart_monitor.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uart_monitor\uart_monitor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uart_monitor\uart_monitor_config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uCosmos\uCosmos.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -469,6 +479,7 @@
     <Folder Include="eeprom" />
     <Folder Include="i2c_master" />
     <Folder Include="mcp9808" />
+    <Folder Include="uart_monitor" />
     <Folder Include="spi_master" />
     <Folder Include="print" />
     <Folder Include="uCosmos" />
