@@ -90,6 +90,30 @@
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny3217
+// ========================================
+
+#if PRODUCT_CURIOSITY_T3217
+	
+	// Demos
+	#define		PERIPHERALS_USE_DEMO_TASKS				1
+	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
+	
+	// LED diodes
+	#define		LED_YELLOW_ON			VPORTA.OUT	|=  PIN3_bm
+	#define		LED_YELLOW_OFF			VPORTA.OUT	&= ~PIN3_bm
+	#define		LED_YELLOW_TGL			VPORTA.OUT	^=  PIN3_bm
+	#define		LED_YELLOW_INIT			VPORTA.DIR	|=	PIN3_bm;	PORTA.PIN3CTRL = PORT_INVEN_bm;
+	
+	// Buttons
+	#define		KEY_SW0_READ			(VPORTB.IN	&	PIN7_bm)
+	#define		KEY_SW0_INIT			PORTB.PIN7CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
+	
+	#define		PERIPHERALS_CONFIG_DONE
+	
+#endif
+
+// ========================================
 // Dev Board XNANO
 // ========================================
 

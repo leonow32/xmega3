@@ -37,7 +37,11 @@
 	#define PRINT_USE_STREAM_MULTI					1
 	
 	// Default output stream
-	#define PRINT_DEFAULT_STREAM					Uart2_Write
+	#if COMPONENT_UART_SINGLE
+		#define PRINT_DEFAULT_STREAM				Uart_Write
+	#elif COMPONENT_UART_MULTI
+		#define PRINT_DEFAULT_STREAM				Uart2_Write
+	#endif
 	
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
@@ -65,6 +69,29 @@
 	#elif COMPONENT_UART_MULTI
 		#define PRINT_DEFAULT_STREAM				Uart3_Write
 	#endif
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					1
+	
+	#define PRINT_CONFIG_DONE
+	
+#endif
+
+// ========================================
+// Dev Board Curiosity ATtiny3217
+// ========================================
+
+#if PRODUCT_CURIOSITY_T3217
+	
+	// Whether to use one output stream at all times or whether it should be changeable
+	#define PRINT_USE_STREAM_SINGLE					0
+	#define PRINT_USE_STREAM_MULTI					1
+	
+	// Default output stream
+	#define PRINT_DEFAULT_STREAM					Uart_Write
 	
 	// Use font formatting in console
 	#define PRINT_USE_COLORS						1
