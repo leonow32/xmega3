@@ -241,7 +241,7 @@
 #if PRODUCT_CURIOSITY_T1627
 	
 	#define		UART0_USE				1
-	#define		UART1_USE				1
+	#define		UART1_USE				0
 		
 	#if UART0_USE
 		#define	UART0_BAUD				115200			// Debug port

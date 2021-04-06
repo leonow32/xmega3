@@ -22,6 +22,19 @@ void Spi_Init(void) {
 		VPORTC.DIR			|=		PIN2_bm;						// MOSI
 	#endif
 	
+	#if (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27) && SPI_PORTA_13
+		VPORTA.DIR			|=		PIN1_bm;						// MOSI
+		VPORTA.DIR			&=	~	PIN2_bm;						// MISO
+		VPORTA.DIR			|=		PIN3_bm;						// SCK
+	#endif
+	
+	#if (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27) && SPI_PORTC_02
+		PORTMUX.SPIROUTEA	|=		PORTMUX_SPI0_ALT1_gc;			// Alternative GPIO
+		VPORTC.DIR			|=		PIN0_bm;						// SCK
+		VPORTC.DIR			&=	~	PIN1_bm;						// MISO
+		VPORTC.DIR			|=		PIN2_bm;						// MOSI
+	#endif
+	
 	#if (HW_CPU_ATmegaXX09 || HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin) && SPI_PORTA_46
 		VPORTA.DIR			|=		PIN4_bm;						// MOSI
 		VPORTA.DIR			&=	~	PIN5_bm;						// MISO

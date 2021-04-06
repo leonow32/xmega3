@@ -413,7 +413,8 @@
       <Value>COMPONENT_EEPROM</Value>
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
-      <Value>COMPONENT_UART_MONITOR</Value>
+      <Value>COMPONENT_SPI_MASTERx</Value>
+      <Value>COMPONENT_UART_MONITORx</Value>
       <Value>COMPONENT_UART_MULTI</Value>
       <Value>COMPONENT_UCOSMOS</Value>
     </ListValues>
