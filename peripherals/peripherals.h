@@ -73,6 +73,30 @@ CHANGELOG
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+	
+	// Functions
+	void Peripherals_Init(void);
+	
+	// Tasks
+	#define		PERIPHERALS_USE_DEMO_TASKS		1
+	#if PERIPHERALS_USE_DEMO_TASKS
+		task_t Peripherals_TaskYellow(runmode_t RunMode);
+	#endif
+	
+	// Console commands
+	#define		PERIPHERALS_USE_DEMO_COMMANDS	1
+	#if PERIPHERALS_USE_DEMO_COMMANDS
+		void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]);
+		void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]);
+	#endif
+	
+#endif
+
+// ========================================
 // Dev Board Curiosity ATtiny3217
 // ========================================
 

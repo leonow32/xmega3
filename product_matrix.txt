@@ -9,7 +9,7 @@ MCP9808				x
 Peripherals			x			x			x			x			x
 Print				x			x			x			x			x
 SPI Master			x
-UartMonitor			x
+UartMonitor			x									x
 UartSingle			o									x			x
 UartMulti			o			x			x
 uCosmos				x			x			x			x			x
