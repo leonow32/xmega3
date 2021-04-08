@@ -4,12 +4,12 @@ Product				AVR-IoT		CurioM4809	CurioT1627	CurioT3217	XNANO
 Clock				x			x			x			x			x
 Console				x			x			x			x			x
 EEPROM				x			x			x			x			x
-I2C Master			x
+I2C Master			x						o
 MCP9808				x
 Peripherals			x			x			x			x			x
 Print				x			x			x			x			x
-SPI Master			x
-UartMonitor			x									x
+SPI Master			x						o
+UartMonitor			x						o
 UartSingle			o									x			x
 UartMulti			o			x			x
 uCosmos				x			x			x			x			x
