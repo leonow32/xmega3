@@ -49,7 +49,7 @@ void Spi_Init(void) {
 		VPORTE.DIR			|=		PIN2_bm;						// SCK
 	
 	#else
-		#error "Config missing"
+		#error "Config missing for SPI_MASTER"
 	#endif
 	
 	// SPI peripheral config
