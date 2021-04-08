@@ -411,6 +411,7 @@
       <Value>COMPONENT_CLOCK</Value>
       <Value>COMPONENT_CONSOLE</Value>
       <Value>COMPONENT_EEPROM</Value>
+      <Value>COMPONENT_I2C_MASTER</Value>
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
       <Value>COMPONENT_SPI_MASTERx</Value>
