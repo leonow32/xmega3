@@ -33,7 +33,7 @@ void I2C_Init(void) {
 		PORTC.PIN3CTRL			 =	PORT_PULLUPEN_bm;
 	
 	#else
-		#error "Config missing"
+		#error "Config missing for I2C_MASTER"
 	#endif
 	
 	// TWI peripheral config
