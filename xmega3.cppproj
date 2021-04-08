@@ -411,11 +411,11 @@
       <Value>COMPONENT_CLOCK</Value>
       <Value>COMPONENT_CONSOLE</Value>
       <Value>COMPONENT_EEPROM</Value>
-      <Value>COMPONENT_I2C_MASTER</Value>
+      <Value>COMPONENT_I2C_MASTER=0</Value>
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
-      <Value>COMPONENT_SPI_MASTERx</Value>
-      <Value>COMPONENT_UART_MONITORx</Value>
+      <Value>COMPONENT_SPI_MASTER=0</Value>
+      <Value>COMPONENT_UART_MONITOR=0</Value>
       <Value>COMPONENT_UART_MULTI</Value>
       <Value>COMPONENT_UCOSMOS</Value>
     </ListValues>
