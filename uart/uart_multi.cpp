@@ -65,56 +65,54 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTB.OUT		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 			VPORTB.DIR		|=	PIN2_bm;											// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATtinyXX12/14/16/17/18 - port alternatywny
-		#if UART0_PORTA_12 && (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
+		#elif UART0_PORTA_12 && (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17)
 			PORTMUX.CTRLB	|=	PORTMUX_USART0_ALTERNATE_gc;
 			PORTA.PIN2CTRL	 =	PORT_PULLUPEN_bm;									// Pin Rx ma w³¹czony rezystor pull-up
 			PORTA.PIN1CTRL	 =	PORT_PULLUPEN_bm |									// Pin Tx ma w³¹czony rezystor pull-up
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTA.OUT		|=	PIN1_bm;											// Pin Tx jako wyjœcie
 			VPORTA.DIR		|=	PIN1_bm;											// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATtinyXX24/26/27 - port podstawowy
-		#if UART0_PORTB_23 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
+		#elif UART0_PORTB_23 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
 			PORTMUX.USARTROUTEA	|=	PORTMUX_USART0_DEFAULT_gc;
 			PORTB.PIN3CTRL	 =	PORT_PULLUPEN_bm;									// Pin Rx ma w³¹czony rezystor pull-up
 			PORTB.PIN2CTRL	 =	PORT_PULLUPEN_bm |									// Pin Tx ma w³¹czony rezystor pull-up
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTB.OUT		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 			VPORTB.DIR		|=	PIN2_bm;											// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATtinyXX24/26/27 - port alternatywny
-		#if UART0_PORTA_12 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
+		#elif UART0_PORTA_12 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
 			PORTMUX.USARTROUTEA	|=	PORTMUX_USART0_ALT1_gc;
 			PORTA.PIN2CTRL	 =	PORT_PULLUPEN_bm;									// Pin Rx ma w³¹czony rezystor pull-up
 			PORTA.PIN1CTRL	 =	PORT_PULLUPEN_bm |									// Pin Tx ma w³¹czony rezystor pull-up
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTA.OUT		|=	PIN1_bm;											// Pin Tx jako wyjœcie
 			VPORTA.DIR		|=	PIN1_bm;											// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATmegaXX08/XX09 - port podstawowy
-		#if UART0_PORTA_01 && (HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin || HW_CPU_ATmegaXX09)
+		#elif UART0_PORTA_01 && (HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin || HW_CPU_ATmegaXX09)
 			PORTMUX.USARTROUTEA		&= ~PORTMUX_USART0_gm;
 			PORTA.PIN1CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 			PORTA.PIN0CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTA.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 			VPORTA.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-		#if UART0_PORTA_45 && (HW_CPU_ATmegaXX09)
+		#elif UART0_PORTA_45 && (HW_CPU_ATmegaXX09)
 			PORTMUX.USARTROUTEA		|=	PORTMUX_USART0_ALT1_gc;
 			PORTA.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 			PORTA.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTA.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 			VPORTA.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
+		
+		#else
+			#error "Missing config for UART"
 		#endif
 	}
 	
@@ -169,36 +167,36 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTC.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 			VPORTC.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-		#if UART1_PORTC_45 && (HW_CPU_ATmegaXX09)
+		#elif UART1_PORTC_45 && (HW_CPU_ATmegaXX09)
 			PORTMUX.USARTROUTEA		|=	PORTMUX_USART1_ALT1_gc;
 			PORTC.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 			PORTC.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTC.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 			VPORTC.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATtinyXX24/26/27 - port podstawowy
-		#if UART1_PORTA_12 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
+		#elif UART1_PORTA_12 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
 			PORTMUX.USARTROUTEA	|=	PORTMUX_USART1_DEFAULT_gc;
 			PORTA.PIN2CTRL	 =	PORT_PULLUPEN_bm;									// Pin Rx ma w³¹czony rezystor pull-up
 			PORTA.PIN1CTRL	 =	PORT_PULLUPEN_bm |									// Pin Tx ma w³¹czony rezystor pull-up
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTA.OUT		|=	PIN1_bm;											// Pin Tx jako wyjœcie
 			VPORTA.DIR		|=	PIN1_bm;											// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATtinyXX24/26/27 - port alternatywny
-		#if UART1_PORTC_21 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
+		#elif UART1_PORTC_21 && (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27)
 			PORTMUX.USARTROUTEA	|=	PORTMUX_USART1_ALT1_gc;
 			PORTC.PIN1CTRL	 =	PORT_PULLUPEN_bm;									// Pin Rx ma w³¹czony rezystor pull-up
 			PORTC.PIN2CTRL	 =	PORT_PULLUPEN_bm |									// Pin Tx ma w³¹czony rezystor pull-up
 								PORT_ISC_INPUT_DISABLE_gc;							// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTC.OUT		|=	PIN2_bm;											// Pin Tx jako wyjœcie
 			VPORTC.DIR		|=	PIN2_bm;											// Pin Tx jako wyjœcie
+		
+		#else
+			#error "Missing config for UART"
 		#endif
 	}
 #endif
@@ -253,16 +251,18 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTF.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 			VPORTF.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-		#if UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
+		#elif UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
 			PORTMUX.USARTROUTEA		|=	PORTMUX_USART2_ALT1_gc;
 			PORTF.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 			PORTF.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTF.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 			VPORTF.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
+		
+		#else
+			#error "Missing config for UART"
 		#endif
 	}
 	
@@ -318,16 +318,18 @@ static void Uart_InterruptDre(USART_t * Port, UART_Buffer_t * Buffer);
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTB.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 			VPORTB.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
-		#endif
 		
 		// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-		#if UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
+		#elif UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
 			PORTMUX.USARTROUTEA		|=	PORTMUX_USART3_ALT1_gc;
 			PORTB.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 			PORTB.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 										PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 			VPORTB.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 			VPORTB.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
+		
+		#else
+			#error "Missing config for UART"
 		#endif
 	}
 #endif
