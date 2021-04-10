@@ -10,6 +10,6 @@ Peripherals			x			x			x			x			x
 Print				x			x			x			x			x
 SPI Master			x						o
 UartMonitor			x						o
-UartSingle			o									x			x
+UartSingle			o						o			x			x
 UartMulti			o			x			x
 uCosmos				x			x			x			x			x

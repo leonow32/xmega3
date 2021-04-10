@@ -40,10 +40,9 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>
-    </avrtool>
-    <avrtoolserialnumber>ATML3203081800007701</avrtoolserialnumber>
-    <avrdeviceexpectedsignature>0x1E9650</avrdeviceexpectedsignature>
+    <avrtool>com.atmel.avrdbg.tool.nedbg</avrtool>
+    <avrtoolserialnumber>MCHP3258021800000519</avrtoolserialnumber>
+    <avrdeviceexpectedsignature>0x1E9428</avrdeviceexpectedsignature>
     <avrtoolinterface>UPDI</avrtoolinterface>
     <com_atmel_avrdbg_tool_nedbg>
       <ToolOptions>
@@ -53,7 +52,7 @@
         <InterfaceName>UPDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.nedbg</ToolType>
-      <ToolNumber>ATML3203081800007701</ToolNumber>
+      <ToolNumber>MCHP3258021800000519</ToolNumber>
       <ToolName>nEDBG</ToolName>
     </com_atmel_avrdbg_tool_nedbg>
     <avrtoolinterfaceclock>1500000</avrtoolinterfaceclock>
@@ -415,8 +414,9 @@
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
       <Value>COMPONENT_SPI_MASTER=0</Value>
+      <Value>COMPONENT_UART_SINGLE</Value>
+      <Value>COMPONENT_UART_MULTI=0</Value>
       <Value>COMPONENT_UART_MONITOR=0</Value>
-      <Value>COMPONENT_UART_MULTI</Value>
       <Value>COMPONENT_UCOSMOS</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
