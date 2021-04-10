@@ -22,6 +22,16 @@
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+	#define UART_MONITOR_PERIPHERAL		USART1			// UART instance
+	#define UART_MONITOR_READ_PERIOD	500				// Time in ms to periodically check UART buffer
+	#define UART_MONITOR_CONFIG_DONE
+#endif
+
+// ========================================
 // Error handling
 // ========================================
 

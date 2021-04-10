@@ -34,6 +34,16 @@
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
+	#define CLOCK_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board Curiosity ATtiny3217
 // ========================================
 

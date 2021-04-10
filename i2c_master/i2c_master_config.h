@@ -19,6 +19,10 @@
 		#define				I2C_PORTB_01			1
 	#endif
 	
+	#if HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27
+		#define				I2C_PORTB_01			1
+	#endif
+	
 	#if HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin || HW_CPU_ATmegaXX09
 		#define				I2C_PORTA_23			1
 		#define				I2C_PORTC_23			0
@@ -35,6 +39,17 @@
 
 #if PRODUCT_AVRIOT
 	#define		I2C_PORTA_23						1
+	#define		I2C_MASTER_SCL_FREQUENCY			157000
+	#define		I2C_MASTER_USE_DEMO_COMMANDS		1
+	#define		I2C_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+	#define		I2C_PORTB_01						1
 	#define		I2C_MASTER_SCL_FREQUENCY			157000
 	#define		I2C_MASTER_USE_DEMO_COMMANDS		1
 	#define		I2C_MASTER_CONFIG_DONE

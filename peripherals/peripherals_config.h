@@ -90,6 +90,30 @@
 #endif
 
 // ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+	
+	// Demos
+	#define		PERIPHERALS_USE_DEMO_TASKS				1
+	#define		PERIPHERALS_USE_DEMO_COMMANDS			1
+	
+	// LED diodes
+	#define		LED_YELLOW_ON			VPORTB.OUT	|=  PIN7_bm
+	#define		LED_YELLOW_OFF			VPORTB.OUT	&= ~PIN7_bm
+	#define		LED_YELLOW_TGL			VPORTB.OUT	^=  PIN7_bm
+	#define		LED_YELLOW_INIT			VPORTB.DIR	|=	PIN7_bm;	PORTB.PIN7CTRL = PORT_INVEN_bm;
+	
+	// Buttons
+	#define		KEY_SW0_READ			(VPORTC.IN	&	PIN4_bm)
+	#define		KEY_SW0_INIT			PORTC.PIN4CTRL = PORT_INVEN_bm | PORT_PULLUPEN_bm;
+	
+	#define		PERIPHERALS_CONFIG_DONE
+	
+#endif
+
+// ========================================
 // Dev Board Curiosity ATtiny3217
 // ========================================
 

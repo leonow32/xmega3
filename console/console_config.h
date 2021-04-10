@@ -67,6 +67,28 @@
 // Dev Board Curiosity ATtiny3217
 // ========================================
 
+#if PRODUCT_CURIOSITY_T1627
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			1
+	#define CONSOLE_CONFIG_DONE
+	
+	#if COMPONENT_UART_SINGLE
+		#define CONSOLE_INPUT_STREAM			Uart_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart_ReceivedCnt
+	#elif COMPONENT_UART_MULTI
+		#define CONSOLE_INPUT_STREAM			Uart0_Read
+		#define CONSOLE_INPUT_RECEIVED_CNT		Uart0_ReceivedCnt
+	#endif
+#endif
+
+// ========================================
+// Dev Board Curiosity ATtiny3217
+// ========================================
+
 #if PRODUCT_CURIOSITY_T3217
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10

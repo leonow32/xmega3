@@ -221,6 +221,69 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 #endif
 #endif
 
+// ========================================
+// Dev Board Curiosity ATtiny1627
+// ========================================
+
+#if PRODUCT_CURIOSITY_T1627
+void Peripherals_Init(void) {
+	
+	// LED diodes
+	LED_YELLOW_INIT;
+	
+	// Buttons
+	KEY_SW0_INIT;
+}
+
+#if PERIPHERALS_USE_DEMO_TASKS
+// Demonstration task to blink LEDs
+task_t Peripherals_TaskYellow(runmode_t RunMode) {
+
+	// Call mode
+	switch(RunMode) {
+		
+		// Identification
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("LedY");
+			return TaskOK;
+		#endif
+	
+		// Normal execution
+		default:
+			LED_YELLOW_TGL;
+			return TaskOK;
+	}
+	
+	return TaskOK;
+} 
+#endif
+
+
+#if PERIPHERALS_USE_DEMO_COMMANDS
+// Setting of GPIOs
+void Peripherals_Demo_ioset(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		Print("ioset peripheral[ASC1] state[0/1]");
+		return;
+	}
+	
+	switch(*argv[1]) {
+		case 'y':		if(*argv[2] == '1')		{LED_YELLOW_ON;}			else 	LED_YELLOW_OFF;	break;
+		default:		Print("Wrong arg");															return;
+	}
+}
+
+
+// Reading GPIOs
+void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
+	Print("SW0\t=\t");
+	Print(KEY_SW0_READ ? '1' : '0');
+}
+
+#endif
+#endif
 
 // ========================================
 // Dev Board Curiosity ATtiny3217

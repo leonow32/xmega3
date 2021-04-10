@@ -13,8 +13,10 @@ void Clock_Init(void) {
 		#elif HW_CPU_ATtinyXX14
 			#error "CLKOUT not supported on ATtinyXX14"
 		#elif HW_CPU_ATtinyXX16
-			VPORTB.OUT					|=	PIN5_bm;	
+			VPORTB.OUT					|=	PIN5_bm;
 		#elif HW_CPU_ATtinyXX17
+			VPORTB.OUT					|=	PIN5_bm;
+		#elif HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27
 			VPORTB.OUT					|=	PIN5_bm;
 		#elif HW_CPU_ATmegaXX08_28pin
 			VPORTA.OUT					|=	PIN7_bm;

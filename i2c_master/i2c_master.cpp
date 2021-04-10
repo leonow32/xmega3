@@ -12,35 +12,39 @@ void I2C_Init(void) {
 		PORTMUX.CTRLB			&= ~PORTMUX_TWI0_bm;
 		PORTB.PIN0CTRL			 =	PORT_PULLUPEN_bm;
 		PORTB.PIN1CTRL			 =	PORT_PULLUPEN_bm;
-	#endif
 	
-	#if (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17) && I2C_PORTA_12
+	#elif (HW_CPU_ATtinyXX12 || HW_CPU_ATtinyXX14 || HW_CPU_ATtinyXX16 || HW_CPU_ATtinyXX17) && I2C_PORTA_12
 		PORTMUX.CTRLB			|=  PORTMUX_TWI0_bm;
 		PORTA.PIN1CTRL			 =	PORT_PULLUPEN_bm;
 		PORTA.PIN2CTRL			 =	PORT_PULLUPEN_bm;
-	#endif
 	
-	#if (HW_CPU_ATmegaXX09 || HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin) && I2C_PORTA_23
+	#elif (HW_CPU_ATtinyXX24 || HW_CPU_ATtinyXX26 || HW_CPU_ATtinyXX27) && I2C_PORTB_01
+		PORTB.PIN0CTRL			 =	PORT_PULLUPEN_bm;
+		PORTB.PIN1CTRL			 =	PORT_PULLUPEN_bm;
+	
+	#elif (HW_CPU_ATmegaXX09 || HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin) && I2C_PORTA_23
 		PORTMUX.TWISPIROUTEA	&= ~PORTMUX_TWI0_gm;
 		PORTA.PIN2CTRL			 =	PORT_PULLUPEN_bm;
 		PORTA.PIN3CTRL			 =	PORT_PULLUPEN_bm;
-	#endif
 	
-	#if (HW_CPU_ATmegaXX09 || HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin) && I2C_PORTC_23
+	#elif (HW_CPU_ATmegaXX09 || HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin) && I2C_PORTC_23
 		PORTMUX.TWISPIROUTEA	|=	PORTMUX_TWI0_ALT2_gc;
 		PORTC.PIN2CTRL			 =	PORT_PULLUPEN_bm;
 		PORTC.PIN3CTRL			 =	PORT_PULLUPEN_bm;
+	
+	#else
+		#error "Config missing for I2C_MASTER"
 	#endif
 	
 	// TWI peripheral config
-	TWI0.DBGCTRL			=	TWI_DBGRUN_bm;
-	TWI0.MBAUD				=	(F_CPU / (2*I2C_MASTER_SCL_FREQUENCY)) - 10;
-	TWI0.CTRLA				=	TWI_ENABLE_bm;
-	TWI0.MCTRLA				=	TWI_ENABLE_bm;
-	TWI0.MCTRLB				=	TWI_FLUSH_bm;
-	TWI0.MSTATUS			=	TWI_RIF_bm |						// Clean read interrupt flag
-								TWI_WIF_bm |						// Clean write interrupt flag
-								TWI_BUSSTATE_IDLE_gc;				// Set bus state
+	TWI0.DBGCTRL				=	TWI_DBGRUN_bm;
+	TWI0.MBAUD					=	(F_CPU / (2*I2C_MASTER_SCL_FREQUENCY)) - 10;
+	TWI0.CTRLA					=	TWI_ENABLE_bm;
+	TWI0.MCTRLA					=	TWI_ENABLE_bm;
+	TWI0.MCTRLB					=	TWI_FLUSH_bm;
+	TWI0.MSTATUS				=	TWI_RIF_bm |						// Clean read interrupt flag
+									TWI_WIF_bm |						// Clean write interrupt flag
+									TWI_BUSSTATE_IDLE_gc;				// Set bus state
 }
 
 
@@ -48,9 +52,9 @@ void I2C_Init(void) {
 // result=0 - correct, ACK
 // result>0 - error, NACK
 uint8_t I2C_Start(uint8_t Address) {
-	TWI0.MSTATUS			=	TWI_RIF_bm |						// Clean read interrupt flag
-								TWI_WIF_bm |						// Clean write interrupt flag
-								TWI_BUSSTATE_IDLE_gc;				// Set bus state
+	TWI0.MSTATUS				=	TWI_RIF_bm |						// Clean read interrupt flag
+									TWI_WIF_bm |						// Clean write interrupt flag
+									TWI_BUSSTATE_IDLE_gc;				// Set bus state
 	TWI0.MADDR = Address;
 	while(!(TWI0.MSTATUS & (TWI_RIF_bm | TWI_WIF_bm))); 			// Wait until done
 	return TWI0.MSTATUS & TWI_RXACK_bm;								// 0 means correct start
