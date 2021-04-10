@@ -23,6 +23,10 @@
 	#include	"../mcp9808/mcp9808_demo.h"
 #endif
 
+#if COMPONENT_MEM25
+	#include	"../mem25/mem25_demo.h"
+#endif
+
 #if COMPONENT_PRINT
 	#include	"../print/print_demo.h"
 #endif
@@ -102,6 +106,14 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"mcp9808-r",		MCP9808_CmdRead},
 	{"mcp9808-w",		MCP9808_CmdWrite},
 	{"mcp9808-dump",	MCP9808_CmdDump},
+#endif
+
+// ========================================
+// MEM25 demo
+// ========================================
+
+#if MEM25_USE_DEMO_COMMANDS
+	{"mem25-r",			Mem25_CmdRead},
 #endif
 
 // ========================================

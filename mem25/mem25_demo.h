@@ -1,14 +1,36 @@
-// Wersja 1.08
-
 #ifndef SPI_MEM_DEMO_H_
 #define SPI_MEM_DEMO_H_
 
-#include <avr/io.h>
-#include "console.h"
-#include "spi_mem.h"
-#include "uart.h"
+// ========================================
+// Includes
+// ========================================
 
-void SpiMem_Demo_Dump(uint8_t argc, uint8_t * argv[]);
+#include		"mem25.h"
+
+#if COMPONENT_SPI_MASTER
+	#include		"../spi_master/spi_master.h"
+#else
+	#error		"This module requires SPI_MASTER component"
+#endif
+
+#if COMPONENT_CONSOLE
+	#include	"../console/console.h"
+#else
+	#error		"This module requires CONSOLE component"
+#endif
+
+#if COMPONENT_PRINT
+	#include	"../print/print.h"
+#else
+	#error		"This module requires PRINT component"
+#endif
+
+// ========================================
+// Console Commands
+// ========================================
+
+void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]);
+//void Mem25_Demo_Dump(uint8_t argc, uint8_t * argv[]);
 
 
 #endif /* SPI_MEM_DEMO_H_ */

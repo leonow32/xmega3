@@ -7,21 +7,40 @@
 // Template
 // ========================================
 
-#if PRODUCT_AVRIOT
-	// Pinout
-	#define		SPIMEM_DIR_SET					VPORTD.DIR	|=	PIN0_bm
-	#define		SPIMEM_CHIP_SELECT				VPORTD.OUT	&= ~PIN0_bm
-	#define		SPIMEM_CHIP_DESELECT			VPORTD.OUT	|=  PIN0_bm
-	
-	// Wielkosci specyficzne dla 25LC512
-	#define		SPIMEM_SIZE						65535
-	#define		SPIMEM_PAGE_SIZE				128
-	#define		SPIMEM_PAGE_CNT					512
-	
-	// Konfiguracja dodatkowych funkcji
-	#define		SPIMEM_INCLUDE_DUMP				1
+#if TEMPATE
 	
 #endif
 
+// ========================================
+// Dev Board AVR-IoT
+// ========================================
+
+#if PRODUCT_AVRIOT
+	
+	// Pinout
+	#define		MEM25_CS_INIT				VPORTC.DIR	|=	PIN3_bm
+	#define		MEM25_CHIP_SELECT			VPORTC.OUT	&= ~PIN3_bm
+	#define		MEM25_CHIP_DESELECT			VPORTC.OUT	|=  PIN3_bm
+	
+	// Values specific for 25LC512
+	#define		MEM25_SIZE					65535
+	#define		MEM25_PAGE_SIZE				128
+	#define		MEM25_PAGE_CNT				512
+	
+	// Additional stuff
+	#define		MEM25_AUTO_SLEEP_MODE		0
+	#define		MEM25_USE_DEMO_COMMANDS		1
+	
+	#define		MEM25_CONFIG_DONE
+
+#endif
+
+// ========================================
+// Error handling
+// ========================================
+
+#ifndef MEM25_CONFIG_DONE
+	#error "Missing config"
+#endif
 
 #endif /* SPI_MEM_CONFIG_H_ */
