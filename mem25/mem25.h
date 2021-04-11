@@ -42,7 +42,7 @@ void		Mem25_WriteEnable(void);
 void		Mem25_WriteDisble(void);
 void		Mem25_ChipErase(void);
 uint8_t		Mem25_StatusRead(void);
-void		Mem25_StaturWrite(uint8_t Status);
+void		Mem25_StatusWrite(uint8_t Status);
 bool		Mem25_IsBusy(void);
 void		Mem25_WaitForReady(void);
 uint8_t		Mem25_Read(uint16_t Address);

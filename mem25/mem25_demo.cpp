@@ -2,17 +2,65 @@
 #include "mem25_demo.h"
 #if MEM25_USE_DEMO_COMMANDS
 
+
+// Read status
+void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]) {
+	uint8_t Status;
+	
+	// If no argument given, then read status
+	if(argc == 1) {
+		Status = Mem25_StatusRead();
+		Print("HEX: ");
+		Print_Hex(Status);
+		Print("\r\nBIN: ");
+		Print_Bin(Status);
+	}
+	
+	// If there is given an argument, then parse argument and write status
+	else {
+		if(Parse_Hex8(argv[1], &Status)) return;
+		Mem25_StatusWrite(Status);
+		Print_ResponseOK();
+	}
+}
+
+
+// Write enable or disable
+void Mem25_CmdWriteEnableDisable(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		#if CONSOLE_USE_HELP
+			Print("mem25-we [0/1]");
+		#endif
+		return;
+	}
+	
+	switch(*argv[1]) {
+		case '0':
+			Mem25_WriteDisble();
+			Print_ResponseOK();
+			return;
+		case '1':
+			Mem25_WriteEnable();
+			Print_ResponseOK();
+			return;
+		default:
+			Parse_Debug(Parse_UnknownCommand, argv[1]);
+			return;
+	}
+}
+
 // Read bytes from memory
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("mem25-r adr[HEX16] len[DEC16] ");
+			Print("mem25-r adr[HEX16] len[DEC16]");
 		#endif
 		return;
 	}
 	
-	uint8_t Buffer[256];
+	uint8_t Buffer[257];
 	memset(Buffer, 0, sizeof(Buffer));
 	
 	// Argument 1 - address
@@ -21,7 +69,7 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 2 - length
 	uint16_t Length;
-	if(Parse_Dec16(argv[2], &Length, sizeof(Buffer))) return;
+	if(Parse_Dec16(argv[2], &Length, sizeof(Buffer)-1)) return;
 	
 	// Argument 3 optional - display format
 	uint8_t DisplayFormat;
@@ -35,6 +83,7 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	// Execute command
 	Mem25_Read(Address, Buffer, Length);
 	
+	// Display result
 	switch(DisplayFormat) {
 		case 'a':
 			Print((const char *)Buffer);
@@ -47,7 +96,6 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 			Print_NL();
 			Print((const char *)Buffer);
 	}
-	
 }
 
 // Odczytywanie pamiêci
