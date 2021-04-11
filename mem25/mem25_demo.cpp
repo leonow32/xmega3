@@ -50,6 +50,7 @@ void Mem25_CmdWriteEnableDisable(uint8_t argc, uint8_t * argv[]) {
 	}
 }
 
+
 // Read bytes from memory
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	
@@ -98,47 +99,90 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	}
 }
 
-// Odczytywanie pamiêci
-// 
-// void Mem25_Demo_Dump(uint8_t argc, uint8_t * argv[]) {
-// 	
-// 	if(argc == 1) {
-// 		#if CMD_USE_HELP
-// 			Uart_Write("smdump start[hex16] length[HEX16]");
-// 		#endif
-// 		return;
-// 	}
-// 	
-// 	// Agument 1 - adres pocz¹tkowy
-// 	uint16_t Address;
-// 	CmdRes_t CmdRes = Parse_Hex16(argv[1], &Address);
-// 	//CmdRes_t CmdRes = Parse_HexNum(argv[1], &Address, 4);
-// 	if(CmdRes) {
-// 		///Command_Debug(CmdRes, argv[1]);
-// 		return;
-// 	}
-// 	
-// 	// Argument 2 - liczba bajtów do odczytania
-// 	uint16_t Length;
-// 	CmdRes = Parse_Hex16(argv[2], &Length);
-// 	//CmdRes = Parse_HexNum(argv[2], &Length, 4);
-// 	if(CmdRes) {
-// 		///Command_Debug(CmdRes, argv[2]);
-// 		return;
-// 	}
-// 	
-// 	// Pobudka
-// 	Mem25_Wake();
-// 
-// 	// Czekanie na gotowoœæ
-// 	SpiFlash_WaitForReady();
-// 	
-// 	// Wykonanie polecenia
-// 	Mem25_Dump(Address, Length);
-// 	
-// 	// Dobranoc
-// 	Mem25_Sleep();
-// }
+
+// Dump fragment of memory
+void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		#if CONSOLE_USE_HELP
+			Print("mem25-dump adr[HEX16] len[DEC32]");
+		#endif
+		return;
+	}
+	
+	// Argument 1 - Address
+	uint16_t Address;
+	if(Parse_Hex16(argv[1], &Address)) return;
+	Address = Address & 0xFFF0;
+	
+	// Argument 2 - Length
+	uint32_t Length;
+	if(Parse_Dec32(argv[2], &Length)) return;
+	if(Length == 0) {
+		Parse_Debug(Parse_Underflow, argv[2]);
+		return;
+	}
+	
+	// Start of transmission
+	MEM25_CHIP_SELECT;
+	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
+	
+	// Print header
+	Print_Format(ForegroundWhiteBright);
+	Print("\t");
+	for(uint8_t i='0'; i<='F'; i++) {
+		Print(' ');
+		Print(i);
+		Print(' ');
+		if(i == '9') {
+			i = 'A' - 1;
+		}
+	}
+	Print_Format(FormatReset);
+	
+	// Loop for 16 bytes
+	uint8_t Buffer[16];
+	uint16_t Loops = Length / sizeof(Buffer);
+	while(Loops--) {
+		
+		// Read 16 bytes
+		Spi_Read(Buffer, sizeof(Buffer));
+		
+		// New line
+		Print_NL();
+		
+		// Print address
+		Print_Format(ForegroundWhiteBright);
+		Print_Hex(Address);
+		Print_Format(FormatReset);
+		
+		// Print HEX
+		Print('\t');
+		for(uint8_t h=0; h<=15; h++) {
+			Print_Hex(*(Buffer+h), ' ');
+		}
+		
+		// Prins ASCII
+		Print('\t');
+		for(uint8_t h=0; h<=15; h++) {
+			if((*(Buffer+h) >= ' ') && (*(Buffer+h) < 127)) {			// omit non-printable characters
+				Uart_Write(*(Buffer+h));
+			}
+			else {
+				Uart_Write(' ');
+			}
+		}
+		
+		// Increment pointers
+		Address += 16;
+		
+		// Watchdog reset
+		asm volatile("wdr");
+	}
+	
+	// End of transmission
+	MEM25_CHIP_DESELECT;
+}
 
 
 #endif

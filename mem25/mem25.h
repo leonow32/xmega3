@@ -50,7 +50,6 @@ void		Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length);
 void		Mem25_WriteMultiPage(uint16_t Address, const uint8_t * Buffer, uint16_t Length);
 void		Mem25_Write(uint16_t Address, uint8_t Byte);
 void		Mem25_Write(uint16_t Address, const uint8_t * Buffer, uint16_t Length);
-void		Mem25_Dump(uint16_t Start, uint16_t Length);
 
 #endif
 #endif /* MEM25_H_ */

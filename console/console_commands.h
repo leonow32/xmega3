@@ -114,6 +114,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 
 #if MEM25_USE_DEMO_COMMANDS
 	{"mem25-r",			Mem25_CmdRead},
+	{"mem25-dump",		Mem25_CmdDump},
 	{"mem25-s",			Mem25_CmdStatus},
 	{"mem25-we",		Mem25_CmdWriteEnableDisable},
 #endif

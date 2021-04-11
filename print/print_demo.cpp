@@ -47,7 +47,7 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("dmp adr[HEX16] len[DEC16]");
+			Print("dump adr[HEX16] len[DEC16]");
 		#endif
 		return;
 	}

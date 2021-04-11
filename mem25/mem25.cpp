@@ -156,53 +156,5 @@ void Mem25_WriteMultiPage(uint16_t Address, const uint8_t * Buffer, uint16_t Len
 	}
 }
 
-#if MEM25_INCLUDE_DUMP
-void Mem25_Dump(uint16_t Start, uint16_t Length) {
-	
-	uint8_t Buffer[16];
-	
-	uint16_t i = Start & 0xFFF0;
-	
-	// rozpoczêcie transmisji
-	MEM25_CHIP_SELECT;
-	Spi_3(MEM25_READ, (i & 0xFF00) >> 8, i & 0x00FF);
-	
-	// wyœwietlenie nag³ówka
-	Print("\n\rADDR:  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
-	
-	do {
-		// odczytanie 16 bajtów
-		Spi_Transmit(Buffer, Buffer, 16);
-		
-		// Przejœcie do nowej linii
-		Print_NL();
-		
-		// wyœwietlenie adresu
-		Print_Hex(i, ':');
-		Print(' ');
-		
-		// wyœwietlenie HEX
-		for(uint8_t h=0; h<=15; h++) {
-			Print_Hex(*(Buffer+h), ' ');
-		}
-		
-		// wyœwietlenie ASCII
-		for(uint8_t h=0; h<=15; h++) {
-			if((*(Buffer+h) >= ' ') && (*(Buffer+h) < 127)) {			// omijanie znaków specjanych <32 i <127
-				Uart_Write(*(Buffer+h));
-			} 
-			else {
-				Uart_Write(' ');
-			}
-		}
-		
-		// inkrementacja adresu
-		i += 16;
-	} while(i <= Start+Length-1 && i != 0);		// i != 0 zabezpiecza przed przekrêceniem sie licznika po 0xFFFF
-	
-	MEM25_CHIP_DESELECT;
-}
-
-#endif
 
 #endif 
