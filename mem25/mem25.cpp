@@ -37,6 +37,16 @@ void Mem25_WriteDisble(void) {
 	MEM25_CHIP_DESELECT;
 }
 
+
+// Get ID
+uint8_t Mem25_GetID(void) {
+	uint8_t ID;
+	MEM25_CHIP_SELECT;
+	ID = Spi_4(MEM25_WAKE, 0, 0, 0);
+	MEM25_CHIP_DESELECT;
+	return ID;
+}
+
 void Mem25_ChipErase(void) {
 	// po skasowaniu scalaka czekaæ na gotowoœæ przy pomocy Mem25_WaitForReady()
 	MEM25_CHIP_SELECT;

@@ -32,7 +32,11 @@
 
 void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWriteEnableDisable(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]);
 //void Mem25_Demo_Dump(uint8_t argc, uint8_t * argv[]);
 

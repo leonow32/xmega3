@@ -40,6 +40,7 @@ void		Mem25_Sleep(void);
 void		Mem25_Wake(void);
 void		Mem25_WriteEnable(void);
 void		Mem25_WriteDisble(void);
+uint8_t		Mem25_GetID(void);
 void		Mem25_ChipErase(void);
 uint8_t		Mem25_StatusRead(void);
 void		Mem25_StatusWrite(uint8_t Status);

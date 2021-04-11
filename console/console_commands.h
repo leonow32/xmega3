@@ -113,9 +113,13 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if MEM25_USE_DEMO_COMMANDS
-	{"mem25-r",			Mem25_CmdRead},
-	{"mem25-dump",		Mem25_CmdDump},
+	{"mem25",			Mem25_CmdDump},
+	{"mem25-id",		Mem25_CmdGetID},
 	{"mem25-s",			Mem25_CmdStatus},
+	{"mem25-sleep",		Mem25_CmdSleep},
+	{"mem25-wake",		Mem25_CmdWake},
+	{"mem25-r",			Mem25_CmdRead},
+	{"mem25-w",			Mem25_CmdWrite},
 	{"mem25-we",		Mem25_CmdWriteEnableDisable},
 #endif
 

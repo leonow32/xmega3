@@ -51,6 +51,25 @@ void Mem25_CmdWriteEnableDisable(uint8_t argc, uint8_t * argv[]) {
 }
 
 
+// Get ID
+void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]) {
+	Print_Hex(Mem25_GetID());
+}
+
+
+// Sleep
+void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]) {
+	Mem25_Sleep();
+	Print_ResponseOK();
+}
+
+// Wake
+void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]) {
+	Mem25_Wake();
+	Print_ResponseOK();
+}
+
+
 // Read bytes from memory
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	
@@ -97,6 +116,41 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 			Print_NL();
 			Print((const char *)Buffer);
 	}
+}
+
+
+// Write data to memory in ASCII or HEX format
+void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		#if CONSOLE_USE_HELP
+			Print("mem25-w format[a/h] adr[HEX16] data[]");
+		#endif
+		return;
+	}
+	
+	// Argument 2 - address
+	uint16_t Address;
+	if(Parse_Hex16(argv[2], &Address)) return;
+	
+	// Argument 3 - data to write in format apecified in argument 1
+	
+	if(*argv[1] == 'a') {
+		uint8_t Length = strlen((const char *)argv[3]) + 1;
+		Mem25_WriteMultiPage(Address, argv[3], Length);
+	}
+	else if(*argv[1] == 'h') {
+		uint8_t Buffer[128];
+		uint8_t BufferLength;
+		if(Parse_HexString(argv[3], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
+		Mem25_WriteMultiPage(Address, Buffer, BufferLength);
+	}
+	else {
+		Parse_Debug(Parse_UnknownCommand, argv[1]);
+		return;
+	}
+	
+	Print_ResponseOK();
 }
 
 
