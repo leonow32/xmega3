@@ -143,6 +143,10 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	// Loop for 16 bytes
 	uint8_t Buffer[16];
 	uint16_t Loops = Length / sizeof(Buffer);
+	if(Length & 0x0F) {
+		Loops++;
+	}
+	
 	while(Loops--) {
 		
 		// Read 16 bytes

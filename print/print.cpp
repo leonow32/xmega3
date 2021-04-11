@@ -140,12 +140,7 @@ void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_
 
 
 // Byte array printed as HEX with the header and address
-void Print_Dump(const uint8_t * String, uint16_t Length) {
-	
-	uint8_t * Pointer		= (uint8_t *)String;
-	uint16_t LengthForHex	= Length;
-	uint16_t LengthForAscii	= Length;
-	uint16_t i = 0;
+void Print_Dump(uint8_t * Pointer, uint32_t Length) {
 	
 	// Print header
 	Print_Format(ForegroundWhiteBright);
@@ -161,7 +156,12 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 	Print_Format(FormatReset);
 	
 	// Loop for 16 bytes
-	do {
+	uint16_t Loops = Length / 16;
+	if(Length & 0x0F) {
+		Loops++;
+	}
+	
+	while(Loops--) {
 		
 		// New line
 		Print_NL();
@@ -173,41 +173,23 @@ void Print_Dump(const uint8_t * String, uint16_t Length) {
 		
 		// Print as HEX
 		Print('\t');
-		for(uint8_t h=0; h<=15; h++) {
-			
-			// If all bytes are printed
-			if(LengthForHex) {
-				LengthForHex--;
-				Print_Hex(*(Pointer+h), ' ');
-			}
-			else {
-				// Print 3 spaces as a separator between HEX and ASCII visualization
-				Print("   ");
-			}
-		}
+		Print_HexString(Pointer, 16, ' ');
 		
 		// Print as ASCII
 		Print('\t');
 		for(uint8_t h=0; h<=15; h++) {
-			if((*(Pointer+h) >= ' ') && (*(Pointer+h) < 127)) {                             // Ignore special characters with codes <32 and >127
-				Print(*(Pointer+h));
+			uint8_t Character = *Pointer++;
+			if((Character >= ' ') && (Character < 127)) {		// Ignore special characters with codes <32 and >127
+				Print(Character);
 			} 
 			else {
 				Print(' ');
 			}
-			
-			if(--LengthForAscii == 0) {
-				break;
-			}
 		}
-		
-		// Increment pointers
-		Pointer += 16;
-		i += 16;
 		
 		// Watchdog reset
 		asm volatile("wdr");
-	} while(i <= Length-1 && i != 0);
+	}
 }
 
 
