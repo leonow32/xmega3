@@ -759,6 +759,7 @@ Parse_t Parse_HexString(const uint8_t * InputString, uint8_t * OutputString, uin
 
 
 // Parsowanie stringu ASCII
+// Wzraca ci¹g znaków zakoñczonu znakiem NUL
 Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength, const uint8_t MinLength) {
 	
 	// WskaŸniki aktualnie przetwarzanych znaków
@@ -766,8 +767,13 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 	*OutputLength = 0;
 	Parse_t Result = Parse_OK;
 	
+	if(InputString == NULL) {
+		Result = Parse_MissingArgument;
+		goto End;
+	}
+	
 	// przetwarzanie a¿ do napotkania znaku 0
-	while(*InputString != 0) {
+	while(1) {
 		
 		// Kontrola przepe³nienia
 		if(*OutputLength == MaxLength) {
@@ -775,22 +781,33 @@ Parse_t Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, u
 			goto End;
 		}
 		
-		// Kopiowanie znaku
-		*OutputString++ = *InputString++;
-		
 		// Licznie znaków w stringu wynikowym
 		(*OutputLength)++;
+		
+		// Kopiowanie znaku
+		*OutputString = *InputString;
+		
+		// Sprawdzenie czy ju¿ doszliœmy do znaku NUL
+		if(*InputString == NUL) {
+			break;
+		}
+		else {
+			OutputString++;
+			InputString++;
+		}
 	}
 	
 	// Kontrola d³ugoœci
 	if(*OutputLength < MinLength) {
 		Result = Parse_Underflow;
+		//Print_Dec(*OutputLength);
 	}
 	
 	// Wyœwietlenie informacji o ewentualnym b³êdzie i zwrócenie wyniku
 	End:
 	if(Result) {
 		Parse_Debug(Result, OrgArgument);
+		//Parse_Debug(Result, InputString - *OutputLength);
 	}
 	return Result;
 }

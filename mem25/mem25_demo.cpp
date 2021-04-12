@@ -134,14 +134,14 @@ void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Hex16(argv[2], &Address)) return;
 	
 	// Argument 3 - data to write in format apecified in argument 1
-	
+	uint8_t Buffer[128];
+	uint8_t BufferLength;
 	if(*argv[1] == 'a') {
-		uint8_t Length = strlen((const char *)argv[3]) + 1;
-		Mem25_WriteMultiPage(Address, argv[3], Length);
+		if(Parse_AsciiString(argv[3], Buffer, &BufferLength, sizeof(Buffer))) return;
+		Print_Dec(BufferLength);
+		Mem25_WriteMultiPage(Address, Buffer, BufferLength);
 	}
 	else if(*argv[1] == 'h') {
-		uint8_t Buffer[128];
-		uint8_t BufferLength;
 		if(Parse_HexString(argv[3], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
 		Mem25_WriteMultiPage(Address, Buffer, BufferLength);
 	}
