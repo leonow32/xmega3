@@ -120,9 +120,9 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"mem25-wake",		Mem25_CmdWake},
 	{"mem25-r",			Mem25_CmdRead},
 	{"mem25-w",			Mem25_CmdWrite},
-	{"mem25-we",		Mem25_CmdWriteEnableDisable},
+	{"mem25-we",		Mem25_CmdWriteEnable},
+	{"mem25-wd",		Mem25_CmdWriteDisable},
 	{"mem25-CE",		Mem25_CmdChipErase},
-	{"mem25-test",		Mem25_CmdTest},
 #endif
 
 // ========================================

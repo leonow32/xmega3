@@ -8,11 +8,15 @@
 void Mem25_Init(void) {
 	MEM25_CHIP_DESELECT;
 	MEM25_CS_INIT;
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Sleep();
+	#endif
 }
 
 // 
 void Mem25_Sleep(void) {
-	// przed wejœciem w staaktualnie nie odbywa siê zapis do pamiêci przy pomocy Mem25_IsBusy() lub Mem25_WaitForReady()
+	Mem25_WaitForReady();
 	MEM25_CHIP_SELECT;
 	Spi_1(MEM25_SLEEP);
 	MEM25_CHIP_DESELECT;
@@ -25,38 +29,46 @@ void Mem25_Wake(void) {
 	MEM25_CHIP_DESELECT;
 }
 
-void Mem25_WriteEnable(void) {
-	MEM25_CHIP_SELECT;
-	Spi_1(MEM25_WRITE_ENABLE);
-	MEM25_CHIP_DESELECT;
-}
-
-void Mem25_WriteDisble(void) {
-	MEM25_CHIP_SELECT;
-	Spi_1(MEM25_WRITE_DISABLE);
-	MEM25_CHIP_DESELECT;
-}
-
 
 // Get ID
 uint8_t Mem25_GetID(void) {
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Wake();
+	#endif
+	
+	Mem25_WaitForReady();
+	
 	uint8_t ID;
 	MEM25_CHIP_SELECT;
 	ID = Spi_4(MEM25_WAKE, 0, 0, 0);
 	MEM25_CHIP_DESELECT;
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Sleep();
+	#endif
+	
 	return ID;
 }
 
 void Mem25_ChipErase(void) {
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Wake();
+	#endif
+	
 	Mem25_WaitForReady();
 	
 	MEM25_CHIP_SELECT;
 	Spi_1(MEM25_WRITE_ENABLE);
 	MEM25_CHIP_DESELECT;
-	
 	MEM25_CHIP_SELECT;
 	Spi_1(MEM25_ERASE_CHIP);
 	MEM25_CHIP_DESELECT;
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Sleep();
+	#endif
 }
 
 
@@ -83,11 +95,21 @@ void Mem25_WaitForReady(void) {
 
 
 void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Wake();
+	#endif
+	
 	Mem25_WaitForReady();
+	
 	MEM25_CHIP_SELECT;
 	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
 	Spi_Transmit(Buffer, Buffer, Length);
 	MEM25_CHIP_DESELECT;
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Sleep();
+	#endif
 }
 
 
@@ -101,6 +123,10 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		uint16_t ActualStart = Address;
 		uint16_t ActualEnd;
 		uint16_t ActualLength;
+		
+		#if MEM25_AUTO_SLEEP_MODE
+			Mem25_Wake();
+		#endif
 		
 		// pêtla obejmuj¹ca wszystkie wyliczone strony
 		while(ActualPage <= PageEnd) {
@@ -119,10 +145,12 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 			
 			// Sprawdzanie czy pamiêæ jest gotowa do zapisu
 			Mem25_WaitForReady();
-					
+			
 			// Write enable latch
-			Mem25_WriteEnable();
-					
+			MEM25_CHIP_SELECT;
+			Spi_1(MEM25_WRITE_ENABLE);
+			MEM25_CHIP_DESELECT;
+			
 			// Zapis w³aœciwy
 			MEM25_CHIP_SELECT;
 			Spi_3(MEM25_WRITE, (Address & 0xFF00) >> 8, Address & 0x00FF);
@@ -135,23 +163,37 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 			ActualPage++;
 			ActualStart = ActualEnd + 1;
 		}
+		
+		#if MEM25_AUTO_SLEEP_MODE
+			Mem25_Sleep();
+		#endif
 	}
 #else
 	void Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		// Nie uwzglêdnia stronicowania pamiêci!!!
-	
+		
+		#if MEM25_AUTO_SLEEP_MODE
+			Mem25_Wake();
+		#endif
+		
 		// Sprawdzanie czy pamiêæ jest gotowa do zapisu
-		SpiFlash_WaitForReady();
-	
+		Mem25_WaitForReady();
+		
 		// Write enable latch
-		Mem25_WriteEnable();
-	
+		MEM25_CHIP_SELECT;
+		Spi_1(MEM25_WRITE_ENABLE);
+		MEM25_CHIP_DESELECT;
+		
 		// Zapis w³aœciwy
 		MEM25_CHIP_SELECT;
 		Spi_3(MEM25_WRITE, (Address & 0xFF00) >> 8, Address & 0x00FF);
 		//Spi_Stream(Buffer, Buffer, Length);
 		Spi_Write(Buffer, Length);
 		MEM25_CHIP_DESELECT;
+		
+		#if MEM25_AUTO_SLEEP_MODE
+			Mem25_Sleep();
+		#endif
 	}
 #endif
 

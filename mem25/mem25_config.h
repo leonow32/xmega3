@@ -28,7 +28,7 @@
 	#define		MEM25_PAGE_CNT				512
 	
 	// Additional stuff
-	#define		MEM25_AUTO_SLEEP_MODE		0
+	#define		MEM25_AUTO_SLEEP_MODE		1
 	#define		MEM25_MULTIPLE_PAGE_WRITE	1
 	#define		MEM25_USE_DEMO_COMMANDS		1
 	

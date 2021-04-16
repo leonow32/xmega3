@@ -25,29 +25,21 @@ void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Write enable or disable
-void Mem25_CmdWriteEnableDisable(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("mem25-we [0/1]");
-		#endif
-		return;
-	}
-	
-	switch(*argv[1]) {
-		case '0':
-			Mem25_WriteDisble();
-			Print_ResponseOK();
-			return;
-		case '1':
-			Mem25_WriteEnable();
-			Print_ResponseOK();
-			return;
-		default:
-			Parse_Debug(Parse_UnknownCommand, argv[1]);
-			return;
-	}
+// Write enable - set WEL bit in status register
+void Mem25_CmdWriteEnable(uint8_t argc, uint8_t * argv[]) {
+	MEM25_CHIP_SELECT;
+	Spi_1(MEM25_WRITE_ENABLE);
+	MEM25_CHIP_DESELECT;
+	Print_ResponseOK();
+}
+
+
+// Write disable - clear WEL bit in status register
+void Mem25_CmdWriteDisable(uint8_t argc, uint8_t * argv[]) {
+	MEM25_CHIP_SELECT;
+	Spi_1(MEM25_WRITE_DISABLE);
+	MEM25_CHIP_DESELECT;
+	Print_ResponseOK();
 }
 
 
@@ -179,6 +171,10 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 		return;
 	}
 	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Wake();
+	#endif
+	
 	// Start of transmission
 	MEM25_CHIP_SELECT;
 	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
@@ -242,32 +238,16 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	
 	// End of transmission
 	MEM25_CHIP_DESELECT;
+	
+	#if MEM25_AUTO_SLEEP_MODE
+		Mem25_Sleep();
+	#endif
 }
 
 
 void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]) {
 	Mem25_ChipErase();
 	Print_ResponseOK();
-}
-
-
-void Mem25_CmdTest(uint8_t argc, uint8_t * argv[]) {
-	
-	uint8_t Buffer[128];
-	for(uint8_t i=0; i<sizeof(Buffer); i++) {
-		Buffer[i] = i;
-	}
-	
-	Mem25_Write(0x0000, Buffer, sizeof(Buffer));
-	Mem25_Write(0x0100, Buffer, sizeof(Buffer));
-	Mem25_ChipErase();
-	memset(Buffer, 0, sizeof(Buffer));
-	
-	Mem25_Read(0x0000, Buffer, sizeof(Buffer));
-	Print_HexString(Buffer, sizeof(Buffer), ' ', 16);
-	Mem25_Read(0x0100, Buffer, sizeof(Buffer));
-	Print_HexString(Buffer, sizeof(Buffer), ' ', 16);
-	
 }
 
 
