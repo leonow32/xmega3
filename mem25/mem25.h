@@ -46,11 +46,8 @@ uint8_t		Mem25_StatusRead(void);
 void		Mem25_StatusWrite(uint8_t Status);
 bool		Mem25_IsBusy(void);
 void		Mem25_WaitForReady(void);
-uint8_t		Mem25_Read(uint16_t Address);
 void		Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length);
-void		Mem25_WriteMultiPage(uint16_t Address, const uint8_t * Buffer, uint16_t Length);
-void		Mem25_Write(uint16_t Address, uint8_t Byte);
-void		Mem25_Write(uint16_t Address, const uint8_t * Buffer, uint16_t Length);
+void		Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length);
 
 #endif
 #endif /* MEM25_H_ */

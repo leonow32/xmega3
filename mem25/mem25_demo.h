@@ -38,6 +38,6 @@ void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]);
-
-
+void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdTest(uint8_t argc, uint8_t * argv[]);
 #endif /* SPI_MEM_DEMO_H_ */

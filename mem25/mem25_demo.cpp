@@ -138,17 +138,19 @@ void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	uint8_t BufferLength;
 	if(*argv[1] == 'a') {
 		if(Parse_AsciiString(argv[3], Buffer, &BufferLength, sizeof(Buffer))) return;
-		Print_Dec(BufferLength);
-		Mem25_WriteMultiPage(Address, Buffer, BufferLength);
 	}
 	else if(*argv[1] == 'h') {
 		if(Parse_HexString(argv[3], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
-		Mem25_WriteMultiPage(Address, Buffer, BufferLength);
 	}
 	else {
 		Parse_Debug(Parse_UnknownCommand, argv[1]);
 		return;
 	}
+	
+	Print("Lenght: ");
+	Print_Dec(BufferLength);
+	Print_NL();
+	Mem25_Write(Address, Buffer, BufferLength);
 	
 	Print_ResponseOK();
 }
@@ -240,6 +242,32 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	
 	// End of transmission
 	MEM25_CHIP_DESELECT;
+}
+
+
+void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]) {
+	Mem25_ChipErase();
+	Print_ResponseOK();
+}
+
+
+void Mem25_CmdTest(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t Buffer[128];
+	for(uint8_t i=0; i<sizeof(Buffer); i++) {
+		Buffer[i] = i;
+	}
+	
+	Mem25_Write(0x0000, Buffer, sizeof(Buffer));
+	Mem25_Write(0x0100, Buffer, sizeof(Buffer));
+	Mem25_ChipErase();
+	memset(Buffer, 0, sizeof(Buffer));
+	
+	Mem25_Read(0x0000, Buffer, sizeof(Buffer));
+	Print_HexString(Buffer, sizeof(Buffer), ' ', 16);
+	Mem25_Read(0x0100, Buffer, sizeof(Buffer));
+	Print_HexString(Buffer, sizeof(Buffer), ' ', 16);
+	
 }
 
 
