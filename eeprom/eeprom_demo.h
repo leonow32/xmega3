@@ -30,12 +30,8 @@
 #endif
 
 #if EEPROM_USE_DEMO_COMMANDS
-	void EEPROM_Demo_Erase(uint8_t argc, uint8_t * argv[]);
-	void EEPROM_Demo_Fill(uint8_t argc, uint8_t * argv[]);
-	void EEPROM_Demo_ReadByte(uint8_t argc, uint8_t * argv[]);
-	void EEPROM_Demo_ReadString(uint8_t argc, uint8_t * argv[]);
-	void EEPROM_Demo_WriteByte(uint8_t argc, uint8_t * argv[]);
-	void EEPROM_Demo_WriteString(uint8_t argc, uint8_t * argv[]);
+	void EEPROM_CmdErase(uint8_t argc, uint8_t * argv[]);
+	void EEPROM_CmdWrite(uint8_t argc, uint8_t * argv[]);
 #endif
 
 #endif /* EEPROM_DEMO_H_ */

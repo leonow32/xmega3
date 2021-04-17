@@ -80,12 +80,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 #if EEPROM_USE_DEMO_COMMANDS
-	{"ee-r",			EEPROM_Demo_ReadByte},
-	{"ee-rs",			EEPROM_Demo_ReadString},
-	{"ee-w",			EEPROM_Demo_WriteByte},
-	{"ee-ws",			EEPROM_Demo_WriteString},
-	{"ee-er",			EEPROM_Demo_Erase},
-	{"ee-fill",			EEPROM_Demo_Fill},
+	{"ee-w",			EEPROM_CmdWrite},
+	{"ee-E",			EEPROM_CmdErase},
 #endif
 
 // ========================================
@@ -122,7 +118,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"mem25-w",			Mem25_CmdWrite},
 	{"mem25-we",		Mem25_CmdWriteEnable},
 	{"mem25-wd",		Mem25_CmdWriteDisable},
-	{"mem25-CE",		Mem25_CmdChipErase},
+	{"mem25-E",			Mem25_CmdChipErase},
 #endif
 
 // ========================================
