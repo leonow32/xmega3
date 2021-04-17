@@ -37,6 +37,8 @@ void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdWriteAscii(uint8_t argc, uint8_t * argv[]);
+void Mem25_CmdWriteHex(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]);

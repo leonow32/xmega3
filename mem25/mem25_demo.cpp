@@ -55,6 +55,7 @@ void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
+
 // Wake
 void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]) {
 	Mem25_Wake();
@@ -116,28 +117,28 @@ void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("mem25-w format[a/h] adr[HEX16] data[]");
+			Print("mem25-w adr[HEX16] data[] format[a/h]");
 		#endif
 		return;
 	}
 	
-	// Argument 2 - address
-	uint16_t Address;
-	if(Parse_Hex16(argv[2], &Address)) return;
-	
-	// Argument 3 - data to write in format apecified in argument 1
-	uint8_t Buffer[128];
-	uint8_t BufferLength;
-	if(*argv[1] == 'a') {
-		if(Parse_AsciiString(argv[3], Buffer, &BufferLength, sizeof(Buffer))) return;
-	}
-	else if(*argv[1] == 'h') {
-		if(Parse_HexString(argv[3], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
+	// Argument 3- input type Ascii or Hex
+	Parse_t (*ParserPointer)(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength, const uint8_t MinLength);
+	if(argv[3] && *argv[3] == 'h') {
+		ParserPointer = Parse_HexString;
 	}
 	else {
-		Parse_Debug(Parse_UnknownCommand, argv[1]);
-		return;
+		ParserPointer = Parse_AsciiString;
 	}
+	
+	// Argument 1 - address
+	uint16_t Address;
+	if(Parse_Hex16(argv[1], &Address)) return;
+	
+	// Argument 2 - data to write in format apecified in argument 1
+	uint8_t Buffer[128];
+	uint8_t BufferLength;
+	if(ParserPointer(argv[2], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
 	
 	Print("Lenght: ");
 	Print_Dec(BufferLength);
@@ -218,7 +219,7 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 			Print_Hex(*(Buffer+h), ' ');
 		}
 		
-		// Prins ASCII
+		// Print ASCII
 		Print('\t');
 		for(uint8_t h=0; h<=15; h++) {
 			if((*(Buffer+h) >= ' ') && (*(Buffer+h) < 127)) {			// omit non-printable characters
