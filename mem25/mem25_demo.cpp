@@ -122,7 +122,7 @@ void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 		return;
 	}
 	
-	// Argument 3- input type Ascii or Hex
+	// Argument 3 - input type Ascii or Hex
 	Parse_t (*ParserPointer)(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength, const uint8_t MinLength);
 	if(argv[3] && *argv[3] == 'h') {
 		ParserPointer = Parse_HexString;
@@ -223,10 +223,10 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 		Print('\t');
 		for(uint8_t h=0; h<=15; h++) {
 			if((*(Buffer+h) >= ' ') && (*(Buffer+h) < 127)) {			// omit non-printable characters
-				Uart_Write(*(Buffer+h));
+				Print(*(Buffer+h));
 			}
 			else {
-				Uart_Write(' ');
+				Print(' ');
 			}
 		}
 		
