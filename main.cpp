@@ -44,6 +44,10 @@
 	#include	"mcp9808/mcp9808.h"
 #endif
 
+#if COMPONENT_MEM25
+	#include	"mem25/mem25.h"
+#endif
+
 // ========================================
 // Software includes
 // ========================================
@@ -113,6 +117,10 @@ int main(void) {
 	
 	#if COMPONENT_MCP9808
 		MCP9808_Init();
+	#endif
+	
+	#if COMPONENT_MEM25
+		Mem25_Init();
 	#endif
 	
 	// ========================================

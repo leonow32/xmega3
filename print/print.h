@@ -80,7 +80,7 @@ void Print_Hex(const uint8_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint16_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint32_t Data, const uint8_t Separator = 0);
 void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0);
-void Print_Dump(const uint8_t * String, uint16_t Length);
+void Print_Dump(uint8_t * Pointer, uint32_t Length);
 
 // Change text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)
 #if PRINT_USE_COLORS

@@ -77,19 +77,23 @@ void Console_CmdHexString(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_HexString(argv[1], Buffer, &Length)) return;
 	Print("Length: ");
 	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
+	Print("\r\nASC: ");
+	Print((const char *)Buffer);
+	Print("\r\nHEX: ");
+	Print_HexString(Buffer, Length, ' ');
 }
 
 
 void Console_CmdAsciiString(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Buffer[32];
+	uint8_t Buffer[16];
 	uint8_t Length;
 	if(Parse_AsciiString(argv[1], Buffer, &Length, sizeof(Buffer), 3)) return;
 	Print("Length: ");
 	Print_Dec(Length);
-	Print_NL();
-	Print_Dump(Buffer, Length);
+	Print("\r\nASC: ");
+	Print((const char *)Buffer);
+	Print("\r\nHEX: ");
+	Print_HexString(Buffer, Length, ' ');
 }
 
 

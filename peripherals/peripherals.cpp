@@ -25,6 +25,9 @@ void Peripherals_Init(void) {
 	PWM_INIT;
 	INT_INIT;
 	
+	// Unused ATWINC1500
+	PORTA.DIR |= PIN7_bm;
+	PORTA.OUT |= PIN7_bm;
 }
 
 

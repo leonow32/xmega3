@@ -23,6 +23,10 @@
 	#include	"../mcp9808/mcp9808_demo.h"
 #endif
 
+#if COMPONENT_MEM25
+	#include	"../mem25/mem25_demo.h"
+#endif
+
 #if COMPONENT_PRINT
 	#include	"../print/print_demo.h"
 #endif
@@ -105,6 +109,23 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
+// MEM25 demo
+// ========================================
+
+#if MEM25_USE_DEMO_COMMANDS
+	{"mem25",			Mem25_CmdDump},
+	{"mem25-id",		Mem25_CmdGetID},
+	{"mem25-s",			Mem25_CmdStatus},
+	{"mem25-sleep",		Mem25_CmdSleep},
+	{"mem25-wake",		Mem25_CmdWake},
+	{"mem25-r",			Mem25_CmdRead},
+	{"mem25-w",			Mem25_CmdWrite},
+	{"mem25-we",		Mem25_CmdWriteEnable},
+	{"mem25-wd",		Mem25_CmdWriteDisable},
+	{"mem25-CE",		Mem25_CmdChipErase},
+#endif
+
+// ========================================
 // Print demo
 // ========================================
 
@@ -148,3 +169,4 @@ const Console_NamePointer_t Console_CommandList[] = {
 };
 
 #endif /* INTERPRETER_COMMANDS_H_ */
+

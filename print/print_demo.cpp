@@ -47,7 +47,7 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("dmp adr[HEX16] len[DEC16]");
+			Print("dump adr[HEX16] len[DEC16]");
 		#endif
 		return;
 	}
@@ -57,15 +57,15 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Hex16(argv[1], &Address)) return;
 	
 	// Argument 2 - Length
-	uint16_t Length;
-	if(Parse_Dec16(argv[2], &Length)) return;
+	uint32_t Length;
+	if(Parse_Dec32(argv[2], &Length)) return;
 	if(Length == 0) {
 		Parse_Debug(Parse_Underflow, argv[2]);
 		return;
 	}
 	
 	// Execute command
-	Print_Dump((const uint8_t *)Address, Length);
+	Print_Dump((uint8_t *)Address, Length);
 }
 
 
