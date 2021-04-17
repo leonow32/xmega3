@@ -6,6 +6,7 @@ Console				x			x			x			x			x
 EEPROM				x			x			x			x			x
 I2C Master			x						o
 MCP9808				x
+Mem25				x
 Peripherals			x			x			x			x			x
 Print				x			x			x			x			x
 SPI Master			x						o
