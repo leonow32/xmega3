@@ -109,7 +109,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// MEM23 demo
+// MEM23 demo (SPI RAM)
 // ========================================
 
 #if MEM23_USE_DEMO_COMMANDS
@@ -120,7 +120,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// MEM25 demo
+// MEM25 demo (SPI EEPROM)
 // ========================================
 
 #if MEM25_USE_DEMO_COMMANDS
