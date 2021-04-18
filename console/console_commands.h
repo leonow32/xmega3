@@ -23,6 +23,10 @@
 	#include	"../mcp9808/mcp9808_demo.h"
 #endif
 
+#if COMPONENT_MEM23
+	#include	"../mem23/mem23_demo.h"
+#endif
+
 #if COMPONENT_MEM25
 	#include	"../mem25/mem25_demo.h"
 #endif
@@ -105,7 +109,18 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// MEM25 demo
+// MEM23 demo (SPI RAM)
+// ========================================
+
+#if MEM23_USE_DEMO_COMMANDS
+	{"mem23",			Mem23_CmdDump},
+	{"mem23-s",			Mem23_CmdStatus},
+	{"mem23-r",			Mem23_CmdRead},
+	{"mem23-w",			Mem23_CmdWrite},
+#endif
+
+// ========================================
+// MEM25 demo (SPI EEPROM)
 // ========================================
 
 #if MEM25_USE_DEMO_COMMANDS

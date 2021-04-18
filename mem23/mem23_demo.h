@@ -5,7 +5,7 @@
 // Includes
 // ========================================
 
-#include		"mem25.h"
+#include		"mem23.h"
 
 #if COMPONENT_SPI_MASTER
 	#include		"../spi_master/spi_master.h"
@@ -30,15 +30,9 @@
 // Console Commands
 // ========================================
 
-void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdWriteEnable(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdWriteDisable(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]);
-void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]);
+void Mem23_CmdStatus(uint8_t argc, uint8_t * argv[]);
+void Mem23_CmdRead(uint8_t argc, uint8_t * argv[]);
+void Mem23_CmdWrite(uint8_t argc, uint8_t * argv[]);
+void Mem23_CmdDump(uint8_t argc, uint8_t * argv[]);
 
 #endif /* SPI_MEM_DEMO_H_ */

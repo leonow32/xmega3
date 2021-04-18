@@ -44,6 +44,10 @@
 	#include	"mcp9808/mcp9808.h"
 #endif
 
+#if COMPONENT_MEM23
+	#include	"mem23/mem23.h"
+#endif
+
 #if COMPONENT_MEM25
 	#include	"mem25/mem25.h"
 #endif
@@ -117,6 +121,10 @@ int main(void) {
 	
 	#if COMPONENT_MCP9808
 		MCP9808_Init();
+	#endif
+	
+	#if COMPONENT_MEM23
+		Mem23_Init();
 	#endif
 	
 	#if COMPONENT_MEM25
