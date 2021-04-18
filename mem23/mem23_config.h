@@ -54,7 +54,7 @@
 // ========================================
 
 #ifndef MEM23_CONFIG_DONE
-#error "Missing config"
+	#error "Missing config"
 #endif
 
 #endif /* SPI_MEM_CONFIG_H_ */
