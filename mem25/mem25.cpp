@@ -105,7 +105,7 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 	
 	MEM25_CHIP_SELECT;
 	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
-	Spi_Transmit(Buffer, Buffer, Length);
+	Spi_Read(Buffer, Length);
 	MEM25_CHIP_DESELECT;
 	
 	#if MEM25_AUTO_SLEEP_MODE
