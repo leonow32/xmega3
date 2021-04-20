@@ -1,5 +1,5 @@
-#ifndef SPI_MEM_DEMO_H_
-#define SPI_MEM_DEMO_H_
+#ifndef SPI_MEM25_DEMO_H_
+#define SPI_MEM25_DEMO_H_
 
 // ========================================
 // Includes

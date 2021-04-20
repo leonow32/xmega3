@@ -27,6 +27,10 @@
 	#include	"../mem23/mem23_demo.h"
 #endif
 
+#if COMPONENT_MEM24
+	#include	"../mem24/mem24_demo.h"
+#endif
+
 #if COMPONENT_MEM25
 	#include	"../mem25/mem25_demo.h"
 #endif
@@ -117,6 +121,17 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"mem23-s",			Mem23_CmdStatus},
 	{"mem23-r",			Mem23_CmdRead},
 	{"mem23-w",			Mem23_CmdWrite},
+#endif
+
+// ========================================
+// MEM24 demo (I2C EEPROM)
+// ========================================
+
+#if MEM24_USE_DEMO_COMMANDS
+	{"mem24",			Mem24_CmdDump},
+	{"mem24-r",			Mem24_CmdRead},
+	{"mem24-w",			Mem24_CmdWrite},
+	{"mem24-t",			Mem24_CmdTest},
 #endif
 
 // ========================================
