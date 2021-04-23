@@ -34,5 +34,4 @@ void Mem24_CmdRead(uint8_t argc, uint8_t * argv[]);
 void Mem24_CmdWrite(uint8_t argc, uint8_t * argv[]);
 void Mem24_CmdDump(uint8_t argc, uint8_t * argv[]);
 
-void Mem24_CmdTest(uint8_t argc, uint8_t * argv[]);
 #endif /* SPI_MEM_DEMO_H_ */

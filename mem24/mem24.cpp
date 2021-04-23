@@ -13,16 +13,13 @@ void Mem24_Init(void) {
 
 // Read fragment of memory
 Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {	
-	//Mem24_WaitForReady();
-	
-	Mem24_t Result = Mem24_OK;
 	
 	// Try to call memory address
 	uint8_t TryTimes = MEM24_TRY_TIMES;
 	while(TryTimes--) {
 		if(TryTimes == 0) {
-			Result = Mem24_Timeout;
-			goto Stop;
+			I2C_Stop();
+			return Mem24_Error;
 		}
 		
 		if(I2C_Start(MEM24_ADDRESS_WRITE) == 0) {
@@ -32,28 +29,32 @@ Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		_delay_ms(MEM24_TRY_PERIOD_MS);
 	}
 	
+	// Try to write 1st byte of address
 	if(I2C_Write((Address & 0xFF00) >> 8)) {
-		Result = Mem24_TransmissionError;
-		goto Stop;
+		I2C_Stop();
+		return Mem24_Error;
 	}
 	
+	// Try to write 2nd byte of address
 	if(I2C_Write((Address & 0x00FF) >> 0)) {
-		Result = Mem24_TransmissionError;
-		goto Stop;
+		I2C_Stop();
+		return Mem24_Error;
 	}
 	
+	// Call read address
 	if(I2C_Start(MEM24_ADDRESS_READ)) {
-		Result = Mem24_TransmissionError;
-		goto Stop;
+		I2C_Stop();
+		return Mem24_Error;
 	}
 	
+	// Rad data to the buffer
 	while(Length--) {
 		*Buffer++ = I2C_Read();
 	}
 	
-	Stop:
+	// Finish transmission
 	I2C_Stop();
-	return Result;
+	return Mem24_OK;
 	
 }
 
@@ -62,7 +63,6 @@ Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 	
 	// Write with automatic page handling
 	Mem24_t Mem24_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
-		Mem24_t Result = Mem24_OK;
 		uint16_t AddressEnd = Address + Length - 1;
 		uint16_t PageStart = Address / MEM24_PAGE_SIZE;
 		uint16_t PageEnd = AddressEnd / MEM24_PAGE_SIZE;
@@ -87,8 +87,8 @@ Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 			uint8_t TryTimes = MEM24_TRY_TIMES;
 			while(TryTimes--) {
 				if(TryTimes == 0) {
-					Result = Mem24_Timeout;
-					goto Stop;
+					I2C_Stop();
+					return Mem24_Error;
 				}
 				
 				if(I2C_Start(MEM24_ADDRESS_WRITE) == 0) {
@@ -98,48 +98,47 @@ Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 				_delay_ms(MEM24_TRY_PERIOD_MS);
 			}
 			
+			// Try to write 1st byte of address
 			if(I2C_Write((ActualStart & 0xFF00) >> 8)) {
-				Result = Mem24_TransmissionError;
-				goto Stop;
+				I2C_Stop();
+				return Mem24_Error;
 			}
 			
+			// Try to write 2nd byte of address
 			if(I2C_Write((ActualStart & 0x00FF) >> 0)) {
-				Result = Mem24_TransmissionError;
-				goto Stop;
+				I2C_Stop();
+				return Mem24_Error;
 			}
 			
+			// Send buffer
 			for(uint8_t i = 0; i < ActualLength; i++) {
 				if(I2C_Write(Buffer[i])) {
-					Result = Mem24_TransmissionError;
-					goto Stop;
+					I2C_Stop();
+					return Mem24_Error;
 				}
 			}
 			
+			// Finish transmission
 			I2C_Stop();
 			
 			Buffer = Buffer + ActualLength;
-			
 			ActualPage++;
 			ActualStart = ActualEnd + 1;
 		}
 		
-		Stop:
-		I2C_Stop();
-		return Result;
+		return Mem24_OK;
 	}
 
 #else
 	// Write without automatic page handling
 	Mem24_t Mem24_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		
-		Mem24_t Result = Mem24_OK;
-		
 		// Try to call memory address
 		uint8_t TryTimes = MEM24_TRY_TIMES;
 		while(TryTimes--) {
 			if(TryTimes == 0) {
-				Result = Mem24_Timeout;
-				goto Stop;
+				I2C_Stop();
+				return Mem24_Error;
 			}
 			
 			if(I2C_Start(MEM24_ADDRESS_WRITE) == 0) {
@@ -149,27 +148,31 @@ Mem24_t Mem24_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 			_delay_ms(MEM24_TRY_PERIOD_MS);
 		}
 		
+		// Try to write 1st byte of address
 		if(I2C_Write((Address & 0xFF00) >> 8)) {
-			Result = Mem24_TransmissionError;
-			goto Stop;
+			I2C_Stop();
+			return Mem24_Error;
 		}
 		
+		// Try to write 2nd byte of address
 		if(I2C_Write((Address & 0x00FF) >> 0)) {
-			Result = Mem24_TransmissionError;
-			goto Stop;
+			I2C_Stop();
+			return Mem24_Error;
 		}
 		
+		// Send buffer
 		while(Length--) {
 			if(I2C_Write(*Buffer++)) {
-				Result = Mem24_TransmissionError;
-				goto Stop;
+				I2C_Stop();
+				return Mem24_Error;
 			}
 		}
 		
-		Stop:
+		// Finish transmission
 		I2C_Stop();
-		return Result;
+		return Mem24_OK;
 	}
+
 #endif
 
 #endif 

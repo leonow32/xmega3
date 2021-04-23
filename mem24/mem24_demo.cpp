@@ -6,9 +6,8 @@
 // Debug errors
 void Mem24_Debug(Mem24_t Result) {
 	switch(Result) {
-		case Mem24_OK:						Print_ResponseOK();						break;
-		case Mem24_Timeout:					Print_ResponseTimeout();				break;
-		case Mem24_TransmissionError:		Print_ResponseTransmissionError();		break;
+		case Mem24_OK:			Print_ResponseOK();			break;
+		case Mem24_Error:		Print_ResponseError();		break;
 	}
 }
 
@@ -197,28 +196,6 @@ void Mem24_CmdDump(uint8_t argc, uint8_t * argv[]) {
 	I2C_Stop();
 }
 
-
-void Mem24_CmdTest(uint8_t argc, uint8_t * argv[]) {
-	
-	uint8_t Buffer[MEM24_PAGE_SIZE];
-	for(uint8_t i=0; i<MEM24_PAGE_SIZE; i++) {
-		Buffer[i] = i;
-	}
-	
-	// 	for(uint32_t Address = 0; Address < MEM24_SIZE; Address += MEM24_PAGE_SIZE) {
-	// 		Mem24_Write(Address, Buffer, sizeof(Buffer));
-	// 	}
-	
-// 	for(uint32_t Address = 0; Address < MEM24_SIZE; Address += MEM24_PAGE_SIZE) {
-// 		Mem24_Read(Address, Buffer, sizeof(Buffer));
-// 	}
-	
-	Buffer[0] = 0x12;
-	Buffer[1] = 0x34;
-	Mem24_Debug(Mem24_Write(0xABCD, Buffer, 2));
-	//Mem24_Write(0xABCD, Buffer, 2);
-	Mem24_Debug(Mem24_Read(0xABCD, Buffer, 2));
-}
 
 #endif
 #endif

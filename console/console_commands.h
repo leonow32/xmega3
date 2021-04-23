@@ -131,7 +131,6 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"mem24",			Mem24_CmdDump},
 	{"mem24-r",			Mem24_CmdRead},
 	{"mem24-w",			Mem24_CmdWrite},
-	{"mem24-t",			Mem24_CmdTest},
 #endif
 
 // ========================================

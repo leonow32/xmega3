@@ -21,9 +21,8 @@
 // ========================================
 
 enum Mem24_t {
-	Mem24_OK = 0,								// Success
-	Mem24_Timeout,								// Received NACK after calling device address on I2C bus
-	Mem24_TransmissionError,					// Received NACK during write operation
+	Mem24_OK = 0,	// Success
+	Mem24_Error,	// Received NACK after calling device address on I2C bus, timeout or transmisstion broken
 };
 
 // ========================================
