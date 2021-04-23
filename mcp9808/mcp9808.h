@@ -15,7 +15,7 @@
 //  Result type
 enum MCP9808_t {
 	MCP9808_OK = 0,								// Success
-	MCP9808_StartNACK,							// Received NACK after calling device address on I2C bus
+	MCP9808_Timeout,							// Received NACK after calling device address on I2C bus
 	MCP9808_TransmissionError,					// Received NACK during write operation
 };
 

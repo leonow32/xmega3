@@ -17,7 +17,7 @@ MCP9808_t MCP9808_Read(uint8_t Register, uint16_t * Data) {
 	MCP9808_t Result = MCP9808_OK;
 	
 	if(I2C_Start(MCP9808_ADDRESS_WRITE)) {
-		Result = MCP9808_StartNACK;
+		Result = MCP9808_Timeout;
 		goto Stop;
 	}
 	
@@ -27,7 +27,7 @@ MCP9808_t MCP9808_Read(uint8_t Register, uint16_t * Data) {
 	}
 	
 	if(I2C_Start(MCP9808_ADDRESS_READ)) {
-		Result = MCP9808_StartNACK;
+		Result = MCP9808_Timeout;
 		goto Stop;
 	}
 	
@@ -45,7 +45,7 @@ MCP9808_t MCP9808_Write(uint8_t Register, uint16_t Data) {
 	MCP9808_t Result = MCP9808_OK;
 	
 	if(I2C_Start(MCP9808_ADDRESS_WRITE)) {
-		Result = MCP9808_StartNACK;
+		Result = MCP9808_Timeout;
 		I2C_Stop();
 	}
 	

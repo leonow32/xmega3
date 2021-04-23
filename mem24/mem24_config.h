@@ -29,6 +29,8 @@
 	
 	// Additional stuff
 	#define		MEM24_MULTIPLE_PAGE_WRITE	1
+	#define		MEM24_TRY_TIMES				10
+	#define		MEM24_TRY_PERIOD_MS			1
 	#define		MEM24_USE_DEMO_COMMANDS		1
 	
 	#define		MEM24_CONFIG_DONE

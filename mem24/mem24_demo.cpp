@@ -3,6 +3,16 @@
 #if MEM24_USE_DEMO_COMMANDS
 
 
+// Debug errors
+void Mem24_Debug(Mem24_t Result) {
+	switch(Result) {
+		case Mem24_OK:						Print_ResponseOK();						break;
+		case Mem24_Timeout:					Print_ResponseTimeout();				break;
+		case Mem24_TransmissionError:		Print_ResponseTransmissionError();		break;
+	}
+}
+
+
 // Read bytes from memory
 void Mem24_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	
@@ -34,9 +44,14 @@ void Mem24_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// Execute command
-	Mem24_Read(Address, Buffer, Length);
+	Mem24_t Result = Mem24_Read(Address, Buffer, Length);
 	
 	// Display result
+	if(Result) {
+		Mem24_Debug(Result);
+		return;
+	}
+	
 	switch(DisplayFormat) {
 		case 'a':
 			Print((const char *)Buffer);
@@ -83,9 +98,10 @@ void Mem24_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	Print("Lenght: ");
 	Print_Dec(BufferLength);
 	Print_NL();
-	Mem24_Write(Address, Buffer, BufferLength);
 	
-	Print_ResponseOK();
+	// Execute command
+	Mem24_t Result = Mem24_Write(Address, Buffer, BufferLength);
+	Mem24_Debug(Result);
 }
 
 
@@ -199,9 +215,9 @@ void Mem24_CmdTest(uint8_t argc, uint8_t * argv[]) {
 	
 	Buffer[0] = 0x12;
 	Buffer[1] = 0x34;
-	Mem24_Write(0xABCD, Buffer, 2);
+	Mem24_Debug(Mem24_Write(0xABCD, Buffer, 2));
 	//Mem24_Write(0xABCD, Buffer, 2);
-	Mem24_Read(0xABCD, Buffer, 2);
+	Mem24_Debug(Mem24_Read(0xABCD, Buffer, 2));
 }
 
 #endif

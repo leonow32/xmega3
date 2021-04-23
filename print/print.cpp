@@ -232,4 +232,17 @@ void Print_ResponseUnknown(void) {
 	Print("Unknown");
 }
 
+
+void Print_ResponseTimeout(void) {
+	Print_Format(ForegroundRed);
+	Print("Timeout");
+}
+
+
+void Print_ResponseTransmissionError(void) {
+	Print_Format(ForegroundRed);
+	Print("Transmission error");
+}
+
+
 #endif
