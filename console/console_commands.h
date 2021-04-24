@@ -11,6 +11,10 @@
 	#include	"../console/console_demo.h"
 #endif
 
+#if COMPONENT_DS3231
+	#include	"../ds3231/ds3231_demo.h"
+#endif
+
 #if COMPONENT_EEPROM
 	#include	"../eeprom/eeprom_demo.h"
 #endif
