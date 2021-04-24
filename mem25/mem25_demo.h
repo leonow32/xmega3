@@ -25,11 +25,11 @@
 	#error		"This module requires PRINT component"
 #endif
 
-
 // ========================================
 // Console Commands
 // ========================================
 
+void Mem25_Debug(Mem25_t Result);
 void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWriteEnable(uint8_t argc, uint8_t * argv[]);
 void Mem25_CmdWriteDisable(uint8_t argc, uint8_t * argv[]);

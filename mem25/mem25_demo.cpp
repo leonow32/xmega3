@@ -3,6 +3,15 @@
 #if MEM25_USE_DEMO_COMMANDS
 
 
+// Debug errors
+void Mem25_Debug(Mem25_t Result) {
+	switch(Result) {
+		case Mem25_OK:			Print_ResponseOK();			break;
+		case Mem25_Error:		Print_ResponseError();		break;
+	}
+}
+
+
 // Read status
 void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]) {
 	uint8_t Status;
@@ -45,7 +54,15 @@ void Mem25_CmdWriteDisable(uint8_t argc, uint8_t * argv[]) {
 
 // Get ID
 void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]) {
-	Print_Hex(Mem25_GetID());
+	uint8_t ID;
+	Mem25_t Result;
+	Result = Mem25_GetID(&ID);
+	if(Result) {
+		Mem25_Debug(Result);
+	}
+	else {
+		Print_Hex(ID);
+	}
 }
 
 
@@ -94,7 +111,12 @@ void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// Execute command
-	Mem25_Read(Address, Buffer, Length);
+	Mem25_t Result;
+	Result = Mem25_Read(Address, Buffer, Length);
+	if(Result) {
+		Mem25_Debug(Result);
+		return;
+	}
 	
 	// Display result
 	switch(DisplayFormat) {
@@ -143,9 +165,11 @@ void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	Print("Lenght: ");
 	Print_Dec(BufferLength);
 	Print_NL();
-	Mem25_Write(Address, Buffer, BufferLength);
 	
-	Print_ResponseOK();
+	// Execute command
+	Mem25_t Result;
+	Result = Mem25_Write(Address, Buffer, BufferLength);
+	Mem25_Debug(Result);
 }
 
 
@@ -247,8 +271,7 @@ void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
 
 
 void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]) {
-	Mem25_ChipErase();
-	Print_ResponseOK();
+	Mem25_Debug(Mem25_ChipErase());
 }
 
 
