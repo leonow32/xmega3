@@ -30,6 +30,7 @@
 // ========================================
 
 void DS3231_Debug(DS3231_t Result);
-
+void DS3231_CmdRead(uint8_t argc, uint8_t * argv[]);
+void DS3231_CmdWrite(uint8_t argc, uint8_t * argv[]);
 
 #endif /* SPI_MEM_DEMO_H_ */

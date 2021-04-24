@@ -28,6 +28,7 @@
 	#define		DS3231_ADDRESS_READ			0xD1
 	
 	// Additional stuff
+	#define		DS3231_SYNC_SYSTEM_TIME		1
 	#define		DS3231_USE_DEMO_COMMANDS	1
 	
 	#define		DS3231_CONFIG_DONE

@@ -84,6 +84,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
+// DS3231 demo
+// ========================================
+
+#if DS3231_USE_DEMO_COMMANDS
+	{"ds3231",			DS3231_CmdRead},
+	{"ds3231-w",		DS3231_CmdWrite},
+#endif
+
+// ========================================
 // Internal EEPROM demo
 // ========================================
 
