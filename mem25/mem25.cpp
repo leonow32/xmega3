@@ -167,7 +167,6 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 #else
 	// Write without automatic page handling
 	void Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
-		// Nie uwzglêdnia stronicowania pamiêci!!!
 		
 		#if MEM25_AUTO_SLEEP_MODE
 			Mem25_Wake();

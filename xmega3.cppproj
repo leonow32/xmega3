@@ -109,8 +109,9 @@
       <Value>COMPONENT_EEPROM</Value>
       <Value>COMPONENT_I2C_MASTER</Value>
       <Value>COMPONENT_MCP9808</Value>
-      <Value>COMPONENT_MEM23</Value>
-      <Value>COMPONENT_MEM25=0</Value>
+      <Value>COMPONENT_MEM23=0</Value>
+      <Value>COMPONENT_MEM24</Value>
+      <Value>COMPONENT_MEM25=1</Value>
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
       <Value>COMPONENT_SPI_MASTER</Value>
@@ -549,6 +550,21 @@
     <Compile Include="mem23\mem23_demo.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mem24\mem24.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mem24\mem24.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mem24\mem24_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mem24\mem24_demo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mem24\mem24_demo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="mem25\mem25.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -667,6 +683,7 @@
     <Folder Include="mcp9808" />
     <Folder Include="mem25" />
     <Folder Include="mem23" />
+    <Folder Include="mem24" />
     <Folder Include="uart_monitor" />
     <Folder Include="spi_master" />
     <Folder Include="print" />

@@ -48,6 +48,10 @@
 	#include	"mem23/mem23.h"
 #endif
 
+#if COMPONENT_MEM24
+	#include	"mem24/mem24.h"
+#endif
+
 #if COMPONENT_MEM25
 	#include	"mem25/mem25.h"
 #endif

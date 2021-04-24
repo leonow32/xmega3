@@ -94,7 +94,8 @@ void Print_ResponseOK(void);
 void Print_ResponseError(void);
 void Print_ResponseNotFound(void);
 void Print_ResponseUnknown(void);
-
+void Print_ResponseTimeout(void);
+void Print_ResponseTransmissionError(void);
 #endif /* COMPONENT_PRINT */
 #endif /* PRINT_H_ */
 
