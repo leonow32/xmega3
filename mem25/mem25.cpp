@@ -30,38 +30,42 @@ void Mem25_Wake(void) {
 }
 
 // Get ID
-uint8_t Mem25_GetID(void) {
+Mem25_t Mem25_GetID(uint8_t * ID) {
 	
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Wake();
 	#endif
 	
-	Mem25_WaitForReady();
+	Mem25_t Result;
+	Result = Mem25_WaitForReady();
+	if(Result) {
+		return Result;
+	}
 	
-	uint8_t ID;
 	MEM25_CHIP_SELECT;
-	ID = Spi_4(MEM25_WAKE, 0, 0, 0);
+	*ID = Spi_4(MEM25_WAKE, 0, 0, 0);
 	MEM25_CHIP_DESELECT;
 	
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Sleep();
 	#endif
 	
-	return ID;
+	return Mem25_OK;
 }
 
 // Erase whole memory
-void Mem25_ChipErase(void) {
+Mem25_t Mem25_ChipErase(void) {
 	
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Wake();
 	#endif
 	
-	Mem25_WaitForReady();
+	Mem25_t Result;
+	Result = Mem25_WaitForReady();
+	if(Result) {
+		return Result;
+	}
 	
-	MEM25_CHIP_SELECT;
-	Spi_1(MEM25_WRITE_ENABLE);
-	MEM25_CHIP_DESELECT;
 	MEM25_CHIP_SELECT;
 	Spi_1(MEM25_ERASE_CHIP);
 	MEM25_CHIP_DESELECT;
@@ -69,6 +73,8 @@ void Mem25_ChipErase(void) {
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Sleep();
 	#endif
+	
+	return Mem25_OK;
 }
 
 // Get status
@@ -88,20 +94,44 @@ void Mem25_StatusWrite(uint8_t Status) {
 }
 
 // Loop as long as chip isn't ready for new commands (good idea to have watchdog enabled)
-void Mem25_WaitForReady(void) {
-	MEM25_CHIP_SELECT;
-	while(Spi_2(MEM25_STATUS_READ, 0) & 0b00000001);
-	MEM25_CHIP_DESELECT;
+Mem25_t Mem25_WaitForReady(void) {
+	
+	for(uint8_t i = 0; i < MEM25_TRY_TIMES; i++) {
+		
+		// Set write enable latch
+		MEM25_CHIP_SELECT;
+		Spi_1(MEM25_WRITE_ENABLE);
+		MEM25_CHIP_DESELECT;
+		
+		// Read status register
+		MEM25_CHIP_SELECT;
+		uint8_t Test = Spi_2(MEM25_STATUS_READ, 0);
+		MEM25_CHIP_DESELECT;
+		
+		// Check if Write In Progress bit = 0 and Write Enable = 1
+		if((Test & 0b00000011) == 0b00000010) {
+			return Mem25_OK;
+		}
+		
+		// Sleep
+		_delay_ms(MEM25_TRY_PERIOD_MS);
+	}
+	
+	return Mem25_Error;
 }
 
 // Read fragment of memory
-void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
+Mem25_t Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 	
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Wake();
 	#endif
 	
-	Mem25_WaitForReady();
+	Mem25_t Result;
+	Result = Mem25_WaitForReady();
+	if(Result) {
+		return Result;
+	}
 	
 	MEM25_CHIP_SELECT;
 	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
@@ -111,13 +141,15 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 	#if MEM25_AUTO_SLEEP_MODE
 		Mem25_Sleep();
 	#endif
+	
+	return Mem25_OK;
 }
 
 // Write buffer to the memory
 #if MEM25_MULTIPLE_PAGE_WRITE
 	
 	// Write with automatic page handling
-	void Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
+	Mem25_t Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		uint16_t AddressEnd = Address + Length - 1;
 		uint16_t PageStart = Address / MEM25_PAGE_SIZE;
 		uint16_t PageEnd = AddressEnd / MEM25_PAGE_SIZE;
@@ -142,11 +174,11 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 			}
 			ActualLength = ActualEnd - ActualStart + 1;
 			
-			Mem25_WaitForReady();
-			
-			MEM25_CHIP_SELECT;
-			Spi_1(MEM25_WRITE_ENABLE);
-			MEM25_CHIP_DESELECT;
+			Mem25_t Result;
+			Result = Mem25_WaitForReady();
+			if(Result) {
+				return Result;
+			}
 			
 			MEM25_CHIP_SELECT;
 			Spi_3(MEM25_WRITE, (ActualStart & 0xFF00) >> 8, ActualStart & 0x00FF);
@@ -162,21 +194,23 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		#if MEM25_AUTO_SLEEP_MODE
 			Mem25_Sleep();
 		#endif
+		
+		return Mem25_OK;
 	}
 
 #else
 	// Write without automatic page handling
-	void Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
+	Mem25_t Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		
 		#if MEM25_AUTO_SLEEP_MODE
 			Mem25_Wake();
 		#endif
 		
-		Mem25_WaitForReady();
-		
-		MEM25_CHIP_SELECT;
-		Spi_1(MEM25_WRITE_ENABLE);
-		MEM25_CHIP_DESELECT;
+		Mem25_t Result;
+		Result = Mem25_WaitForReady();
+		if(Result) {
+			return Result;
+		}
 		
 		MEM25_CHIP_SELECT;
 		Spi_3(MEM25_WRITE, (Address & 0xFF00) >> 8, Address & 0x00FF);
@@ -186,6 +220,8 @@ void Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length) {
 		#if MEM25_AUTO_SLEEP_MODE
 			Mem25_Sleep();
 		#endif
+		
+		return Mem25_OK;
 	}
 #endif
 

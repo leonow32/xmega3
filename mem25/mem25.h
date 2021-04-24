@@ -7,6 +7,7 @@
 // ========================================
 
 #include	<avr/io.h>
+#include	<util/delay.h>
 #include	"mem25_config.h"
 
 #if COMPONENT_SPI_MASTER
@@ -14,6 +15,15 @@
 #else
 	#error		"This module requires SPI_MASTER component"
 #endif
+
+// ========================================
+// Result type
+// ========================================
+
+enum Mem25_t {
+	Mem25_OK = 0,	// Success
+	Mem25_Error,	// Timeout
+};
 
 // ========================================
 // Commands
@@ -38,14 +48,13 @@
 void		Mem25_Init(void);
 void		Mem25_Sleep(void);
 void		Mem25_Wake(void);
-uint8_t		Mem25_GetID(void);
-void		Mem25_ChipErase(void);
+Mem25_t		Mem25_GetID(uint8_t * ID);
+Mem25_t		Mem25_ChipErase(void);
 uint8_t		Mem25_StatusRead(void);
 void		Mem25_StatusWrite(uint8_t Status);
-bool		Mem25_IsBusy(void);
-void		Mem25_WaitForReady(void);
-void		Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length);
-void		Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length);
+Mem25_t		Mem25_WaitForReady(void);
+Mem25_t		Mem25_Read(uint16_t Address, uint8_t * Buffer, uint16_t Length);
+Mem25_t		Mem25_Write(uint16_t Address, uint8_t * Buffer, uint16_t Length);
 
 #endif
 #endif /* MEM25_H_ */

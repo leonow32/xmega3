@@ -22,6 +22,7 @@
 	// Additional stuff
 	#define		MEM25_AUTO_SLEEP_MODE		1
 	#define		MEM25_MULTIPLE_PAGE_WRITE	1
+	
 	#define		MEM25_USE_DEMO_COMMANDS		1
 	
 	#define		MEM25_CONFIG_DONE
@@ -46,7 +47,9 @@
 	
 	// Additional stuff
 	#define		MEM25_AUTO_SLEEP_MODE		1
-	#define		MEM25_MULTIPLE_PAGE_WRITE	1
+	#define		MEM25_MULTIPLE_PAGE_WRITE	0
+	#define		MEM25_TRY_TIMES				10
+	#define		MEM25_TRY_PERIOD_MS			1
 	#define		MEM25_USE_DEMO_COMMANDS		1
 	
 	#define		MEM25_CONFIG_DONE
