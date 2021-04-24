@@ -111,7 +111,7 @@
       <Value>COMPONENT_MCP9808</Value>
       <Value>COMPONENT_MEM23=0</Value>
       <Value>COMPONENT_MEM24</Value>
-      <Value>COMPONENT_MEM25=1</Value>
+      <Value>COMPONENT_MEM25</Value>
       <Value>COMPONENT_PERIPHERALS</Value>
       <Value>COMPONENT_PRINT</Value>
       <Value>COMPONENT_SPI_MASTER</Value>

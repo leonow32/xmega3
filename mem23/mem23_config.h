@@ -1,7 +1,7 @@
 // Version 2.0.0
 
-#ifndef SPI_MEM_CONFIG_H_
-#define SPI_MEM_CONFIG_H_
+#ifndef MEM23_CONFIG_H_
+#define MEM23_CONFIG_H_
 
 // ========================================
 // Template
