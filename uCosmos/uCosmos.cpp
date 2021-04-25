@@ -146,7 +146,7 @@ void TaskScheduler(void) {
 					Print_NL();
 					
 					#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-						Os_TimePrint();
+						Print_Time();
 					#endif
 					
 					Print("Task(");
@@ -240,7 +240,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 	#if OS_DEBUG_MESSAGES_SHOW
 		Print_NL();
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		Print("TaskAdd(");
 		#if OS_USE_TASK_IDENTIFY
@@ -387,7 +387,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		
 		Print("TaskClose(");
@@ -490,7 +490,7 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		
 		Print("TaskPeriodChange(");
@@ -874,38 +874,9 @@ ISR(RTC_PIT_vect) {													// Przerwanie wywo³ywane co 1 sekundê
 }
 
 
-// Na potrzeby Os_TimePrint(), ¿eby zaoszczêdziæ trochê miejsca programu
-static void Os__DecXXprint(uint8_t Dec) {
-	Print(Dec / 10 + '0');
-	Print(Dec % 10 + '0');
-}
-
-
-// Wyœwietlenie czasu podanego w formacie time_t
-void Os_TimePrint(time_t Time) {
-	
-	tm TimeStruct;
-	if(Time == 0xFFFFFFFF) Time = 0;
-	gmtime_r(&Time, &TimeStruct);
-	
-	Os__DecXXprint(20);
-	Os__DecXXprint(TimeStruct.tm_year - 100);
- 	Print('-');
-	Os__DecXXprint(TimeStruct.tm_mon + 1);
-	Print('-');
-	Os__DecXXprint(TimeStruct.tm_mday);
-	Print(' ');
-	Os__DecXXprint(TimeStruct.tm_hour);
-	Print(':');
-	Os__DecXXprint(TimeStruct.tm_min);
-	Print(':');
-	Os__DecXXprint(TimeStruct.tm_sec);
-}
-
-
 // Wyœwietlenie czasu w formacie YYYY-MM-DD hh:mm:ss
 void Os_TimePrint(uint8_t argc, uint8_t * argv[]) {
-	Os_TimePrint(Os_Time);
+	Print_Time(Os_Time);
 }
 
 
@@ -918,7 +889,7 @@ void Os_TimeSet(uint8_t YY, uint8_t MM, uint8_t DD, uint8_t hh, uint8_t mm, uint
 	NewTime.tm_hour = hh;
 	NewTime.tm_min = mm;
 	NewTime.tm_sec = ss;
-
+	
 	cli();
 	Os_Time = mk_gmtime(&NewTime);
 	sei();
