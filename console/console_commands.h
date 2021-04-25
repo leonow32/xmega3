@@ -171,6 +171,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"color",			Print_CmdColor},
 	{"ascii",			Print_CmdAscii},
 	{"dump",			Print_CmdDump},
+	{"timet",			Print_CmdTimet},
+	{"times",			Print_CmdTimes},
 #endif
 
 // ========================================

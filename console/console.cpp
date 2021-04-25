@@ -327,7 +327,6 @@ void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 	Print(": ");
 	
 	switch(Result) {
-		case Parse_NotReady:							Print("Not ready");							break;
 		case Parse_UnknownCommand:						Print("Unknown command");					break;
 		case Parse_NoInput:								Print("No input");							break;
 		case Parse_Overflow:							Print("Overflow");							break;
@@ -336,8 +335,6 @@ void Parse_Debug(const Parse_t Result, const uint8_t * Argument) {
 		case Parse_ParseError:							Print("Parse error");						break;
 		case Parse_ExpectedHex:							Print("Expected Hex");						break;
 		case Parse_ExpectedDec:							Print("Expected Dec");						break;
-		case Parse_ReceivedACK:							Print("Received ACK");						break;
-		case Parse_ReceivedNAK:							Print("Received NAK");						break;
 		default:										Print_ResponseUnknown();					break;
 	}
 }
@@ -828,6 +825,55 @@ Parse_t Parse_AsciiCharacter(const uint8_t * Argument, uint8_t * Output) {
 	}
 	
 	// Wyœwietlenie informacji o ewentualnym b³êdzie i zwrócenie wyniku
+	if(Result) {
+		Parse_Debug(Result, Argument);
+	}
+	return Result;
+}
+
+
+// Parse time given in format YYMMDDhhmmss
+Parse_t Parse_Time(const uint8_t * Argument, time_t * Output) {
+	
+	Parse_t Result = Parse_OK;
+	
+	// Sanity check
+	if(Argument == NULL) {
+		Result = Parse_MissingArgument;
+		goto End;
+	}
+	
+	if(strlen((const char *)Argument) != 12) {
+		Result = Parse_ParseError;
+		goto End;
+	}
+	
+	// Parse characters into table
+	uint8_t DateAsNumbers[6];
+	for(uint8_t i=0; i<sizeof(DateAsNumbers); i++) {
+		DateAsNumbers[i] = ((*Argument++) - '0') * 10;
+		DateAsNumbers[i] += ((*Argument++) - '0');
+	}
+	
+// 	for(uint8_t i=0; i<sizeof(DateAsNumbers); i++) {
+// 		Print_Dec(i);
+// 		Print('\t');
+// 		Print_Dec(DateAsNumbers[i]);
+// 		Print_NL();
+// 	}
+	
+	// Calculation
+	tm NewTime;
+	NewTime.tm_year		= DateAsNumbers[0] + 100;
+	NewTime.tm_mon		= DateAsNumbers[1] - 1;
+	NewTime.tm_mday		= DateAsNumbers[2];
+	NewTime.tm_hour		= DateAsNumbers[3];
+	NewTime.tm_min		= DateAsNumbers[4];
+	NewTime.tm_sec		= DateAsNumbers[5];
+	*Output = mk_gmtime(&NewTime);
+	
+	// Wyœwietlenie informacji o ewentualnym b³êdzie i zwrócenie wyniku
+	End:
 	if(Result) {
 		Parse_Debug(Result, Argument);
 	}

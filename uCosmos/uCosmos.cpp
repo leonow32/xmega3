@@ -967,50 +967,6 @@ task_t Os_TimeRecovery(runmode_t RunMode) {
 #if OS_USE_TIMESET_COMMAND
 void Os_TimeSet(uint8_t argc, uint8_t * argv[]) {
 	
-	// Kontrola czy przekazano wszystkie argumenty
-	if(argc != 7) {
-		#if CMD_USE_HELP
-			Print("timeset YY MM DD hh mm ss");
-		#endif
-		return;
-	}
-	
-	// Struktura do przechowywania czasu w formacie YY MM DD hh mm ss
-	tm NewTime;
-	
-	// Argument 1 - rok
-	uint8_t Year;
-	if(Parse_Dec8(argv[1], &Year)) return;
-	NewTime.tm_year = Year + 100;
-	
-	// Argument 2 - miesi¹c
-	if(Parse_Dec8(argv[2], (uint8_t*)&NewTime.tm_mon)) return;
-	NewTime.tm_mon--;
-	
-	// Argument 3 - dzieñ
-	if(Parse_Dec8(argv[3], (uint8_t*)&NewTime.tm_mday)) return;	
-	
-	// Argument 4 - godzina
-	if(Parse_Dec8(argv[4], (uint8_t*)&NewTime.tm_hour)) return;	
-	
-	// Argument 5 - minuta
-	if(Parse_Dec8(argv[5], (uint8_t*)&NewTime.tm_min)) return;
-	
-	// Argument 6 - sekunda
-	if(Parse_Dec8(argv[6], (uint8_t*)&NewTime.tm_sec)) return;
-
-	// Ustawienie czasu w systemie
- 	cli();
- 	Os_Time = mk_gmtime(&NewTime);
-	 
-	#if OS_USE_TIME_RECOVERY
-		Os_TimeRecoverySave();
-	#endif
-	
- 	sei();	
-	 
-	//Console_ResponseOK();
-
 }
 #endif
 
