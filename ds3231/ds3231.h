@@ -6,6 +6,10 @@
 // Includes
 // ========================================
 
+// DEBUG
+#include "../print/print.h"
+
+#include	<time.h>
 #include	<avr/io.h>
 #include	<util/delay.h>
 #include	"ds3231_config.h"
@@ -30,6 +34,8 @@ enum DS3231_t {
 // ========================================
 
 void		DS3231_Init(void);
+DS3231_t	DS3231_Read(time_t * Time);
+DS3231_t	DS3231_Write(time_t * Time);
 
 
 #endif

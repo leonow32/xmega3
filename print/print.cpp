@@ -147,10 +147,10 @@ static void Print_Dec2digits(uint8_t Dec) {
 
 
 // Print time
-void Print_Time(time_t Time) {
+void Print_Time(time_t * Time) {
 	tm TimeStruct;
-	if(Time == 0xFFFFFFFF) Time = 0;
-	gmtime_r(&Time, &TimeStruct);
+	if(*Time == 0xFFFFFFFF) *Time = 0;
+	gmtime_r(Time, &TimeStruct);
 	
 	Print_Dec2digits(20);
 	Print_Dec2digits(TimeStruct.tm_year - 100);

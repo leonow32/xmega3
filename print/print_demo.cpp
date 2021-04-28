@@ -69,7 +69,7 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Convect time_t to  human readable time
+// Convect time_t to human readable time
 void Print_CmdTimet(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -84,16 +84,16 @@ void Print_CmdTimet(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Dec32(argv[1], &Time)) return;
 	
 	// Execute command
-	Print_Time(time_t(Time));
+	Print_Time((time_t*)Time);
 }
 
 
-// Convect time_t to  human readable time
+// Convect human readable time to time_t
 void Print_CmdTimes(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("xxxx");
+			Print("times YYMMDDhhmmss");
 		#endif
 		return;
 	}
@@ -103,7 +103,7 @@ void Print_CmdTimes(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Time(argv[1], &Time)) return;
 	
 	// Execute command
-	Print_Time(Time);
+	Print_Time(&Time);
 	Print_NL();
 	Print_Dec(uint32_t(Time));
 }

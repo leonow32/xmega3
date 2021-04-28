@@ -855,13 +855,6 @@ Parse_t Parse_Time(const uint8_t * Argument, time_t * Output) {
 		DateAsNumbers[i] += ((*Argument++) - '0');
 	}
 	
-// 	for(uint8_t i=0; i<sizeof(DateAsNumbers); i++) {
-// 		Print_Dec(i);
-// 		Print('\t');
-// 		Print_Dec(DateAsNumbers[i]);
-// 		Print_NL();
-// 	}
-	
 	// Calculation
 	tm NewTime;
 	NewTime.tm_year		= DateAsNumbers[0] + 100;

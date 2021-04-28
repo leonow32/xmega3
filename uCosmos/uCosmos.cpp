@@ -876,7 +876,8 @@ ISR(RTC_PIT_vect) {													// Przerwanie wywo³ywane co 1 sekundê
 
 // Wyœwietlenie czasu w formacie YYYY-MM-DD hh:mm:ss
 void Os_TimePrint(uint8_t argc, uint8_t * argv[]) {
-	Print_Time(Os_Time);
+	time_t TimeLocal = Os_Time;
+	Print_Time(&TimeLocal);
 }
 
 
