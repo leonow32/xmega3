@@ -7,6 +7,14 @@
 
 // Init
 void DS3231_Init(void) {
+	
+	#if DS3231_SYNC_SYSTEM_TIME
+		time_t Time;
+		if(DS3231_Read(&Time) == DS3231_OK) {
+			Os_Time = Time;
+		}
+	#endif
+	
 	return;
 }
 

@@ -20,6 +20,12 @@
 	#error		"This module requires I2C_MASTER component"
 #endif
 
+#if DS3231_SYNC_SYSTEM_TIME && COMPONENT_UCOSMOS
+	#include	"../uCosmos/uCosmos.h"
+#else
+	#error		"This module requires UCOSMOS component"
+#endif
+
 // ========================================
 // Result type
 // ========================================
