@@ -12,6 +12,7 @@ void DS3231_Debug(DS3231_t Result) {
 }
 
 
+// Read time from DS3231 and display in human readable format
 void DS3231_CmdRead(uint8_t argc, uint8_t * argv[]) {
 	time_t Time;
 	DS3231_t Result;
@@ -24,6 +25,7 @@ void DS3231_CmdRead(uint8_t argc, uint8_t * argv[]) {
 }
 
 
+// Set time in DS3231
 void DS3231_CmdWrite(uint8_t argc, uint8_t * argv[]) {
 	time_t Time;
 	if(Parse_Time(argv[1], &Time)) return;

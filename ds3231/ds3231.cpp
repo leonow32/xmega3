@@ -70,6 +70,7 @@ DS3231_t DS3231_Read(time_t * Time) {
 	return DS3231_OK;
 }
 
+
 // Write time
 DS3231_t DS3231_Write(time_t * Time) {
 	
@@ -112,8 +113,6 @@ DS3231_t DS3231_Write(time_t * Time) {
 	I2C_Stop();
 	return Result;
 }
-
-
 
 
 #endif

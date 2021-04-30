@@ -138,7 +138,7 @@
   </avrgcccpp.linker.libraries.Libraries>
   <avrgcccpp.linker.memorysettings.Flash>
     <ListValues>
-      <Value>.text=0x0400</Value>
+      <Value>.text=0x0000</Value>
     </ListValues>
   </avrgcccpp.linker.memorysettings.Flash>
   <avrgcccpp.assembler.general.IncludePaths>

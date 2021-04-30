@@ -69,7 +69,7 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Convect time_t to human readable time
+// Convert time_t to human readable time
 void Print_CmdTimet(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
@@ -88,7 +88,7 @@ void Print_CmdTimet(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-// Convect human readable time to time_t
+// Convert human readable time to time_t
 void Print_CmdTimes(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
