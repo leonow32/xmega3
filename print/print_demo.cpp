@@ -69,5 +69,45 @@ void Print_CmdDump(uint8_t argc, uint8_t * argv[]) {
 }
 
 
+// Convert time_t to human readable time
+void Print_CmdTimet(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		#if CONSOLE_USE_HELP
+			Print("timet [DEC32]");
+		#endif
+		return;
+	}
+	
+	// Argument 1 - time as a number of seconds since 2000.01.01 00:00:00
+	uint32_t Time;
+	if(Parse_Dec32(argv[1], &Time)) return;
+	
+	// Execute command
+	Print_Time((time_t*)Time);
+}
+
+
+// Convert human readable time to time_t
+void Print_CmdTimes(uint8_t argc, uint8_t * argv[]) {
+	
+	if(argc == 1) {
+		#if CONSOLE_USE_HELP
+			Print("times YYMMDDhhmmss");
+		#endif
+		return;
+	}
+	
+	// Argument 1 - time as a number of seconds since 2000.01.01 00:00:00
+	time_t Time;
+	if(Parse_Time(argv[1], &Time)) return;
+	
+	// Execute command
+	Print_Time(&Time);
+	Print_NL();
+	Print_Dec(uint32_t(Time));
+}
+
+
 #endif
 #endif

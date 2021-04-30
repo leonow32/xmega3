@@ -152,7 +152,6 @@ extern volatile uint8_t Os_Ticks;
 #if OS_USE_TIME
 	extern volatile time_t Os_Time;
 	void		Os_TimePrint(uint8_t argc = 0, uint8_t * argv[] = NULL);
-	void		Os_TimePrint(time_t Time);
 	bool		Os_TimeValidCheck(void);
 	void		Os_TimeInvalid(void);
 	void		Os_TimeSet(uint8_t argc, uint8_t * argv[]);

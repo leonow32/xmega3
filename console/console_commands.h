@@ -11,6 +11,10 @@
 	#include	"../console/console_demo.h"
 #endif
 
+#if COMPONENT_DS3231
+	#include	"../ds3231/ds3231_demo.h"
+#endif
+
 #if COMPONENT_EEPROM
 	#include	"../eeprom/eeprom_demo.h"
 #endif
@@ -77,6 +81,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"hexstr",			Console_CmdHexString},
 	{"ascstr",			Console_CmdAsciiString},
 	{"ascchr",			Console_CmdAsciiCharacter},
+#endif
+
+// ========================================
+// DS3231 demo
+// ========================================
+
+#if DS3231_USE_DEMO_COMMANDS
+	{"ds3231",			DS3231_CmdRead},
+	{"ds3231-w",		DS3231_CmdWrite},
 #endif
 
 // ========================================
@@ -158,6 +171,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"color",			Print_CmdColor},
 	{"ascii",			Print_CmdAscii},
 	{"dump",			Print_CmdDump},
+	{"timet",			Print_CmdTimet},
+	{"times",			Print_CmdTimes},
 #endif
 
 // ========================================
@@ -165,7 +180,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if SPI_MASTER_USE_DEMO_COMMANDS
-	{"spi",					Spi_CmdTransmit},
+	{"spi",				Spi_CmdTransmit},
 #endif
 
 // ========================================

@@ -139,6 +139,34 @@ void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_
 }
 
 
+// Na potrzeby Os_TimePrint(), ¿eby zaoszczêdziæ trochê miejsca programu
+static void Print_Dec2digits(uint8_t Dec) {
+	Print(Dec / 10 + '0');
+	Print(Dec % 10 + '0');
+}
+
+
+// Print time
+void Print_Time(time_t * Time) {
+	tm TimeStruct;
+	if(*Time == 0xFFFFFFFF) *Time = 0;
+	gmtime_r(Time, &TimeStruct);
+	
+	Print_Dec2digits(20);
+	Print_Dec2digits(TimeStruct.tm_year - 100);
+	Print('-');
+	Print_Dec2digits(TimeStruct.tm_mon + 1);
+	Print('-');
+	Print_Dec2digits(TimeStruct.tm_mday);
+	Print(' ');
+	Print_Dec2digits(TimeStruct.tm_hour);
+	Print(':');
+	Print_Dec2digits(TimeStruct.tm_min);
+	Print(':');
+	Print_Dec2digits(TimeStruct.tm_sec);
+}
+
+
 // Byte array printed as HEX with the header and address
 void Print_Dump(uint8_t * Pointer, uint32_t Length) {
 	

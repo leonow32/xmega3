@@ -40,6 +40,10 @@
 // External Hardware Includes
 // ========================================
 
+#if COMPONENT_DS3231
+	#include	"ds3231/ds3231.h"
+#endif
+
 #if COMPONENT_MCP9808
 	#include	"mcp9808/mcp9808.h"
 #endif
@@ -122,6 +126,10 @@ int main(void) {
 	// ========================================
 	// External Hardware init
 	// ========================================
+	
+	#if COMPONENT_DS3231
+		DS3231_Init();
+	#endif
 	
 	#if COMPONENT_MCP9808
 		MCP9808_Init();

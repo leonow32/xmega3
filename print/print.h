@@ -11,10 +11,14 @@ HARDWARE
 
 #if COMPONENT_PRINT
 
-#include "print_config.h"
-#include "../common/ascii.h"
-
+// ========================================
 // Includes
+// ========================================
+
+#include		<time.h>
+#include		"print_config.h"
+#include		"../common/ascii.h"
+
 #if COMPONENT_UART_SINGLE
 	#include	"../uart/uart_single.h"
 #elif COMPONENT_UART_MULTI
@@ -23,7 +27,10 @@ HARDWARE
 	#error		"This module requires UART component"
 #endif
 
+// ========================================
 // ANSI format codes
+// ========================================
+
 enum PrintFormat_t {
 	FormatReset = 0,
 	FormatBold = 1,
@@ -66,6 +73,10 @@ enum PrintFormat_t {
 	BackgroundWhiteBright = 107,
 };
 
+// ========================================
+// Functions
+// ========================================
+
 // Set output stream pointer. If NULL then set to default (see config)
 void Print_SetStream(void (*NewPrintPointer)(const uint8_t Data) = NULL);
 
@@ -80,6 +91,7 @@ void Print_Hex(const uint8_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint16_t Data, const uint8_t Separator = 0);
 void Print_Hex(const uint32_t Data, const uint8_t Separator = 0);
 void Print_HexString(const uint8_t * String, const uint16_t Length, const uint8_t Separator = 0, const uint8_t BytesInRow = 0);
+void Print_Time(time_t * Time);
 void Print_Dump(uint8_t * Pointer, uint32_t Length);
 
 // Change text format, bolt, italic, underline, color of foreground and background (https://en.wikipedia.org/wiki/ANSI_escape_code)

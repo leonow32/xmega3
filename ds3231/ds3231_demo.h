@@ -1,9 +1,17 @@
-#ifndef PRINT_DEMO_H_
-#define PRINT_DEMO_H_
+#ifndef DS3231_DEMO_H_
+#define DS3231_DEMO_H_
 
 // ========================================
 // Includes
 // ========================================
+
+#include		"ds3231.h"
+
+#if COMPONENT_SPI_MASTER
+	#include		"../i2c_master/i2c_master.h"
+#else
+	#error		"This module requires I2C_MASTER component"
+#endif
 
 #if COMPONENT_CONSOLE
 	#include	"../console/console.h"
@@ -21,10 +29,8 @@
 // Console Commands
 // ========================================
 
-void Print_CmdColor(uint8_t argc, uint8_t * argv[]);
-void Print_CmdAscii(uint8_t argc, uint8_t * argv[]);
-void Print_CmdDump(uint8_t argc, uint8_t * argv[]);
-void Print_CmdTimet(uint8_t argc, uint8_t * argv[]);
-void Print_CmdTimes(uint8_t argc, uint8_t * argv[]);
+void DS3231_Debug(DS3231_t Result);
+void DS3231_CmdRead(uint8_t argc, uint8_t * argv[]);
+void DS3231_CmdWrite(uint8_t argc, uint8_t * argv[]);
 
-#endif /* PRINT_DEMO_H_ */
+#endif /* SPI_MEM_DEMO_H_ */

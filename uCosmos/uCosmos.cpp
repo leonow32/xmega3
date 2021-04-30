@@ -146,7 +146,7 @@ void TaskScheduler(void) {
 					Print_NL();
 					
 					#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-						Os_TimePrint();
+						Print_Time();
 					#endif
 					
 					Print("Task(");
@@ -240,7 +240,7 @@ os_t TaskAdd(task_t (*TaskPtr)(runmode_t), Os_Timer_t Period, Os_Timer_t InitCou
 	#if OS_DEBUG_MESSAGES_SHOW
 		Print_NL();
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		Print("TaskAdd(");
 		#if OS_USE_TASK_IDENTIFY
@@ -387,7 +387,7 @@ os_t TaskClose(task_t (*TaskPtr)(runmode_t)) {
 		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		
 		Print("TaskClose(");
@@ -490,7 +490,7 @@ os_t TaskPeriodChange(uint8_t SlotNumber, Os_Timer_t Period, Os_Timer_t Counter)
 		Print_NL();
 		
 		#if OS_DEBUG_MESSAGES_TIMESTAMP && OS_USE_TIME
-			Os_TimePrint();
+			Print_Time();
 		#endif
 		
 		Print("TaskPeriodChange(");
@@ -874,38 +874,10 @@ ISR(RTC_PIT_vect) {													// Przerwanie wywo³ywane co 1 sekundê
 }
 
 
-// Na potrzeby Os_TimePrint(), ¿eby zaoszczêdziæ trochê miejsca programu
-static void Os__DecXXprint(uint8_t Dec) {
-	Print(Dec / 10 + '0');
-	Print(Dec % 10 + '0');
-}
-
-
-// Wyœwietlenie czasu podanego w formacie time_t
-void Os_TimePrint(time_t Time) {
-	
-	tm TimeStruct;
-	if(Time == 0xFFFFFFFF) Time = 0;
-	gmtime_r(&Time, &TimeStruct);
-	
-	Os__DecXXprint(20);
-	Os__DecXXprint(TimeStruct.tm_year - 100);
- 	Print('-');
-	Os__DecXXprint(TimeStruct.tm_mon + 1);
-	Print('-');
-	Os__DecXXprint(TimeStruct.tm_mday);
-	Print(' ');
-	Os__DecXXprint(TimeStruct.tm_hour);
-	Print(':');
-	Os__DecXXprint(TimeStruct.tm_min);
-	Print(':');
-	Os__DecXXprint(TimeStruct.tm_sec);
-}
-
-
 // Wyœwietlenie czasu w formacie YYYY-MM-DD hh:mm:ss
 void Os_TimePrint(uint8_t argc, uint8_t * argv[]) {
-	Os_TimePrint(Os_Time);
+	time_t TimeLocal = Os_Time;
+	Print_Time(&TimeLocal);
 }
 
 
@@ -918,7 +890,7 @@ void Os_TimeSet(uint8_t YY, uint8_t MM, uint8_t DD, uint8_t hh, uint8_t mm, uint
 	NewTime.tm_hour = hh;
 	NewTime.tm_min = mm;
 	NewTime.tm_sec = ss;
-
+	
 	cli();
 	Os_Time = mk_gmtime(&NewTime);
 	sei();
@@ -996,50 +968,6 @@ task_t Os_TimeRecovery(runmode_t RunMode) {
 #if OS_USE_TIMESET_COMMAND
 void Os_TimeSet(uint8_t argc, uint8_t * argv[]) {
 	
-	// Kontrola czy przekazano wszystkie argumenty
-	if(argc != 7) {
-		#if CMD_USE_HELP
-			Print("timeset YY MM DD hh mm ss");
-		#endif
-		return;
-	}
-	
-	// Struktura do przechowywania czasu w formacie YY MM DD hh mm ss
-	tm NewTime;
-	
-	// Argument 1 - rok
-	uint8_t Year;
-	if(Parse_Dec8(argv[1], &Year)) return;
-	NewTime.tm_year = Year + 100;
-	
-	// Argument 2 - miesi¹c
-	if(Parse_Dec8(argv[2], (uint8_t*)&NewTime.tm_mon)) return;
-	NewTime.tm_mon--;
-	
-	// Argument 3 - dzieñ
-	if(Parse_Dec8(argv[3], (uint8_t*)&NewTime.tm_mday)) return;	
-	
-	// Argument 4 - godzina
-	if(Parse_Dec8(argv[4], (uint8_t*)&NewTime.tm_hour)) return;	
-	
-	// Argument 5 - minuta
-	if(Parse_Dec8(argv[5], (uint8_t*)&NewTime.tm_min)) return;
-	
-	// Argument 6 - sekunda
-	if(Parse_Dec8(argv[6], (uint8_t*)&NewTime.tm_sec)) return;
-
-	// Ustawienie czasu w systemie
- 	cli();
- 	Os_Time = mk_gmtime(&NewTime);
-	 
-	#if OS_USE_TIME_RECOVERY
-		Os_TimeRecoverySave();
-	#endif
-	
- 	sei();	
-	 
-	//Console_ResponseOK();
-
 }
 #endif
 

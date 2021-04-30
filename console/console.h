@@ -2,10 +2,11 @@
 #define CONSOLE_H_
 #if COMPONENT_CONSOLE
 
-#include <avr/io.h>
-#include <string.h>
-#include "console_config.h"
-#include "../common/ascii.h"
+#include		<time.h>
+#include		<avr/io.h>
+#include		<string.h>
+#include		"console_config.h"
+#include		"../common/ascii.h"
 
 #if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
@@ -31,7 +32,6 @@ enum Console_t {
 // Result type for argument parser
 enum Parse_t {
 	Parse_OK = 0,									// Zwracane przez wszystkie funkcje, je¿eli zakoñczy³y siê prawid³owo
-	Parse_NotReady,									// Zwracane przez Command_LineInput(), kiedy nie podano znaku ENTER
 	Parse_UnknownCommand,							// Zwracane przez Command_Interpreter(), kiedy nie rozpozna polecenia
 	Parse_NoInput,
 	Parse_MissingArgument,
@@ -40,8 +40,6 @@ enum Parse_t {
 	Parse_ParseError,
 	Parse_ExpectedHex,
 	Parse_ExpectedDec,
-	Parse_ReceivedACK,							// Zwracane przez Command_Interpreter(), kiedy zostanie otrzymane potwierdzenie odebrania polecenia z po³¹czonego uk³adu
-	Parse_ReceivedNAK,							// Zwracane przez Command_Interpreter(), kiedy NIE zostanie otrzymane potwierdzenie odebrania polecenia z po³¹czonego uk³adu
 };
 
 // Struct with command buffers
@@ -80,6 +78,7 @@ Parse_t		Parse_Dec32S(const uint8_t * Argument, int32_t * Output); //, const int
 Parse_t		Parse_HexString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 Parse_t		Parse_AsciiString(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength = 255, const uint8_t MinLength = 0);
 Parse_t		Parse_AsciiCharacter(const uint8_t * Argument, uint8_t * Output);
+Parse_t		Parse_Time(const uint8_t * Argument, time_t * Output);
 
 // Demo commands
 #if CONSOLE_USE_COMMAND_ALL
