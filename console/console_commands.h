@@ -202,8 +202,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if COMPONENT_UART_MONITOR
-	{"uart-h",			UartMonitor_CmdSendHex},
-	{"uart-a",			UartMonitor_CmdSendAscii},
+	{"uart",			UartMonitor_CmdSend},
 #endif
 
 };

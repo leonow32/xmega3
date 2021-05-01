@@ -82,58 +82,38 @@ task_t UartMonitor_Task(runmode_t RunMode) {
 
 
 // Send data via UART
-void UartMonitor_CmdSendHex(uint8_t argc, uint8_t * argv[]) {
+void UartMonitor_CmdSend(uint8_t argc, uint8_t * argv[]) {
 	
 	if(argc == 1) {
 		#if CONSOLE_USE_HELP
-			Print("uart-h string[HEX]");
+			Print("uart txt [a/h]");
 		#endif
 		return;
 	}
 	
-	// Argument 1 - string 
+	// Argument 2 - input type Ascii or Hex
+	Parse_t (*ParserPointer)(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength, const uint8_t MinLength);
+	if(argv[2]) {
+		if(*argv[2] == 'h') {
+			ParserPointer = Parse_HexString;
+		}
+		else {
+			ParserPointer = Parse_AsciiString;
+		}
+	}
+	else {
+		ParserPointer = Parse_AsciiString;
+	}
+	
+	// Argument 1 - data to write in format apecified in argument 1
 	uint8_t Buffer[128];
 	uint8_t BufferLength;
-	if(Parse_HexString(argv[1], Buffer, &BufferLength, sizeof(Buffer))) return;
+	if(ParserPointer(argv[1], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
 	
-	// Print data to send
-	Print_Format(ForegroundWhiteBright);
-	Print("UART_Tx[");
-	Print_Dec(BufferLength);
-	Print("]: ");
-	Print_Format(FormatReset);
-	Print_HexString(Buffer, BufferLength, ' ');
-	
-	// Exectue command
-	for(uint8_t i=0; i<BufferLength; i++) {
-		Uart_Write(Buffer[i], &UART_MONITOR_PERIPHERAL);
-	}
-}
-
-
-// Send data via UART
-void UartMonitor_CmdSendAscii(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("uart-a ");
-		#endif
-		return;
-	}
-	
-	// Argument 1 - string 
-	uint8_t Buffer[130];
-	uint8_t BufferLength;
-	if(Parse_AsciiString(argv[1], Buffer, &BufferLength, sizeof(Buffer)-2)) return;
-	
-	// Argument 2 - append CRLF at string end
-	uint8_t Option = 0;
-	if(argc == 3) {
-		Parse_AsciiCharacter(argv[2], &Option);
-	}
-	if(Option == '1') {
-		Buffer[BufferLength++] = CR;
-		Buffer[BufferLength++] = LF;
+	if(ParserPointer == Parse_AsciiString) {
+		Buffer[BufferLength-1] = CR;
+		Buffer[BufferLength] = LF;
+		BufferLength++;
 	}
 	
 	// Print data to send

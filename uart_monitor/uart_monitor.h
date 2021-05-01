@@ -41,8 +41,7 @@
 
 void UartMonitor_Init(void);
 task_t UartMonitor_Task(runmode_t RunMode);
-void UartMonitor_CmdSendHex(uint8_t argc, uint8_t * argv[]);
-void UartMonitor_CmdSendAscii(uint8_t argc, uint8_t * argv[]);
+void UartMonitor_CmdSend(uint8_t argc, uint8_t * argv[]);
 
 #endif
 #endif /* UART_MONITOR_H_ */
