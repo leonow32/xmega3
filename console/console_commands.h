@@ -11,6 +11,10 @@
 	#include	"../console/console_demo.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1351
+	#include	"../display_ssd1351/display_ssd1351_demo.h"
+#endif
+
 #if COMPONENT_DS3231
 	#include	"../ds3231/ds3231_demo.h"
 #endif
@@ -81,6 +85,14 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"hexstr",			Console_CmdHexString},
 	{"ascstr",			Console_CmdAsciiString},
 	{"ascchr",			Console_CmdAsciiCharacter},
+#endif
+
+// ========================================
+// Display SSD1350 demo
+// ========================================
+
+#if SSD1351_USE_DEMO_COMMANDS
+	
 #endif
 
 // ========================================
