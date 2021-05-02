@@ -147,6 +147,10 @@ int main(void) {
 		Mem23_Init();
 	#endif
 	
+	#if COMPONENT_MEM24
+		Mem24_Init();
+	#endif
+	
 	#if COMPONENT_MEM25
 		Mem25_Init();
 	#endif

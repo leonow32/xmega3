@@ -32,4 +32,6 @@ void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]);
 #endif /* DISPLAY_SSD1351_DEMO_H_ */

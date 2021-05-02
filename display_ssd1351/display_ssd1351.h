@@ -80,7 +80,10 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
-// Funkcje elementarne
+// ========================================
+// Basic functions
+// ========================================
+
 void		SSD1351_Init(void);
 void		SSD1351_WriteCommand(const uint8_t Command);
 void		SSD1351_WriteData(const uint8_t Data);

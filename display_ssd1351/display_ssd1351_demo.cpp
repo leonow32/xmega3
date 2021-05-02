@@ -2,27 +2,15 @@
 #include "display_ssd1351_demo.h"
 #if SSD1351_USE_DEMO_COMMANDS
 
-
-// Debug errors
-// void Mem25_Debug(Mem25_t Result) {
-// 	switch(Result) {
-// 		case Mem25_OK:			Print_ResponseOK();			break;
-// 		case Mem25_Error:		Print_ResponseError();		break;
-// 	}
-// }
-
-
 // Clear display
 void SSD1351_CmdClear(uint8_t argc, uint8_t * argv[]) {
 	SSD1351_Clear();
 }
 
-
 // Draw chessboard
 void SSD1351_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]) {
 	SSD1351_Chessboard();
 }
-
 
 // Set contrast
 void SSD1351_CmdContrast(uint8_t argc, uint8_t * argv[]) {
@@ -35,7 +23,6 @@ void SSD1351_CmdContrast(uint8_t argc, uint8_t * argv[]) {
 	SSD1351_ContrastSet(Contrast);
 	Print_ResponseOK();
 }
-
 
 // Draw pixel
 void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]) {
@@ -50,8 +37,8 @@ void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SSD1351_DrawPixel(x, y);
+	Print_ResponseOK();
 }
-
 
 // Draw line
 void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]) {
@@ -74,8 +61,8 @@ void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SSD1351_DrawLine(x0, y0, x1, y1);
+	Print_ResponseOK();
 }
-
 
 // Draw rectangle
 void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]) {
@@ -98,8 +85,8 @@ void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SSD1351_DrawRectangle(x0, y0, x1, y1);
+	Print_ResponseOK();
 }
-
 
 // Draw rectangle and fill
 void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]) {
@@ -122,8 +109,8 @@ void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SSD1351_DrawRectangleFill(x0, y0, x1, y1);
+	Print_ResponseOK();
 }
-
 
 // Craw circle
 void SSD1351_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
@@ -142,8 +129,8 @@ void SSD1351_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SSD1351_DrawCircle(x, y, r);
+	Print_ResponseOK();
 }
-
 
 // Set or get cursor position
 void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]) {
@@ -172,6 +159,38 @@ void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]) {
 		SSD1351_CursorSet(x, y);
 		Print_ResponseOK();
 	}
+}
+
+// Set foreground color
+void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]) {
+	switch(*argv[1]) {
+		case 'k':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLACK_ID));		break;
+		case 'r':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_RED_ID));			break;
+		case 'g':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_GREEN_ID));		break;
+		case 'y':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_YELLOW_ID));		break;
+		case 'b':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLUE_ID));		break;
+		case 'm':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_MAGENTA_ID));		break;
+		case 'c':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_CYAN_ID));		break;
+		case 'w':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_WHITE_ID));		break;
+		default:	Print_ResponseError();															return;
+	}
+	Print_ResponseOK();
+}
+
+// Set background color
+void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]) {
+	switch(*argv[1]) {
+		case 'k':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLACK_ID));		break;
+		case 'r':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_RED_ID));			break;
+		case 'g':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_GREEN_ID));		break;
+		case 'y':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_YELLOW_ID));		break;
+		case 'b':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLUE_ID));			break;
+		case 'm':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_MAGENTA_ID));		break;
+		case 'c':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_CYAN_ID));			break;
+		case 'w':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_WHITE_ID));		break;
+		default:	Print_ResponseError();															return;
+	}
+	Print_ResponseOK();
 }
 
 
