@@ -4,274 +4,175 @@
 
 
 // Debug errors
-void Mem25_Debug(Mem25_t Result) {
-	switch(Result) {
-		case Mem25_OK:			Print_ResponseOK();			break;
-		case Mem25_Error:		Print_ResponseError();		break;
-	}
+// void Mem25_Debug(Mem25_t Result) {
+// 	switch(Result) {
+// 		case Mem25_OK:			Print_ResponseOK();			break;
+// 		case Mem25_Error:		Print_ResponseError();		break;
+// 	}
+// }
+
+
+// Clear display
+void SSD1351_CmdClear(uint8_t argc, uint8_t * argv[]) {
+	SSD1351_Clear();
 }
 
 
-// Read status
-void Mem25_CmdStatus(uint8_t argc, uint8_t * argv[]) {
-	uint8_t Status;
+// Draw chessboard
+void SSD1351_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]) {
+	SSD1351_Chessboard();
+}
+
+
+// Set contrast
+void SSD1351_CmdContrast(uint8_t argc, uint8_t * argv[]) {
 	
-	// If no argument given, then read status
+	// Argument 1 - contrast value
+	uint8_t Contrast;
+	if(Parse_Dec8(argv[1], &Contrast)) return;
+	
+	// Execute command
+	SSD1351_ContrastSet(Contrast);
+	Print_ResponseOK();
+}
+
+
+// Draw pixel
+void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - coordinate X
+	uint8_t x;
+	if(Parse_Dec8(argv[1], &x, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y
+	uint8_t y;
+	if(Parse_Dec8(argv[2], &y, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Execute command
+	SSD1351_DrawPixel(x, y);
+}
+
+
+// Draw line
+void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - coordinate X0
+	uint8_t x0;
+	if(Parse_Dec8(argv[1], &x0, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y0;
+	if(Parse_Dec8(argv[2], &y0, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Argument 1 - coordinate X0
+	uint8_t x1;
+	if(Parse_Dec8(argv[3], &x1, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y1;
+	if(Parse_Dec8(argv[4], &y1, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Execute command
+	SSD1351_DrawLine(x0, y0, x1, y1);
+}
+
+
+// Draw rectangle
+void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - coordinate X0
+	uint8_t x0;
+	if(Parse_Dec8(argv[1], &x0, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y0;
+	if(Parse_Dec8(argv[2], &y0, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Argument 1 - coordinate X0
+	uint8_t x1;
+	if(Parse_Dec8(argv[3], &x1, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y1;
+	if(Parse_Dec8(argv[4], &y1, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Execute command
+	SSD1351_DrawRectangle(x0, y0, x1, y1);
+}
+
+
+// Draw rectangle and fill
+void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - coordinate X0
+	uint8_t x0;
+	if(Parse_Dec8(argv[1], &x0, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y0;
+	if(Parse_Dec8(argv[2], &y0, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Argument 1 - coordinate X0
+	uint8_t x1;
+	if(Parse_Dec8(argv[3], &x1, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y0
+	uint8_t y1;
+	if(Parse_Dec8(argv[4], &y1, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Execute command
+	SSD1351_DrawRectangleFill(x0, y0, x1, y1);
+}
+
+
+// Craw circle
+void SSD1351_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - coordinate X
+	uint8_t x;
+	if(Parse_Dec8(argv[1], &x, SSD1351_DISPLAY_SIZE_X-1)) return;
+	
+	// Argument 2 - coordinate Y
+	uint8_t y;
+	if(Parse_Dec8(argv[2], &y, SSD1351_DISPLAY_SIZE_Y-1)) return;
+	
+	// Argument 1 - radius
+	uint8_t r;
+	if(Parse_Dec8(argv[3], &r)) return;
+	
+	// Execute command
+	SSD1351_DrawCircle(x, y, r);
+}
+
+
+// Set or get cursor position
+void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments, then print actual cursor position
 	if(argc == 1) {
-		Status = Mem25_StatusRead();
-		Print("HEX: ");
-		Print_Hex(Status);
-		Print("\r\nBIN: ");
-		Print_Bin(Status);
+		uint8_t x = SSD1351_CursorXGet();
+		uint8_t y = SSD1351_CursorYGet();
+		Print("x = ");
+		Print_Dec(x);
+		Print("\r\ny = ");
+		Print_Dec(y);
 	}
 	
-	// If there is given an argument, then parse argument and write status
+	// If arguments given, then set cursor position
 	else {
-		if(Parse_Hex8(argv[1], &Status)) return;
-		Mem25_StatusWrite(Status);
+		// Argument 1 - coordinate X
+		uint8_t x;
+		if(Parse_Dec8(argv[1], &x, SSD1351_DISPLAY_SIZE_X-1)) return;
+		
+		// Argument 2 - coordinate Y
+		uint8_t y;
+		if(Parse_Dec8(argv[2], &y, SSD1351_DISPLAY_SIZE_Y-1)) return;
+		
+		// Execute command
+		SSD1351_CursorXSet(x);
+		SSD1351_CursorYSet(y);
 		Print_ResponseOK();
 	}
-}
-
-
-// Write enable - set WEL bit in status register
-void Mem25_CmdWriteEnable(uint8_t argc, uint8_t * argv[]) {
-	MEM25_CHIP_SELECT;
-	Spi_1(MEM25_WRITE_ENABLE);
-	MEM25_CHIP_DESELECT;
-	Print_ResponseOK();
-}
-
-
-// Write disable - clear WEL bit in status register
-void Mem25_CmdWriteDisable(uint8_t argc, uint8_t * argv[]) {
-	MEM25_CHIP_SELECT;
-	Spi_1(MEM25_WRITE_DISABLE);
-	MEM25_CHIP_DESELECT;
-	Print_ResponseOK();
-}
-
-
-// Get ID
-void Mem25_CmdGetID(uint8_t argc, uint8_t * argv[]) {
-	uint8_t ID;
-	Mem25_t Result;
-	Result = Mem25_GetID(&ID);
-	if(Result) {
-		Mem25_Debug(Result);
-	}
-	else {
-		Print_Hex(ID);
-	}
-}
-
-
-// Sleep
-void Mem25_CmdSleep(uint8_t argc, uint8_t * argv[]) {
-	Mem25_Sleep();
-	Print_ResponseOK();
-}
-
-
-// Wake
-void Mem25_CmdWake(uint8_t argc, uint8_t * argv[]) {
-	Mem25_Wake();
-	Print_ResponseOK();
-}
-
-
-// Read bytes from memory
-void Mem25_CmdRead(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("mem25-r adr[HEX16] len[DEC16]");
-		#endif
-		return;
-	}
-	
-	uint8_t Buffer[257];
-	memset(Buffer, 0, sizeof(Buffer));
-	
-	// Argument 1 - address
-	uint16_t Address;
-	if(Parse_Hex16(argv[1], &Address)) return;
-	
-	// Argument 2 - length
-	uint16_t Length;
-	if(Parse_Dec16(argv[2], &Length, sizeof(Buffer)-1)) return;
-	
-	// Argument 3 optional - display format
-	uint8_t DisplayFormat;
-	if(argc == 4) {
-		Parse_AsciiCharacter(argv[3], &DisplayFormat);
-	}
-	else {
-		DisplayFormat = 0;
-	}
-	
-	// Execute command
-	Mem25_t Result;
-	Result = Mem25_Read(Address, Buffer, Length);
-	if(Result) {
-		Mem25_Debug(Result);
-		return;
-	}
-	
-	// Display result
-	switch(DisplayFormat) {
-		case 'a':
-			Print((const char *)Buffer);
-			break;
-		case 'h':
-			Print_HexString(Buffer, Length, ' ', 16);
-			break;
-		default:
-			Print_HexString(Buffer, Length, ' ', 16);
-			Print_NL();
-			Print((const char *)Buffer);
-	}
-}
-
-
-// Write data to memory in ASCII or HEX format
-void Mem25_CmdWrite(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("mem25-w adr[HEX16] data[] format[a/h]");
-		#endif
-		return;
-	}
-	
-	// Argument 3 - input type Ascii or Hex
-	Parse_t (*ParserPointer)(const uint8_t * InputString, uint8_t * OutputString, uint8_t * OutputLength, const uint8_t MaxLength, const uint8_t MinLength);
-	if(argv[3] && *argv[3] == 'h') {
-		ParserPointer = Parse_HexString;
-	}
-	else {
-		ParserPointer = Parse_AsciiString;
-	}
-	
-	// Argument 1 - address
-	uint16_t Address;
-	if(Parse_Hex16(argv[1], &Address)) return;
-	
-	// Argument 2 - data to write in format apecified in argument 1
-	uint8_t Buffer[128];
-	uint8_t BufferLength;
-	if(ParserPointer(argv[2], Buffer, &BufferLength, sizeof(Buffer), 1)) return;
-	
-	Print("Lenght: ");
-	Print_Dec(BufferLength);
-	Print_NL();
-	
-	// Execute command
-	Mem25_t Result;
-	Result = Mem25_Write(Address, Buffer, BufferLength);
-	Mem25_Debug(Result);
-}
-
-
-// Dump fragment of memory
-void Mem25_CmdDump(uint8_t argc, uint8_t * argv[]) {
-	
-	if(argc == 1) {
-		#if CONSOLE_USE_HELP
-			Print("mem25-dump adr[HEX16] len[DEC32]");
-		#endif
-		return;
-	}
-	
-	// Argument 1 - Address
-	uint16_t Address;
-	if(Parse_Hex16(argv[1], &Address)) return;
-	Address = Address & 0xFFF0;
-	
-	// Argument 2 - Length
-	uint32_t Length;
-	if(Parse_Dec32(argv[2], &Length)) return;
-	if(Length == 0) {
-		Parse_Debug(Parse_Underflow, argv[2]);
-		return;
-	}
-	
-	#if MEM25_AUTO_SLEEP_MODE
-		Mem25_Wake();
-	#endif
-	
-	// Start of transmission
-	MEM25_CHIP_SELECT;
-	Spi_3(MEM25_READ, (Address & 0xFF00) >> 8, Address & 0x00FF);
-	
-	// Print header
-	Print_Format(ForegroundWhiteBright);
-	Print("\t");
-	for(uint8_t i='0'; i<='F'; i++) {
-		Print(' ');
-		Print(i);
-		Print(' ');
-		if(i == '9') {
-			i = 'A' - 1;
-		}
-	}
-	Print_Format(FormatReset);
-	
-	// Loop for 16 bytes
-	uint8_t Buffer[16];
-	uint16_t Loops = Length / sizeof(Buffer);
-	if(Length & 0x0F) {
-		Loops++;
-	}
-	
-	while(Loops--) {
-		
-		// Read 16 bytes
-		Spi_Read(Buffer, sizeof(Buffer));
-		
-		// New line
-		Print_NL();
-		
-		// Print address
-		Print_Format(ForegroundWhiteBright);
-		Print_Hex(Address);
-		Print_Format(FormatReset);
-		
-		// Print HEX
-		Print('\t');
-		for(uint8_t h=0; h<=15; h++) {
-			Print_Hex(*(Buffer+h), ' ');
-		}
-		
-		// Print ASCII
-		Print('\t');
-		for(uint8_t h=0; h<=15; h++) {
-			if((*(Buffer+h) >= ' ') && (*(Buffer+h) < 127)) {			// omit non-printable characters
-				Print(*(Buffer+h));
-			}
-			else {
-				Print(' ');
-			}
-		}
-		
-		// Increment pointers
-		Address += 16;
-		
-		// Watchdog reset
-		asm volatile("wdr");
-	}
-	
-	// End of transmission
-	MEM25_CHIP_DESELECT;
-	
-	#if MEM25_AUTO_SLEEP_MODE
-		Mem25_Sleep();
-	#endif
-}
-
-
-void Mem25_CmdChipErase(uint8_t argc, uint8_t * argv[]) {
-	Mem25_Debug(Mem25_ChipErase());
 }
 
 

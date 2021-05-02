@@ -4,7 +4,10 @@
 
 #include	"display_ssd1351.h"
 
-// Zmienne globalne
+// ========================================
+// Global variables
+// ========================================
+
 static uint8_t SSD1351_CursorX			= 0;
 static uint8_t SSD1351_CursorX_Max		= SSD1351_DISPLAY_SIZE_X - 1;
 static uint8_t SSD1351_CursorY			= 0;
@@ -16,32 +19,32 @@ static uint8_t SSD1351_ColorFrontL		= 0xFF;
 static uint8_t SSD1351_ColorBackH		= 0x00;		// Czarny
 static uint8_t SSD1351_ColorBackL		= 0x00;
 
-// Konfiguracja wyœwietlacza dla funkcji SH1106_Init()
+// Display config for init function
 static const uint8_t SSD1351_InitSequence[] = {
 	1,	SSD1351_SET_LOCK_COMMAND,
 	0,	0x12,
-
+	
 	1,	SSD1351_SET_LOCK_COMMAND,			// Command lock
 	0,	0xB1,								// Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
-
+	
 	1,	SSD1351_SLEEP_MODE_ON,				// Display off
-
+	
 	1, SSD1351_SET_DISPLAY_MODE_OFF,		// Normal Display mode
-
+	
 	1, SSD1351_COLUMN_RANGE,				// Set column address
-	0, 0x00,								// Column address start 00
-	0, 0x7F,								// Column address end 95
-
+	0, 0x00,								// Column address start value
+	0, 0x7F,								// Column address end value
+	
 	1, SSD1351_ROW_RANGE,					// Set row address
-	0, 0x00,								// Row address start 00
-	0, 0x7f,								// Row address end 63
-
+	0, 0x00,								// Row address start value
+	0, 0x7F,								// Row address end value
+	
 	1, SSD1351_CLOCK_DIVIDER_OSC_FREQ,
 	0, 0xF1,
-
+	
 	1, SSD1351_SET_MUX_RATIO,
 	0, 0x7F,
-
+	
 	1, SSD1351_REMAP_COLOR_DEPTH,			// Set re-map & data format
 	0, 0b01110101,							// Vertical address increment 0b01110101
 											// bit 0 - 1: kursor od lewej do prawej, 1 od góry do do³u
@@ -51,48 +54,48 @@ static const uint8_t SSD1351_InitSequence[] = {
 											// bit 4 - lustrzane odbicie X
 											// bit 5 - naprzemienne linie (nie u¿ywaæ)
 											// bit 67 - format koloru
-
+	
 	1, SSD1351_SET_DISPLAY_START_LINE,		// Set display start line
 	0, 0x00,
-
+	
 	1, SSD1351_SET_DISPLAY_OFFSET,			// Set display offset
 	0, 0x00,
-
+	
 	1, SSD1351_FUNCTION_SELECTION,
 	0, 0x01,
-
+	
 	1, SSD1351_SET_SEGMENT_LOW_VOLTAGE,
 	0, 0xA0,
 	0, 0xB5,
 	0, 0x55,
-
+	
 	1, SSD1351_SET_CONTRAST,
 	0, 0xFF,								// Oryginalnie 0xC8
 	0, 0xFF,								// Oryginalnie 0x80
 	0, 0xFF,								// Oryginalnie 0xC0
-
+	
 	1, SSD1351_MASTER_CONTRAST_CURRENT,
 	0, 0x0F,
-
+	
 	1, SSD1351_SET_RESET_PRECHARGE,
 	0, 0x32,
-
+	
 	1, SSD1351_DISPLAY_ENHANCEMENT,
 	0, 0xA4,
 	0, 0x00,
 	0, 0x00,
-
+	
 	1, SSD1351_SET_PRECHARGE_VOLTAGE,
 	0, 0x17,
-
+	
 	1, SSD1351_SET_SECOND_PRECHARGE,
 	0, 0x01,
-
+	
 	1, SSD1351_SET_VCOMH_VOLTAGE,
 	0, 0x05,
-
+	
 	1, SSD1351_SET_DISPLAY_MODE_RESET,
-
+	
 	1, SSD1351_SLEEP_MODE_OFF,				// Display on
 };
 
@@ -101,19 +104,19 @@ static const uint8_t SSD1351_InitSequence[] = {
 // ===================
 
 
-// Inicjalizacja
+// Initialization
 void SSD1351_Init(void) {
-
-	SSD1351_CS_PORT	|=	SSD1351_CS_PIN;
-	SSD1351_CS_DIR	|=	SSD1351_CS_PIN;
-	SSD1351_DC_DIR	|=	SSD1351_DC_PIN;
-
+	
+	SSD1351_CHIP_SELECT_INIT;
+	SSD1351_DC_INIT;
+	
+	
 	const uint8_t * Index = SSD1351_InitSequence;
 	const uint8_t * Limit = SSD1351_InitSequence + sizeof(SSD1351_InitSequence);
-
+	
 	SSD1351_CHIP_SELECT;
-
-	// Przesy³¹nie tablicy SSD1351_InitSequence
+	
+	// Transmit array SSD1351_InitSequence
 	// Bajt nieparzysty ukreœla czy jak ustawiæ pin steruj¹cy DC (dane lub polecenie)
 	// Bajt parzysty ma zostaæ przes³any przez SPI
 	while(Index != Limit) {
@@ -126,7 +129,7 @@ void SSD1351_Init(void) {
 }
 
 
-// Wys³anie komendy
+// Send command
 void SSD1351_WriteCommand(const uint8_t Command) {
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;
@@ -135,7 +138,7 @@ void SSD1351_WriteCommand(const uint8_t Command) {
 }
 
 
-// Wys³anie danych
+// WSend data
 void SSD1351_WriteData(const uint8_t Data) {
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_DATA;
@@ -144,7 +147,7 @@ void SSD1351_WriteData(const uint8_t Data) {
 }
 
 
-// Zezwolenie na wyœwietlanie otrzymanych danych
+// Allow to display data
 void SSD1351_WriteRamEnable(void) {
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;
@@ -153,7 +156,7 @@ void SSD1351_WriteRamEnable(void) {
 }
 
 
-// Ustawianie kontrastu
+// Set contrast
 void SSD1351_ContrastSet(const uint8_t Value) {
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;

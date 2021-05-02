@@ -16,19 +16,21 @@
 // ========================================
 
 #if PRODUCT_AVRIOT
-
-	// Piny steruj¹ca CS dla SPI
-	#define		SSD1351_CS_PORT					VPORTA.OUT
-	#define		SSD1351_CS_DIR					VPORTA.DIR
-	#define		SSD1351_CS_PIN					PIN0_bm
-	#define		SSD1351_DC_PORT					VPORTD.OUT
-	#define		SSD1351_DC_DIR					VPORTD.DIR
-	#define		SSD1351_DC_PIN					PIN7_bm
-
+	
+	// Pinout
+	#define		SSD1351_CHIP_SELECT_INIT		VPORTD.DIR	|=	PIN7_bm
+	#define		SSD1351_CHIP_SELECT				VPORTD.OUT	&= ~PIN7_bm
+	#define		SSD1351_CHIP_DESELECT			VPORTD.OUT	|=  PIN7_bm
+	#define		SSD1351_DC_INIT					VPORTA.DIR |= PIN0_bm
+	#define		SSD1351_DC_DATA					VPORTA.OUT |=  PIN0_bm
+	#define		SSD1351_DC_COMMAND				VPORTA.OUT &= ~PIN0_bm
+	
+	#define		SSD1351_USE_DEMO_COMMANDS		1
+	
 	// Definicje
 	#define		SSD1351_DISPLAY_SIZE_X			128
 	#define		SSD1351_DISPLAY_SIZE_Y			128
-
+	
 	// Czcionki
 	//#include	"FontXF90/fontXF90_Console8x6.h"
 	// #include	"FontXF90/fontXF90_Dos8x8.h"
@@ -39,12 +41,12 @@
 	// #include	"FontR/fontR_Sans16B.h"
 	// #include	"FontXF90/fontXF90_Sans16B_PL.h"
 	// #include	"FontR/fontR_Sans24.h"
-
+	
 	//#include	"FontXF90/fontXF90_Sans24_PL.h"
-
+	
 	// #include	"FontR/fontR_Sans24B.h"
 	// #include	"FontR/fontR_Sans24B_PL.h"
-
+	
 	// Bitmapy
 	//#include	"BitmapXF90/bitmapXF90_ExtronicLogo.h"
 	// #include	"BitmapXF90/bitmapXF90_TestPattern.h"

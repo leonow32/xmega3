@@ -79,15 +79,10 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
+// ========================================
+// Display operation codes
+// ========================================
 
-
-// Komendy steruj¹ce SPI - sterowanie pinem DC
-#define		SSD1351_DC_DATA						SSD1351_DC_PORT |=  SSD1351_DC_PIN
-#define		SSD1351_DC_COMMAND					SSD1351_DC_PORT &= ~SSD1351_DC_PIN
-#define		SSD1351_CHIP_SELECT					SSD1351_CS_PORT &= ~SSD1351_CS_PIN
-#define		SSD1351_CHIP_DESELECT				SSD1351_CS_PORT |=  SSD1351_CS_PIN
-
-// !! 
 // Polecenia o d³ugoœc 1 bajta s¹ zrealizowane jako definicje, które nale¿y wywo³aæ poprzez SSD1351_WriteCommand()
 #define		SSD1351_COLUMN_RANGE				0x15						// 01, ustawia zakres w którym porusza siê kursor
 #define		SSD1351_ROW_RANGE					0x75						// 02, ustawia zakres w którym porusza siê kursor
@@ -202,8 +197,8 @@ void		SSD1351_ColorBackSet(uint16_t ColorRGB565);
 void		SSD1351_ColorBackSet(uint8_t R, uint8_t G, uint8_t B);
 uint16_t	SSD1351_ColorNameToRGB565(uint8_t ColorName);
 uint16_t	SSD1351_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B);
-
 uint16_t	SSD1351_ColorRGB332toRGB565(uint8_t Color332);
+
 // Podstawowe funkcje geometryczne i rysowanie bitmap
 void		SSD1351_DrawPixel(uint8_t x, uint8_t y);
 void		SSD1351_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);

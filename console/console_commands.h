@@ -92,7 +92,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if SSD1351_USE_DEMO_COMMANDS
-	
+	{"d-clr",			SSD1351_CmdClear},
+	{"d-chess",			SSD1351_CmdDrawChessboard},
+	{"d-cont",			SSD1351_CmdContrast},
+	{"d-pix",			SSD1351_CmdDrawPixel},
+	{"d-lin",			SSD1351_CmdDrawLine},
+	{"d-rec",			SSD1351_CmdDrawRectangle},
+	{"d-recf",			SSD1351_CmdDrawRectangleFill},
+	{"d-cir",			SSD1351_CmdDrawCircle},
+	{"d-cur",			SSD1351_CmdCursor},
 #endif
 
 // ========================================
