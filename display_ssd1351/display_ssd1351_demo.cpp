@@ -25,7 +25,7 @@ void SSD1351_CmdContrast(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Draw pixel
-void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]) {
+void SSD1351_CmdPixel(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 1 - coordinate X
 	uint8_t x;
@@ -41,7 +41,7 @@ void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Draw line
-void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]) {
+void SSD1351_CmdLine(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 1 - coordinate X0
 	uint8_t x0;
@@ -65,7 +65,7 @@ void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Draw rectangle
-void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]) {
+void SSD1351_CmdRectangle(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 1 - coordinate X0
 	uint8_t x0;
@@ -89,7 +89,7 @@ void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Draw rectangle and fill
-void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]) {
+void SSD1351_CmdRectangleFill(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 1 - coordinate X0
 	uint8_t x0;
@@ -164,15 +164,15 @@ void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]) {
 // Set foreground color
 void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]) {
 	switch(*argv[1]) {
-		case 'k':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLACK_ID));		break;
-		case 'r':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_RED_ID));			break;
-		case 'g':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_GREEN_ID));		break;
-		case 'y':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_YELLOW_ID));		break;
-		case 'b':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLUE_ID));		break;
-		case 'm':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_MAGENTA_ID));		break;
-		case 'c':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_CYAN_ID));		break;
-		case 'w':	SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_WHITE_ID));		break;
-		default:	Print_ResponseError();															return;
+		case 'k':	SSD1351_ColorFrontSet(SSD1351_COLOR_BLACK_RGB565);			break;
+		case 'r':	SSD1351_ColorFrontSet(SSD1351_COLOR_RED_RGB565);			break;
+		case 'g':	SSD1351_ColorFrontSet(SSD1351_COLOR_GREEN_RGB565);			break;
+		case 'y':	SSD1351_ColorFrontSet(SSD1351_COLOR_YELLOW_RGB565);			break;
+		case 'b':	SSD1351_ColorFrontSet(SSD1351_COLOR_BLUE_RGB565);			break;
+		case 'm':	SSD1351_ColorFrontSet(SSD1351_COLOR_MAGENTA_RGB565);		break;
+		case 'c':	SSD1351_ColorFrontSet(SSD1351_COLOR_CYAN_RGB565);			break;
+		case 'w':	SSD1351_ColorFrontSet(SSD1351_COLOR_WHITE_RGB565);			break;
+		default:	Print_ResponseError();										return;
 	}
 	Print_ResponseOK();
 }
@@ -180,16 +180,41 @@ void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]) {
 // Set background color
 void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]) {
 	switch(*argv[1]) {
-		case 'k':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLACK_ID));		break;
-		case 'r':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_RED_ID));			break;
-		case 'g':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_GREEN_ID));		break;
-		case 'y':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_YELLOW_ID));		break;
-		case 'b':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_BLUE_ID));			break;
-		case 'm':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_MAGENTA_ID));		break;
-		case 'c':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_CYAN_ID));			break;
-		case 'w':	SSD1351_ColorBackSet(SSD1351_ColorNameToRGB565(SSD1351_COLOR_WHITE_ID));		break;
-		default:	Print_ResponseError();															return;
+		case 'k':	SSD1351_ColorBackSet(SSD1351_COLOR_BLACK_RGB565);			break;
+		case 'r':	SSD1351_ColorBackSet(SSD1351_COLOR_RED_RGB565);				break;
+		case 'g':	SSD1351_ColorBackSet(SSD1351_COLOR_GREEN_RGB565);			break;
+		case 'y':	SSD1351_ColorBackSet(SSD1351_COLOR_YELLOW_RGB565);			break;
+		case 'b':	SSD1351_ColorBackSet(SSD1351_COLOR_BLUE_RGB565);			break;
+		case 'm':	SSD1351_ColorBackSet(SSD1351_COLOR_MAGENTA_RGB565);			break;
+		case 'c':	SSD1351_ColorBackSet(SSD1351_COLOR_CYAN_RGB565);			break;
+		case 'w':	SSD1351_ColorBackSet(SSD1351_COLOR_WHITE_RGB565);			break;
+		default:	Print_ResponseError();										return;
 	}
+	Print_ResponseOK();
+}
+
+// Print text
+void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 2 optional - text align
+	uint8_t Align = 0;
+	if(argc == 3) {
+		switch(*argv[2]) {
+			case '1':	Align = SSD1351_HALIGN_LEFT   | SSD1351_VALIGN_BOTTOM;	break;
+			case '2':	Align = SSD1351_HALIGN_CENTER | SSD1351_VALIGN_BOTTOM;	break;
+			case '3':	Align = SSD1351_HALIGN_RIGHT  | SSD1351_VALIGN_BOTTOM;	break;
+			case '4':	Align = SSD1351_HALIGN_LEFT   | SSD1351_VALIGN_CENTER;	break;
+			case '5':	Align = SSD1351_HALIGN_CENTER | SSD1351_VALIGN_CENTER;	break;
+			case '6':	Align = SSD1351_HALIGN_RIGHT  | SSD1351_VALIGN_CENTER;	break;
+			case '7':	Align = SSD1351_HALIGN_LEFT   | SSD1351_VALIGN_TOP;		break;
+			case '8':	Align = SSD1351_HALIGN_CENTER | SSD1351_VALIGN_TOP;		break;
+			case '9':	Align = SSD1351_HALIGN_RIGHT  | SSD1351_VALIGN_TOP;		break;
+			default:	Align = 0;	break;
+		}
+	}
+	
+	// Execute command
+	SSD1351_Text((const char *)argv[1], Align);
 	Print_ResponseOK();
 }
 

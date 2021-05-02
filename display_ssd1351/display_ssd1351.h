@@ -71,7 +71,6 @@ HARDWARE
 #include	<util/delay.h>
 #include	"display_ssd1351_defines.h"
 #include	"display_ssd1351_config.h"
-#include	"font/fontXF90_typedef.h"
 #include	"bitmap/bitmapXF90_typedef.h"
 
 #if COMPONENT_SPI_MASTER
@@ -88,24 +87,27 @@ void		SSD1351_Init(void);
 void		SSD1351_WriteCommand(const uint8_t Command);
 void		SSD1351_WriteData(const uint8_t Data);
 void		SSD1351_WriteRamEnable(void);
-
 void		SSD1351_ContrastSet(const uint8_t Value);
-void		SSD1351_Clear(void);					// Ustawienie Pattern innego ni¿ domyœlny pozwala zape³niæ wyœwietlacz wzorem
+void		SSD1351_Clear(void);
 void		SSD1351_Chessboard(void);
 
-// Ustawianie kursora
+// ========================================
+// Cursor and active area
+// ========================================
+
 void		SSD1351_CursorSet(uint8_t x, uint8_t y);
 uint8_t		SSD1351_CursorXGet(void);
 void		SSD1351_CursorXSet(uint8_t x);
 uint8_t		SSD1351_CursorYGet(void);
 void		SSD1351_CursorYSet(uint8_t y);
-
-// Obszar roboczy
 void		SSD1351_ActiveAreaSet(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2);
 void		SSD1351_ActiveAreaXSet(uint8_t x1, uint8_t x2);
 void		SSD1351_ActiveAreaYSet(uint8_t y1, uint8_t y2);
 
-// Kolory
+// ========================================
+// Colors
+// ========================================
+
 uint16_t	SSD1351_ColorFrontGet(void);
 void		SSD1351_ColorFrontSet(uint16_t ColorRGB565);
 void		SSD1351_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B);
@@ -116,7 +118,10 @@ uint16_t	SSD1351_ColorNameToRGB565(uint8_t ColorName);
 uint16_t	SSD1351_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B);
 uint16_t	SSD1351_ColorRGB332toRGB565(uint8_t Color332);
 
-// Podstawowe funkcje geometryczne i rysowanie bitmap
+// ========================================
+// Drawing
+// ========================================
+
 void		SSD1351_DrawPixel(uint8_t x, uint8_t y);
 void		SSD1351_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
 void		SSD1351_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
@@ -125,12 +130,18 @@ void		SSD1351_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SSD1351_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 
-// Bitmapy
+// ========================================
+// BBitmaps
+// ========================================
+
 void		SSD1351_BitmapMono(const BitmapXF90_t * Bitmap);
 void		SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap);
 void		SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap);
 
-// Napisy
+// ========================================
+// Text
+// ========================================
+
 const fontXF90_def_t * SSD1351_FontGet(void);
 void		SSD1351_FontSet(const fontXF90_def_t * Font);
 uint8_t		SSD1351_TextWidth(const char * Text);

@@ -32,20 +32,12 @@
 	#define		SSD1351_DISPLAY_SIZE_Y			128
 	
 	// Czcionki
-	//#include	"FontXF90/fontXF90_Console8x6.h"
-	// #include	"FontXF90/fontXF90_Dos8x8.h"
-	// #include	"FontXF90/fontXF90_Dos16x8.h"
-	// #include	"FontR/fontR_Sans8.h"
-	//#include	"FontR/fontR_Sans16.h"
-	//#include	"FontXF90/fontXF90_Sans16_PL.h"
-	// #include	"FontR/fontR_Sans16B.h"
-	// #include	"FontXF90/fontXF90_Sans16B_PL.h"
-	// #include	"FontR/fontR_Sans24.h"
-	
-	//#include	"FontXF90/fontXF90_Sans24_PL.h"
-	
-	// #include	"FontR/fontR_Sans24B.h"
-	// #include	"FontR/fontR_Sans24B_PL.h"
+	#include	"font/fontXF90_Console8x6.h"
+	#include	"font/fontXF90_Dos8x8.h"
+	#include	"font/fontXF90_Dos16x8.h"
+	#include	"font/fontXF90_Sans16_PL.h"
+	#include	"font/fontXF90_Sans16B_PL.h"
+	#include	"font/fontXF90_Sans24_PL.h"
 	
 	// Bitmapy
 	//#include	"BitmapXF90/bitmapXF90_ExtronicLogo.h"

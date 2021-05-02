@@ -95,14 +95,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"d-clr",			SSD1351_CmdClear},
 	{"d-chess",			SSD1351_CmdDrawChessboard},
 	{"d-cont",			SSD1351_CmdContrast},
-	{"d-pix",			SSD1351_CmdDrawPixel},
-	{"d-lin",			SSD1351_CmdDrawLine},
-	{"d-rec",			SSD1351_CmdDrawRectangle},
-	{"d-recf",			SSD1351_CmdDrawRectangleFill},
+	{"d-pix",			SSD1351_CmdPixel},
+	{"d-lin",			SSD1351_CmdLine},
+	{"d-rec",			SSD1351_CmdRectangle},
+	{"d-recf",			SSD1351_CmdRectangleFill},
 	{"d-cir",			SSD1351_CmdDrawCircle},
 	{"d-cur",			SSD1351_CmdCursor},
 	{"d-cf",			SSD1351_CmdColorFront},
 	{"d-cb",			SSD1351_CmdColorBack},
+	{"d-t",				SSD1351_CmdText},
 #endif
 
 // ========================================

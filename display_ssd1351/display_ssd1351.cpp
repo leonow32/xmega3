@@ -13,7 +13,7 @@ static uint8_t SSD1351_CursorX_Max		= SSD1351_DISPLAY_SIZE_X - 1;
 static uint8_t SSD1351_CursorY			= 0;
 static uint8_t SSD1351_CursorY_Max		= SSD1351_DISPLAY_SIZE_Y - 1;
 
-const static fontXF90_def_t * SSD1351_Font;
+const static fontXF90_def_t * SSD1351_Font = &FontXF90_Dos8x8;
 static uint8_t SSD1351_ColorFrontH		= 0xFF;		// Bia³y
 static uint8_t SSD1351_ColorFrontL		= 0xFF;
 static uint8_t SSD1351_ColorBackH		= 0x00;		// Czarny
@@ -777,7 +777,7 @@ void SSD1351_Text(const char * Text, uint8_t Align, uint8_t Negative) {
 	}
 	
 	// Wyœwietlenie tekstu
-		while(*Text) SSD1351_PrintChar(*Text++, Negative);
+	while(*Text) SSD1351_PrintChar(*Text++, Negative);
 }
 
 #endif

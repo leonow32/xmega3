@@ -26,12 +26,13 @@
 void SSD1351_CmdClear(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdContrast(uint8_t argc, uint8_t * argv[]);
-void SSD1351_CmdDrawPixel(uint8_t argc, uint8_t * argv[]);
-void SSD1351_CmdDrawLine(uint8_t argc, uint8_t * argv[]);
-void SSD1351_CmdDrawRectangle(uint8_t argc, uint8_t * argv[]);
-void SSD1351_CmdDrawRectangleFill(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdPixel(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdLine(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdRectangle(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdRectangleFill(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]);
 #endif /* DISPLAY_SSD1351_DEMO_H_ */
