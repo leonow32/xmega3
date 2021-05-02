@@ -169,8 +169,7 @@ void SSD1351_CmdCursor(uint8_t argc, uint8_t * argv[]) {
 		if(Parse_Dec8(argv[2], &y, SSD1351_DISPLAY_SIZE_Y-1)) return;
 		
 		// Execute command
-		SSD1351_CursorXSet(x);
-		SSD1351_CursorYSet(y);
+		SSD1351_CursorSet(x, y);
 		Print_ResponseOK();
 	}
 }

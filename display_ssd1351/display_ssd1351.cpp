@@ -99,17 +99,16 @@ static const uint8_t SSD1351_InitSequence[] = {
 	1, SSD1351_SLEEP_MODE_OFF,				// Display on
 };
 
-// ===================
-// Funckje elementarne
-// ===================
 
+// ========================================
+// Basic functions
+// ========================================
 
 // Initialization
 void SSD1351_Init(void) {
 	
 	SSD1351_CHIP_SELECT_INIT;
 	SSD1351_DC_INIT;
-	
 	
 	const uint8_t * Index = SSD1351_InitSequence;
 	const uint8_t * Limit = SSD1351_InitSequence + sizeof(SSD1351_InitSequence);
@@ -128,7 +127,6 @@ void SSD1351_Init(void) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
 // Send command
 void SSD1351_WriteCommand(const uint8_t Command) {
 	SSD1351_CHIP_SELECT;
@@ -137,15 +135,13 @@ void SSD1351_WriteCommand(const uint8_t Command) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// WSend data
+// Send data
 void SSD1351_WriteData(const uint8_t Data) {
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_DATA;
 	Spi_1(Data);
 	SSD1351_CHIP_DESELECT;
 }
-
 
 // Allow to display data
 void SSD1351_WriteRamEnable(void) {
@@ -154,7 +150,6 @@ void SSD1351_WriteRamEnable(void) {
 	Spi_1(SSD1351_RAM_WRITE);
 	SSD1351_CHIP_DESELECT;	
 }
-
 
 // Set contrast
 void SSD1351_ContrastSet(const uint8_t Value) {
@@ -169,92 +164,81 @@ void SSD1351_ContrastSet(const uint8_t Value) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// Czyszczenie wyœwietlacza
+// Clear display
 void SSD1351_Clear(void) {
-
-	// Ustawienie obszaru aktywnego na ca³y wyœwietlacz
+	
+	// Set active area to fill all the screen
 	SSD1351_ActiveAreaSet(0, SSD1351_DISPLAY_SIZE_X-1, 0, SSD1351_DISPLAY_SIZE_Y-1);
 	
-	// Zape³nienie pikselami o kolorze t³a
+	// Fill with background colored pixels
 	SSD1351_CHIP_SELECT;
 	Spi_Repeat(SSD1351_ColorBackH, SSD1351_ColorBackL, SSD1351_DISPLAY_SIZE_X * SSD1351_DISPLAY_SIZE_Y);
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// Szachownica na ca³y wyœwietlacz
+// Print chessboard on the display
 void SSD1351_Chessboard(void) {
-
-	// Zakres osi X od 0 do 127
+	
+	// For all range of X
 	SSD1351_ActiveAreaXSet(0, SSD1351_DISPLAY_SIZE_X-1);
-
-	// Zakres osi Y od 0 do 127
+	
+	// For all range of Y
 	for(uint8_t y=0; y<SSD1351_DISPLAY_SIZE_Y; y++) {
 		SSD1351_ActiveAreaYSet(y, y);
 		SSD1351_CHIP_SELECT;
 		if(y & 0x01) {
-			// Linie nieparzyste
+			// Odd lines
 			for(uint8_t x=0; x<(SSD1351_DISPLAY_SIZE_X/2); x++) {
-				Spi_4(0xFF, 0xFF, 0x00, 0x00);
+				Spi_4(SSD1351_ColorFrontH, SSD1351_ColorFrontL, SSD1351_ColorBackH, SSD1351_ColorBackL);
 			}
 		}
 		else {
-			// Linie parzyste
+			// Even lines
 			for(uint8_t x=0; x<(SSD1351_DISPLAY_SIZE_X/2); x++) {
-				Spi_4(0x00, 0x00, 0xFF, 0xFF);
+				Spi_4(SSD1351_ColorBackH, SSD1351_ColorBackL, SSD1351_ColorFrontH, SSD1351_ColorFrontL);
 			}
 		}
 		SSD1351_CHIP_DESELECT;
 	}
-
+	
 	SSD1351_ActiveAreaSet(0, SSD1351_DISPLAY_SIZE_X-1, 0, SSD1351_DISPLAY_SIZE_Y-1);
 }
 
-// ===============
-// Pozycja kursora
-// ===============
+// ========================================
+// Cursor position
+// ========================================
 
-// Ustawienie pozycji XY
 void SSD1351_CursorSet(uint8_t x, uint8_t y) {
 	SSD1351_CursorX = x < SSD1351_DISPLAY_SIZE_X ? x : SSD1351_DISPLAY_SIZE_X-1;
 	SSD1351_CursorY = y < SSD1351_DISPLAY_SIZE_Y ? y : SSD1351_DISPLAY_SIZE_Y-1;
 }
 
-// Odczytanie pozycji X
 uint8_t SSD1351_CursorXGet(void) {
 	return SSD1351_CursorX;
 }
 
-
-// Ustawienie pozycji X
 void SSD1351_CursorXSet(uint8_t x) {
  	SSD1351_CursorX = x < SSD1351_DISPLAY_SIZE_X ? x : SSD1351_DISPLAY_SIZE_X-1;
 }
 
-
-// Odczytanie pozycji Y
 uint8_t SSD1351_CursorYGet(void) {
 	return SSD1351_CursorY;
 }
 
-
-//Ustawienie pozycji Y
 void SSD1351_CursorYSet(uint8_t y) {
  	SSD1351_CursorY = y < SSD1351_DISPLAY_SIZE_Y ? y : SSD1351_DISPLAY_SIZE_Y-1;
 }
 
-
-// Ustawianie aktywnego obszaru, by zape³niæ go pikselami
+// Set active area to write to in next operation
 void SSD1351_ActiveAreaSet(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2) {
 	
-	// Kontrola
+	// Sanity check
 	SSD1351_CursorX			= x1 < SSD1351_DISPLAY_SIZE_X ? x1 : SSD1351_DISPLAY_SIZE_X-1;
 	SSD1351_CursorX_Max		= x2 < SSD1351_DISPLAY_SIZE_X ? x2 : SSD1351_DISPLAY_SIZE_X-1;
 	SSD1351_CursorY			= y1 < SSD1351_DISPLAY_SIZE_Y ? y1 : SSD1351_DISPLAY_SIZE_Y-1;
 	SSD1351_CursorY_Max		= y2 < SSD1351_DISPLAY_SIZE_Y ? y2 : SSD1351_DISPLAY_SIZE_Y-1;
-
-	// Przes³anie do wyœwietlacza
+	
+	// Send to display
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;
 	Spi_1(SSD1351_COLUMN_RANGE);
@@ -270,15 +254,14 @@ void SSD1351_ActiveAreaSet(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// Ustawianie aktywnego obszaru tylko w X, by zape³niæ go pikselami
+// Change active area only in X dimension
 void SSD1351_ActiveAreaXSet(uint8_t x1, uint8_t x2) {
 	
-	// Kontrola
+	// Sanity check
 	SSD1351_CursorX			= x1 < SSD1351_DISPLAY_SIZE_X ? x1 : SSD1351_DISPLAY_SIZE_X-1;
 	SSD1351_CursorX_Max		= x2 < SSD1351_DISPLAY_SIZE_X ? x2 : SSD1351_DISPLAY_SIZE_X-1;
-
-	// Przes³anie do wyœwietlacza
+	
+	// Send to display
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;
 	Spi_1(SSD1351_COLUMN_RANGE);
@@ -290,15 +273,14 @@ void SSD1351_ActiveAreaXSet(uint8_t x1, uint8_t x2) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// Ustawianie aktywnego obszaru tylko w Y, by zape³niæ go pikselami
+// Change active area only in Y dimension
 void SSD1351_ActiveAreaYSet(uint8_t y1, uint8_t y2) {
 	
-	// Kontrola
+	// Sanity check
 	SSD1351_CursorY			= y1 < SSD1351_DISPLAY_SIZE_Y ? y1 : SSD1351_DISPLAY_SIZE_Y-1;
 	SSD1351_CursorY_Max		= y2 < SSD1351_DISPLAY_SIZE_Y ? y2 : SSD1351_DISPLAY_SIZE_Y-1;
-
-	// Przes³anie do wyœwietlacza
+	
+	// Send to display
 	SSD1351_CHIP_SELECT;
 	SSD1351_DC_COMMAND;
 	Spi_1(SSD1351_ROW_RANGE);
@@ -310,23 +292,20 @@ void SSD1351_ActiveAreaYSet(uint8_t y1, uint8_t y2) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
-// ===============
-// Kolory
-// ===============
+// ========================================
+// Colors
+// ========================================
 
 // Pobranie koloru pierwszego planu
 uint16_t SSD1351_ColorFrontGet(void) {
 	return (uint16_t)SSD1351_ColorFrontH << 8 | SSD1351_ColorFrontL;
 }
 
-
 // Ustawienie koloru t³a poprzed podabie wartoœci RGB w formacie 565
 void SSD1351_ColorFrontSet(uint16_t ColorRGB565) {
 	SSD1351_ColorFrontH = (uint8_t)(ColorRGB565 >> 8);
 	SSD1351_ColorFrontL = (uint8_t)(ColorRGB565 & 0x00FF);
 }
-
 
 // Ustawienie kolrou pierwszego planu poprzed podanie wartoœci RGB ka¿dej osobno
 void SSD1351_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B) {
@@ -335,25 +314,22 @@ void SSD1351_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B) {
 	R = R & 0b11111000;
 	G = G & 0b11111100;
 	B = B & 0b11111000;
-
+	
 	// Sk³adanie zmiennej koloru
 	SSD1351_ColorFrontH = R | (G >> 5);
 	SSD1351_ColorFrontL = (G << 3) | (B >> 3);
 }
-
 
 // Pobranie koloru pierwszego planu
 uint16_t SSD1351_ColorBackGet(void) {
 	return (uint16_t)SSD1351_ColorBackH << 8 | SSD1351_ColorBackL;
 }
 
-
 // Ustawienie koloru t³a poprzed podabie wartoœci RGB w formacie 565
 void SSD1351_ColorBackSet(uint16_t ColorRGB565) {
 	SSD1351_ColorBackH = (uint8_t)(ColorRGB565 >> 8);
 	SSD1351_ColorBackL = (uint8_t)(ColorRGB565 & 0x00FF);
 }
-
 
 // Ustawienie kolrou t³a poprzed podanie wartoœci RGB ka¿dej osobno
 void SSD1351_ColorBackSet(uint8_t R, uint8_t G, uint8_t B) {
@@ -362,7 +338,7 @@ void SSD1351_ColorBackSet(uint8_t R, uint8_t G, uint8_t B) {
 	R = R & 0b11111000;
 	G = G & 0b11111100;
 	B = B & 0b11111000;
-
+	
 	// Sk³adanie zmiennej koloru
 	SSD1351_ColorBackH = R | (G >> 5);
 	SSD1351_ColorBackL = (G << 3) | (B >> 3);
@@ -391,7 +367,6 @@ uint16_t SSD1351_ColorNameToRGB565(uint8_t ColorName) {
 	}
 }
 
-
 // Konwersja RGB888 na RGB565
 uint16_t SSD1351_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B) {
 	
@@ -399,23 +374,22 @@ uint16_t SSD1351_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B) {
 	R = R & 0b11111000;
 	G = G & 0b11111100;
 	B = B & 0b11111000;
-
+	
 	// Sk³adanie zmiennej koloru
 	uint8_t ColorH = R | (G >> 5);
 	uint8_t ColorL = (G << 3) | (B >> 3);
-
+	
 	return ((uint16_t)ColorH << 8) | ColorL;
 }
 
-
 // Konwersja RGB
 uint16_t SSD1351_ColorRGB332toRGB565(uint8_t Color332) {
-
+	
 	// Tabele konwersji palety
 	const uint8_t b3to6lookup[8] = {0, 9, 18, 27, 36, 45, 54, 63};
 	const uint8_t b3to5lookup[8] = {0, 4, 9, 13, 18, 22, 27, 31};
 	const uint8_t b2to5lookup[4] = {0, 10, 21, 31};
-
+	
 	uint16_t red, green, blue;
 	
 	red = (Color332 & 0xe0) >> 5;		// rgb332 3 red bits now right justified
@@ -432,11 +406,9 @@ uint16_t SSD1351_ColorRGB332toRGB565(uint8_t Color332) {
 	return (uint16_t)(red | green | blue);
 }
 
-
 // ====================================
 // Funkcje rysuj¹ce figury geometryczne
 // ====================================
-
 
 // Rysowanie piksela
 void SSD1351_DrawPixel(uint8_t x, uint8_t y) {
@@ -446,33 +418,30 @@ void SSD1351_DrawPixel(uint8_t x, uint8_t y) {
 	SSD1351_CHIP_DESELECT;
 }
 
-
 // Linia pozioma
 void SSD1351_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	// Rysuje liniê poziom¹ od punktu (x0,y0) w prawo.
-
+	
 	SSD1351_ActiveAreaSet(x0, x0 + Length - 1, y0, y0);
 	SSD1351_CHIP_SELECT;
 	Spi_Repeat(SSD1351_ColorFrontH, SSD1351_ColorFrontL, Length);
 	SSD1351_CHIP_DESELECT;
 }
 
-
 // Linia pionowa
 void SSD1351_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	// Rysuje liniê pionow¹ od punktu (X,Y) w dó³.
-
+	
 	SSD1351_ActiveAreaSet(x0, x0, y0, y0 + Length - 1);
 	SSD1351_CHIP_SELECT;
 	Spi_Repeat(SSD1351_ColorFrontH, SSD1351_ColorFrontL, Length);
 	SSD1351_CHIP_DESELECT;
 }
 
-
 // Linia pod dowolnym k¹tem algorytmem Bresenhama
 // Jeœli trzeba narysowaæ liniê pionow¹ lub poziom¹ to u¿ywaæ funkcji LineHorizontal lub LineVertica, bo dzia³aj¹ szybciej
 void SSD1351_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-
+	
 	int16_t Sx;
 	int16_t Sy;
 	int16_t E2;
@@ -499,7 +468,6 @@ void SSD1351_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	}
 }
 
-
 //  Prostok¹t bez wype³nienia
 void SSD1351_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	SSD1351_DrawLineVertical(x0, y0, y1-y0+1);
@@ -507,7 +475,6 @@ void SSD1351_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	SSD1351_DrawLineHorizontal(x0+1, y0, x1-x0-1);
 	SSD1351_DrawLineHorizontal(x0+1, y1, x1-x0-1);
 }
-	
 
 // Prostok¹t z wype³nieniem
 void SSD1351_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
@@ -515,7 +482,6 @@ void SSD1351_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SSD1351_DrawLineHorizontal(x0, y, y1-y0+1);
 	}
 }
-
 
 // Okr¹g
 void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
@@ -525,7 +491,7 @@ void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 	int16_t y = r;
 	int16_t deltaA = (-2*r + 5) * 4;
 	int16_t deltaB = 3*4;
-
+	
 	while (x <= y) {
 		SSD1351_DrawPixel(x0-x, y0-y);
 		SSD1351_DrawPixel(x0-x, y0+y);
@@ -551,9 +517,9 @@ void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 	}
 }
 
-// =======
-// Bitmapy
-// =======
+// ========================================
+// Bitmaps
+// ========================================
 
 // Rysowanie bitmapy monochromatycznej
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
@@ -562,19 +528,19 @@ void SSD1351_BitmapMono(const BitmapXF90_t * Bitmap) {
 	// Odczytanie rozmiaru bitmapy
 	uint8_t WidthPixels = Bitmap->Width;
 	uint8_t HeightPixels = Bitmap->Height;
-
+	
 	// Ustawienie obszaru roboczego
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + WidthPixels - 1, SSD1351_CursorY, SSD1351_CursorY + HeightPixels - 1);
-
+	
 	// Pêtla kolumn
 	uint8_t Buffer = 0;
 	uint16_t Address = 0;
 	SSD1351_CHIP_SELECT;
 	for(uint8_t ActualColumn = 0; ActualColumn < WidthPixels; ActualColumn++) {
-
+		
 		uint8_t ActualRow = HeightPixels;
 		uint8_t BitMask = 0;
-
+		
 		// Pêtla wierszy
 		while(ActualRow--) {
 			if(BitMask == 0) {
@@ -582,7 +548,7 @@ void SSD1351_BitmapMono(const BitmapXF90_t * Bitmap) {
 				//Buffer = Bitmap[Address++];
 				Buffer = Bitmap->Bitmaps[Address++];
 			}
-
+			
 			if(Buffer & BitMask) {
 				// Kolor pierwszoplanowy
 				Spi_2(SSD1351_ColorFrontH, SSD1351_ColorFrontL); 
@@ -591,14 +557,13 @@ void SSD1351_BitmapMono(const BitmapXF90_t * Bitmap) {
 				// Kolor t³a
 				Spi_2(SSD1351_ColorBackH, SSD1351_ColorBackL);
 			}
-
+			
 			// Przesuniêcie maski bitowej
 			BitMask = BitMask >> 1;
 		}
 	}
 	SSD1351_CHIP_DESELECT;
 }
-
 
 // Rysowanie bitmapy kolorowej w RGB565
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
@@ -607,16 +572,15 @@ void SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap) {
 	// Odczytanie rozmiaru bitmapy
 	uint8_t WidthPixels = Bitmap->Width;
 	uint8_t HeightPixels = Bitmap->Height;
-
+	
 	// Ustawienie obszaru roboczego
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + WidthPixels - 1, SSD1351_CursorY, SSD1351_CursorY + HeightPixels - 1);
-
+	
 	// Rysowanie pikseli
 	SSD1351_CHIP_SELECT;
 	Spi_Write(Bitmap->Bitmaps, WidthPixels * HeightPixels * 2);
 	SSD1351_CHIP_DESELECT;
 }
-
 
 // Rysowanie bitmapy kolorowej w RGB332
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
@@ -628,10 +592,10 @@ void SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap) {
 	uint16_t Size = WidthPixels * HeightPixels;
 	uint16_t Color565;
 	const uint8_t * BitmapPointer = Bitmap->Bitmaps;
-
+	
 	// Ustawienie obszaru roboczego
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + WidthPixels - 1, SSD1351_CursorY, SSD1351_CursorY + HeightPixels - 1);
-
+	
 	// Rysowanie pikseli
 	SSD1351_CHIP_SELECT;
 	while(Size--) {
@@ -639,20 +603,16 @@ void SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap) {
 		Spi_2(Color565 >> 8, Color565 & 0xFF);
 	}
 	SSD1351_CHIP_DESELECT;
-
 }
 
-
-// =================
-// Czcionki i napisy
-// =================
-
+// ========================================
+// Fonts
+// ========================================
 
 // Odczytanie aktualnie ustawionej czcionki
 const fontXF90_def_t * SSD1351_FontGet(void) {
 	return SSD1351_Font;
 }
-
 
 // Ustawienie czcionki
 // U¿ycie: SSD1351_FontSet(&FontXF90_NazwaCzcionki);  <- pamiêtaæ o &
@@ -660,11 +620,10 @@ void SSD1351_FontSet(const fontXF90_def_t * Font) {
 	SSD1351_Font = Font;
 }
 
-
 // Wyœwietlanie znaku
 // Zmienna Negative jest opcjonalna, wartoœæ inna ni¿ 0 powoduje negacjê koloru
 void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
-
+	
 	// Kontrola czy ¿¹dany znak znajduje siê w tablicy
 	if(Char < SSD1351_Font->FirstChar) Char = SSD1351_Font->LastChar;
 	if(Char > SSD1351_Font->LastChar) Char = SSD1351_Font->LastChar;
@@ -687,34 +646,34 @@ void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
 		Width = SSD1351_Font->Descriptors[Char].Width;
 		Address = SSD1351_Font->Descriptors[Char].Offset;
 	}
-
+	
 	// Je¿eli Addres = 0 i Szerokoœæ = 0 to znaczy, ¿e taki znak nie jest zdefiniowany, wiêc wyœwietlamy BadChar (ostatni znak z tabeli)
 	if((Address == 0) && (Width == 0)) {
 		Char = SSD1351_Font->LastChar - SSD1351_Font->FirstChar;
 		Address = SSD1351_Font->Descriptors[Char].Offset;
 		Width = SSD1351_Font->Descriptors[Char].Width;
 	}
-
+	
 	// Obszar roboczy
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + Width + Spacing - 1, SSD1351_CursorY, SSD1351_CursorY + Height - 1);
-
+	
 	// Wysy³anie pikseli
 	uint8_t Buffer = 0;
 	SSD1351_CHIP_SELECT;
 	
 	// Pêtla kolumn tylko dla znaku (spacing bêdzie w kolejnej pêtli)
 	for(uint8_t ActualColumn = 0; ActualColumn < Width; ActualColumn++) {
-
+		
 		uint8_t ActualRow = Height;
 		uint8_t BitMask = 0;
-
+		
 		// Pêtla wierszy
 		while(ActualRow--) {
 			if(BitMask == 0) {
 				BitMask = 0b10000000;
 				Buffer = SSD1351_Font->Bitmaps[Address++];
 			}
-
+			
 			if(Buffer & BitMask) {
 				// Kolor pierwszoplanowy
 				if(Negative) Spi_2(SSD1351_ColorBackH, SSD1351_ColorBackL);
@@ -725,12 +684,12 @@ void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
 				if(Negative) Spi_2(SSD1351_ColorFrontH, SSD1351_ColorFrontL);
 				else Spi_2(SSD1351_ColorBackH, SSD1351_ColorBackL);
 			}
-
+			
 			// Przesuniêcie maski bitowej
 			BitMask = BitMask >> 1;
 		}
 	}
-
+	
 	// Spacing
 	for(uint8_t Column = 0; Column < Spacing; Column++) {
 		for(uint8_t i=0; i<Height; i++) {
@@ -738,10 +697,10 @@ void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
 			else Spi_2(SSD1351_ColorBackH, SSD1351_ColorBackL);
 		}
 	}
-
+	
 	// Koniec transmisji
 	SSD1351_CHIP_DESELECT;
-
+	
 	// Ustawienie kursora na koniec znaku
 	SSD1351_CursorX = SSD1351_CursorX + Width + Spacing;
 	if(SSD1351_CursorX > SSD1351_DISPLAY_SIZE_X) {
@@ -749,22 +708,21 @@ void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
 	}
 }
 
-
 // Wylicza d³ugoœæ napisu w pikselach w zale¿noœci od wybranej czcionki
 uint8_t SSD1351_TextWidth(const char * Text) {
 	uint8_t Width = 0;
 	uint16_t Offset = SSD1351_Font->FirstChar;
-
+	
 	// Sprawdzenie czy czcionka ma sta³¹ szerokoœæ znaku
 	if(SSD1351_Font->Width) {
 		// Czcionka o sta³ej szerokoœci znaków
-
+		
 		// Zliczanie iloœci znaków
 		while(*Text++) Width++;
-
+		
 		// Odtsêp za ka¿dym znakiem		(!! sprawdziæ to i poprawiæ w SH1106)
 		//Width = Width + SSD1351_Font.Spacing;
-
+		
 		// Mno¿enie przez sta³¹ szerokoœæ znaku
 		Width = Width * (SSD1351_Font->Width + SSD1351_Font->Spacing);						
 	}
@@ -779,46 +737,45 @@ uint8_t SSD1351_TextWidth(const char * Text) {
 	return Width;
 }
 
-
 // Pisanie tekstu. Wczeœniej wybraæ czcionkê!
 void SSD1351_Text(const char * Text, uint8_t Align, uint8_t Negative) {
 	
 	// Ustawienie pozycji kursora w zale¿noœci od wyrównania tekstu
 	uint8_t Width = SSD1351_TextWidth(Text);
 	uint8_t Height = SSD1351_Font->Height;
-
+	
 	// M³odszy nibble oznacza wyrównanie poziome
 	switch(Align & 0x0F) {
-
+		
 		case SSD1351_HALIGN_LEFT:
 			SSD1351_CursorX = 0;
 			break;
-
+			
 		case SSD1351_HALIGN_CENTER:
 			SSD1351_CursorX = SSD1351_DISPLAY_SIZE_X/2 - Width/2;
 			break;
-
+			
 		case SSD1351_HALIGN_RIGHT:
 			SSD1351_CursorX = SSD1351_DISPLAY_SIZE_X - Width;
 			break;
 	}
-
+	
 	// Starszy nibble oznacza wyrównanie pionowe
 	switch(Align & 0xF0) {
-
+		
 		case SSD1351_VALIGN_TOP:
 			SSD1351_CursorY = 0;
 			break;
-
+		
 		case SSD1351_VALIGN_CENTER:
 			SSD1351_CursorY = SSD1351_DISPLAY_SIZE_Y/2 - Height/2;
 			break;
-
+		
 		case SSD1351_VALIGN_BOTTOM:
 			SSD1351_CursorY = SSD1351_DISPLAY_SIZE_Y - Height;
 			break;
 	}
-
+	
 	// Wyœwietlenie tekstu
 		while(*Text) SSD1351_PrintChar(*Text++, Negative);
 }
