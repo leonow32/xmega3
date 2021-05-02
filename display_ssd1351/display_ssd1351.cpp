@@ -13,7 +13,7 @@ static uint8_t SSD1351_CursorX_Max		= SSD1351_DISPLAY_SIZE_X - 1;
 static uint8_t SSD1351_CursorY			= 0;
 static uint8_t SSD1351_CursorY_Max		= SSD1351_DISPLAY_SIZE_Y - 1;
 
-const static fontXF90_def_t * SSD1351_Font = &FontXF90_Dos8x8;
+const static SSD1351_FontDef_t * SSD1351_Font = &SSD1351_DEFAULT_FONT;
 static uint8_t SSD1351_ColorFrontH		= 0xFF;		// Bia³y
 static uint8_t SSD1351_ColorFrontL		= 0xFF;
 static uint8_t SSD1351_ColorBackH		= 0x00;		// Czarny
@@ -70,9 +70,9 @@ static const uint8_t SSD1351_InitSequence[] = {
 	0, 0x55,
 	
 	1, SSD1351_SET_CONTRAST,
-	0, 0xFF,								// Oryginalnie 0xC8
-	0, 0xFF,								// Oryginalnie 0x80
-	0, 0xFF,								// Oryginalnie 0xC0
+	0, SSD1351_DEFAULT_CONTRAST,
+	0, SSD1351_DEFAULT_CONTRAST,
+	0, SSD1351_DEFAULT_CONTRAST,
 	
 	1, SSD1351_MASTER_CONTRAST_CURRENT,
 	0, 0x0F,
@@ -116,8 +116,6 @@ void SSD1351_Init(void) {
 	SSD1351_CHIP_SELECT;
 	
 	// Transmit array SSD1351_InitSequence
-	// Bajt nieparzysty ukreœla czy jak ustawiæ pin steruj¹cy DC (dane lub polecenie)
-	// Bajt parzysty ma zostaæ przes³any przez SPI
 	while(Index != Limit) {
 		if(*Index++) SSD1351_DC_COMMAND;
 		else SSD1351_DC_DATA;
@@ -610,13 +608,13 @@ void SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap) {
 // ========================================
 
 // Odczytanie aktualnie ustawionej czcionki
-const fontXF90_def_t * SSD1351_FontGet(void) {
+const SSD1351_FontDef_t * SSD1351_FontGet(void) {
 	return SSD1351_Font;
 }
 
 // Ustawienie czcionki
 // U¿ycie: SSD1351_FontSet(&FontXF90_NazwaCzcionki);  <- pamiêtaæ o &
-void SSD1351_FontSet(const fontXF90_def_t * Font) {
+void SSD1351_FontSet(const SSD1351_FontDef_t * Font) {
 	SSD1351_Font = Font;
 }
 
@@ -709,7 +707,7 @@ void SSD1351_PrintChar(uint8_t Char, uint8_t Negative) {
 }
 
 // Wylicza d³ugoœæ napisu w pikselach w zale¿noœci od wybranej czcionki
-uint8_t SSD1351_TextWidth(const char * Text) {
+uint8_t SSD1351_TextWidthGet(const char * Text) {
 	uint8_t Width = 0;
 	uint16_t Offset = SSD1351_Font->FirstChar;
 	
@@ -741,7 +739,7 @@ uint8_t SSD1351_TextWidth(const char * Text) {
 void SSD1351_Text(const char * Text, uint8_t Align, uint8_t Negative) {
 	
 	// Ustawienie pozycji kursora w zale¿noœci od wyrównania tekstu
-	uint8_t Width = SSD1351_TextWidth(Text);
+	uint8_t Width = SSD1351_TextWidthGet(Text);
 	uint8_t Height = SSD1351_Font->Height;
 	
 	// M³odszy nibble oznacza wyrównanie poziome

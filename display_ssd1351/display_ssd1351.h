@@ -79,6 +79,30 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
+#if SSD1351_FONT_CONSOLE8x8
+	#include	"font/console8x6.h"
+#endif
+
+#if SSD1351_FONT_DOS8x8
+	#include	"font/dos8x8.h"
+#endif
+
+#if SSD1351_FONT_DOS16x8
+	#include	"font/dos16x8.h"
+#endif
+
+#if SSD1351_FONT_SANS16_PL
+	#include	"font/sans16_PL.h"
+#endif
+
+#if SSD1351_FONT_SANS16B_PL
+	#include	"font/sans16B_PL.h"
+#endif
+
+#if SSD1351_FONT_SANS24_PL
+	#include	"font/sans24_PL.h"
+#endif
+
 // ========================================
 // Basic functions
 // ========================================
@@ -142,9 +166,9 @@ void		SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap);
 // Text
 // ========================================
 
-const fontXF90_def_t * SSD1351_FontGet(void);
-void		SSD1351_FontSet(const fontXF90_def_t * Font);
-uint8_t		SSD1351_TextWidth(const char * Text);
+const SSD1351_FontDef_t * SSD1351_FontGet(void);
+void		SSD1351_FontSet(const SSD1351_FontDef_t * Font);
+uint8_t		SSD1351_TextWidthGet(const char * Text);
 void		SSD1351_PrintChar(uint8_t Char, uint8_t Negative = 0);
 void		SSD1351_Text(const char * Text, uint8_t Align = 0, uint8_t Negative = 0);
 

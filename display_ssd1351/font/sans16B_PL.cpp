@@ -1,4 +1,4 @@
-#include "fontXF90_Sans16B_PL.h"
+#include "sans16B_PL.h"
 
 const uint8_t FontXF90_Sans16B_PL_Bitmap[] = {
 	// @0 ' ' (2 pixels wide)
@@ -983,7 +983,7 @@ const uint8_t FontXF90_Sans16B_PL_Bitmap[] = {
 	0b11111111, 0b11111111, // ################
 };
 
-const fontXF90_info_t FontXF90_Sans16B_PL_Descriptors[] = {
+const SSD1351_CharDef_t FontXF90_Sans16B_PL_Descriptors[] = {
 	{2, 0}, 		//
 	{2, 4}, 		// !
 	{4, 8}, 		// "
@@ -1199,7 +1199,7 @@ const fontXF90_info_t FontXF90_Sans16B_PL_Descriptors[] = {
 	{4, 1498},		// bad char 244
 };
 
-const fontXF90_def_t FontXF90_Sans16B_PL = {
+const SSD1351_FontDef_t FontXF90_Sans16B_PL = {
 	.Height				=	16,
 	.Width				=	0,
 	.Spacing			=	1,

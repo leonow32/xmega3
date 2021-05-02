@@ -2,17 +2,23 @@
 #define DISPLAY_SSD1351_DEFINES_H_
 
 // ========================================
+// Basic constants
+// ========================================
+
+#define		SSD1351_DISPLAY_SIZE_X				128
+#define		SSD1351_DISPLAY_SIZE_Y				128
+
+// ========================================
 // Display operation codes
 // ========================================
 
-// Polecenia o d³ugoœc 1 bajta s¹ zrealizowane jako definicje, które nale¿y wywo³aæ poprzez SSD1351_WriteCommand()
-#define		SSD1351_COLUMN_RANGE				0x15						// 01, ustawia zakres w którym porusza siê kursor
-#define		SSD1351_ROW_RANGE					0x75						// 02, ustawia zakres w którym porusza siê kursor
-#define		SSD1351_RAM_WRITE					0x5C						// 03, Start zapisuj grafiki do RAM
-#define		SSD1351_RAM_READ					0x5D						// 04, Odczytywanie z RAM (nie dzia³a poprzez SPI)
-#define		SSD1351_REMAP_COLOR_DEPTH			0xA0						// 05,
-#define		SSD1351_SET_DISPLAY_START_LINE		0xA1						// 06, Set vertical scroll by RAM from 0~127. [reset=00h]
-#define		SSD1351_SET_DISPLAY_OFFSET			0xA2						// 07, Set vertical scroll by Row from 0-127. [reset=60h]
+#define		SSD1351_COLUMN_RANGE				0x15						// 01 specifies the range in which the cursor can increment
+#define		SSD1351_ROW_RANGE					0x75						// 02 specifies the range in which the cursor can increment
+#define		SSD1351_RAM_WRITE					0x5C						// 03
+#define		SSD1351_RAM_READ					0x5D						// 04 reading from the display doesn't work in SPI mode
+#define		SSD1351_REMAP_COLOR_DEPTH			0xA0						// 05
+#define		SSD1351_SET_DISPLAY_START_LINE		0xA1						// 06 set vertical scroll by RAM from 0~127. [reset=00h]
+#define		SSD1351_SET_DISPLAY_OFFSET			0xA2						// 07 set vertical scroll by Row from 0-127. [reset=60h]
 #define		SSD1351_SET_DISPLAY_MODE_OFF		0xA4						// 08a
 #define		SSD1351_SET_DISPLAY_MODE_ON			0xA5						// 08b
 #define		SSD1351_SET_DISPLAY_MODE_RESET		0xA6						// 08c
@@ -81,36 +87,34 @@
 #define		SSD1351_COLOR_LIGHTGRAY_RGB565		0b1100011000011000
 
 // ========================================
-// Text align
+// Text and fonts
 // ========================================
 
 #define		SSD1351_HALIGN_NONE					0x00
 #define		SSD1351_HALIGN_LEFT					0x01
 #define		SSD1351_HALIGN_CENTER				0x02
 #define		SSD1351_HALIGN_RIGHT				0x03
-#define		SSD1351_HALIGN_JUSTIFY				0x04
 #define		SSD1351_VALIGN_NONE					0x00
 #define		SSD1351_VALIGN_TOP					0x10
 #define		SSD1351_VALIGN_CENTER				0x20
 #define		SSD1351_VALIGN_BOTTOM				0x30
 
+// Character definition
+struct SSD1351_CharDef_t {
+	uint8_t		Width;							// Width of character in pixels
+	uint16_t	Offset;							// Address in bitmap array
+};
 
-// Struktura d³ugoœci i offsetów znaków w tabeli bitmap
-struct fontXF90_info_t {
-	uint8_t		Width;						// Szerokoœæ znaku w pikselach
-	uint16_t	Offset;						// Adres w tablicy bitmap
-} ;
-
-// Struktura definicji czcionki
-struct fontXF90_def_t {
-	uint8_t Height;							// Wysokoœæ w pikselach
-	uint8_t Width;							// Je¿eli czcionka ma sta³¹ szerokoœæ, jeœli nie to =0
-	uint8_t Spacing;						// Odstêp miêdzy znakami
-	uint8_t FirstChar;						// Pierwszy znak, jaki znajduje siê w tablicy Bitmaps
-	uint8_t LastChar;						// Ostatni znak, jaki znajduje siê w tablicy Bitmaps
-	const fontXF90_info_t * Descriptors;		// Tablica szerokoœci i offsetów, jeœli Width jest ustalone to wstawiæ NULL
-	const uint8_t * Bitmaps;				// Tablica znaków
-} ;
+// Font definition
+struct SSD1351_FontDef_t {
+	uint8_t Height;								// Height of character in pixels
+	uint8_t Width;								// Width of character if constant for all characters, if variable width then type 0
+	uint8_t Spacing;							// Space between characters
+	uint8_t FirstChar;							// ASCII code of first character in bitmap array
+	uint8_t LastChar;							// ASCII code of last character in bitmap array
+	const SSD1351_CharDef_t * Descriptors;		// Pointer to array of character definitions if Width!=0, if width is constant for all characters then pass NULL
+	const uint8_t * Bitmaps;					// Pointer to bitmaps array
+};
 
 
 #endif /* DISPLAY_SSD1351_DEFINES_H_ */

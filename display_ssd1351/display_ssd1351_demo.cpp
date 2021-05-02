@@ -218,6 +218,42 @@ void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
+// Change font
+void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]) {
+	switch(*argv[1]) {
+		
+		#if SSD1351_FONT_CONSOLE8x8
+			case '1':	SSD1351_FontSet(&FontXF90_Console8x6);		break;
+		#endif
+		
+		#if SSD1351_FONT_DOS8x8
+			case '2':	SSD1351_FontSet(&FontXF90_Dos8x8);			break;
+		#endif
+		
+		#if SSD1351_FONT_DOS16x8
+			case '3':	SSD1351_FontSet(&FontXF90_Dos16x8);			break;
+		#endif
+		
+		#if SSD1351_FONT_SANS16_PL
+			case '4':	SSD1351_FontSet(&FontXF90_Sans16_PL);		break;
+		#endif
+		
+		#if SSD1351_FONT_SANS16B_PL
+			case '5':	SSD1351_FontSet(&FontXF90_Sans16B_PL);		break;
+		#endif
+		
+		#if SSD1351_FONT_SANS24_PL
+			case '6':	SSD1351_FontSet(&FontXF90_Sans24_PL);		break;
+		#endif
+		
+		default:
+			Print_ResponseError();
+			return;
+	}
+	
+	Print_ResponseOK();
+}
+
 
 #endif
 #endif

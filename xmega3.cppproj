@@ -510,40 +510,40 @@
     <Compile Include="display_ssd1351\display_ssd1351_demo.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Console8x6.cpp">
+    <Compile Include="display_ssd1351\font\console8x6.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Console8x6.h">
+    <Compile Include="display_ssd1351\font\console8x6.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Dos16x8.cpp">
+    <Compile Include="display_ssd1351\font\dos16x8.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Dos16x8.h">
+    <Compile Include="display_ssd1351\font\dos16x8.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Dos8x8.cpp">
+    <Compile Include="display_ssd1351\font\dos8x8.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Dos8x8.h">
+    <Compile Include="display_ssd1351\font\dos8x8.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans16B_PL.cpp">
+    <Compile Include="display_ssd1351\font\sans16B_PL.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans16B_PL.h">
+    <Compile Include="display_ssd1351\font\sans16B_PL.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans16_PL.cpp">
+    <Compile Include="display_ssd1351\font\sans16_PL.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans16_PL.h">
+    <Compile Include="display_ssd1351\font\sans16_PL.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans24_PL.cpp">
+    <Compile Include="display_ssd1351\font\sans24_PL.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\font\fontXF90_Sans24_PL.h">
+    <Compile Include="display_ssd1351\font\sans24_PL.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="ds3231\ds3231.cpp">

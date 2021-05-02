@@ -1,4 +1,4 @@
-#include "fontXF90_Sans24_PL.h"
+#include "sans24_PL.h"
 
 const uint8_t FontXF90_Sans24_PL_Bitmap[] = {
 	// @0 ' ' (2 pixels wide)
@@ -1217,7 +1217,7 @@ const uint8_t FontXF90_Sans24_PL_Bitmap[] = {
 
 };
 
-const fontXF90_info_t FontXF90_Sans24_PL_Descriptors[] = {
+const SSD1351_CharDef_t FontXF90_Sans24_PL_Descriptors[] = {
 	{2, 0}, 		//
 	{2, 6}, 		// !
 	{5, 12}, 		// "
@@ -1433,7 +1433,7 @@ const fontXF90_info_t FontXF90_Sans24_PL_Descriptors[] = {
 	{4, 2943},		// bad char 244
 };
 
-const fontXF90_def_t FontXF90_Sans24_PL = {
+const SSD1351_FontDef_t FontXF90_Sans24_PL = {
 	.Height				=	24,
 	.Width				=	0,
 	.Spacing			=	2,

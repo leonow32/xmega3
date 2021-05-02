@@ -1,4 +1,4 @@
-#include "fontXF90_Console8x6.h"
+#include "console8x6.h"
 
 const uint8_t FontXF90_Console8x6_Bitmap[]  = {
 	// Char 32
@@ -675,7 +675,7 @@ const uint8_t FontXF90_Console8x6_Bitmap[]  = {
 
 };
 
-const fontXF90_def_t FontXF90_Console8x6 = {
+const SSD1351_FontDef_t FontXF90_Console8x6 = {
 	.Height				=	8,
 	.Width				=	5,
 	.Spacing			=	1,

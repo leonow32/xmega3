@@ -25,19 +25,17 @@
 	#define		SSD1351_DC_DATA					VPORTA.OUT |=  PIN0_bm
 	#define		SSD1351_DC_COMMAND				VPORTA.OUT &= ~PIN0_bm
 	
-	#define		SSD1351_USE_DEMO_COMMANDS		1
+	// Config
+	#define		SSD1351_DEFAULT_CONTRAST		255
 	
-	// Definicje
-	#define		SSD1351_DISPLAY_SIZE_X			128
-	#define		SSD1351_DISPLAY_SIZE_Y			128
-	
-	// Czcionki
-	#include	"font/fontXF90_Console8x6.h"
-	#include	"font/fontXF90_Dos8x8.h"
-	#include	"font/fontXF90_Dos16x8.h"
-	#include	"font/fontXF90_Sans16_PL.h"
-	#include	"font/fontXF90_Sans16B_PL.h"
-	#include	"font/fontXF90_Sans24_PL.h"
+	// Fonts
+	#define		SSD1351_DEFAULT_FONT			FontXF90_Dos8x8
+	#define		SSD1351_FONT_CONSOLE8x8			1						// 497 B
+	#define		SSD1351_FONT_DOS8x8				1						// 2065 B
+	#define		SSD1351_FONT_DOS16x8			1						// 4113 B
+	#define		SSD1351_FONT_SANS16_PL			1						// 1938 B
+	#define		SSD1351_FONT_SANS16B_PL			1						// 2162 B
+	#define		SSD1351_FONT_SANS24_PL			1						// 3614 B
 	
 	// Bitmapy
 	//#include	"BitmapXF90/bitmapXF90_ExtronicLogo.h"
@@ -45,6 +43,9 @@
 	//#include	"BitmapXF90/bitmapXF90_Cassini565.h"
 	//#include	"BitmapXF90/bitmapXF90_Cassini332.h"
 	//#include	"BitmapXF90/bitmapXF90_Pluszaki.h"
+	
+	// Miscellaneous
+	#define		SSD1351_USE_DEMO_COMMANDS		1
 	
 	#define		SSD1351_CONFIG_DONE
 	

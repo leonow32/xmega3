@@ -1,4 +1,4 @@
-#include "fontXF90_Dos8x8.h"
+#include "dos8x8.h"
 
 const uint8_t FontXF90_Dos8x8_Bitmap[]  = {
 	0b00000000, // 000
@@ -2307,7 +2307,7 @@ const uint8_t FontXF90_Dos8x8_Bitmap[]  = {
 
 };
 
-const fontXF90_def_t FontXF90_Dos8x8 = {
+const SSD1351_FontDef_t FontXF90_Dos8x8 = {
 	.Height				=	8,
 	.Width				=	8,
 	.Spacing			=	0,
