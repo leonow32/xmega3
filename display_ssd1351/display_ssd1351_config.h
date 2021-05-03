@@ -27,9 +27,10 @@
 	
 	// Config
 	#define		SSD1351_DEFAULT_CONTRAST		255
+	#define		SSD1351_CLEAR_AFERT_INIT		1		// TODO
 	
 	// Fonts
-	#define		SSD1351_DEFAULT_FONT			FontXF90_Dos8x8
+	#define		SSD1351_DEFAULT_FONT			SSD1351_FontDos16x8
 	#define		SSD1351_FONT_CONSOLE8x8			1						// 497 B
 	#define		SSD1351_FONT_DOS8x8				1						// 2065 B
 	#define		SSD1351_FONT_DOS16x8			1						// 4113 B
@@ -37,7 +38,7 @@
 	#define		SSD1351_FONT_SANS16B_PL			1						// 2162 B
 	#define		SSD1351_FONT_SANS24_PL			1						// 3614 B
 	
-	// Bitmapy
+	// Bitmaps
 	//#include	"BitmapXF90/bitmapXF90_ExtronicLogo.h"
 	// #include	"BitmapXF90/bitmapXF90_TestPattern.h"
 	//#include	"BitmapXF90/bitmapXF90_Cassini565.h"

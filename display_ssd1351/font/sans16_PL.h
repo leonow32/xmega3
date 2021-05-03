@@ -4,8 +4,8 @@
 #include <avr/io.h>
 #include "../display_ssd1351_defines.h"
 
-extern const uint8_t FontXF90_Sans16_PL_Bitmap[];
-extern const SSD1351_CharDef_t FontXF90_Sans16_PL_Descriptors[];
-extern const SSD1351_FontDef_t FontXF90_Sans16_PL;
+extern const uint8_t SSD1351_BitmapSans16_PL[];
+extern const SSD1351_CharDef_t SSD1351_CharactersSans16_PL[];
+extern const SSD1351_FontDef_t SSD1351_FontSans16_PL;
 
 #endif /* FONTXF90_SANS16_PL_H_ */

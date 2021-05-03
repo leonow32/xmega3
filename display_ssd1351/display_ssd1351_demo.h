@@ -19,6 +19,12 @@
 	#error		"This module requires PRINT component"
 #endif
 
+#if COMPONENT_PRINT
+	#include	"../uCosmos/uCosmos.h"
+#else
+	#error		"This module requires uCOSMOS component"
+#endif
+
 // ========================================
 // Console Commands
 // ========================================
@@ -36,4 +42,21 @@ void SSD1351_CmdColorFront(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]);
 void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]);
+
+
+void SSD1351_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmDDemoFontTest(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdDemoTextAlign(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]);
+void SSD1351_CmdDemoColorPalette(uint8_t argc, uint8_t * argv[]);
+
+
+// Animated demos
+void SSD1351_CmdSnake(uint8_t argc, uint8_t * argv[]);
+task_t SSD1351_TaskSnake(runmode_t RunMode);
+void SSD1351_CmdFace(uint8_t argc, uint8_t * argv[]);
+task_t SSD1351_TaskFace1(runmode_t RunMode);
+task_t SSD1351_TaskFace2(runmode_t RunMode);
+task_t SSD1351_TaskFace3(runmode_t RunMode);
+task_t SSD1351_TaskFace4(runmode_t RunMode);
 #endif /* DISPLAY_SSD1351_DEMO_H_ */

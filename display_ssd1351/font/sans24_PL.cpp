@@ -1,6 +1,6 @@
 #include "sans24_PL.h"
 
-const uint8_t FontXF90_Sans24_PL_Bitmap[] = {
+const uint8_t SSD1351_BitmapSans24_PL[] = {
 	// @0 ' ' (2 pixels wide)
 	0b00000000, 0b00000000, 0b00000000, //
 	0b00000000, 0b00000000, 0b00000000, //
@@ -1217,7 +1217,7 @@ const uint8_t FontXF90_Sans24_PL_Bitmap[] = {
 
 };
 
-const SSD1351_CharDef_t FontXF90_Sans24_PL_Descriptors[] = {
+const SSD1351_CharDef_t SSD1351_CharactersSans24_PL[] = {
 	{2, 0}, 		//
 	{2, 6}, 		// !
 	{5, 12}, 		// "
@@ -1433,12 +1433,12 @@ const SSD1351_CharDef_t FontXF90_Sans24_PL_Descriptors[] = {
 	{4, 2943},		// bad char 244
 };
 
-const SSD1351_FontDef_t FontXF90_Sans24_PL = {
+const SSD1351_FontDef_t SSD1351_FontSans24_PL = {
 	.Height				=	24,
 	.Width				=	0,
 	.Spacing			=	2,
 	.FirstChar			=	' ',
 	.LastChar			=	244,
-	.Descriptors		=	FontXF90_Sans24_PL_Descriptors,
-	.Bitmaps			=	FontXF90_Sans24_PL_Bitmap,
+	.Descriptors		=	SSD1351_CharactersSans24_PL,
+	.Bitmaps			=	SSD1351_BitmapSans24_PL,
 };

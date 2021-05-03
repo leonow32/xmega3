@@ -1,6 +1,6 @@
 #include "sans16B_PL.h"
 
-const uint8_t FontXF90_Sans16B_PL_Bitmap[] = {
+const uint8_t SSD1351_BitmapSans16B_PL[] = {
 	// @0 ' ' (2 pixels wide)
 	0b00000000, 0b00000000, //
 	0b00000000, 0b00000000, //
@@ -983,7 +983,7 @@ const uint8_t FontXF90_Sans16B_PL_Bitmap[] = {
 	0b11111111, 0b11111111, // ################
 };
 
-const SSD1351_CharDef_t FontXF90_Sans16B_PL_Descriptors[] = {
+const SSD1351_CharDef_t SSD1351_CharactersSans16B_PL[] = {
 	{2, 0}, 		//
 	{2, 4}, 		// !
 	{4, 8}, 		// "
@@ -1199,12 +1199,12 @@ const SSD1351_CharDef_t FontXF90_Sans16B_PL_Descriptors[] = {
 	{4, 1498},		// bad char 244
 };
 
-const SSD1351_FontDef_t FontXF90_Sans16B_PL = {
+const SSD1351_FontDef_t SSD1351_FontSans16B_PL = {
 	.Height				=	16,
 	.Width				=	0,
 	.Spacing			=	1,
 	.FirstChar			=	' ',
 	.LastChar			=	244,
-	.Descriptors		=	FontXF90_Sans16B_PL_Descriptors,
-	.Bitmaps			=	FontXF90_Sans16B_PL_Bitmap,
+	.Descriptors		=	SSD1351_CharactersSans16B_PL,
+	.Bitmaps			=	SSD1351_BitmapSans16B_PL,
 };

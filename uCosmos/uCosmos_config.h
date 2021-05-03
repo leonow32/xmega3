@@ -70,7 +70,7 @@
 	#define		OS_GENERATOR_XOSC32				0
 	
 	// Konfiguracja systemu
-	#define		OS_TASK_MAXCOUNT				10			// Od tego zalezy rozmiar tablicy Task[] w RAM
+	#define		OS_TASK_MAXCOUNT				20			// Od tego zalezy rozmiar tablicy Task[] w RAM
 	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task

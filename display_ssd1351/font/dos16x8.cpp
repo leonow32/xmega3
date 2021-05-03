@@ -1,6 +1,6 @@
 #include "dos16x8.h"
 
-const uint8_t FontXF90_Dos16x8_Bitmap[]  = {
+const uint8_t SSD1351_BitmapDos16x8[]  = {
 	// Char 0
 	0b00000000,0b00000000, //
 	0b00000000,0b00000000, //
@@ -2563,12 +2563,12 @@ const uint8_t FontXF90_Dos16x8_Bitmap[]  = {
 
 };
 
-const SSD1351_FontDef_t FontXF90_Dos16x8 = {
+const SSD1351_FontDef_t SSD1351_FontDos16x8 = {
 	.Height				=	16,
 	.Width				=	8,
 	.Spacing			=	0,
 	.FirstChar			=	0,
 	.LastChar			=	255,
 	.Descriptors		=	0,
-	.Bitmaps			=	FontXF90_Dos16x8_Bitmap,
+	.Bitmaps			=	SSD1351_BitmapDos16x8,
 };

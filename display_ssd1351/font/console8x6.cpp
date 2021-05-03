@@ -1,6 +1,6 @@
 #include "console8x6.h"
 
-const uint8_t FontXF90_Console8x6_Bitmap[]  = {
+const uint8_t SSD1351_BitmapConsole8x6[]  = {
 	// Char 32
 	0b00000000, //
 	0b00000000, //
@@ -675,12 +675,12 @@ const uint8_t FontXF90_Console8x6_Bitmap[]  = {
 
 };
 
-const SSD1351_FontDef_t FontXF90_Console8x6 = {
+const SSD1351_FontDef_t SSD1351_FontConsole8x6 = {
 	.Height				=	8,
 	.Width				=	5,
 	.Spacing			=	1,
 	.FirstChar			=	' ',
 	.LastChar			=	127,
 	.Descriptors		=	0,
-	.Bitmaps			=	FontXF90_Console8x6_Bitmap,
+	.Bitmaps			=	SSD1351_BitmapConsole8x6,
 };

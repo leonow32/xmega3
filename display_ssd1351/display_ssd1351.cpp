@@ -778,4 +778,7 @@ void SSD1351_Text(const char * Text, uint8_t Align, uint8_t Negative) {
 	while(*Text) SSD1351_PrintChar(*Text++, Negative);
 }
 
+
+
+
 #endif

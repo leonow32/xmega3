@@ -223,27 +223,27 @@ void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]) {
 	switch(*argv[1]) {
 		
 		#if SSD1351_FONT_CONSOLE8x8
-			case '1':	SSD1351_FontSet(&FontXF90_Console8x6);		break;
+			case '1':	SSD1351_FontSet(&SSD1351_FontConsole8x6);		break;
 		#endif
 		
 		#if SSD1351_FONT_DOS8x8
-			case '2':	SSD1351_FontSet(&FontXF90_Dos8x8);			break;
+			case '2':	SSD1351_FontSet(&SSD1351_FontDos8x8);			break;
 		#endif
 		
 		#if SSD1351_FONT_DOS16x8
-			case '3':	SSD1351_FontSet(&FontXF90_Dos16x8);			break;
+			case '3':	SSD1351_FontSet(&SSD1351_FontDos16x8);			break;
 		#endif
 		
 		#if SSD1351_FONT_SANS16_PL
-			case '4':	SSD1351_FontSet(&FontXF90_Sans16_PL);		break;
+			case '4':	SSD1351_FontSet(&SSD1351_FontSans16_PL);		break;
 		#endif
 		
 		#if SSD1351_FONT_SANS16B_PL
-			case '5':	SSD1351_FontSet(&FontXF90_Sans16B_PL);		break;
+			case '5':	SSD1351_FontSet(&SSD1351_FontSans16B_PL);		break;
 		#endif
 		
 		#if SSD1351_FONT_SANS24_PL
-			case '6':	SSD1351_FontSet(&FontXF90_Sans24_PL);		break;
+			case '6':	SSD1351_FontSet(&SSD1351_FontSans24_PL);		break;
 		#endif
 		
 		default:
@@ -253,6 +253,679 @@ void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]) {
 	
 	Print_ResponseOK();
 }
+
+// Display all characters from Dos8x8 font
+void SSD1351_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t Char = 0;
+	SSD1351_FontSet(&SSD1351_FontDos8x8);
+	
+	for(uint8_t Line = 0; Line < 16; Line++) {
+		SSD1351_CursorSet(0, Line * 8);
+		
+		for(uint8_t i=0; i<16; i++) {
+			SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565((i & 0b00000111)+1));
+			SSD1351_PrintChar(Char++);
+		}
+	}
+}
+
+// Test all fonts
+void SSD1351_CmDDemoFontTest(uint8_t argc, uint8_t * argv[]) {
+	
+	SSD1351_Clear();
+	
+	SSD1351_ColorFrontSet(255, 255, 255);
+	SSD1351_ColorBackSet(0, 0, 0);
+	SSD1351_FontSet(&SSD1351_FontConsole8x6);
+	SSD1351_CursorSet(0, 0);
+	SSD1351_Text("ABCDEFGHIJKLMNOPQRSTU");
+	SSD1351_CursorSet(0, 8);
+	SSD1351_Text("abcdefghijk0123456789");
+	
+	SSD1351_ColorFrontSet(255, 0, 0);
+	SSD1351_CursorSet(0, 17);
+	SSD1351_FontSet(&SSD1351_FontDos8x8);
+	SSD1351_Text("ABCDEFGHIJKLMNOP");
+	
+	SSD1351_ColorFrontSet(255, 255, 0);
+	SSD1351_CursorSet(0, 24);
+	SSD1351_FontSet(&SSD1351_FontSans16_PL);
+	SSD1351_Text("ABCDEFGHIJKLMNO");
+	SSD1351_CursorSet(0, 36);
+	SSD1351_Text("abcdefghijklmn1234567");
+	
+	SSD1351_ColorFrontSet(0, 255, 0);
+	SSD1351_CursorSet(0, 51);
+	SSD1351_FontSet(&SSD1351_FontSans16B_PL);
+	SSD1351_Text("ABCDEFGHIJKLMN");
+	SSD1351_CursorSet(0, 63);
+	SSD1351_Text("abcdefghijklmn1234");
+	
+	SSD1351_ColorFrontSet(0, 0, 255);
+	SSD1351_CursorSet(0, 78);
+	SSD1351_FontSet(&SSD1351_FontSans24_PL);
+	SSD1351_Text("ABCDEFGHIJ");
+	SSD1351_CursorSet(0, 97);
+	SSD1351_Text("abcdefghij123");
+	
+	SSD1351_ColorFrontSet(255, 0, 255);
+	SSD1351_CursorSet(0, 119);
+	SSD1351_FontSet(&SSD1351_FontDos8x8);
+	SSD1351_Text("123!@#$");
+}
+
+// Print some messages in varoius positions
+void SSD1351_CmdDemoTextAlign(uint8_t argc, uint8_t * argv[]) {
+	SSD1351_Chessboard();
+	SSD1351_Text("TL",		SSD1351_HALIGN_LEFT		| SSD1351_VALIGN_TOP);
+	SSD1351_Text("Top",		SSD1351_HALIGN_CENTER	| SSD1351_VALIGN_TOP);
+	SSD1351_Text("TR",		SSD1351_HALIGN_RIGHT	| SSD1351_VALIGN_TOP);
+	SSD1351_Text("Left",	SSD1351_HALIGN_LEFT		| SSD1351_VALIGN_CENTER);
+	SSD1351_Text("Center",	SSD1351_HALIGN_CENTER	| SSD1351_VALIGN_CENTER);
+	SSD1351_Text("Right",	SSD1351_HALIGN_RIGHT	| SSD1351_VALIGN_CENTER);
+	SSD1351_Text("BL",		SSD1351_HALIGN_LEFT		| SSD1351_VALIGN_BOTTOM);
+	SSD1351_Text("Bottom",	SSD1351_HALIGN_CENTER	| SSD1351_VALIGN_BOTTOM);
+	SSD1351_Text("BR",		SSD1351_HALIGN_RIGHT	| SSD1351_VALIGN_BOTTOM);
+	
+	SSD1351_CursorSet(10, 90);
+	SSD1351_Text("Somewhere else");
+}
+
+// Display all characters from Dos16x8 font
+void SSD1351_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]) {
+	
+	static uint8_t Char = 0;
+	SSD1351_FontSet(&SSD1351_FontDos16x8);
+	
+	for(uint8_t Line = 0; Line < 8; Line++) {
+		SSD1351_CursorSet(0, Line * 16);
+		SSD1351_ColorFrontSet(SSD1351_ColorNameToRGB565(Line+1));
+		
+		for(uint8_t i=0; i<16; i++) {
+			SSD1351_PrintChar(Char++);
+		}
+	}
+}
+
+void SSD1351_CmdDemoColorPalette(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t R;
+	uint8_t G;
+	uint8_t B;
+	uint16_t Color;
+	
+	SSD1351_Clear();
+	
+	SSD1351_CHIP_SELECT;
+	
+	// Czerwony -> ¿ó³ty
+	R = 255;
+	G = 0;
+	B = 0;
+	for(uint8_t i=0; i<21; i++) {
+		G = G + 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	// ¯ó³ty -> zielony
+	R = 255;
+	G = 255;
+	B = 0;
+	for(uint8_t i=0; i<21; i++) {
+		R = R - 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	// Zielony -> cyjan
+	R = 0;
+	G = 255;
+	B = 0;
+	for(uint8_t i=0; i<21; i++) {
+		B = B + 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	// Cyjan -> niebieski
+	R = 0;
+	G = 255;
+	B = 255;
+	for(uint8_t i=0; i<21; i++) {
+		G = G - 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	// Niebieski -> magenta
+	R = 0;
+	G = 0;
+	B = 255;
+	for(uint8_t i=0; i<21; i++) {
+		R = R + 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	// Magenta -> czerowny
+	R = 255;
+	G = 0;
+	B = 255;
+	for(uint8_t i=0; i<21; i++) {
+		B = B - 12;
+		Color = SSD1351_ColorRGB888toRGB565(R, G, B);
+		Spi_Repeat(Color >> 8, Color & 0x00FF, 128);
+	}
+	
+	SSD1351_CHIP_DESELECT;
+}
+
+// ========================================
+// Animated demos
+// ========================================
+
+void SSD1351_CmdSnake(uint8_t argc, uint8_t * argv[]) {
+	if(*argv[1] == '0') {
+		TaskClose(SSD1351_TaskSnake);
+	}
+	else {
+		TaskAdd(SSD1351_TaskSnake, TaskMsToTicks(100));
+	}
+}
+
+task_t SSD1351_TaskSnake(runmode_t RunMode) {
+	
+	// Zmienne
+	static uint8_t x = 64;
+	static uint8_t y = 64;
+	static uint8_t PrevX = 64;;
+	static uint8_t PrevY = 64;;
+	static uint8_t R = 255;
+	static uint8_t G = 0;
+	static uint8_t B = 0;
+	static uint8_t ColorMode = 0;
+	
+	uint8_t NewX;
+	uint8_t NewY;
+	uint8_t Random;
+	
+	// Tryb wywo³ania
+	switch(RunMode) {
+		
+		// Konstruktor
+		case FirstRun:
+			x = 64;
+			y = 64;
+			return TaskOK;
+		
+		// Destruktor
+		case Close:
+			
+			return TaskDone;
+		
+		// Wywo³anie identyfikacyjne
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Snake");
+			return TaskOK;
+		#endif
+		
+		// Normalne wywo³anie przez Sheduler
+		case Run:
+		
+			switch(ColorMode) {
+				case 0:				// Red -> Yellow
+					R = 255;
+					G = G + 16;
+					B = 0;
+					if(G == 0) {
+						G = 255;
+						ColorMode++;
+					}
+					break;
+				
+				case 1:				// Yellow -> Green
+					R = R - 16;
+					G = 255;
+					B = 0;
+					if(R == 15) {
+						ColorMode++;
+					}
+					break;
+				
+				case 2:				// Green -> Cyan
+					R = 0;
+					G = 255;
+					B = B + 16;
+					if(B == 0) {
+						B = 255;
+						ColorMode++;
+					}
+					break;
+				
+				case 3:				// Cyan -> Blue
+					R = 0;
+					G = G - 16;
+					B = 255;
+					if(G == 15) {
+						ColorMode++;
+					}
+					break;
+				
+				case 4:				// Blue -> Magenta
+					R = R + 16;
+					G = 0;
+					B = 255;
+					if(R == 0) {
+						R = 255;
+						ColorMode++;
+					}
+					break;
+				
+				case 5:				// Blue -> Magenta
+					R = 255;
+					G = 0;
+					B = B - 16;
+					if(B == 15) {
+						B = 0;
+						ColorMode = 0;
+					}
+					break;
+			}
+			
+			
+			Random = rand();
+			NewX = Random & 0b01111111;
+			Random = rand();
+			NewY = Random & 0b01111111;
+			
+			SSD1351_ColorFrontSet(0, 0, 0);
+			SSD1351_DrawLine(PrevX, PrevY, x, y);
+			SSD1351_ColorFrontSet(R, G, B);
+			SSD1351_DrawLine(x, y, NewX, NewY);
+			
+			PrevX = x;
+			PrevY = y;
+			x = NewX;
+			y = NewY;
+			
+			// Je¿eli podczas normalnego wywo³ania task nie bêdzie ju¿ wiêcej potrzebny
+			// to mo¿e zwróciæ TaskDane, aby Sheduler usun¹³ go z tablicy tasków
+			return TaskOK;
+	}
+	
+	return TaskOK;
+}
+
+// Animated faces
+void SSD1351_CmdFace(uint8_t argc, uint8_t * argv[]) {
+	task_t (*TaskPointer)(runmode_t RunMode);
+	switch(*argv[1]) {
+		case '1':	TaskPointer = SSD1351_TaskFace1;	break;
+		case '2':	TaskPointer = SSD1351_TaskFace2;	break;
+		case '3':	TaskPointer = SSD1351_TaskFace3;	break;
+		case '4':	TaskPointer = SSD1351_TaskFace4;	break;
+		default:	Print_ResponseError();				return;
+	}
+	
+	if(TaskFind(TaskPointer) == OsNotFound) {
+		TaskAdd(TaskPointer, TaskMsToTicks(100));
+	}
+	else {
+		TaskClose(TaskPointer);
+	}
+	Print_ResponseOK();
+}
+
+
+task_t SSD1351_TaskFace1(runmode_t RunMode) {
+	
+	static uint8_t X = 0;
+	static uint8_t Y = 0;
+	static uint8_t Char = 1;
+	static uint8_t Dir = 0;
+	static uint8_t StepsToDo = 0;
+	uint8_t Rand; 
+	
+	switch(RunMode) {
+		case FirstRun:
+			X = 64;
+			Y = 64;
+			Dir = 0;
+			StepsToDo = 0;
+			return TaskOK;
+			
+		case Run:
+			
+			// Losowanie nowego kierunku i liczby kroków, je¿eli zadana liczba kroków zosta³a ju¿ wykonana
+			if(StepsToDo == 0) {
+				Rand = (uint8_t)random();
+				Dir = Rand & 0b00000011;
+				StepsToDo = 1 + ((Rand & 0b11111100) >> 2);
+			}
+			
+			// Zmniejszanie liczby kroków do wykonania
+			StepsToDo--;
+			
+			// Ustawienie czcionki
+			SSD1351_FontSet(&SSD1351_FontDos8x8);
+			SSD1351_ColorFrontSet(255, 0, 0);
+			
+			// Ukrywanie poprzednio wyœwietlonego znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			
+			// Przesuwanie pozycji
+			switch(Dir) {
+				
+				// W lewo
+				case 0:
+					if(X > 0) X--;
+					else X = SSD1351_DISPLAY_SIZE_X-8;
+					break;
+				
+				// w prawo
+				case 1:
+					if(X < SSD1351_DISPLAY_SIZE_X-8) X++;
+					else X = 0;
+					break;
+				
+				// w górê
+				case 2:
+					if(Y > 0) Y--;
+					else Y = SSD1351_DISPLAY_SIZE_Y-8; 
+					break;
+				
+				// w dó³
+				case 3:
+					if(Y < 120) Y++;
+					else Y = 0;
+					break;
+			}
+			
+			// Ustawienie pozycji kursora i wyœwietlenie znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(Char);
+			
+			return TaskOK;
+		
+		case Close:
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			return TaskDone;
+		
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Face1");
+			return TaskOK;
+		#endif
+	}
+
+	return TaskOK;
+}
+
+task_t SSD1351_TaskFace2(runmode_t RunMode) {
+	
+	static uint8_t X = 0;
+	static uint8_t Y = 0;
+	static uint8_t Char = 2;
+	static uint8_t Dir = 0;
+	static uint8_t StepsToDo = 0;
+	uint8_t Rand; 
+	
+	switch(RunMode) {
+		case FirstRun:
+			X = 64;
+			Y = 64;
+			Dir = 0;
+			StepsToDo = 0;
+			return TaskOK;
+		
+		case Run:
+			
+			// Losowanie nowego kierunku i liczby kroków, je¿eli zadana liczba kroków zosta³a ju¿ wykonana
+			if(StepsToDo == 0) {
+				Rand = (uint8_t)random();
+				Dir = Rand & 0b00000011;
+				StepsToDo = 1 + ((Rand & 0b11111100) >> 2);
+			}
+			
+			// Zmniejszanie liczby kroków do wykonania
+			StepsToDo--;
+			
+			// Ustawienie czcionki
+			SSD1351_FontSet(&SSD1351_FontDos8x8);
+			SSD1351_ColorFrontSet(0, 0, 255);
+			
+			// Ukrywanie poprzednio wyœwietlonego znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			
+			// Przesuwanie pozycji
+			switch(Dir) {
+				
+				// W lewo
+				case 0:
+					if(X > 0) X--;
+					else X = SSD1351_DISPLAY_SIZE_X-8;
+					break;
+				
+				// w prawo
+				case 1:
+					if(X < SSD1351_DISPLAY_SIZE_X-8) X++;
+					else X = 0;
+					break;
+				
+				// w górê
+				case 2:
+					if(Y > 0) Y--;
+					else Y = SSD1351_DISPLAY_SIZE_Y-8; 
+					break;
+				
+				// w dó³
+				case 3:
+					if(Y < SSD1351_DISPLAY_SIZE_Y-8) Y++;
+					else Y = 0;
+					break;
+			}
+			
+			// Ustawienie pozycji kursora i wyœwietlenie znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(Char);
+			
+			return TaskOK;
+		
+		case Close:
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			return TaskDone;
+		
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Face2");
+			return TaskOK;
+		#endif
+	}
+	
+	return TaskOK;
+}
+
+
+task_t SSD1351_TaskFace3(runmode_t RunMode) {
+	
+	static uint8_t X = 0;
+	static uint8_t Y = 0;
+	static uint8_t Char = 1;
+	static uint8_t Dir = 0;
+	static uint8_t StepsToDo = 0;
+	uint8_t Rand; 
+	
+	switch(RunMode) {
+		case FirstRun:
+			X = 64;
+			Y = 64;
+			Dir = 0;
+			StepsToDo = 0;
+			return TaskOK;
+		
+		case Run:
+			
+			// Losowanie nowego kierunku i liczby kroków, je¿eli zadana liczba kroków zosta³a ju¿ wykonana
+			if(StepsToDo == 0) {
+				Rand = (uint8_t)random();
+				Dir = Rand & 0b00000011;
+				StepsToDo = 1 + ((Rand & 0b11111100) >> 2);
+			}
+			
+			// Zmniejszanie liczby kroków do wykonania
+			StepsToDo--;
+			
+			// Ustawienie czcionki
+			SSD1351_FontSet(&SSD1351_FontDos16x8);
+			SSD1351_ColorFrontSet(255, 255, 0);
+			
+			// Ukrywanie poprzednio wyœwietlonego znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			
+			// Przesuwanie pozycji
+			switch(Dir) {
+				
+				// W lewo
+				case 0:
+					if(X > 0) X--;
+					else X = SSD1351_DISPLAY_SIZE_X-8;
+					break;
+				
+				// w prawo
+				case 1:
+					if(X < SSD1351_DISPLAY_SIZE_X-8) X++;
+					else X = 0;
+					break;
+				
+				// w górê
+				case 2:
+					if(Y > 0) Y--;
+					else Y = SSD1351_DISPLAY_SIZE_Y-16; 
+					break;
+				
+				// w dó³
+				case 3:
+					if(Y < SSD1351_DISPLAY_SIZE_Y-16) Y++;
+					else Y = 0;
+					break;
+			}
+			
+			// Ustawienie pozycji kursora i wyœwietlenie znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(Char);
+			
+			return TaskOK;
+		
+		case Close:
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			return TaskDone;
+		
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Face3");
+			return TaskOK;
+		#endif
+	}
+	
+	return TaskOK;
+}
+
+
+task_t SSD1351_TaskFace4(runmode_t RunMode) {
+	
+	static uint8_t X = 0;
+	static uint8_t Y = 0;
+	static uint8_t Char = 2;
+	static uint8_t Dir = 0;
+	static uint8_t StepsToDo = 0;
+	uint8_t Rand; 
+	
+	switch(RunMode) {
+		case FirstRun:
+			X = 64;
+			Y = 64;
+			Dir = 0;
+			StepsToDo = 0;
+			return TaskOK;
+			
+		case Run:
+			
+			// Losowanie nowego kierunku i liczby kroków, je¿eli zadana liczba kroków zosta³a ju¿ wykonana
+			if(StepsToDo == 0) {
+				Rand = (uint8_t)random();
+				Dir = Rand & 0b00000011;
+				StepsToDo = 1 + ((Rand & 0b11111100) >> 2);
+			}
+			
+			// Zmniejszanie liczby kroków do wykonania
+			StepsToDo--;
+			
+			// Ustawienie czcionki
+			SSD1351_FontSet(&SSD1351_FontDos16x8);
+			SSD1351_ColorFrontSet(0, 255, 0);
+			
+			// Ukrywanie poprzednio wyœwietlonego znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			
+			// Przesuwanie pozycji
+			switch(Dir) {
+				
+				// W lewo
+				case 0:
+					if(X > 0) X--;
+					else X = SSD1351_DISPLAY_SIZE_X-8;
+					break;
+				
+				// w prawo
+				case 1:
+					if(X < SSD1351_DISPLAY_SIZE_X-8) X++;
+					else X = 0;
+					break;
+				
+				// w górê
+				case 2:
+					if(Y > 0) Y--;
+					else Y = SSD1351_DISPLAY_SIZE_Y-16; 
+					break;
+				
+				// w dó³
+				case 3:
+					if(Y < SSD1351_DISPLAY_SIZE_Y-16) Y++;
+					else Y = 0;
+					break;
+			}
+			
+			// Ustawienie pozycji kursora i wyœwietlenie znaku
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(Char);
+			
+			return TaskOK;
+		
+		case Close:
+			SSD1351_CursorSet(X, Y);
+			SSD1351_PrintChar(0);
+			return TaskDone;
+		
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Face4");
+			return TaskOK;
+		#endif
+	}
+	
+	return TaskOK;
+}
+
 
 
 #endif
