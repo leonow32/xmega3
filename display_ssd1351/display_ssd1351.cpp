@@ -521,7 +521,7 @@ void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 
 // Rysowanie bitmapy monochromatycznej
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
-void SSD1351_BitmapMono(const BitmapXF90_t * Bitmap) {
+void SSD1351_BitmapMono(const SSD1351_Bitmap_t * Bitmap) {
 	
 	// Odczytanie rozmiaru bitmapy
 	uint8_t WidthPixels = Bitmap->Width;
@@ -565,7 +565,7 @@ void SSD1351_BitmapMono(const BitmapXF90_t * Bitmap) {
 
 // Rysowanie bitmapy kolorowej w RGB565
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
-void SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap) {
+void SSD1351_BitmapRGB565(const SSD1351_Bitmap_t * Bitmap) {
 	
 	// Odczytanie rozmiaru bitmapy
 	uint8_t WidthPixels = Bitmap->Width;
@@ -582,7 +582,7 @@ void SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap) {
 
 // Rysowanie bitmapy kolorowej w RGB332
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
-void SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap) {
+void SSD1351_BitmapRGB332(const SSD1351_Bitmap_t * Bitmap) {
 	
 	// Odczytanie rozmiaru bitmapy
 	uint8_t WidthPixels = Bitmap->Width;

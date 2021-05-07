@@ -71,7 +71,6 @@ HARDWARE
 #include	<util/delay.h>
 #include	"display_ssd1351_defines.h"
 #include	"display_ssd1351_config.h"
-#include	"bitmap/bitmapXF90_typedef.h"
 
 #if COMPONENT_SPI_MASTER
 	#include	"../spi_master/spi_master.h"
@@ -158,9 +157,9 @@ void		SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 // BBitmaps
 // ========================================
 
-void		SSD1351_BitmapMono(const BitmapXF90_t * Bitmap);
-void		SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap);
-void		SSD1351_BitmapRGB332(const BitmapXF90_t * Bitmap);
+void		SSD1351_BitmapMono(const SSD1351_Bitmap_t * Bitmap);
+void		SSD1351_BitmapRGB565(const SSD1351_Bitmap_t * Bitmap);
+void		SSD1351_BitmapRGB332(const SSD1351_Bitmap_t * Bitmap);
 
 // ========================================
 // Text

@@ -116,5 +116,20 @@ struct SSD1351_FontDef_t {
 	const uint8_t * Bitmaps;					// Pointer to bitmaps array
 };
 
+// Enum to select one of possible color modes
+enum SSD1351_Color_t {
+	SSD1351_ColorMono,							// 1 byte = 8 pixels
+	SSD1351_ColorRGB332,						// 1 pixel = 1 byte,  0bRRRGGGBB
+	SSD1351_ColorRGB565							// 1 pixel = 2 bytes, 0bRRRRRGGGGGGBBBBB
+};
+
+// Bitmap definition
+struct SSD1351_Bitmap_t {
+	const uint8_t Height;						// Height in pixels
+	const uint8_t Width;						// 
+	const SSD1351_Color_t ColorDepth;			// 
+	const uint8_t * Bitmaps;					// 
+};
+
 
 #endif /* DISPLAY_SSD1351_DEFINES_H_ */
