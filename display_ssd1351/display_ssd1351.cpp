@@ -519,6 +519,14 @@ void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 // Bitmaps
 // ========================================
 
+void SSD1351_Bitmap(const SSD1351_Bitmap_t * Bitmap) {
+	switch(Bitmap->ColorDepth) {
+		case SSD1351_ColorMono:		SSD1351_BitmapMono(Bitmap);		break;
+		case SSD1351_ColorRGB332:	SSD1351_BitmapRGB332(Bitmap);	break;
+		case SSD1351_ColorRGB565:	SSD1351_BitmapRGB565(Bitmap);	break;
+	}
+}
+
 // Rysowanie bitmapy monochromatycznej
 // Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
 void SSD1351_BitmapMono(const SSD1351_Bitmap_t * Bitmap) {

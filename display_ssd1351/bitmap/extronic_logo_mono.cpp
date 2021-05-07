@@ -1,6 +1,6 @@
-#include "bitmapXF90_ExtronicLogo.h"
+#include "extronic_logo_mono.h"
 
-const uint8_t BitmapXF90_ExtronicLogo_Bitmaps[] = {
+const uint8_t SSD1351_BitmapExtronicLogoMono_Array[] = {
 	0b11100000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000111, // ###                                                          ###
 	0b10000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001, // #                                                              #
 	0b10000000, 0b00000000, 0b00000000, 0b00111111, 0b10000100, 0b00000000, 0b00000000, 0b00000001, // #                         #######    #                         #
@@ -132,9 +132,9 @@ const uint8_t BitmapXF90_ExtronicLogo_Bitmaps[] = {
 };
 
 // Definicja bitmapy
-const SSD1351_Bitmap_t BitmapXF90_ExtronicLogo = {
+const SSD1351_Bitmap_t SSD1351_BitmapExtronicLogoMono = {
 	.Height				=	64,
 	.Width				=	128,
 	.ColorDepth			=	SSD1351_ColorMono,
-	.Bitmaps			=	BitmapXF90_ExtronicLogo_Bitmaps,
+	.Bitmaps			=	SSD1351_BitmapExtronicLogoMono_Array,
 };

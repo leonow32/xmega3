@@ -113,6 +113,9 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"d-fonts",			SSD1351_CmDDemoFontTest},
 	{"d-align",			SSD1351_CmdDemoTextAlign},
 	
+	// Bitmaps
+	{"d-b",				SSD1351_CmdBitmap},
+	
 	// Animated demos
 	{"d-snake",			SSD1351_CmdSnake},
 	{"d-face",			SSD1351_CmdFace},

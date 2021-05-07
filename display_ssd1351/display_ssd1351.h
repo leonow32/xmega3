@@ -102,6 +102,18 @@ HARDWARE
 	#include	"font/sans24_PL.h"
 #endif
 
+#if SSD1351_BITMAP_TEST_PATTERN
+	#include	"bitmap/test_pattern.h"
+#endif
+
+#if SSD1351_BITMAP_EXTRONIC_LOGO
+	#include	"bitmap/extronic_logo.h"
+#endif
+
+#if SSD1351_BITMAP_EXTRONIC_LOGO_RGB565
+	#include	"bitmap/extronic_logo_rgb565.h"
+#endif
+
 // ========================================
 // Basic functions
 // ========================================
@@ -157,6 +169,7 @@ void		SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 // BBitmaps
 // ========================================
 
+void		SSD1351_Bitmap(const SSD1351_Bitmap_t * Bitmap);
 void		SSD1351_BitmapMono(const SSD1351_Bitmap_t * Bitmap);
 void		SSD1351_BitmapRGB565(const SSD1351_Bitmap_t * Bitmap);
 void		SSD1351_BitmapRGB332(const SSD1351_Bitmap_t * Bitmap);

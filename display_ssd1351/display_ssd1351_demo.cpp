@@ -193,6 +193,10 @@ void SSD1351_CmdColorBack(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
+// ========================================
+// Fonts and text
+// ========================================
+
 // Print text
 void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]) {
 	
@@ -275,44 +279,56 @@ void SSD1351_CmDDemoFontTest(uint8_t argc, uint8_t * argv[]) {
 	
 	SSD1351_Clear();
 	
-	SSD1351_ColorFrontSet(255, 255, 255);
-	SSD1351_ColorBackSet(0, 0, 0);
-	SSD1351_FontSet(&SSD1351_FontConsole8x6);
-	SSD1351_CursorSet(0, 0);
-	SSD1351_Text("ABCDEFGHIJKLMNOPQRSTU");
-	SSD1351_CursorSet(0, 8);
-	SSD1351_Text("abcdefghijk0123456789");
+	#if SSD1351_FONT_CONSOLE8x8
+		SSD1351_ColorFrontSet(255, 255, 255);
+		SSD1351_ColorBackSet(0, 0, 0);
+		SSD1351_FontSet(&SSD1351_FontConsole8x6);
+		SSD1351_CursorSet(0, 0);
+		SSD1351_Text("ABCDEFGHIJKLMNOPQRSTU");
+		SSD1351_CursorSet(0, 8);
+		SSD1351_Text("abcdefghijk0123456789");
+	#endif
 	
-	SSD1351_ColorFrontSet(255, 0, 0);
-	SSD1351_CursorSet(0, 17);
-	SSD1351_FontSet(&SSD1351_FontDos8x8);
-	SSD1351_Text("ABCDEFGHIJKLMNOP");
+	#if SSD1351_FONT_DOS8x8
+		SSD1351_ColorFrontSet(255, 0, 0);
+		SSD1351_CursorSet(0, 17);
+		SSD1351_FontSet(&SSD1351_FontDos8x8);
+		SSD1351_Text("ABCDEFGHIJKLMNOP");
+	#endif
 	
-	SSD1351_ColorFrontSet(255, 255, 0);
-	SSD1351_CursorSet(0, 24);
-	SSD1351_FontSet(&SSD1351_FontSans16_PL);
-	SSD1351_Text("ABCDEFGHIJKLMNO");
-	SSD1351_CursorSet(0, 36);
-	SSD1351_Text("abcdefghijklmn1234567");
+	#if SSD1351_FONT_SANS16_PL
+		SSD1351_ColorFrontSet(255, 255, 0);
+		SSD1351_CursorSet(0, 24);
+		SSD1351_FontSet(&SSD1351_FontSans16_PL);
+		SSD1351_Text("ABCDEFGHIJKLMNO");
+		SSD1351_CursorSet(0, 36);
+		SSD1351_Text("abcdefghijklmn1234567");
+	#endif
 	
-	SSD1351_ColorFrontSet(0, 255, 0);
-	SSD1351_CursorSet(0, 51);
-	SSD1351_FontSet(&SSD1351_FontSans16B_PL);
-	SSD1351_Text("ABCDEFGHIJKLMN");
-	SSD1351_CursorSet(0, 63);
-	SSD1351_Text("abcdefghijklmn1234");
+	#if SSD1351_FONT_SANS16B_PL
+		SSD1351_ColorFrontSet(0, 255, 0);
+		SSD1351_CursorSet(0, 51);
+		SSD1351_FontSet(&SSD1351_FontSans16B_PL);
+		SSD1351_Text("ABCDEFGHIJKLMN");
+		SSD1351_CursorSet(0, 63);
+		SSD1351_Text("abcdefghijklmn1234");
+	#endif
 	
-	SSD1351_ColorFrontSet(0, 0, 255);
-	SSD1351_CursorSet(0, 78);
-	SSD1351_FontSet(&SSD1351_FontSans24_PL);
-	SSD1351_Text("ABCDEFGHIJ");
-	SSD1351_CursorSet(0, 97);
-	SSD1351_Text("abcdefghij123");
+	#if SSD1351_FONT_SANS24_PL
+		SSD1351_ColorFrontSet(0, 0, 255);
+		SSD1351_CursorSet(0, 78);
+		SSD1351_FontSet(&SSD1351_FontSans24_PL);
+		SSD1351_Text("ABCDEFGHIJ");
+		SSD1351_CursorSet(0, 97);
+		SSD1351_Text("abcdefghij123");
+	#endif
 	
-	SSD1351_ColorFrontSet(255, 0, 255);
-	SSD1351_CursorSet(0, 119);
-	SSD1351_FontSet(&SSD1351_FontDos8x8);
-	SSD1351_Text("123!@#$");
+	#if SSD1351_FONT_DOS8x8
+		SSD1351_ColorFrontSet(255, 0, 255);
+		SSD1351_CursorSet(0, 119);
+		SSD1351_FontSet(&SSD1351_FontDos8x8);
+		SSD1351_Text("123!@#$");
+	#endif
 }
 
 // Print some messages in varoius positions
@@ -420,6 +436,35 @@ void SSD1351_CmdDemoColorPalette(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	SSD1351_CHIP_DESELECT;
+}
+
+// ========================================
+// Bitmaps
+// ========================================
+
+void SSD1351_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
+	
+	const SSD1351_Bitmap_t * Pointer;
+	switch(*argv[1]) {
+		
+		#if SSD1351_BITMAP_TEST_PATTERN
+			case '1':	Pointer = &SSD1351_BitmapTestPattern;			break;
+		#endif
+		
+		#if SSD1351_BITMAP_EXTRONIC_LOGO
+			case '2':	Pointer = &SSD1351_BitmapExtronicLogoMono;			break;
+		#endif
+		
+		#if SSD1351_BITMAP_EXTRONIC_LOGO_RGB565
+			case '3':	Pointer = &SSD1351_BitmapExtronicLogoRGB565;	break;
+		#endif
+		
+		default:	Print_ResponseError();	return;
+	}
+	
+	SSD1351_CursorXSet((SSD1351_DISPLAY_SIZE_X - Pointer->Width) / 2);
+	SSD1351_CursorYSet((SSD1351_DISPLAY_SIZE_Y - Pointer->Height) / 2);
+	SSD1351_Bitmap(Pointer);
 }
 
 // ========================================

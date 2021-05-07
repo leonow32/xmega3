@@ -501,10 +501,10 @@
     <Compile Include="display_ssd1351\bitmap\bitmapXF90_Cassini565.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_ExtronicLogo.cpp">
+    <Compile Include="display_ssd1351\bitmap\extronic_logo_mono.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_ExtronicLogo.h">
+    <Compile Include="display_ssd1351\bitmap\extronic_logo_mono.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="display_ssd1351\bitmap\bitmapXF90_Pluszaki.cpp">
@@ -513,10 +513,16 @@
     <Compile Include="display_ssd1351\bitmap\bitmapXF90_Pluszaki.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_TestPattern.cpp">
+    <Compile Include="display_ssd1351\bitmap\extronic_logo_rgb565.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_TestPattern.h">
+    <Compile Include="display_ssd1351\bitmap\extronic_logo_rgb565.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1351\bitmap\test_pattern.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1351\bitmap\test_pattern.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="display_ssd1351\display_ssd1351.cpp">
