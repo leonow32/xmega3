@@ -96,7 +96,9 @@ static const uint8_t SSD1351_InitSequence[] = {
 	
 	1, SSD1351_SET_DISPLAY_MODE_RESET,
 	
-	1, SSD1351_SLEEP_MODE_OFF,				// Display on
+	#if SSD1351_CLEAR_AFERT_INIT == 0
+		1, SSD1351_SLEEP_MODE_OFF,				// Display on
+	#endif
 };
 
 
@@ -123,6 +125,11 @@ void SSD1351_Init(void) {
 	}
 	
 	SSD1351_CHIP_DESELECT;
+	
+	#if SSD1351_CLEAR_AFERT_INIT
+		SSD1351_Clear();
+		SSD1351_WriteCommand(SSD1351_SLEEP_MODE_OFF);
+	#endif
 }
 
 // Send command

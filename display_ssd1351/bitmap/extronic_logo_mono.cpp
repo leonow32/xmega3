@@ -131,7 +131,6 @@ const uint8_t SSD1351_BitmapExtronicLogoMono_Array[] = {
 	0b11100000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000111, // ###                                                          ###
 };
 
-// Definicja bitmapy
 const SSD1351_Bitmap_t SSD1351_BitmapExtronicLogoMono = {
 	.Height				=	64,
 	.Width				=	128,

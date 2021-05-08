@@ -4,59 +4,9 @@ OPIS
 UWAGI
 		-	Dodaæ zabezpieczenie przed wyœwietleniem znaku, który wychdozi poza ekran
 		-	Coœ nie dzia³a przy SSD1351_DrawRectangle przy parametrach granicznych
-		-	Komendy sterownika
-		-	Bitmapy kolorowe
-	
-CHANGELOG
-0.15	+	uint16_t SSD1351_ColorRGB332toRGB565(uint8_t Color332);
-0.14	*	Usuniêcie Spi_0 ze wszystkich funkcji
-0.13	+	void SSD1351_BitmapRGB565(const BitmapXF90_t * Bitmap);
-0.12	+	void SSD1351_CursorSet(uint8_t x, uint8_t y);
-		*	Zamiana struktury przechowuj¹cej dane aktualnej czcionki na wskaŸnik do struktury czcionki, oszczêdnoœæ 354B + 7B RAM
-		+	void SSD1351_ContrastSet(const uint8_t Value)
-		+	static const uint8_t SSD1351_InitSequence[]
-		*	Optymalizacja funkcji SSD1351_Init(), oszczêdnoœæ 146B
-0.11	+	uint16_t SSD1351_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B);
-0.10	+	Nowa czcionka fontXF90_Sans16B_PL
-		+	Nowa czcionka fontXF90_Sans24_PL
-0.09	+	Obs³uga bitmap monochromatycznych
-		+	void SSD1351_BitmapMono(const uint8_t * Bitmap, const uint8_t WidthPixels, const uint8_t HeightPixels);
-0.08	*	Obs³uga poslkich znaków
-		*	Funckje do wyœwietlania napisów i wyrównywania ich
-0.07	+	Nowa czcionka FontXF90_Sans16_PL
-0.06	*	Modyfikacja funkcji SSD1351_PrintChar(), by obs³ugiwa³a znaki o ró¿nych szerokoœciach i wysokoœciach
-0.05	*	Nowy format czcionek XF90, aby lepiej zoptymalizowaæ zu¿ycie pamiêci i szybkoœæ generowania napisów
-0.04	+	uint16_t SSD1351_ColorNameToRGB565(uint8_t ColorName);
-0.03	+	void SSD1351_ActiveAreaXSet(uint8_t x1, uint8_t x2);
-		+	void SSD1351_ActiveAreaYSet(uint8_t y1, uint8_t y2);
-		+	uint8_t SSD1351_CursorXGet(void);
-		+	void SSD1351_CursorXSet(uint8_t PosX);
-		+	uint8_t SSD1351_CursorYGet(void);
-		+	void SSD1351_CursorYSet(uint8_t PosY);
-		+	uint16_t SSD1351_ColorFrontGet(void);
-		+	void SSD1351_ColorFrontSet(uint16_t ColorRGB565);
-		+	void SSD1351_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B);
-		+	uint16_t SSD1351_ColorBackGet(void);
-		+	void SSD1351_ColorBackSet(uint16_t ColorRGB565);
-		+	void SSD1351_ColorBackSet(uint8_t R, uint8_t G, uint8_t B);
-		+	void SSD1351_DrawPixel(uint8_t x, uint8_t y);
-		+	void SSD1351_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
-		+	void SSD1351_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
-		+	void SSD1351_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-		+	void SSD1351_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-		+	void SSD1351_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-		+	void SSD1351_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r)
-		+	SSD1351_PrintChar() dla czcionek o sta³ej szerokoœci 8 pikseli
-		+	Font/font_Dos8x8.h
-		+	Font/font_Dos16x8.h
-		+	Definicje kolorów 4-bitowych
-0.02	+	void SSD1351_CursorPosxSet(uint8_t PosX);
-		+	void SSD1351_CursorPosySet(uint8_t PosY);
-		+	void SSD1351_Clear();
-0.01	*	Pierwsze wydanie, adaptacja biblioteki SD1106
-
+		
 HARDWARE
-		-	I2C
+		-	SPI
 */
 
 #ifndef DISPLAY_SSD1351_H_
@@ -102,16 +52,28 @@ HARDWARE
 	#include	"font/sans24_PL.h"
 #endif
 
-#if SSD1351_BITMAP_TEST_PATTERN
-	#include	"bitmap/test_pattern.h"
+#if SSD1351_BITMAP_ARROW
+	#include	"bitmap/arrow.h"
 #endif
 
-#if SSD1351_BITMAP_EXTRONIC_LOGO
-	#include	"bitmap/extronic_logo.h"
+#if SSD1351_BITMAP_EXTRONIC_LOGO_MONO
+	#include	"bitmap/extronic_logo_mono.h"
 #endif
 
 #if SSD1351_BITMAP_EXTRONIC_LOGO_RGB565
 	#include	"bitmap/extronic_logo_rgb565.h"
+#endif
+
+#if SSD1351_BITMAP_ME_AND_MY_GIRLFRIEND
+	#include	"bitmap/me_and_my_girlfriend.h"
+#endif
+
+#if SSD1351_BITMAP_CASSINI_RGB332
+	#include	"bitmap/cassini_rgb332.h"
+#endif
+
+#if SSD1351_BITMAP_CASSINI_RGB565
+	#include	"bitmap/cassini_rgb565.h"
 #endif
 
 // ========================================

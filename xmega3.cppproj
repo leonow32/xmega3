@@ -489,16 +489,16 @@
     <Compile Include="console\console_demo.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Cassini332.cpp">
+    <Compile Include="display_ssd1351\bitmap\cassini_rgb332.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Cassini332.h">
+    <Compile Include="display_ssd1351\bitmap\cassini_rgb332.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Cassini565.cpp">
+    <Compile Include="display_ssd1351\bitmap\cassini_rgb565.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Cassini565.h">
+    <Compile Include="display_ssd1351\bitmap\cassini_rgb565.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="display_ssd1351\bitmap\extronic_logo_mono.cpp">
@@ -507,10 +507,10 @@
     <Compile Include="display_ssd1351\bitmap\extronic_logo_mono.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Pluszaki.cpp">
+    <Compile Include="display_ssd1351\bitmap\me_and_my_girlfriend.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\bitmapXF90_Pluszaki.h">
+    <Compile Include="display_ssd1351\bitmap\me_and_my_girlfriend.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="display_ssd1351\bitmap\extronic_logo_rgb565.cpp">
@@ -519,10 +519,10 @@
     <Compile Include="display_ssd1351\bitmap\extronic_logo_rgb565.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\test_pattern.cpp">
+    <Compile Include="display_ssd1351\bitmap\arrow.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="display_ssd1351\bitmap\test_pattern.h">
+    <Compile Include="display_ssd1351\bitmap\arrow.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="display_ssd1351\display_ssd1351.cpp">

@@ -259,6 +259,7 @@ void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Display all characters from Dos8x8 font
+#if SSD1351_FONT_DOS8x8
 void SSD1351_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]) {
 	
 	uint8_t Char = 0;
@@ -273,6 +274,7 @@ void SSD1351_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]) {
 		}
 	}
 }
+#endif
 
 // Test all fonts
 void SSD1351_CmDDemoFontTest(uint8_t argc, uint8_t * argv[]) {
@@ -349,6 +351,7 @@ void SSD1351_CmdDemoTextAlign(uint8_t argc, uint8_t * argv[]) {
 }
 
 // Display all characters from Dos16x8 font
+#if SSD1351_FONT_DOS16x8
 void SSD1351_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]) {
 	
 	static uint8_t Char = 0;
@@ -363,6 +366,7 @@ void SSD1351_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]) {
 		}
 	}
 }
+#endif
 
 void SSD1351_CmdDemoColorPalette(uint8_t argc, uint8_t * argv[]) {
 	
@@ -447,16 +451,28 @@ void SSD1351_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	const SSD1351_Bitmap_t * Pointer;
 	switch(*argv[1]) {
 		
-		#if SSD1351_BITMAP_TEST_PATTERN
-			case '1':	Pointer = &SSD1351_BitmapTestPattern;			break;
+		#if SSD1351_BITMAP_ARROW
+			case '1':	Pointer = &SSD1351_BitmapArrow;						break;
 		#endif
 		
-		#if SSD1351_BITMAP_EXTRONIC_LOGO
+		#if SSD1351_BITMAP_EXTRONIC_LOGO_MONO
 			case '2':	Pointer = &SSD1351_BitmapExtronicLogoMono;			break;
 		#endif
 		
 		#if SSD1351_BITMAP_EXTRONIC_LOGO_RGB565
-			case '3':	Pointer = &SSD1351_BitmapExtronicLogoRGB565;	break;
+			case '3':	Pointer = &SSD1351_BitmapExtronicLogoRGB565;		break;
+		#endif
+		
+		#if SSD1351_BITMAP_ME_AND_MY_GIRLFRIEND
+			case '4':	Pointer = &SSD1351_BitmapMeAndMyGirlfriend;			break;
+		#endif
+		
+		#if SSD1351_BITMAP_CASSINI_RGB332
+			case '5':	Pointer = &SSD1351_BitmapCassiniRGB332;				break;
+		#endif
+		
+		#if SSD1351_BITMAP_CASSINI_RGB565
+			case '6':	Pointer = &SSD1351_BitmapCassiniRGB565;				break;
 		#endif
 		
 		default:	Print_ResponseError();	return;
@@ -605,13 +621,20 @@ task_t SSD1351_TaskSnake(runmode_t RunMode) {
 }
 
 // Animated faces
+#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
 void SSD1351_CmdFace(uint8_t argc, uint8_t * argv[]) {
 	task_t (*TaskPointer)(runmode_t RunMode);
 	switch(*argv[1]) {
-		case '1':	TaskPointer = SSD1351_TaskFace1;	break;
-		case '2':	TaskPointer = SSD1351_TaskFace2;	break;
-		case '3':	TaskPointer = SSD1351_TaskFace3;	break;
-		case '4':	TaskPointer = SSD1351_TaskFace4;	break;
+		#if SSD1351_FONT_DOS8x8
+			case '1':	TaskPointer = SSD1351_TaskFace1;	break;
+			case '2':	TaskPointer = SSD1351_TaskFace2;	break;
+		#endif
+		
+		#if SSD1351_FONT_DOS16x8
+			case '3':	TaskPointer = SSD1351_TaskFace3;	break;
+			case '4':	TaskPointer = SSD1351_TaskFace4;	break;
+		#endif
+		
 		default:	Print_ResponseError();				return;
 	}
 	
@@ -623,8 +646,9 @@ void SSD1351_CmdFace(uint8_t argc, uint8_t * argv[]) {
 	}
 	Print_ResponseOK();
 }
+#endif
 
-
+#if SSD1351_FONT_DOS8x8
 task_t SSD1351_TaskFace1(runmode_t RunMode) {
 	
 	static uint8_t X = 0;
@@ -710,7 +734,9 @@ task_t SSD1351_TaskFace1(runmode_t RunMode) {
 
 	return TaskOK;
 }
+#endif
 
+#if SSD1351_FONT_DOS8x8
 task_t SSD1351_TaskFace2(runmode_t RunMode) {
 	
 	static uint8_t X = 0;
@@ -796,8 +822,9 @@ task_t SSD1351_TaskFace2(runmode_t RunMode) {
 	
 	return TaskOK;
 }
+#endif
 
-
+#if SSD1351_FONT_DOS16x8
 task_t SSD1351_TaskFace3(runmode_t RunMode) {
 	
 	static uint8_t X = 0;
@@ -883,8 +910,9 @@ task_t SSD1351_TaskFace3(runmode_t RunMode) {
 	
 	return TaskOK;
 }
+#endif
 
-
+#if SSD1351_FONT_DOS16x8
 task_t SSD1351_TaskFace4(runmode_t RunMode) {
 	
 	static uint8_t X = 0;
@@ -970,7 +998,7 @@ task_t SSD1351_TaskFace4(runmode_t RunMode) {
 	
 	return TaskOK;
 }
-
+#endif
 
 
 #endif

@@ -116,6 +116,10 @@ struct SSD1351_FontDef_t {
 	const uint8_t * Bitmaps;					// Pointer to bitmaps array
 };
 
+// ========================================
+// Bitmaps
+// ========================================
+
 // Enum to select one of possible color modes
 enum SSD1351_Color_t {
 	SSD1351_ColorMono,							// 1 byte = 8 pixels
@@ -126,9 +130,9 @@ enum SSD1351_Color_t {
 // Bitmap definition
 struct SSD1351_Bitmap_t {
 	const uint8_t Height;						// Height in pixels
-	const uint8_t Width;						// 
-	const SSD1351_Color_t ColorDepth;			// 
-	const uint8_t * Bitmaps;					// 
+	const uint8_t Width;						// Width in pixels
+	const SSD1351_Color_t ColorDepth;			// Color depth
+	const uint8_t * Bitmaps;					// Pointer to bitmap array
 };
 
 

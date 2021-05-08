@@ -107,8 +107,14 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"d-f",				SSD1351_CmdFont},
 	
 	// Font demos
-	{"d-dos8",			SSD1351_CmdDemoFontDos8x8},
-	{"d-dos16",			SSD1351_CmdDemoFontDos16x8},
+	#if SSD1351_FONT_DOS8x8
+		{"d-dos8",		SSD1351_CmdDemoFontDos8x8},
+	#endif
+	
+	#if SSD1351_FONT_DOS16x8
+		{"d-dos16",		SSD1351_CmdDemoFontDos16x8},
+	#endif
+	
 	{"d-rainbow",		SSD1351_CmdDemoColorPalette},
 	{"d-fonts",			SSD1351_CmDDemoFontTest},
 	{"d-align",			SSD1351_CmdDemoTextAlign},
@@ -118,7 +124,10 @@ const Console_NamePointer_t Console_CommandList[] = {
 	
 	// Animated demos
 	{"d-snake",			SSD1351_CmdSnake},
-	{"d-face",			SSD1351_CmdFace},
+	
+	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
+		{"d-face",		SSD1351_CmdFace},
+	#endif
 #endif
 
 // ========================================
