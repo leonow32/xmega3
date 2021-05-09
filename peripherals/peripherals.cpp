@@ -1,5 +1,7 @@
 // Version 2.0.0
 
+#if COMPONENT_PERIPHERALS
+
 #include "peripherals.h"
 
 
@@ -418,4 +420,5 @@ void Peripherals_Demo_ioget(uint8_t argc, uint8_t * argv[]) {
 
 #endif
 
+#endif
 #endif

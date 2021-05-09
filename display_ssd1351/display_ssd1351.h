@@ -28,7 +28,7 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
-#if SSD1351_FONT_CONSOLE8x8
+#if SSD1351_FONT_CONSOLE8x6
 	#include	"font/console8x6.h"
 #endif
 

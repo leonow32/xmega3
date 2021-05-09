@@ -226,7 +226,7 @@ void SSD1351_CmdText(uint8_t argc, uint8_t * argv[]) {
 void SSD1351_CmdFont(uint8_t argc, uint8_t * argv[]) {
 	switch(*argv[1]) {
 		
-		#if SSD1351_FONT_CONSOLE8x8
+		#if SSD1351_FONT_CONSOLE8x6
 			case '1':	SSD1351_FontSet(&SSD1351_FontConsole8x6);		break;
 		#endif
 		
@@ -281,7 +281,7 @@ void SSD1351_CmDDemoFontTest(uint8_t argc, uint8_t * argv[]) {
 	
 	SSD1351_Clear();
 	
-	#if SSD1351_FONT_CONSOLE8x8
+	#if SSD1351_FONT_CONSOLE8x6
 		SSD1351_ColorFrontSet(255, 255, 255);
 		SSD1351_ColorBackSet(0, 0, 0);
 		SSD1351_FontSet(&SSD1351_FontConsole8x6);
@@ -492,7 +492,7 @@ void SSD1351_CmdSnake(uint8_t argc, uint8_t * argv[]) {
 		TaskClose(SSD1351_TaskSnake);
 	}
 	else {
-		TaskAdd(SSD1351_TaskSnake, TaskMsToTicks(100));
+		TaskAdd(SSD1351_TaskSnake, TaskMsToTicks(50));
 	}
 }
 
@@ -639,7 +639,7 @@ void SSD1351_CmdFace(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	if(TaskFind(TaskPointer) == OsNotFound) {
-		TaskAdd(TaskPointer, TaskMsToTicks(100));
+		TaskAdd(TaskPointer, TaskMsToTicks(10));
 	}
 	else {
 		TaskClose(TaskPointer);

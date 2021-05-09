@@ -6,6 +6,8 @@ CHANGELOG
 #ifndef PERIPHERALS_H_
 #define PERIPHERALS_H_
 
+#if COMPONENT_PERIPHERALS
+
 #include <avr/io.h>
 #include "peripherals_config.h"
 
@@ -142,5 +144,5 @@ CHANGELOG
 
 #endif
 
-
+#endif
 #endif /* PERIPHERALS_H_ */
