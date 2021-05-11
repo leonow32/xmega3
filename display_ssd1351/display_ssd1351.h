@@ -1,9 +1,6 @@
 /*
-OPIS
-		-	Wyœwietlacz SSD1351 z interfejsem SPI
-UWAGI
-		-	Dodaæ zabezpieczenie przed wyœwietleniem znaku, który wychdozi poza ekran
-		-	Coœ nie dzia³a przy SSD1351_DrawRectangle przy parametrach granicznych
+DESCRIPTION
+		-	Display SSD1351 with SPI interface
 		
 HARDWARE
 		-	SPI
@@ -143,8 +140,8 @@ void		SSD1351_BitmapRGB332(const SSD1351_Bitmap_t * Bitmap);
 const SSD1351_FontDef_t * SSD1351_FontGet(void);
 void		SSD1351_FontSet(const SSD1351_FontDef_t * Font);
 uint8_t		SSD1351_TextWidthGet(const char * Text);
-void		SSD1351_PrintChar(uint8_t Char, uint8_t Negative = 0);
-void		SSD1351_Text(const char * Text, uint8_t Align = 0, uint8_t Negative = 0);
+void		SSD1351_PrintChar(uint8_t Char);
+void		SSD1351_Text(const char * Text, uint8_t Align = 0);
 
 #endif /* DISPLAY_SSD1351_H_ */
 #endif
