@@ -30,6 +30,29 @@
 // Demo Display SSD1351
 // ========================================
 
+#if PRODUCT_SH1106
+	
+	// Whether to use one output stream at all times or whether it should be changeable
+	#define PRINT_USE_STREAM_SINGLE					1
+	#define PRINT_USE_STREAM_MULTI					0
+	
+	// Default output stream
+	#define PRINT_DEFAULT_STREAM					Uart_Write
+	
+	// Use font formatting in console
+	#define PRINT_USE_COLORS						1
+	
+	// Use demo commands
+	#define PRINT_USE_DEMO_COMMANDS					0
+	
+	#define PRINT_CONFIG_DONE
+	
+#endif
+
+// ========================================
+// Demo Display SSD1351
+// ========================================
+
 #if PRODUCT_SSD1351
 	
 	// Whether to use one output stream at all times or whether it should be changeable
