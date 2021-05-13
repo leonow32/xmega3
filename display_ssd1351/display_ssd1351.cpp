@@ -12,9 +12,9 @@ static uint8_t SSD1351_CursorY			= 0;
 static uint8_t SSD1351_CursorY_Max		= SSD1351_DISPLAY_SIZE_Y - 1;
 
 const static SSD1351_FontDef_t * SSD1351_Font = &SSD1351_DEFAULT_FONT;
-static uint8_t SSD1351_ColorFrontH		= 0xFF;		// Bia³y
+static uint8_t SSD1351_ColorFrontH		= 0xFF;		// White
 static uint8_t SSD1351_ColorFrontL		= 0xFF;
-static uint8_t SSD1351_ColorBackH		= 0x00;		// Czarny
+static uint8_t SSD1351_ColorBackH		= 0x00;		// Black
 static uint8_t SSD1351_ColorBackL		= 0x00;
 
 // Display config for init function
@@ -589,20 +589,20 @@ void SSD1351_BitmapRGB565(const SSD1351_Bitmap_t * Bitmap) {
 	uint8_t WidthPixels = Bitmap->Width;
 	uint8_t HeightPixels = Bitmap->Height;
 	
-	// Ustawienie obszaru roboczego
+	// Set active area to draw into
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + WidthPixels - 1, SSD1351_CursorY, SSD1351_CursorY + HeightPixels - 1);
 	
-	// Rysowanie pikseli
+	// Stream all pixels
 	SSD1351_CHIP_SELECT;
 	Spi_Write(Bitmap->Bitmaps, WidthPixels * HeightPixels * 2);
 	SSD1351_CHIP_DESELECT;
 }
 
-// Rysowanie bitmapy kolorowej w RGB332
-// Kolor pierwszego planu, kolor t³a, wspó³rzêdnie XY ustawiæ przed wywo³aniem SSD1351_BitmapMono()
+// Draw a bitmap saved in format RGB5332
+// Set XY coordinates set before calling
 void SSD1351_BitmapRGB332(const SSD1351_Bitmap_t * Bitmap) {
 	
-	// Odczytanie rozmiaru bitmapy
+	// Get size fo bitmap
 	uint8_t WidthPixels = Bitmap->Width;
 	uint8_t HeightPixels = Bitmap->Height;
 	uint16_t Size = WidthPixels * HeightPixels;
@@ -636,53 +636,52 @@ void SSD1351_FontSet(const SSD1351_FontDef_t * Font) {
 }
 
 // Print single character
-// Zmienna Negative jest opcjonalna, wartoœæ inna ni¿ 0 powoduje negacjê koloru
 void SSD1351_PrintChar(uint8_t Char) {
 	
-	// Kontrola czy ¿¹dany znak znajduje siê w tablicy
+	// Check if character is supported by font
 	if(Char < SSD1351_Font->FirstChar) Char = SSD1351_Font->LastChar;
 	if(Char > SSD1351_Font->LastChar) Char = SSD1351_Font->LastChar;
 	
-	// Offset znaku, bo tablica bitmap nie musi zawieraæ wszystkich znaków ASCII od zera
+	// Calculate character offset, because font table doesn't have to befin with 0x00 character
 	Char = Char - SSD1351_Font->FirstChar;
 	
-	// Okreœlenie szerokoœci znaku oraz jego po³o¿enia w tabeli bitmap
+	// Find width of the character and its position is bitmap table
 	uint8_t Width;
 	uint8_t Height = SSD1351_Font->Height;
 	uint8_t Spacing = SSD1351_Font->Spacing;
 	uint16_t Address;
 	if(SSD1351_Font->Width > 0) {
-		// Dla czcionki o sta³ej szerokoœci znaku
+		// For font with fixed width of all characters
 		Width = SSD1351_Font->Width;
 		Address = Char * Width * (Height/8);
 	}
 	else {
-		// Dla czcionki o zmiennej szerokoœci znaku
+		// For font with characters with variable width
 		Width = SSD1351_Font->Descriptors[Char].Width;
 		Address = SSD1351_Font->Descriptors[Char].Offset;
 	}
 	
-	// Je¿eli Addres = 0 i Szerokoœæ = 0 to znaczy, ¿e taki znak nie jest zdefiniowany, wiêc wyœwietlamy BadChar (ostatni znak z tabeli)
+	// If Address is null and width = 0 then print last charachter from table (badchar)
 	if((Address == 0) && (Width == 0)) {
 		Char = SSD1351_Font->LastChar - SSD1351_Font->FirstChar;
 		Address = SSD1351_Font->Descriptors[Char].Offset;
 		Width = SSD1351_Font->Descriptors[Char].Width;
 	}
 	
-	// Obszar roboczy
+	// Set active area to write into
 	SSD1351_ActiveAreaSet(SSD1351_CursorX, SSD1351_CursorX + Width + Spacing - 1, SSD1351_CursorY, SSD1351_CursorY + Height - 1);
 	
-	// Wysy³anie pikseli
+	// Stream all pixels
 	uint8_t Buffer = 0;
 	SSD1351_CHIP_SELECT;
 	
-	// Pêtla kolumn tylko dla znaku (spacing bêdzie w kolejnej pêtli)
+	// Column loop
 	for(uint8_t ActualColumn = 0; ActualColumn < Width; ActualColumn++) {
 		
 		uint8_t ActualRow = Height;
 		uint8_t BitMask = 0;
 		
-		// Pêtla wierszy
+		// Row loop
 		while(ActualRow--) {
 			if(BitMask == 0) {
 				BitMask = 0b10000000;
@@ -690,15 +689,14 @@ void SSD1351_PrintChar(uint8_t Char) {
 			}
 			
 			if(Buffer & BitMask) {
-				// Kolor pierwszoplanowy
+				// Transmit foreground color
 				Spi_2(SSD1351_ColorFrontH, SSD1351_ColorFrontL);
 			}
 			else {
-				// Kolor t³a
+				// Transmit background color
 				Spi_2(SSD1351_ColorBackH, SSD1351_ColorBackL);
 			}
 			
-			// Przesuniêcie maski bitowej
 			BitMask = BitMask >> 1;
 		}
 	}
@@ -710,36 +708,32 @@ void SSD1351_PrintChar(uint8_t Char) {
 		}
 	}
 	
-	// Koniec transmisji
+	// End of transmission
 	SSD1351_CHIP_DESELECT;
 	
-	// Ustawienie kursora na koniec znaku
+	// Move cursor at the end of character
 	SSD1351_CursorX = SSD1351_CursorX + Width + Spacing;
 	if(SSD1351_CursorX > SSD1351_DISPLAY_SIZE_X) {
 		SSD1351_CursorX = SSD1351_CursorX - SSD1351_DISPLAY_SIZE_X;
 	}
 }
 
-// Wylicza d³ugoœæ napisu w pikselach w zale¿noœci od wybranej czcionki
+// Calculate text width
 uint8_t SSD1351_TextWidthGet(const char * Text) {
 	uint8_t Width = 0;
 	uint16_t Offset = SSD1351_Font->FirstChar;
 	
-	// Sprawdzenie czy czcionka ma sta³¹ szerokoœæ znaku
+	// Check if the font has characters with fixed width
 	if(SSD1351_Font->Width) {
-		// Czcionka o sta³ej szerokoœci znaków
 		
-		// Zliczanie iloœci znaków
+		// Count number of characters
 		while(*Text++) Width++;
 		
-		// Odtsêp za ka¿dym znakiem		(!! sprawdziæ to i poprawiæ w SH1106)
-		//Width = Width + SSD1351_Font.Spacing;
-		
-		// Mno¿enie przez sta³¹ szerokoœæ znaku
+		// Multiply by width of single character
 		Width = Width * (SSD1351_Font->Width + SSD1351_Font->Spacing);						
 	}
 	else {
-		// Czcionka o zmiennej szerokoœci znaków
+		// Font with variable character width
 		while(*Text) {
 			Width += SSD1351_Font->Descriptors[(*Text) - Offset].Width + SSD1351_Font->Spacing;			
 			Text++;
@@ -749,7 +743,7 @@ uint8_t SSD1351_TextWidthGet(const char * Text) {
 	return Width;
 }
 
-// Pisanie tekstu. Wczeœniej wybraæ czcionkê!
+// Print text. Remember to set font first!
 void SSD1351_Text(const char * Text, uint8_t Align) {
 	
 	// Set cursor position to match text widht and align
