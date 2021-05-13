@@ -11,6 +11,10 @@
 	#include	"../console/console_demo.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1351
+	#include	"../display_ssd1351/display_ssd1351_demo.h"
+#endif
+
 #if COMPONENT_DS3231
 	#include	"../ds3231/ds3231_demo.h"
 #endif
@@ -81,6 +85,49 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"hexstr",			Console_CmdHexString},
 	{"ascstr",			Console_CmdAsciiString},
 	{"ascchr",			Console_CmdAsciiCharacter},
+#endif
+
+// ========================================
+// Display SSD1350 demo
+// ========================================
+
+#if SSD1351_USE_DEMO_COMMANDS
+	{"d-clr",			SSD1351_CmdClear},
+	{"d-chess",			SSD1351_CmdDrawChessboard},
+	{"d-cont",			SSD1351_CmdContrast},
+	{"d-pix",			SSD1351_CmdPixel},
+	{"d-lin",			SSD1351_CmdLine},
+	{"d-rec",			SSD1351_CmdRectangle},
+	{"d-recf",			SSD1351_CmdRectangleFill},
+	{"d-cir",			SSD1351_CmdDrawCircle},
+	{"d-cur",			SSD1351_CmdCursor},
+	{"d-cf",			SSD1351_CmdColorFront},
+	{"d-cb",			SSD1351_CmdColorBack},
+	{"d-t",				SSD1351_CmdText},
+	{"d-f",				SSD1351_CmdFont},
+	
+	// Font demos
+	#if SSD1351_FONT_DOS8x8
+		{"d-dos8",		SSD1351_CmdDemoFontDos8x8},
+	#endif
+	
+	#if SSD1351_FONT_DOS16x8
+		{"d-dos16",		SSD1351_CmdDemoFontDos16x8},
+	#endif
+	
+	{"d-rainbow",		SSD1351_CmdDemoColorPalette},
+	{"d-fonts",			SSD1351_CmDDemoFontTest},
+	{"d-align",			SSD1351_CmdDemoTextAlign},
+	
+	// Bitmaps
+	{"d-b",				SSD1351_CmdBitmap},
+	
+	// Animated demos
+	{"d-snake",			SSD1351_CmdSnake},
+	
+	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
+		{"d-face",		SSD1351_CmdFace},
+	#endif
 #endif
 
 // ========================================

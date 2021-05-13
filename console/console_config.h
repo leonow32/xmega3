@@ -20,6 +20,22 @@
 #endif
 
 // ========================================
+// Demo Display SSD1351
+// ========================================
+
+#if PRODUCT_SSD1351
+	#define CONSOLE_COMMAND_LENGTH				250
+	#define CONSOLE_MAX_ARGUMENTS				10
+	#define CONSOLE_USE_HELP					1
+	#define CONSOLE_USE_CTRL_Z					1
+	#define CONSOLE_USE_COMMAND_ALL				1
+	#define CONSOLE_USE_DEMO_COMMANDS			0
+	#define CONSOLE_INPUT_STREAM				Uart_Read
+	#define CONSOLE_INPUT_RECEIVED_CNT			Uart_ReceivedCnt
+	#define CONSOLE_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 

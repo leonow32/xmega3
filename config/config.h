@@ -11,16 +11,25 @@ CHANGELOG
 // ========================================
 
 #if PRODUCT_TEMPLATE
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					0
-	#define HW_CPU_ATtinyXX17					0
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					0
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				1
-	#define HW_CPU_ATmegaXX09					0
+	#define HW_CPU_ATtinyXX12				0
+	#define HW_CPU_ATtinyXX14				0
+	#define HW_CPU_ATtinyXX16				0
+	#define HW_CPU_ATtinyXX17				0
+	#define HW_CPU_ATtinyXX24				0
+	#define HW_CPU_ATtinyXX26				0
+	#define HW_CPU_ATtinyXX27				0
+	#define HW_CPU_ATmegaXX08_28pin			0
+	#define HW_CPU_ATmegaXX08_32pin			1
+	#define HW_CPU_ATmegaXX09				0
+	#define HW_CONFIG_DONE
+#endif
+
+// ========================================
+// Demo Display SSD1351
+// ========================================
+
+#if PRODUCT_SSD1351
+	#define HW_CPU_ATmegaXX08_32pin			1
 	#define HW_CONFIG_DONE
 #endif
 
@@ -29,16 +38,7 @@ CHANGELOG
 // ========================================
 
 #if PRODUCT_AVRIOT
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					0
-	#define HW_CPU_ATtinyXX17					0
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					0
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				1
-	#define HW_CPU_ATmegaXX09					0
+	#define HW_CPU_ATmegaXX08_32pin			1
 	#define HW_CONFIG_DONE
 #endif
 
@@ -47,16 +47,7 @@ CHANGELOG
 // ========================================
 
 #if PRODUCT_CURIOSITY_M4809
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					0
-	#define HW_CPU_ATtinyXX17					0
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					0
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				0
-	#define HW_CPU_ATmegaXX09					1
+	#define HW_CPU_ATmegaXX09				1
 	#define HW_CONFIG_DONE
 #endif
 
@@ -65,16 +56,7 @@ CHANGELOG
 // ========================================
 
 #if PRODUCT_CURIOSITY_T1627
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					0
-	#define HW_CPU_ATtinyXX17					0
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					1
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				0
-	#define HW_CPU_ATmegaXX09					0
+	#define HW_CPU_ATtinyXX27				1
 	#define HW_CONFIG_DONE
 #endif
 
@@ -83,16 +65,7 @@ CHANGELOG
 // ========================================
 
 #if PRODUCT_CURIOSITY_T3217
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					0
-	#define HW_CPU_ATtinyXX17					1
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					0
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				0
-	#define HW_CPU_ATmegaXX09					0
+	#define HW_CPU_ATtinyXX17				1
 	#define HW_CONFIG_DONE
 #endif
 
@@ -101,16 +74,7 @@ CHANGELOG
 // ========================================
 
 #if BOARD_XNANO
-	#define HW_CPU_ATtinyXX12					0
-	#define HW_CPU_ATtinyXX14					0
-	#define HW_CPU_ATtinyXX16					1
-	#define HW_CPU_ATtinyXX17					0
-	#define HW_CPU_ATtinyXX24					0
-	#define HW_CPU_ATtinyXX26					0
-	#define HW_CPU_ATtinyXX27					0
-	#define HW_CPU_ATmegaXX08_28pin				0
-	#define HW_CPU_ATmegaXX08_32pin				0
-	#define HW_CPU_ATmegaXX09					0
+	#define HW_CPU_ATtinyXX16				1
 	#define HW_CONFIG_DONE
 #endif
 

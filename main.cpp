@@ -40,6 +40,10 @@
 // External Hardware Includes
 // ========================================
 
+#if COMPONENT_DISPLAY_SSD1351
+	#include	"display_ssd1351/display_ssd1351.h"
+#endif
+
 #if COMPONENT_DS3231
 	#include	"ds3231/ds3231.h"
 #endif
@@ -127,6 +131,10 @@ int main(void) {
 	// External Hardware init
 	// ========================================
 	
+	#if COMPONENT_DISPLAY_SSD1351
+		SSD1351_Init();
+	#endif
+	
 	#if COMPONENT_DS3231
 		DS3231_Init();
 	#endif
@@ -137,6 +145,10 @@ int main(void) {
 	
 	#if COMPONENT_MEM23
 		Mem23_Init();
+	#endif
+	
+	#if COMPONENT_MEM24
+		Mem24_Init();
 	#endif
 	
 	#if COMPONENT_MEM25

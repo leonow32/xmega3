@@ -14,6 +14,16 @@
 #endif
 
 // ========================================
+// Demo Display SSD1351
+// ========================================
+
+#if PRODUCT_SSD1351
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
+	#define CLOCK_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 
