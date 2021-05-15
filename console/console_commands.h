@@ -96,16 +96,16 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if SH1106_USE_DEMO_COMMANDS
-	{"d-init",			SH1106_CmdInit},
-	{"d-clr",			SH1106_CmdClear},
-	{"d-slash",			SH1106_CmdDrawSlash},
-//	{"d-chess",			SSD1351_CmdDrawChessboard},
-// 	{"d-cont",			SSD1351_CmdContrast},
-// 	{"d-pix",			SSD1351_CmdPixel},
-// 	{"d-lin",			SSD1351_CmdLine},
-// 	{"d-rec",			SSD1351_CmdRectangle},
-// 	{"d-recf",			SSD1351_CmdRectangleFill},
-// 	{"d-cir",			SSD1351_CmdDrawCircle},
+	{"init",			SH1106_CmdInit},
+	{"clr",				SH1106_CmdClear},
+	{"slash",			SH1106_CmdDrawSlash},
+	{"chess",			SH1106_CmdDrawChessboard},
+ 	{"cont",			SH1106_CmdContrast},
+ 	{"pix",				SH1106_CmdPixel},
+ 	{"lin",				SH1106_CmdLine},
+ 	{"rec",				SH1106_CmdRectangle},
+ 	{"recf",			SH1106_CmdRectangleFill},
+ 	{"cir",				SH1106_CmdDrawCircle},
 // 	{"d-cur",			SSD1351_CmdCursor},
 // 	{"d-cf",			SSD1351_CmdColorFront},
 // 	{"d-cb",			SSD1351_CmdColorBack},
@@ -141,41 +141,41 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if SSD1351_USE_DEMO_COMMANDS
-	{"d-clr",			SSD1351_CmdClear},
-	{"d-chess",			SSD1351_CmdDrawChessboard},
-	{"d-cont",			SSD1351_CmdContrast},
-	{"d-pix",			SSD1351_CmdPixel},
-	{"d-lin",			SSD1351_CmdLine},
-	{"d-rec",			SSD1351_CmdRectangle},
-	{"d-recf",			SSD1351_CmdRectangleFill},
-	{"d-cir",			SSD1351_CmdDrawCircle},
-	{"d-cur",			SSD1351_CmdCursor},
-	{"d-cf",			SSD1351_CmdColorFront},
-	{"d-cb",			SSD1351_CmdColorBack},
-	{"d-t",				SSD1351_CmdText},
-	{"d-f",				SSD1351_CmdFont},
+	{"clr",				SSD1351_CmdClear},
+	{"chess",			SSD1351_CmdDrawChessboard},
+	{"cont",			SSD1351_CmdContrast},
+	{"pix",				SSD1351_CmdPixel},
+	{"lin",				SSD1351_CmdLine},
+	{"rec",				SSD1351_CmdRectangle},
+	{"recf",			SSD1351_CmdRectangleFill},
+	{"cir",				SSD1351_CmdDrawCircle},
+	{"cur",				SSD1351_CmdCursor},
+	{"cf",				SSD1351_CmdColorFront},
+	{"cb",				SSD1351_CmdColorBack},
+	{"txt",				SSD1351_CmdText},
+	{"font",			SSD1351_CmdFont},
 	
 	// Font demos
 	#if SSD1351_FONT_DOS8x8
-		{"d-dos8",		SSD1351_CmdDemoFontDos8x8},
+		{"dos8",		SSD1351_CmdDemoFontDos8x8},
 	#endif
 	
 	#if SSD1351_FONT_DOS16x8
-		{"d-dos16",		SSD1351_CmdDemoFontDos16x8},
+		{"dos16",		SSD1351_CmdDemoFontDos16x8},
 	#endif
 	
-	{"d-rainbow",		SSD1351_CmdDemoColorPalette},
-	{"d-fonts",			SSD1351_CmDDemoFontTest},
-	{"d-align",			SSD1351_CmdDemoTextAlign},
+	{"rainbow",			SSD1351_CmdDemoColorPalette},
+	{"fonts",			SSD1351_CmDDemoFontTest},
+	{"align",			SSD1351_CmdDemoTextAlign},
 	
 	// Bitmaps
-	{"d-b",				SSD1351_CmdBitmap},
+	{"bitmap",			SSD1351_CmdBitmap},
 	
 	// Animated demos
-	{"d-snake",			SSD1351_CmdSnake},
+	{"snake",			SSD1351_CmdSnake},
 	
 	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
-		{"d-face",		SSD1351_CmdFace},
+		{"face",		SSD1351_CmdFace},
 	#endif
 #endif
 

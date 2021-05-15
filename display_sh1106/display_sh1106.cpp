@@ -24,7 +24,7 @@ static const uint8_t SH1106_InitSequence[] = {
  	SH1106_NORMAL_REVERSE(0),				// Normal display
  	SH1106_ENTRIE_DISPLAY_ON(0),			// Display ON
  	SH1106_CONTRAST,						// Set contrast
- 	0xFF,									// Contrast DATA
+ 	SH1106_DEFAULT_CONTRAST,				// Contrast DATA
  	SH1106_MULTIPLEX_RATIO,					// Multiplex ratio
  	0x3F,									// 1/64 duty
  	SH1106_CLOCK_DIV_FREQ,					// Display clock divide
@@ -35,7 +35,9 @@ static const uint8_t SH1106_InitSequence[] = {
  	0x40,
  	SH1106_CHARGE_PUMP,						// Charge pump 0x8d
  	0x14,
- 	SH1106_DISPLAY_ON,						// Display ON
+ 	#if SH1106_CLEAR_AFERT_INIT == 0
+		SH1106_DISPLAY_ON,					// Display ON
+	#endif
 };
 
 
@@ -46,6 +48,11 @@ void SH1106_Init(void) {
 		for(uint8_t i=0; i<sizeof(SH1106_InitSequence); i++) {
 			SH1106_WriteCommand(SH1106_InitSequence[i]);
 		}
+		
+		#if SH1106_CLEAR_AFERT_INIT
+			SH1106_Clear();
+			SH1106_WriteCommand(SH1106_DISPLAY_ON);
+		#endif
 	#endif
 	
 	#if SH1106_USE_SPI
@@ -56,6 +63,11 @@ void SH1106_Init(void) {
 		SH1106_DC_COMMAND;
 		Spi_Write(SH1106_InitSequence, sizeof(SH1106_InitSequence));
 		SH1106_CHIP_DESELECT;
+		
+		#if SH1106_CLEAR_AFERT_INIT
+			SH1106_Clear();
+			SH1106_WriteCommand(SH1106_DISPLAY_ON);
+		#endif
 	#endif
 }
 
@@ -109,7 +121,7 @@ void SH1106_ContrastSet(const uint8_t Value) {
 void SH1106_Clear(const uint8_t Pattern) {
 	for(uint8_t Page=0; Page<8; Page++) {
 		SH1106_CursorPageSet(Page);
-		SH1106_CursorPosxSet(0);
+		SH1106_CursorXSet(0);
 		
 		#if SH1106_USE_I2C
 			Twi_Start(SH1106_ADDRESS_WRITE);
@@ -128,7 +140,7 @@ void SH1106_Clear(const uint8_t Pattern) {
 		#endif
 	}
 	
-	SH1106_CursorPosxSet(0);
+	SH1106_CursorXSet(0);
 	SH1106_CursorPageSet(0);
 }
 
@@ -137,7 +149,7 @@ void SH1106_Clear(const uint8_t Pattern) {
 void SH1106_BackgroundGray(void) {
 	for(uint8_t Page=0; Page<8; Page++) {
 		SH1106_CursorPageSet(Page);
-		SH1106_CursorPosxSet(0);
+		SH1106_CursorXSet(0);
 		
 		#if SH1106_USE_I2C
 			Twi_Start(SH1106_ADDRESS_WRITE);
@@ -159,7 +171,7 @@ void SH1106_BackgroundGray(void) {
 		#endif
 	}
 	
-	SH1106_CursorPosxSet(0);
+	SH1106_CursorXSet(0);
 	SH1106_CursorPageSet(0);
 }
 
@@ -170,13 +182,13 @@ void SH1106_BackgroundGray(void) {
 
 
 // Odczytanie pozycji X
-uint8_t SH1106_CursorPosxGet(void) {
+uint8_t SH1106_CursorXGet(void) {
 	return SH1106_CursorX;
 }
 
 
 // Ustawienie pozycji X
-void SH1106_CursorPosxSet(uint8_t PosX) {
+void SH1106_CursorXSet(uint8_t PosX) {
 	
 	// Kontrola
 	SH1106_CursorX = PosX < SH1106_DISPLAY_SIZE_X ? PosX : 0;
@@ -253,7 +265,7 @@ void SH1106_RmwExe(uint8_t Byte, SH1106_rmw_t Mode) {
 // Wyjœcie z trybu read-mofify-write
 void SH1106_RmwEnd() {
 	SH1106_WriteCommand(SH1106_END);
-	SH1106_CursorPosxSet(SH1106_CursorX);
+	SH1106_CursorXSet(SH1106_CursorX);
 }
 #endif
 
@@ -264,7 +276,7 @@ void SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode) {
 	// Obliczenie na której stronie wyœwietlacza wstawiæ pixel i ustawienie kursora
 	uint8_t Page = y / SH1106_PAGE_HEIGHT;
 	SH1106_CursorPageSet(Page);
-	SH1106_CursorPosxSet(x);
+	SH1106_CursorXSet(x);
 	uint8_t Pattern = (1 << (y % SH1106_PAGE_HEIGHT));
 
 	if(RmwMode == SH1106_RmwNone) {
@@ -281,7 +293,7 @@ void SH1106_DrawPixel(uint8_t x, uint8_t y) {
 	// Obliczenie na której stronie wyœwietlacza wstawiæ pixel i ustawienie kursora
 	uint8_t Page = y / SH1106_PAGE_HEIGHT;
 	SH1106_CursorPageSet(Page);
-	SH1106_CursorPosxSet(x);
+	SH1106_CursorXSet(x);
 	uint8_t Pattern = (1 << (y % SH1106_PAGE_HEIGHT));
 	SH1106_WriteData(Pattern);
 }
@@ -297,7 +309,7 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rm
 	uint8_t Page = y0 / SH1106_PAGE_HEIGHT;
 	uint8_t Pattern = (1 << (y0 % SH1106_PAGE_HEIGHT));
 	SH1106_CursorPageSet(Page);
-	SH1106_CursorPosxSet(x0);
+	SH1106_CursorXSet(x0);
 
 	if(RmwMode == SH1106_RmwNone) {
 		Twi_Start(SH1106_ADDRESS_WRITE);
@@ -323,7 +335,7 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	uint8_t Page = y0 / SH1106_PAGE_HEIGHT;
 	uint8_t Pattern = (1 << (y0 % SH1106_PAGE_HEIGHT));
 	SH1106_CursorPageSet(Page);
-	SH1106_CursorPosxSet(x0);
+	SH1106_CursorXSet(x0);
 
 	#if SH1106_USE_I2C
 		Twi_Start(SH1106_ADDRESS_WRITE);
@@ -356,7 +368,7 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_
 
 	if(PageStart == PageEnd) {
 		// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		if(RmwMode == SH1106_RmwNone) {
 			SH1106_WriteData(PagePatternStart & PagePatternEnd);
@@ -371,7 +383,7 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_
 	else {
 		// Linia zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
 		// Rysowanie pocz¹tku linii
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		if(RmwMode == SH1106_RmwNone) {
 			SH1106_WriteData(PagePatternStart);
@@ -384,7 +396,7 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_
 
 		// Rysowanie koñca linii
 		if(PagePatternEnd) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageEnd);
 			if(RmwMode == SH1106_RmwNone) {
 				SH1106_WriteData(PagePatternEnd);
@@ -398,7 +410,7 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_
 
 		// Rysowanie œrodka linii jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
 		while(PageEnd - PageStart >= 2) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(++PageStart);
 			if(RmwMode == SH1106_RmwNone) {
 				SH1106_WriteData(0xFF);
@@ -422,27 +434,27 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 
 	if(PageStart == PageEnd) {
 		// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		SH1106_WriteData(PagePatternStart & PagePatternEnd);
 	}
 	else {
 		// Linia zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
 		// Rysowanie pocz¹tku linii
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		SH1106_WriteData(PagePatternStart);
 
 		// Rysowanie koñca linii
 		if(PagePatternEnd) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageEnd);
 			SH1106_WriteData(PagePatternEnd);
 		}
 		
 		// Rysowanie œrodka linii jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
 		while(PageEnd - PageStart >= 2) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(++PageStart);
 			SH1106_WriteData(0xFF);
 		}
@@ -541,7 +553,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH
 
 	if(PageStart == PageEnd) {
 		// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		if(RmwMode == SH1106_RmwNone) {
 			for(uint8_t i=x0; i<=x1; i++) {
@@ -560,7 +572,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH
 	else {
 		// Linia zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
 		// Rysowanie górnej czêœci
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		if(RmwMode == SH1106_RmwNone) {
 			for(uint8_t i=x0; i<=x1; i++) {
@@ -577,7 +589,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH
 
 		// Rysowanie dolnej czêœci jeœli jest
 		if(PagePatternEnd) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageEnd);
 			if(RmwMode == SH1106_RmwNone) {
 				for(uint8_t i=x0; i<=x1; i++) {
@@ -595,7 +607,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH
 
 		// Rysowanie œrodkowej czêœci jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
 		while(PageEnd - PageStart >= 2) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(++PageStart);
 			if(RmwMode == SH1106_RmwNone) {
 				for(uint8_t i=x0; i<=x1; i++) {
@@ -622,7 +634,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 	if(PageStart == PageEnd) {
 		// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 
 		#if SH1106_USE_I2C
@@ -644,7 +656,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	else {
 		// Prostok¹t zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
 		// Rysowanie górnej czêœci
-		SH1106_CursorPosxSet(x0);
+		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		
 		#if SH1106_USE_I2C
@@ -665,7 +677,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 		// Rysowanie dolnej czêœci jeœli jest
 		if(PagePatternEnd) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageEnd);
 
 			#if SH1106_USE_I2C
@@ -687,7 +699,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
 		// Rysowanie œrodkowej czêœci jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
 		while(PageEnd - PageStart >= 2) {
-			SH1106_CursorPosxSet(x0);
+			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(++PageStart);
 			
 			#if SH1106_USE_I2C
@@ -857,7 +869,7 @@ void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pi
 			// To nie by³a jeszcze ostatnia strona
 
 			// Cofamy kursor na pocz¹tek
-			SH1106_CursorPosxSet(CursorX_Old);
+			SH1106_CursorXSet(CursorX_Old);
 
 			// Przesuwamy kursor o jedn¹ stronê ni¿ej
 			SH1106_CursorPageSet(SH1106_CursorP + 1);			
@@ -1086,8 +1098,12 @@ void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative) {
 }
 */
 
-// Testowe 
-void SH1106_DrawSlash(void) {
+// ========================================
+// Testing
+// ========================================
+
+// Draw angled line made of 8 segments
+void SH1106_Slash(void) {
 	
 	#if SH1106_USE_I2C
 		uint8_t Slash = 0b10000000;
@@ -1096,7 +1112,7 @@ void SH1106_DrawSlash(void) {
 			Slash = Slash >> 1;
 		}
 	#endif
-
+	
 	#if SH1106_USE_SPI
 		const uint8_t Slash[8] = {
 			0b10000000,
@@ -1113,6 +1129,36 @@ void SH1106_DrawSlash(void) {
 		Spi_Write(Slash, sizeof(Slash));
 		SH1106_CHIP_DESELECT;
 	#endif
+}
+
+// Draw chessboard
+void SH1106_Chessboard(void) {
+	
+	// Loop 8 pages
+	for(uint8_t Page = 0; Page < SH1106_PAGE_COUNT; Page++) {
+		SH1106_CursorPageSet(Page);
+		SH1106_CursorXSet(0);
+		
+		// Loop 128 columns
+		#if SH1106_USE_I2C
+			Twi_Start(SH1106_ADDRESS_WRITE);
+			Twi_Write(SH1106_DATA_BYTE);
+			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
+				Twi_Write(0b10101010);
+				Twi_Write(0x01010101);
+			}
+			Twi_Stop();
+		#endif
+		
+		#if SH1106_USE_SPI
+			SH1106_CHIP_SELECT;
+			SH1106_DC_DATA;
+			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
+				Spi_2(0b10101010, 0b01010101);
+			}
+			SH1106_CHIP_DESELECT;
+		#endif
+	}
 }
 
 #endif

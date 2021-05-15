@@ -648,6 +648,9 @@
     <Compile Include="display_sh1106\display_sh1106_config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_sh1106\display_sh1106_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="display_sh1106\display_sh1106_demo.cpp">
       <SubType>compile</SubType>
     </Compile>

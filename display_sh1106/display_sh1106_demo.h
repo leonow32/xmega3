@@ -31,8 +31,12 @@
 
 void SH1106_CmdInit(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdClear(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdDrawSlash(uint8_t argc, uint8_t * argv[]);
-
-
-
+void SH1106_CmdContrast(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdPixel(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdLine(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdRectangle(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdRectangleFill(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 #endif /* DISPLAY_SH1106_DEMO_H_ */

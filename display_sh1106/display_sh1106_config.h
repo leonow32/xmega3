@@ -17,15 +17,17 @@
 	
 	#define SH1106_USE_DEMO_COMMANDS			1
 	
-	// Wybór magistali
+	// Interface selection
 	#define		SH1106_USE_I2C					0
 	#define		SH1106_USE_SPI					1
 	
-	// Tryb read-modify-write tylko przy po³¹czeniu I2C
-	// Mo¿na wy³¹czyæ, jeœli wyœwietlacz nie obs³uguje lub nie ma potrzeby
-	#define		SH1106_USE_RMW					0
+	// Config
+	#define		SH1106_DEFAULT_CONTRAST			255
+	#define		SH1106_CLEAR_AFERT_INIT			1
+	#define		SH1106_USE_DEMO_COMMANDS		1
+	#define		SH1106_USE_RMW					0		// for I2C interface only
 	
-	// Adres I2C
+	// Addess on I2C bus
 	#if SH1106_USE_I2C
 		#define		SH1106_ADDRESS_READ			0x79
 		#define		SH1106_ADDRESS_WRITE		0x78
@@ -40,13 +42,7 @@
 		#define		SH1106_DC_DATA				VPORTC.OUT |=  PIN5_bm
 		#define		SH1106_DC_COMMAND			VPORTC.OUT &= ~PIN5_bm
 	#endif
-	
-	// Definicje
-	#define		SH1106_DISPLAY_SIZE_X			128
-	#define		SH1106_DISPLAY_SIZE_Y			64
-	#define		SH1106_PAGE_HEIGHT				8
-	#define		SH1106_PAGE_COUNT				8
-	#define		SH1106_OFFSET_X					2			// Offset poziomy - ustawiæ jeœli matryca OLED jest przesuniêta wglêdem wspó³rzêdnych sterownika
+
 	
 	// Czcionki (znaki obrócone o 90 stopni - wersja R)
 	// #include	"FontR/fontR_Console8x6.h"
