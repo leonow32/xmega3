@@ -6,7 +6,7 @@
 static uint8_t SH1106_CursorP = 0;
 static uint8_t SH1106_CursorX = 0;
 //static fontR_def_t SH1106_Font;
-const static fontR_def_t * SH1106_Font = &SH1106_DEFAULT_FONT;
+const static SH1106_FontDef_t * SH1106_Font = &SH1106_DEFAULT_FONT;
 
 // Konfiguracja wyœwietlacza dla funkcji SH1106_Init()
 static const uint8_t SH1106_InitSequence[] = {
@@ -883,13 +883,13 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 
 // Odczytanie aktualnie ustawionej czcionki
 
-const fontR_def_t * SH1106_FontGet(void) {
+const SH1106_FontDef_t * SH1106_FontGet(void) {
 	return SH1106_Font;
 }
 
 
 // Ustawienie czcionki
-void SH1106_FontSet(const fontR_def_t * Font) {
+void SH1106_FontSet(const SH1106_FontDef_t * Font) {
 	SH1106_Font = Font;
 }
 

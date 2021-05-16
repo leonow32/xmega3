@@ -883,7 +883,7 @@ const uint8_t FontRSans16B_Bitmap[] =
 	0b11111111, 0b11111111, // ################
 };
 
-const fontR_info_t FontRSans16B_Descriptors[] =
+const SH1106_CharDef_t FontRSans16B_Descriptors[] =
 {
 	{2, 0}, 		//
 	{2, 4}, 		// !
@@ -983,7 +983,7 @@ const fontR_info_t FontRSans16B_Descriptors[] =
 	{4, 1372},		// bad char
 };
 
-const fontR_def_t FontRSans16B = {
+const SH1106_FontDef_t FontRSans16B = {
 	.Height				=	2,
 	.Width				=	0,
 	.Spacing			=	1,

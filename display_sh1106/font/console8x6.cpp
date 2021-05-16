@@ -1,6 +1,6 @@
 #include "console8x6.h"
 
-const uint8_t FontRConsole8x6_Bitmap[]  =
+const uint8_t SH1106_BitmapConsole8x6[]  =
 {
 	0b00000000, //
 	0b00000000, //
@@ -579,12 +579,12 @@ const uint8_t FontRConsole8x6_Bitmap[]  =
 	0b11111111, // ########
 };
 
-const fontR_def_t FontRConsole8x6 = {
+const SH1106_FontDef_t SH1106_FontConsole8x6 = {
 	.Height				=	1,
 	.Width				=	5,
 	.Spacing			=	1,
 	.FirstChar			=	' ',
 	.LastChar			=	127,
 	.Descriptors		=	0,
-	.Bitmaps			=	FontRConsole8x6_Bitmap,
+	.Bitmaps			=	SH1106_BitmapConsole8x6,
 };

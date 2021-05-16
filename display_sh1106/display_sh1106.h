@@ -216,8 +216,8 @@ void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
 // Text
 // ========================================
 
-const fontR_def_t * SH1106_FontGet(void);
-void SH1106_FontSet(const fontR_def_t * Font);
+const SH1106_FontDef_t * SH1106_FontGet(void);
+void SH1106_FontSet(const SH1106_FontDef_t * Font);
 // uint16_t	SH1106_TextWidth(const char * Text);
 // #if SH1106_USE_RMW
 // void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);

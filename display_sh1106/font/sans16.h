@@ -5,7 +5,7 @@
 #include "../display_sh1106_defines.h"
 
 extern const uint8_t FontRSans16_Bitmap[];
-extern const fontR_info_t FontRSans16_Descriptors[];
-extern const fontR_def_t FontRSans16;
+extern const SH1106_CharDef_t FontRSans16_Descriptors[];
+extern const SH1106_FontDef_t FontRSans16;
 
 #endif

@@ -2052,7 +2052,7 @@ const uint8_t FontRDos8x8_Bitmap[]  = {
 
 };
 
-const fontR_def_t FontRDos8x8 = {
+const SH1106_FontDef_t FontRDos8x8 = {
 	.Height				=	1,
 	.Width				=	8,
 	.Spacing			=	0,

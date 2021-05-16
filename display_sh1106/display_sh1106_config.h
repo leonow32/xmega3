@@ -42,7 +42,7 @@
 	#endif
 	
 	// Fonts
-	#define		SH1106_DEFAULT_FONT				FontRDos16x8
+	#define		SH1106_DEFAULT_FONT				SH1106_FontDos16x8
 	#define		SH1106_FONT_CONSOLE8x6			1						// 480 B
 	#define		SH1106_FONT_DOS8x8				1						// 
 	#define		SH1106_FONT_DOS16x8				1						// 
