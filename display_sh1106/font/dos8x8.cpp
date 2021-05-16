@@ -1,6 +1,6 @@
 #include "dos8x8.h"
 
-const uint8_t FontRDos8x8_Bitmap[]  = {
+const uint8_t SH1106_BitmapDos8x8[]  = {
 	0b00000000, // 000
 	0b00000000, //
 	0b00000000, //
@@ -2052,12 +2052,12 @@ const uint8_t FontRDos8x8_Bitmap[]  = {
 
 };
 
-const SH1106_FontDef_t FontRDos8x8 = {
+const SH1106_FontDef_t SH1106_FontDos8x8 = {
 	.Height				=	1,
 	.Width				=	8,
 	.Spacing			=	0,
 	.FirstChar			=	0,
 	.LastChar			=	255,
 	.Descriptors		=	0,
-	.Bitmaps			=	FontRDos8x8_Bitmap,
+	.Bitmaps			=	SH1106_BitmapDos8x8,
 };

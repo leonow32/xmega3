@@ -1,6 +1,6 @@
 #include "sans16.h"
 
-const uint8_t FontRSans16_Bitmap[]  =
+const uint8_t SH1106_BitmapSans16[]  =
 {
 	// @0 ' ' (2 pixels wide)
 	0b00000000, 0b00000000, //
@@ -790,7 +790,7 @@ const uint8_t FontRSans16_Bitmap[]  =
 	0b11111111, 0b11111111, // ################
 };
 
-const SH1106_CharDef_t FontRSans16_Descriptors[] =
+const SH1106_CharDef_t SH1106_CharactersSans16[] =
 {
 	{2, 0}, 		//
 	{1, 4}, 		// !
@@ -890,12 +890,12 @@ const SH1106_CharDef_t FontRSans16_Descriptors[] =
 	{7, 1186},		// bad char
 };
 
-const SH1106_FontDef_t FontRSans16 = {
+const SH1106_FontDef_t SH1106_FontSans16 = {
 	.Height				=	2,
 	.Width				=	0,
 	.Spacing			=	1,
 	.FirstChar			=	' ',
 	.LastChar			=	'~'+1,
-	.Descriptors		=	FontRSans16_Descriptors,
-	.Bitmaps			=	FontRSans16_Bitmap,
+	.Descriptors		=	SH1106_CharactersSans16,
+	.Bitmaps			=	SH1106_BitmapSans16,
 };

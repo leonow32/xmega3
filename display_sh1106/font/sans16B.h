@@ -4,8 +4,8 @@
 #include <avr/io.h>
 #include "../display_sh1106_defines.h"
 
-extern const uint8_t FontRSans16B_Bitmap[];
-extern const SH1106_CharDef_t FontRSans16B_Descriptors[];
-extern const SH1106_FontDef_t FontRSans16B;
+extern const uint8_t SH1106_BitmapSans16B[];
+extern const SH1106_CharDef_t SH1106_CharactersSans16B[];
+extern const SH1106_FontDef_t SH1106_FontSans16B;
 
 #endif

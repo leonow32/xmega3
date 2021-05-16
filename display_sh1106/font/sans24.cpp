@@ -1,6 +1,6 @@
 #include "sans24.h"
 
-const uint8_t FontRSans24_Bitmap[] =
+const uint8_t SH1106_BitmapSans24[] =
 {
 	// @0 ' ' (2 pixels wide)
 	0b00000000, 0b00000000, 0b00000000, //
@@ -1079,7 +1079,7 @@ const uint8_t FontRSans24_Bitmap[] =
 	0b11111111, 0b11111111, 0b11111111,
 };
 
-const SH1106_CharDef_t FontRSans24_Descriptors[] =
+const SH1106_CharDef_t SH1106_CharactersSans24[] =
 {
 	{2, 0}, 		//
 	{2, 6}, 		// !
@@ -1179,12 +1179,12 @@ const SH1106_CharDef_t FontRSans24_Descriptors[] =
 	{5, 2643},		// bad char
 };
 
-const SH1106_FontDef_t FontRSans24 = {
+const SH1106_FontDef_t SH1106_FontSans24 = {
 	.Height				=	3,
 	.Width				=	0,
 	.Spacing			=	2,
 	.FirstChar			=	' ',
 	.LastChar			=	'~'+1,
-	.Descriptors		=	FontRSans24_Descriptors,
-	.Bitmaps			=	FontRSans24_Bitmap,
+	.Descriptors		=	SH1106_CharactersSans24,
+	.Bitmaps			=	SH1106_BitmapSans24,
 };

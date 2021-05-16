@@ -1,6 +1,6 @@
 #include "sans8.h"
 
-const uint8_t FontRSans8_Bitmap[] = {
+const uint8_t SH1106_BitmapSans8[] = {
 	// @0 ' ' (2 pixels wide)
 	0b00000000, //
 	0b00000000, //
@@ -527,7 +527,7 @@ const uint8_t FontRSans8_Bitmap[] = {
 	0b11111111,
 };
 
-const SH1106_CharDef_t FontRSans8_Descriptors[] =
+const SH1106_CharDef_t SH1106_CharactersSans8[] =
 {
 	{2, 0}, 		//
 	{1, 2}, 		// !
@@ -627,12 +627,12 @@ const SH1106_CharDef_t FontRSans8_Descriptors[] =
 	{3, 332},		// bad char
 };
 
-const SH1106_FontDef_t FontRSans8 = {
+const SH1106_FontDef_t SH1106_FontSans8 = {
 	.Height				=	1,
 	.Width				=	0,
 	.Spacing			=	1,
 	.FirstChar			=	' ',
 	.LastChar			=	'~'+1,
-	.Descriptors		=	FontRSans8_Descriptors,
-	.Bitmaps			=	FontRSans8_Bitmap,
+	.Descriptors		=	SH1106_CharactersSans8,
+	.Bitmaps			=	SH1106_BitmapSans8,
 };
