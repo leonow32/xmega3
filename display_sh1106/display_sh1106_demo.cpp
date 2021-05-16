@@ -181,6 +181,60 @@ void SH1106_CmdCursor(uint8_t argc, uint8_t * argv[]) {
 // Fonts and text
 // ========================================
 
+// Print text
+void SH1106_CmdText(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 2 optional - text align
+	SH1106_align_t Align = SH1106_AlignNone;
+	if(argc == 3) {
+		switch(*argv[2]) {
+			case '1':	Align = SH1106_AlignLeft;	break;
+			case '2':	Align = SH1106_AlignCenter;	break;
+			case '3':	Align = SH1106_AlignRight;	break;
+			default:	Align = SH1106_AlignNone;	break;
+		}
+	}
+	
+	// Execute command
+	SH1106_Text((const char *)argv[1], Align);
+	Print_ResponseOK();
+}
+
+// Change font
+void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]) {
+	switch(*argv[1]) {
+		
+// 		#if SH1106_FONT_CONSOLE8x6
+// 			case '1':	SH1106_FontSet(&SH1106_FontConsole8x6);		break;
+// 		#endif
+// 		
+// 		#if SH1106_FONT_DOS8x8
+// 			case '2':	SH1106_FontSet(&SH1106_FontDos8x8);			break;
+// 		#endif
+// 		
+// 		#if SH1106_FONT_DOS16x8
+// 			case '3':	SH1106_FontSet(&SH1106_FontDos16x8);			break;
+// 		#endif
+// 		
+// 		#if SH1106_FONT_SANS16_PL
+// 			case '4':	SH1106_FontSet(&SH1106_FontSans16_PL);		break;
+// 		#endif
+// 		
+// 		#if SH1106_FONT_SANS16B_PL
+// 			case '5':	SH1106_FontSet(&SH1106_FontSans16B_PL);		break;
+// 		#endif
+// 		
+// 		#if SH1106_FONT_SANS24_PL
+// 			case '6':	SH1106_FontSet(&SH1106_FontSans24_PL);		break;
+// 		#endif
+		
+		default:
+			Print_ResponseError();
+			return;
+	}
+	
+	Print_ResponseOK();
+}
 
 // ========================================
 // Bitmaps

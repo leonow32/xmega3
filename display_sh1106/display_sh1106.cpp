@@ -6,36 +6,37 @@
 static uint8_t SH1106_CursorP = 0;
 static uint8_t SH1106_CursorX = 0;
 //static fontR_def_t SH1106_Font;
+const static fontR_def_t * SH1106_Font = &SH1106_DEFAULT_FONT;
 
 // Konfiguracja wyœwietlacza dla funkcji SH1106_Init()
 static const uint8_t SH1106_InitSequence[] = {
- 	SH1106_DISPLAY_OFF,						// Display OFF
- 	SH1106_COLUMN_LOW(SH1106_OFFSET_X),		// Low Column
- 	SH1106_COLUMN_HIGH(0),					// High Column
- 	SH1106_PAGE(0),							// Strona
- 	SH1106_START_LINE(0),					// Start line
- 	SH1106_REMAP(1),						// Remap
- 	SH1106_COMMON_PADS_HW_CONFIG,			// Com pins
- 	0x12,
- 	SH1106_DISPLAY_OFFSET,					// Display offset
- 	0x00,									// No offset
- 	SH1106_SCAN_DIRECTION(0),				// Scan direction
- 	0xC8,
- 	SH1106_NORMAL_REVERSE(0),				// Normal display
- 	SH1106_ENTRIE_DISPLAY_ON(0),			// Display ON
- 	SH1106_CONTRAST,						// Set contrast
- 	SH1106_DEFAULT_CONTRAST,				// Contrast DATA
- 	SH1106_MULTIPLEX_RATIO,					// Multiplex ratio
- 	0x3F,									// 1/64 duty
- 	SH1106_CLOCK_DIV_FREQ,					// Display clock divide
- 	0x80,
- 	SH1106_CHARGE_PERIOD,					// Precharge period
- 	0xF1,
- 	SH1106_VCOM_DESELECT_LEVEL,				// VCOM deselect
- 	0x40,
- 	SH1106_CHARGE_PUMP,						// Charge pump 0x8d
- 	0x14,
- 	#if SH1106_CLEAR_AFERT_INIT == 0
+	SH1106_DISPLAY_OFF,						// Display OFF
+	SH1106_COLUMN_LOW(SH1106_OFFSET_X),		// Low Column
+	SH1106_COLUMN_HIGH(0),					// High Column
+	SH1106_PAGE(0),							// Strona
+	SH1106_START_LINE(0),					// Start line
+	SH1106_REMAP(1),						// Remap
+	SH1106_COMMON_PADS_HW_CONFIG,			// Com pins
+	0x12,
+	SH1106_DISPLAY_OFFSET,					// Display offset
+	0x00,									// No offset
+	SH1106_SCAN_DIRECTION(0),				// Scan direction
+	0xC8,
+	SH1106_NORMAL_REVERSE(0),				// Normal display
+	SH1106_ENTRIE_DISPLAY_ON(0),			// Display ON
+	SH1106_CONTRAST,						// Set contrast
+	SH1106_DEFAULT_CONTRAST,				// Contrast DATA
+	SH1106_MULTIPLEX_RATIO,					// Multiplex ratio
+	0x3F,									// 1/64 duty
+	SH1106_CLOCK_DIV_FREQ,					// Display clock divide
+	0x80,
+	SH1106_CHARGE_PERIOD,					// Precharge period
+	0xF1,
+	SH1106_VCOM_DESELECT_LEVEL,				// VCOM deselect
+	0x40,
+	SH1106_CHARGE_PUMP,						// Charge pump 0x8d
+	0x14,
+	#if SH1106_CLEAR_AFERT_INIT == 0
 		SH1106_DISPLAY_ON,					// Display ON
 	#endif
 };
@@ -881,14 +882,14 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 
 
 // Odczytanie aktualnie ustawionej czcionki
-/*
-fontR_def_t SH1106_FontGet(void) {
+
+const fontR_def_t * SH1106_FontGet(void) {
 	return SH1106_Font;
 }
 
 
 // Ustawienie czcionki
-void SH1106_FontSet(fontR_def_t Font) {
+void SH1106_FontSet(const fontR_def_t * Font) {
 	SH1106_Font = Font;
 }
 
@@ -902,30 +903,30 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 #endif
 
 	// Kontrola czy ¿¹dany znak znajduje siê w tablicy
-	if(Char < SH1106_Font.FirstChar) Char = SH1106_Font.LastChar;
-	if(Char > SH1106_Font.LastChar) Char = SH1106_Font.LastChar;
+	if(Char < SH1106_Font->FirstChar) Char = SH1106_Font->LastChar;
+	if(Char > SH1106_Font->LastChar) Char = SH1106_Font->LastChar;
 	
 	// Offset znaku, bo tablica bitmap nie musi zawieraæ wszystkich znaków ASCII od zera
-	Char = Char - SH1106_Font.FirstChar;
+	Char = Char - SH1106_Font->FirstChar;
 	
 	// Okreœlenie szerokoœci znaku oraz jego po³o¿enia w tabeli bitmap
 	uint8_t Width;
-	uint8_t Height = SH1106_Font.Height;
+	uint8_t Height = SH1106_Font->Height;
 	uint16_t Address;
-	if(SH1106_Font.Width > 0) {
-		Width = SH1106_Font.Width;
+	if(SH1106_Font->Width > 0) {
+		Width = SH1106_Font->Width;
 		Address = Char * Width * Height;
 	}
 	else {
-		Width = SH1106_Font.Descriptors[Char].Width;
-		Address = SH1106_Font.Descriptors[Char].Offset;
+		Width = SH1106_Font->Descriptors[Char].Width;
+		Address = SH1106_Font->Descriptors[Char].Offset;
 	}
 
 	// Je¿eli Addres = 0 i Szerokoœæ = 0 to znaczy, ¿e taki znak nie jest zdefiniowany, wiêc wyœwietlamy BadChar (ostatni znak z tabeli)
 	if((Address == 0) && (Width == 0)) {
-		Char = SH1106_Font.LastChar - SH1106_Font.FirstChar;
-		Address = SH1106_Font.Descriptors[Char].Offset;
-		Width = SH1106_Font.Descriptors[Char].Width;
+		Char = SH1106_Font->LastChar - SH1106_Font->FirstChar;
+		Address = SH1106_Font->Descriptors[Char].Offset;
+		Width = SH1106_Font->Descriptors[Char].Width;
 	}
 	
 	// Aktualna pozycja kursora
@@ -970,14 +971,14 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 
 				// Znak
 				for(uint8_t i=0; i<Width; i++) {
-					Spi_1(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address]);
+					Spi_1(Negative ? ~SH1106_Font->Bitmaps[Address] : SH1106_Font->Bitmaps[Address]);
 					Address = Address + Height;
 				}
 				//Spi_1(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address]);
 				Address = Address + Height;
 
 				// Odstêp miêdzy znakami
-				for(uint8_t i = SH1106_Font.Spacing; i; i--) {
+				for(uint8_t i = SH1106_Font->Spacing; i; i--) {
 					Spi_1(Negative ? 0xFF : 0x00);
 				}
 
@@ -1009,7 +1010,7 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 			}
 
 			// Kursor X ustawiamy na koniec znaku
-			SH1106_CursorX = CursorX_Old + Width + SH1106_Font.Spacing;
+			SH1106_CursorX = CursorX_Old + Width + SH1106_Font->Spacing;
 			if(SH1106_CursorX >= SH1106_DISPLAY_SIZE_X) {
 				SH1106_CursorX = SH1106_CursorX - SH1106_DISPLAY_SIZE_X;
 			}
@@ -1019,7 +1020,7 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 			// To nie by³a jeszcze ostatnia strona
 
 			// Cofamy kursor na pocz¹tek
-			SH1106_CursorPosxSet(CursorX_Old);
+			SH1106_CursorXSet(CursorX_Old);
 
 			// Przesuwamy kursor o jedn¹ stronê ni¿ej
 			SH1106_CursorPageSet(SH1106_CursorP + 1);
@@ -1034,25 +1035,25 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 // Wylicza d³ugoœæ napisu w pikselach w zale¿noœci od wybranej czcionki
 uint16_t SH1106_TextWidth(const char * Text) {
 	uint16_t Width = 0;
-	uint16_t Offset = SH1106_Font.FirstChar;
+	uint16_t Offset = SH1106_Font->FirstChar;
 
 	// Sprawdzenie czy czcionka ma sta³¹ szerokoœæ znaku
-	if(SH1106_Font.Width) {
+	if(SH1106_Font->Width) {
 		// Czcionka o sta³ej szerokoœci znaków
 
 		// Zliczanie iloœci znaków
 		while(*Text++) Width++;
 
 		// Odtsêp za ka¿dym znakiem
-		Width = Width + SH1106_Font.Spacing;
+		Width = Width + SH1106_Font->Spacing;
 
 		// Mno¿enie przez sta³¹ szerokoœæ znaku
-		Width = Width * (SH1106_Font.Width);						
+		Width = Width * (SH1106_Font->Width);
 	}
 	else {
 		// Czcionka o zmiennej szerokoœci znaków
 		while(*Text) {
-			Width += SH1106_Font.Descriptors[(*Text) - Offset].Width + SH1106_Font.Spacing;			
+			Width += SH1106_Font->Descriptors[(*Text) - Offset].Width + SH1106_Font->Spacing;			
 			Text++;
 		}
 	}
@@ -1073,17 +1074,17 @@ void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative) {
 	switch(Align) {
 
 		case SH1106_AlignLeft:
-			SH1106_CursorPosxSet(0);
+			SH1106_CursorXSet(0);
 			break;
 
 		case SH1106_AlignRight:
 			Width = SH1106_TextWidth(Text);
-			SH1106_CursorPosxSet(SH1106_DISPLAY_SIZE_X - Width);
+			SH1106_CursorXSet(SH1106_DISPLAY_SIZE_X - Width);
 			break;
 
 		case SH1106_AlignCenter:
 			Width = SH1106_TextWidth(Text);
-			SH1106_CursorPosxSet(SH1106_DISPLAY_SIZE_X/2 - Width/2);
+			SH1106_CursorXSet(SH1106_DISPLAY_SIZE_X/2 - Width/2);
 			break;
 
 		default:
@@ -1097,7 +1098,7 @@ void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative) {
 		while(*Text) SH1106_PrintChar(*Text++, Negative);
 	#endif
 }
-*/
+
 
 // ========================================
 // Testing

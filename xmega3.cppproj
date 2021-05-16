@@ -663,6 +663,78 @@
     <Compile Include="display_sh1106\display_sh1106_demo.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_sh1106\font\console8x6.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\console8x6.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\dos16x8.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\dos16x8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\dos8x8.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\dos8x8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16B.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16B.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16B_PL.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16B_PL.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16_PL.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans16_PL.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24B.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24B.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24B_PL.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24B_PL.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24_PL.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans24_PL.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans8.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\font\sans8.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="display_ssd1351\bitmap\cassini_rgb332.cpp">
       <SubType>compile</SubType>
     </Compile>

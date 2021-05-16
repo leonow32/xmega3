@@ -110,8 +110,8 @@ const Console_NamePointer_t Console_CommandList[] = {
  	{"cur",				SH1106_CmdCursor},
 // 	{"d-cf",			SSD1351_CmdColorFront},
 // 	{"d-cb",			SSD1351_CmdColorBack},
-// 	{"d-t",				SSD1351_CmdText},
-// 	{"d-f",				SSD1351_CmdFont},
+	{"txt",				SH1106_CmdText},
+	{"font",			SH1106_CmdFont},
 	
 	// Font demos
 	#if SSD1351_FONT_DOS8x8

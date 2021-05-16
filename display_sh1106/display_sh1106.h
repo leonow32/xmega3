@@ -106,6 +106,54 @@ HARDWARE
 	#endif
 #endif
 
+#if SH1106_FONT_CONSOLE8x6
+	#include	"font/console8x6.h"
+#endif
+
+#if SH1106_FONT_DOS8x8
+	#include	"font/dos8x8.h"
+#endif
+
+#if SH1106_FONT_DOS16x8
+	#include	"font/dos16x8.h"
+#endif
+
+#if SH1106_FONT_SANS8
+	#include	"font/sans8.h"
+#endif
+
+#if SH1106_FONT_SANS16
+	#include	"font/sans16.h"
+#endif
+
+#if SH1106_FONT_SANS16B
+	#include	"font/sans16B.h"
+#endif
+
+#if SH1106_FONT_SANS16_PL
+	#include	"font/sans16_PL.h"
+#endif
+
+#if SH1106_FONT_SANS16B_PL
+	#include	"font/sans16B_PL.h"
+#endif
+
+#if SH1106_FONT_SANS24
+	#include	"font/sans24.h"
+#endif
+
+#if SH1106_FONT_SANS24B
+	#include	"font/sans24B.h"
+#endif
+
+#if SH1106_FONT_SANS24_PL
+	#include	"font/sans24_PL.h"
+#endif
+
+#if SH1106_FONT_SANS24B_PL
+	#include	"font/sans24B_PL.h"
+#endif
+
 #if SH1106_BITMAP_EXTRONIC_LOGO
 	#include	"bitmap/extronic_logo.h"
 #endif
@@ -164,16 +212,19 @@ void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
 #endif
 
-// Napisy
-// fontR_def_t	SH1106_FontGet(void);
-// void		SH1106_FontSet(fontR_def_t Font);
+// ========================================
+// Text
+// ========================================
+
+const fontR_def_t * SH1106_FontGet(void);
+void SH1106_FontSet(const fontR_def_t * Font);
 // uint16_t	SH1106_TextWidth(const char * Text);
 // #if SH1106_USE_RMW
 // void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 // void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 // #else
-// void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0);
-// void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0);
+void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0);
+void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0);
 //#endif
 
 // ========================================

@@ -41,5 +41,7 @@ void SH1106_CmdRectangle(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdRectangleFill(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdCursor(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdText(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]);
 #endif /* DISPLAY_SH1106_DEMO_H_ */

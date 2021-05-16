@@ -59,6 +59,23 @@ enum SH1106_align_t {
 	SH1106_AlignCenter
 };
 
+// Struktura d³ugoœci i offsetów znaków w tabeli bitmap
+typedef struct _fontR_char_info {
+	uint8_t		Width;						// Szerokoœæ znaku w pikselach
+	uint16_t	Offset;						// Adres w tablicy bitmap
+} fontR_info_t;
+
+// Struktura definicji czcionki
+typedef struct _fontR_definition {
+	uint8_t Height;							// Wysokoœæ zanku w liniach po 8 pixeli
+	uint8_t Width;							// Je¿eli czcionka ma sta³¹ szerokoœæ, jeœli nie to =0
+	uint8_t Spacing;						// Odstêp miêdzy znakami
+	uint8_t FirstChar;						// Pierwszy znak, jaki znajduje siê w tablicy Bitmaps
+	uint8_t LastChar;						// Ostatni znak, jaki znajduje siê w tablicy Bitmaps
+	const fontR_info_t * Descriptors;		// Tablica szerokoœci i offsetów, jeœli Width jest ustalone to wstawiæ NULL
+	const uint8_t * Bitmaps;				// Tablica znaków
+} fontR_def_t;
+
 // ========================================
 // Bitmaps
 // ========================================

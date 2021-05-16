@@ -15,8 +15,6 @@
 
 #if PRODUCT_SH1106
 	
-	#define SH1106_USE_DEMO_COMMANDS			1
-	
 	// Interface selection
 	#define		SH1106_USE_I2C					0
 	#define		SH1106_USE_SPI					1
@@ -42,28 +40,24 @@
 		#define		SH1106_DC_DATA				VPORTC.OUT |=  PIN5_bm
 		#define		SH1106_DC_COMMAND			VPORTC.OUT &= ~PIN5_bm
 	#endif
-
 	
-	// Czcionki (znaki obrócone o 90 stopni - wersja R)
-	// #include	"FontR/fontR_Console8x6.h"
-	// #include	"FontR/fontR_Dos8x8.h"
-	// #include	"FontR/fontR_Dos16x8.h"
-	// #include	"FontR/fontR_Sans8.h"
-	// #include	"FontR/fontR_Sans16.h"
-	// #include	"FontR/fontR_Sans16_PL.h"
-	// #include	"FontR/fontR_Sans16B.h"
-	// #include	"FontR/fontR_Sans16B_PL.h"
-	// #include	"FontR/fontR_Sans24.h"
-	// #include	"FontR/fontR_Sans24_PL.h"
-	// #include	"FontR/fontR_Sans24B.h"
-	// #include	"FontR/fontR_Sans24B_PL.h"
-	
-	// Bitmapy
-	//#include	"Bitmap/bitmap_Testowy.h"
-	//#include	"Bitmap/bitmap_ExtronicLogo.h"
+	// Fonts
+	#define		SH1106_DEFAULT_FONT				FontRDos16x8
+	#define		SH1106_FONT_CONSOLE8x6			1						// 480 B
+	#define		SH1106_FONT_DOS8x8				1						// 
+	#define		SH1106_FONT_DOS16x8				1						// 
+	#define		SH1106_FONT_SANS8				1						// 
+	#define		SH1106_FONT_SANS16_PL			1						// 
+	#define		SH1106_FONT_SANS16_PL			1						// 
+	#define		SH1106_FONT_SANS16B				1						// 
+	#define		SH1106_FONT_SANS16B_PL			1						// 
+	#define		SH1106_FONT_SANS24				1						// 
+	#define		SH1106_FONT_SANS24_PL			1						// 
+	#define		SH1106_FONT_SANS24B				1						//
+	#define		SH1106_FONT_SANS24B_PL			1						//
 	
 	// Bitmaps
-	#define		SH1106_BITMAP_EXTRONIC_LOGO	1						// 1024 B
+	#define		SH1106_BITMAP_EXTRONIC_LOGO		1						// 1024 B
 	
 	
 #endif
