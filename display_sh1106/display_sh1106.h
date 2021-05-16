@@ -106,6 +106,9 @@ HARDWARE
 	#endif
 #endif
 
+#if SH1106_BITMAP_EXTRONIC_LOGO
+	#include	"bitmap/extronic_logo.h"
+#endif
 
 
 // ========================================
@@ -138,8 +141,9 @@ void		SH1106_RmwEnd();
 #endif
 
 // ========================================
-// Enums
+// Drawing
 // ========================================
+
 #if SH1106_USE_RMW
 void		SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_t RmwMode = SH1106_RmwNone);
@@ -157,7 +161,7 @@ void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y);
 void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
-void		SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels);
+void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
 #endif
 
 // Napisy
@@ -178,6 +182,7 @@ void		SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t P
 
 void		SH1106_Slash(void);
 void		SH1106_Chessboard(void);
+void		SH1106_Fill(void);
 
 #endif /* DISPLAY_SH1106_H_ */
 #endif

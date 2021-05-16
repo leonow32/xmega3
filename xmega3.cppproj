@@ -639,6 +639,12 @@
     <Compile Include="console\console_demo.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_sh1106\bitmap\extronic_logo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_sh1106\bitmap\extronic_logo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="display_sh1106\display_sh1106.cpp">
       <SubType>compile</SubType>
     </Compile>

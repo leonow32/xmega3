@@ -49,7 +49,7 @@
 #endif
 
 // ========================================
-// Enums
+// Text and fonts
 // ========================================
 
 enum SH1106_align_t {
@@ -58,6 +58,21 @@ enum SH1106_align_t {
 	SH1106_AlignRight,
 	SH1106_AlignCenter
 };
+
+// ========================================
+// Bitmaps
+// ========================================
+
+// Bitmap definition
+struct SH1106_Bitmap_t {
+	const uint8_t Height;						// Height in pixels
+	const uint8_t Width;						// Width in pixels
+	const uint8_t * Array;						// Pointer to bitmap array
+};
+
+// ========================================
+// Other stuff
+// ========================================
 
 #if SH1106_USE_RMW
 enum SH1106_rmw_t {

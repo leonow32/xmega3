@@ -220,7 +220,7 @@ uint8_t SH1106_CursorPageGet(void) {
 
 // Ustawienie pozycji strony
 void SH1106_CursorPageSet(uint8_t Page) {
-	SH1106_CursorP = Page < SH1106_PAGE_COUNT ? Page : 0;
+	SH1106_CursorP = Page;
 	SH1106_WriteCommand(SH1106_PAGE(SH1106_CursorP));
 }
 
@@ -801,10 +801,11 @@ void SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 #if SH1106_USE_RMW
 void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels, SH1106_rmw_t RmwMode) {
 #else
-void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels) {
+void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 #endif
 	uint16_t Address;
-	uint8_t Page = Pages - 1;
+	//uint8_t Page = Pages - 1;
+	uint8_t Page = Bitmap->Height / SH1106_PAGE_HEIGHT - 1;
 
 	uint8_t CursorX_Old = SH1106_CursorX;
 	uint8_t CursorL_Old = SH1106_CursorP;
@@ -830,9 +831,9 @@ void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pi
 			#if SH1106_USE_SPI
 				SH1106_CHIP_SELECT;
 				SH1106_DC_DATA;
-				for(uint8_t i=0; i<Pixels; i++) {
-					Spi_1(Bitmap[Address]);
-					Address = Address + Pages;
+				for(uint8_t i = 0; i < Bitmap->Width; i++) {
+					Spi_1(Bitmap->Array[Address]);
+					Address = Address + Bitmap->Height / SH1106_PAGE_HEIGHT;
 				}
 				SH1106_CHIP_DESELECT;
 			#endif
@@ -854,12 +855,12 @@ void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pi
 			// To by³a ostatnia strona
 
 			// Kursor strony ustawiamy tam gdzie by³ na pocz¹tku, jeœli znak by³ na wielu stronach
-			if(Pages > 1) {
+			if(Bitmap->Height / SH1106_PAGE_HEIGHT > 1) {
 				SH1106_CursorPageSet(CursorL_Old);
 			}
 
 			// Kursor X ustawiamy na koniec znaku
-			SH1106_CursorX = CursorX_Old + Pixels;
+			SH1106_CursorX = CursorX_Old + Bitmap->Width;
 			if(SH1106_CursorX >= SH1106_DISPLAY_SIZE_X) {
 				SH1106_CursorX = SH1106_CursorX - SH1106_DISPLAY_SIZE_X;
 			}
@@ -872,7 +873,7 @@ void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pi
 			SH1106_CursorXSet(CursorX_Old);
 
 			// Przesuwamy kursor o jedn¹ stronê ni¿ej
-			SH1106_CursorPageSet(SH1106_CursorP + 1);			
+			SH1106_CursorPageSet(SH1106_CursorP + 1);
 		}
 
 	} while(Page--);
@@ -1159,6 +1160,10 @@ void SH1106_Chessboard(void) {
 			SH1106_CHIP_DESELECT;
 		#endif
 	}
+}
+
+void SH1106_Fill(void) {
+	SH1106_Clear(0xFF);
 }
 
 #endif

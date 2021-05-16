@@ -61,6 +61,11 @@
 	// Bitmapy
 	//#include	"Bitmap/bitmap_Testowy.h"
 	//#include	"Bitmap/bitmap_ExtronicLogo.h"
+	
+	// Bitmaps
+	#define		SH1106_BITMAP_EXTRONIC_LOGO	1						// 1024 B
+	
+	
 #endif
 
 // Komunikaty o b³êdach

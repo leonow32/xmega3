@@ -12,6 +12,11 @@ void SH1106_CmdClear(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Clear();
 }
 
+// Light all pixels
+void SH1106_CmdFill(uint8_t argc, uint8_t * argv[]) {
+	SH1106_Fill();
+}
+
 // Draw chessboard
 void SH1106_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Chessboard();
@@ -140,6 +145,62 @@ void SH1106_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
 	// Execute command
 	SH1106_DrawCircle(x, y, r);
 	Print_ResponseOK();
+}
+
+// Set or get cursor position
+void SH1106_CmdCursor(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments, then print actual cursor position
+	if(argc == 1) {
+		uint8_t x = SH1106_CursorXGet();
+		uint8_t y = SH1106_CursorPageGet();
+		Print("x = ");
+		Print_Dec(x);
+		Print("\r\np = ");
+		Print_Dec(y);
+	}
+	
+	// If arguments given, then set cursor position
+	else {
+		// Argument 1 - coordinate X
+		uint8_t x;
+		if(Parse_Dec8(argv[1], &x, SH1106_DISPLAY_SIZE_X-1)) return;
+		
+		// Argument 2 - cpage
+		uint8_t p;
+		if(Parse_Dec8(argv[2], &p, SH1106_DISPLAY_SIZE_Y-1)) return;
+		
+		// Execute command
+		SH1106_CursorXSet(x);
+		SH1106_CursorPageSet(p);
+		Print_ResponseOK();
+	}
+}
+
+// ========================================
+// Fonts and text
+// ========================================
+
+
+// ========================================
+// Bitmaps
+// ========================================
+
+void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
+	
+	const SH1106_Bitmap_t * Pointer;
+	switch(*argv[1]) {
+		
+		#if SH1106_BITMAP_EXTRONIC_LOGO
+			case '1':	Pointer = &SH1106_BitmapExtronicLogo;			break;
+		#endif
+		
+		default:	Print_ResponseError();	return;
+	}
+	
+	SH1106_CursorXSet((SH1106_DISPLAY_SIZE_X - Pointer->Width) / 2);
+	SH1106_CursorPageSet(((SH1106_DISPLAY_SIZE_Y - Pointer->Height) / 2) / SH1106_PAGE_COUNT);
+	SH1106_Bitmap(Pointer);
 }
 
 #endif

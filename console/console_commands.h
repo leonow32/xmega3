@@ -98,6 +98,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if SH1106_USE_DEMO_COMMANDS
 	{"init",			SH1106_CmdInit},
 	{"clr",				SH1106_CmdClear},
+	{"fill",			SH1106_CmdFill},
 	{"slash",			SH1106_CmdDrawSlash},
 	{"chess",			SH1106_CmdDrawChessboard},
  	{"cont",			SH1106_CmdContrast},
@@ -106,7 +107,7 @@ const Console_NamePointer_t Console_CommandList[] = {
  	{"rec",				SH1106_CmdRectangle},
  	{"recf",			SH1106_CmdRectangleFill},
  	{"cir",				SH1106_CmdDrawCircle},
-// 	{"d-cur",			SSD1351_CmdCursor},
+ 	{"cur",				SH1106_CmdCursor},
 // 	{"d-cf",			SSD1351_CmdColorFront},
 // 	{"d-cb",			SSD1351_CmdColorBack},
 // 	{"d-t",				SSD1351_CmdText},
@@ -126,7 +127,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // 	{"d-align",			SSD1351_CmdDemoTextAlign},
 	
 	// Bitmaps
-//	{"d-b",				SSD1351_CmdBitmap},
+	{"bitmap",			SH1106_CmdBitmap},
 	
 	// Animated demos
 //	{"d-snake",			SSD1351_CmdSnake},
