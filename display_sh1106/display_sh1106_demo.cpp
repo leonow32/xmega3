@@ -269,5 +269,76 @@ void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Bitmap(Pointer);
 }
 
+// ========================================
+// Animated demos
+// ========================================
+
+void SH1106_CmdSnake(uint8_t argc, uint8_t * argv[]) {
+	if(*argv[1] == '0') {
+		TaskClose(SH1106_TaskSnake);
+	}
+	else {
+		TaskAdd(SH1106_TaskSnake, TaskMsToTicks(50));
+	}
+}
+
+task_t SH1106_TaskSnake(runmode_t RunMode) {
+	
+	// Zmienne
+	static uint8_t x = 64;
+	static uint8_t y = 32;
+	static uint8_t PrevX = 64;;
+	static uint8_t PrevY = 32;;
+	
+	uint8_t NewX;
+	uint8_t NewY;
+	uint8_t Random;
+	
+	// Tryb wywo³ania
+	switch(RunMode) {
+		
+		// Konstruktor
+		case FirstRun:
+			x = 64;
+			y = 32;
+			return TaskOK;
+		
+		// Destruktor
+		case Close:
+			
+			return TaskDone;
+		
+		// Wywo³anie identyfikacyjne
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Snake");
+			return TaskOK;
+		#endif
+		
+		// Normalne wywo³anie przez Sheduler
+		case Run:
+			Random = rand();
+			NewX = Random & 0b01111111;
+			Random = rand();
+			NewY = Random & 0b00111111;
+			
+// 			SH1106_ColorFrontSet(0, 0, 0);
+// 			SH1106_DrawLine(PrevX, PrevY, x, y);
+//			SH1106_ColorFrontSet(R, G, B);
+			SH1106_DrawLine(x, y, NewX, NewY);
+			
+			PrevX = x;
+			PrevY = y;
+			x = NewX;
+			y = NewY;
+			
+			// Je¿eli podczas normalnego wywo³ania task nie bêdzie ju¿ wiêcej potrzebny
+			// to mo¿e zwróciæ TaskDane, aby Sheduler usun¹³ go z tablicy tasków
+			return TaskOK;
+	}
+	
+	return TaskOK;
+}
+
 #endif
 #endif

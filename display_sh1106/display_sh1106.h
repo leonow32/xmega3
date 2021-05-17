@@ -106,53 +106,53 @@ HARDWARE
 	#endif
 #endif
 
-#if SH1106_FONT_CONSOLE8x6
+//#if SH1106_FONT_CONSOLE8x6
 	#include	"font/console8x6.h"
-#endif
+//#endif
 
-#if SH1106_FONT_DOS8x8
+//#if SH1106_FONT_DOS8x8
 	#include	"font/dos8x8.h"
-#endif
+//#endif
 
-#if SH1106_FONT_DOS16x8
+//#if SH1106_FONT_DOS16x8
 	#include	"font/dos16x8.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS8
+//#if SH1106_FONT_SANS8
 	#include	"font/sans8.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS16
+//#if SH1106_FONT_SANS16
 	#include	"font/sans16.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS16B
+//#if SH1106_FONT_SANS16B
 	#include	"font/sans16B.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS16_PL
+//#if SH1106_FONT_SANS16_PL
 	#include	"font/sans16_PL.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS16B_PL
+//#if SH1106_FONT_SANS16B_PL
 	#include	"font/sans16B_PL.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS24
+//#if SH1106_FONT_SANS24
 	#include	"font/sans24.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS24B
+//#if SH1106_FONT_SANS24B
 	#include	"font/sans24B.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS24_PL
+//#if SH1106_FONT_SANS24_PL
 	#include	"font/sans24_PL.h"
-#endif
+//#endif
 
-#if SH1106_FONT_SANS24B_PL
+//#if SH1106_FONT_SANS24B_PL
 	#include	"font/sans24B_PL.h"
-#endif
+//#endif
 
 #if SH1106_BITMAP_EXTRONIC_LOGO
 	#include	"bitmap/extronic_logo.h"

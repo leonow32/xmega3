@@ -130,7 +130,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"bitmap",			SH1106_CmdBitmap},
 	
 	// Animated demos
-//	{"d-snake",			SSD1351_CmdSnake},
+	{"snake",			SH1106_CmdSnake},
 	
 	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
 		{"d-face",		SSD1351_CmdFace},

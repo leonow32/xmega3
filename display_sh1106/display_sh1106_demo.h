@@ -44,4 +44,8 @@ void SH1106_CmdCursor(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdText(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]);
+
+// Animated demos
+void SH1106_CmdSnake(uint8_t argc, uint8_t * argv[]);
+task_t SH1106_TaskSnake(runmode_t RunMode);
 #endif /* DISPLAY_SH1106_DEMO_H_ */
