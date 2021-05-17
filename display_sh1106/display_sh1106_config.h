@@ -47,7 +47,7 @@
 	#define		SH1106_FONT_DOS8x8				1						// 
 	#define		SH1106_FONT_DOS16x8				1						// 
 	#define		SH1106_FONT_SANS8				1						// 
-	#define		SH1106_FONT_SANS16_PL			1						// 
+	#define		SH1106_FONT_SANS16				1						// 
 	#define		SH1106_FONT_SANS16_PL			1						// 
 	#define		SH1106_FONT_SANS16B				1						// 
 	#define		SH1106_FONT_SANS16B_PL			1						// 

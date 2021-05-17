@@ -202,31 +202,43 @@ void SH1106_CmdText(uint8_t argc, uint8_t * argv[]) {
 
 // Change font
 void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]) {
-	switch(*argv[1]) {
+	
+	uint8_t FontNumber;
+	if(Parse_Dec8(argv[1], &FontNumber)) return;
+	
+	switch(FontNumber) {
 		
-// 		#if SH1106_FONT_CONSOLE8x6
-// 			case '1':	SH1106_FontSet(&SH1106_FontConsole8x6);		break;
-// 		#endif
-// 		
-// 		#if SH1106_FONT_DOS8x8
-// 			case '2':	SH1106_FontSet(&SH1106_FontDos8x8);			break;
-// 		#endif
-// 		
-// 		#if SH1106_FONT_DOS16x8
-// 			case '3':	SH1106_FontSet(&SH1106_FontDos16x8);			break;
-// 		#endif
-// 		
-// 		#if SH1106_FONT_SANS16_PL
-// 			case '4':	SH1106_FontSet(&SH1106_FontSans16_PL);		break;
-// 		#endif
-// 		
-// 		#if SH1106_FONT_SANS16B_PL
-// 			case '5':	SH1106_FontSet(&SH1106_FontSans16B_PL);		break;
-// 		#endif
-// 		
-// 		#if SH1106_FONT_SANS24_PL
-// 			case '6':	SH1106_FontSet(&SH1106_FontSans24_PL);		break;
-// 		#endif
+		#if SH1106_FONT_CONSOLE8x6
+			case 1:	SH1106_FontSet(&SH1106_FontConsole8x6);		break;
+		#endif
+		
+		#if SH1106_FONT_DOS8x8
+			case 2:	SH1106_FontSet(&SH1106_FontDos8x8);			break;
+		#endif
+		
+		#if SH1106_FONT_DOS16x8
+			case 3:	SH1106_FontSet(&SH1106_FontDos16x8);		break;
+		#endif
+		
+		#if SH1106_FONT_SANS8
+			case 5:	SH1106_FontSet(&SH1106_FontSans8);			break;
+		#endif
+		
+		#if SH1106_FONT_SANS16
+			case 6:	SH1106_FontSet(&SH1106_FontSans16);			break;
+		#endif
+		
+		#if SH1106_FONT_SANS16B
+			case 7:	SH1106_FontSet(&SH1106_FontSans16B);		break;
+		#endif
+		
+		#if SH1106_FONT_SANS24
+			case 8:	SH1106_FontSet(&SH1106_FontSans24);			break;
+		#endif
+		
+		#if SH1106_FONT_SANS24B
+			case 9:	SH1106_FontSet(&SH1106_FontSans24B);		break;
+		#endif
 		
 		default:
 			Print_ResponseError();
