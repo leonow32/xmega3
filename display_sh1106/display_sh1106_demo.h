@@ -35,6 +35,7 @@ void SH1106_CmdFill(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdDrawSlash(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdContrast(uint8_t argc, uint8_t * argv[]);
+void SH1106_CmdColor(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdPixel(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdLine(uint8_t argc, uint8_t * argv[]);
 void SH1106_CmdRectangle(uint8_t argc, uint8_t * argv[]);

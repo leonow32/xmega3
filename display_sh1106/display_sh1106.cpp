@@ -5,8 +5,8 @@
 // Zmienne globalne
 static uint8_t SH1106_CursorP = 0;
 static uint8_t SH1106_CursorX = 0;
-//static fontR_def_t SH1106_Font;
-const static SH1106_FontDef_t * SH1106_Font = &SH1106_DEFAULT_FONT;
+static uint8_t SH1106_Color	= 1;		// White
+static const SH1106_FontDef_t * SH1106_Font = &SH1106_DEFAULT_FONT;
 
 // Konfiguracja wyœwietlacza dla funkcji SH1106_Init()
 static const uint8_t SH1106_InitSequence[] = {
@@ -271,6 +271,15 @@ void SH1106_RmwEnd() {
 #endif
 
 
+void SH1106_ColorSet(uint8_t Color) {
+	SH1106_Color = Color;
+}
+
+uint8_t SH1106_ColorGet(void) {
+	return SH1106_Color;
+}
+
+
 // Rysowanie piksela
 #if SH1106_USE_RMW
 void SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode) {
@@ -295,7 +304,7 @@ void SH1106_DrawPixel(uint8_t x, uint8_t y) {
 	uint8_t Page = y / SH1106_PAGE_HEIGHT;
 	SH1106_CursorPageSet(Page);
 	SH1106_CursorXSet(x);
-	uint8_t Pattern = (1 << (y % SH1106_PAGE_HEIGHT));
+	uint8_t Pattern = (SH1106_Color << (y % SH1106_PAGE_HEIGHT));
 	SH1106_WriteData(Pattern);
 }
 #endif
@@ -334,7 +343,7 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 
 	// Przeliczenie wysokoœci na numer strony i ustawienie kursora
 	uint8_t Page = y0 / SH1106_PAGE_HEIGHT;
-	uint8_t Pattern = (1 << (y0 % SH1106_PAGE_HEIGHT));
+	uint8_t Pattern = (SH1106_Color << (y0 % SH1106_PAGE_HEIGHT));
 	SH1106_CursorPageSet(Page);
 	SH1106_CursorXSet(x0);
 
@@ -496,7 +505,26 @@ void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_
 }
 #else
 void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-
+	
+	if(x0 == x1) {
+		if(y0 > y1) {
+			uint8_t temp = y0;
+			y0 = y1;
+			y1 = temp;
+		}
+		SH1106_DrawLineVertical(x0, y0, y1-y0+1);
+		return;
+	}
+	
+	if(y0 == y1) {
+		if(x0 > x1) {
+			uint8_t temp = x0;
+			x0 = x1;
+			x1 = temp;
+		}
+		SH1106_DrawLineHorizontal(x0, y0, x1-x0+1);
+	}
+	
 	int16_t Sx;
 	int16_t Sy;
 	int16_t E2;
@@ -833,7 +861,7 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 				SH1106_CHIP_SELECT;
 				SH1106_DC_DATA;
 				for(uint8_t i = 0; i < Bitmap->Width; i++) {
-					Spi_1(Bitmap->Array[Address]);
+					Spi_1(SH1106_Color ? Bitmap->Array[Address] : ~Bitmap->Array[Address]);
 					Address = Address + Bitmap->Height / SH1106_PAGE_HEIGHT;
 				}
 				SH1106_CHIP_DESELECT;
@@ -899,7 +927,7 @@ void SH1106_FontSet(const SH1106_FontDef_t * Font) {
 #if SH1106_USE_RMW
 void SH1106_PrintChar(uint8_t Char, uint8_t Negative, SH1106_rmw_t RmwMode) {
 #else
-void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
+void SH1106_PrintChar(uint8_t Char) {
 #endif
 
 	// Kontrola czy ¿¹dany znak znajduje siê w tablicy
@@ -971,7 +999,7 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 
 				// Znak
 				for(uint8_t i=0; i<Width; i++) {
-					Spi_1(Negative ? ~SH1106_Font->Bitmaps[Address] : SH1106_Font->Bitmaps[Address]);
+					Spi_1(SH1106_Color ? SH1106_Font->Bitmaps[Address] : ~SH1106_Font->Bitmaps[Address]);
 					Address = Address + Height;
 				}
 				//Spi_1(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address]);
@@ -979,7 +1007,7 @@ void SH1106_PrintChar(uint8_t Char, uint8_t Negative) {
 
 				// Odstêp miêdzy znakami
 				for(uint8_t i = SH1106_Font->Spacing; i; i--) {
-					Spi_1(Negative ? 0xFF : 0x00);
+					Spi_1(SH1106_Color ? 0x00 : 0xFF);
 				}
 
 				SH1106_CHIP_DESELECT;
@@ -1066,7 +1094,7 @@ uint16_t SH1106_TextWidth(const char * Text) {
 #if SH1106_USE_RMW
 void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative, SH1106_rmw_t RmwMode) {
 #else
-void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative) {
+void SH1106_Text(const char * Text, SH1106_align_t Align) {
 #endif
 	
 	// Ustawienie pozycji kursora w zale¿noœci od wyrównania tekstu
@@ -1093,9 +1121,9 @@ void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative) {
 
 	// Wyœwietlenie tekstu
 	#if SH1106_USE_RMW
-		while(*Text) SH1106_PrintChar(*Text++, Negative, RmwMode);
+		while(*Text) SH1106_PrintChar(*Text++, RmwMode);
 	#else
-		while(*Text) SH1106_PrintChar(*Text++, Negative);
+		while(*Text) SH1106_PrintChar(*Text++);
 	#endif
 }
 

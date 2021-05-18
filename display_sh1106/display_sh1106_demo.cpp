@@ -5,26 +5,31 @@
 // Init
 void SH1106_CmdInit(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Init();
+	Print_ResponseOK();
 }
 
 // Clear display
 void SH1106_CmdClear(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Clear();
+	Print_ResponseOK();
 }
 
 // Light all pixels
 void SH1106_CmdFill(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Fill();
+	Print_ResponseOK();
 }
 
 // Draw chessboard
 void SH1106_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Chessboard();
+	Print_ResponseOK();
 }
 
 // Draw chessboard
 void SH1106_CmdDrawSlash(uint8_t argc, uint8_t * argv[]) {
 	SH1106_Slash();
+	Print_ResponseOK();
 }
 
 // Set contrast
@@ -36,6 +41,16 @@ void SH1106_CmdContrast(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SH1106_ContrastSet(Contrast);
+	Print_ResponseOK();
+}
+
+// Set color - 1 white, 0 black
+void SH1106_CmdColor(uint8_t argc, uint8_t * argv[]) {
+	switch(*argv[1]) {
+		case '0':	SH1106_ColorSet(0);				break;
+		case '1':	SH1106_ColorSet(1);				break;
+		default:	Print_Dec(SH1106_ColorGet());	return;
+	}
 	Print_ResponseOK();
 }
 
@@ -267,6 +282,7 @@ void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	SH1106_CursorXSet((SH1106_DISPLAY_SIZE_X - Pointer->Width) / 2);
 	SH1106_CursorPageSet(((SH1106_DISPLAY_SIZE_Y - Pointer->Height) / 2) / SH1106_PAGE_COUNT);
 	SH1106_Bitmap(Pointer);
+	Print_ResponseOK();
 }
 
 // ========================================
@@ -278,8 +294,11 @@ void SH1106_CmdSnake(uint8_t argc, uint8_t * argv[]) {
 		TaskClose(SH1106_TaskSnake);
 	}
 	else {
-		TaskAdd(SH1106_TaskSnake, TaskMsToTicks(50));
+		uint16_t Period;
+		if(Parse_Dec16(argv[1], &Period)) return;
+		TaskAdd(SH1106_TaskSnake, TaskMsToTicks(Period));
 	}
+	Print_ResponseOK();
 }
 
 task_t SH1106_TaskSnake(runmode_t RunMode) {
@@ -322,9 +341,9 @@ task_t SH1106_TaskSnake(runmode_t RunMode) {
 			Random = rand();
 			NewY = Random & 0b00111111;
 			
-// 			SH1106_ColorFrontSet(0, 0, 0);
-// 			SH1106_DrawLine(PrevX, PrevY, x, y);
-//			SH1106_ColorFrontSet(R, G, B);
+			SH1106_ColorSet(0);
+ 			SH1106_DrawLine(PrevX, PrevY, x, y);
+			SH1106_ColorSet(1);
 			SH1106_DrawLine(x, y, NewX, NewY);
 			
 			PrevX = x;

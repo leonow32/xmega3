@@ -1,6 +1,10 @@
 /*
 OPIS
 		-	Wyœwietlacz SH1106 z interfejsem I2C/SPI
+		
+TODO
+		-	Add support for color in all geometric functions
+		
 UWAGI
 		-	Zapisywanie w trubie RMW (Read-Mofidy-Write) zajmuje ponad 6x wiêcej czasu ni¿ w trybie normalnym
 	
@@ -192,6 +196,9 @@ void		SH1106_RmwEnd();
 // Drawing
 // ========================================
 
+void SH1106_ColorSet(uint8_t Color);
+uint8_t SH1106_ColorGet(void);
+
 #if SH1106_USE_RMW
 void		SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_t RmwMode = SH1106_RmwNone);
@@ -204,7 +211,7 @@ void		SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t P
 #else
 void		SH1106_DrawPixel(uint8_t x, uint8_t y);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
-void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
+void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);		// nie uwzglednia SH1106_Color
 void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y);
 void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
@@ -223,8 +230,8 @@ void SH1106_FontSet(const SH1106_FontDef_t * Font);
 // void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 // void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 // #else
-void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0);
-void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0);
+void		SH1106_PrintChar(uint8_t Char);
+void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone);
 //#endif
 
 // ========================================

@@ -108,7 +108,7 @@ const Console_NamePointer_t Console_CommandList[] = {
  	{"recf",			SH1106_CmdRectangleFill},
  	{"cir",				SH1106_CmdDrawCircle},
  	{"cur",				SH1106_CmdCursor},
-// 	{"d-cf",			SSD1351_CmdColorFront},
+ 	{"color",			SH1106_CmdColor},
 // 	{"d-cb",			SSD1351_CmdColorBack},
 	{"txt",				SH1106_CmdText},
 	{"font",			SH1106_CmdFont},
