@@ -49,4 +49,18 @@ void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]);
 // Animated demos
 void SH1106_CmdSnake(uint8_t argc, uint8_t * argv[]);
 task_t SH1106_TaskSnake(runmode_t RunMode);
+void SH1106_CmdPixels(uint8_t argc, uint8_t * argv[]);
+task_t SH1106_TaskPixels(runmode_t RunMode);
+void SH1106_CmdFace(uint8_t argc, uint8_t * argv[]);
+task_t SH1106_TaskFace1(runmode_t RunMode);
+
+#if SH1106_FONT_DOS8x8
+	void SH1106_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]);
+#endif
+
+#if SH1106_FONT_DOS16x8
+	void SH1106_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]);
+#endif
+
+
 #endif /* DISPLAY_SH1106_DEMO_H_ */

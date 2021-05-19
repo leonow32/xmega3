@@ -270,11 +270,25 @@ void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]) {
 void SH1106_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	
 	const SH1106_Bitmap_t * Pointer;
+	
+	// Pseudo bitmap made of character from a font
+	SH1106_Bitmap_t Smile = {
+		.Height = 16,
+		.Width = 8,
+		.Array = &SH1106_BitmapDos16x8[16],
+	};
+	
 	switch(*argv[1]) {
+		
+		#if SH1106_FONT_DOS16x8
+			case '0':	Pointer = &Smile;								break;
+		#endif
 		
 		#if SH1106_BITMAP_EXTRONIC_LOGO
 			case '1':	Pointer = &SH1106_BitmapExtronicLogo;			break;
 		#endif
+		
+		
 		
 		default:	Print_ResponseError();	return;
 	}
@@ -306,8 +320,8 @@ task_t SH1106_TaskSnake(runmode_t RunMode) {
 	// Zmienne
 	static uint8_t x = 64;
 	static uint8_t y = 32;
-	static uint8_t PrevX = 64;;
-	static uint8_t PrevY = 32;;
+	static uint8_t PrevX = 64;
+	static uint8_t PrevY = 32;
 	
 	uint8_t NewX;
 	uint8_t NewY;
@@ -358,6 +372,209 @@ task_t SH1106_TaskSnake(runmode_t RunMode) {
 	
 	return TaskOK;
 }
+
+void SH1106_CmdPixels(uint8_t argc, uint8_t * argv[]) {
+	if(*argv[1] == '0') {
+		TaskClose(SH1106_TaskPixels);
+	}
+	else {
+		uint16_t Period;
+		if(Parse_Dec16(argv[1], &Period)) return;
+		TaskAdd(SH1106_TaskPixels, TaskMsToTicks(Period));
+	}
+	Print_ResponseOK();
+}
+
+task_t SH1106_TaskPixels(runmode_t RunMode) {
+	
+	// Zmienne
+	uint8_t x;
+	uint8_t y;
+	uint8_t Random;
+	
+	// Tryb wywo³ania
+	switch(RunMode) {
+		
+		// Konstruktor
+		case FirstRun:
+			return TaskOK;
+		
+		// Destruktor
+		case Close:
+			return TaskDone;
+		
+		// Wywo³anie identyfikacyjne
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Pixels");
+			return TaskOK;
+		#endif
+		
+		// Normalne wywo³anie przez Sheduler
+		case Run:
+			Random = rand();
+			x = Random & 0b01111111;
+			Random = rand();
+			y = Random & 0b00111111;
+			
+			SH1106_DrawPixel(x, y);
+			
+			// Je¿eli podczas normalnego wywo³ania task nie bêdzie ju¿ wiêcej potrzebny
+			// to mo¿e zwróciæ TaskDane, aby Sheduler usun¹³ go z tablicy tasków
+			return TaskOK;
+	}
+	
+	return TaskOK;
+}
+
+// Animated faces
+void SH1106_CmdFace(uint8_t argc, uint8_t * argv[]) {
+	task_t (*TaskPointer)(runmode_t RunMode);
+	switch(*argv[1]) {
+		#if SH1106_FONT_DOS8x8
+			case '1':	TaskPointer = SH1106_TaskFace1;	break;
+			//case '2':	TaskPointer = SH1106_TaskFace2;	break;
+		#endif
+		
+		#if SH1106_FONT_DOS16x8
+			//case '3':	TaskPointer = SH1106_TaskFace3;	break;
+			//case '4':	TaskPointer = SH1106_TaskFace4;	break;
+		#endif
+		
+		default:	Print_ResponseError();				return;
+	}
+	
+	if(TaskFind(TaskPointer) == OsNotFound) {
+		TaskAdd(TaskPointer, TaskMsToTicks(10));
+	}
+	else {
+		TaskClose(TaskPointer);
+	}
+	Print_ResponseOK();
+}
+
+task_t SH1106_TaskFace1(runmode_t RunMode) {
+	
+	static uint8_t X = 0;
+	static uint8_t Y = 0;
+	static uint8_t Dir = 0;
+	static uint8_t StepsToDo = 0;
+	uint8_t Rand; 
+	
+	switch(RunMode) {
+		case FirstRun:
+			X = 32;
+			Y = 64;
+			Dir = 0;
+			StepsToDo = 0;
+			return TaskOK;
+			
+		case Run:
+			
+			// Losowanie nowego kierunku i liczby kroków, je¿eli zadana liczba kroków zosta³a ju¿ wykonana
+			if(StepsToDo == 0) {
+				Rand = (uint8_t)random();
+				Dir = Rand & 0b00000011;
+				StepsToDo = 1 + (Rand & 0b00111111);
+			}
+			
+			// Zmniejszanie liczby kroków do wykonania
+			StepsToDo--;
+			
+			SH1106_ColorSet(0);
+			SH1106_DrawCircle(X, Y, 8);
+			
+			// Przesuwanie pozycji
+			switch(Dir) {
+				
+				// W lewo
+				case 0:
+					if(X > 8) X--;
+					else X = SH1106_DISPLAY_SIZE_X-8;
+					break;
+				
+				// w prawo
+				case 1:
+					if(X < SH1106_DISPLAY_SIZE_X-8) X++;
+					else X = 8;
+					break;
+				
+				// w górê
+				case 2:
+					if(Y > 8) Y--;
+					else Y = SH1106_DISPLAY_SIZE_Y-8; 
+					break;
+				
+				// w dó³
+				case 3:
+					if(Y < SH1106_DISPLAY_SIZE_Y-8) Y++;
+					else Y = 8;
+					break;
+			}
+			
+			// Ustawienie pozycji kursora i wyœwietlenie znaku
+			SH1106_ColorSet(1);
+			SH1106_DrawCircle(X, Y, 8);
+			
+			return TaskOK;
+		
+		case Close:
+			SH1106_ColorSet(0);
+			SH1106_DrawCircle(X, Y, 8);
+			SH1106_ColorSet(1);
+			return TaskDone;
+		
+		#if OS_USE_TASK_IDENTIFY
+		case Identify:
+			Print("Face1");
+			return TaskOK;
+		#endif
+	}
+
+	return TaskOK;
+}
+
+// Display all characters from Dos8x8 font
+#if SH1106_FONT_DOS8x8
+void SH1106_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]) {
+	
+	static uint8_t Char = 0;
+	SH1106_FontSet(&SH1106_FontDos8x8);
+	
+	for(uint8_t Line = 0; Line < SH1106_PAGE_COUNT; Line++) {
+		SH1106_CursorPageSet(Line);
+		SH1106_CursorXSet(0);
+		
+		for(uint8_t i = 0; i < SH1106_DISPLAY_SIZE_X / SH1106_FontDos8x8.Width; i++) {
+			SH1106_PrintChar(Char++);
+		}
+	}
+	
+	Print_ResponseOK();
+}
+#endif
+
+// Display all characters from Dos16x8 font
+#if SH1106_FONT_DOS16x8
+void SH1106_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]) {
+	
+	static uint8_t Char = 0;
+	SH1106_FontSet(&SH1106_FontDos16x8);
+	
+	for(uint8_t Line = 0; Line < (SH1106_PAGE_COUNT / 2); Line++) {
+		SH1106_CursorPageSet(2*Line);
+		SH1106_CursorXSet(0);
+		
+		for(uint8_t i = 0; i < SH1106_DISPLAY_SIZE_X / SH1106_FontDos16x8.Width; i++) {
+			SH1106_PrintChar(Char++);
+		}
+	}
+	
+	Print_ResponseOK();
+}
+#endif
+
+
 
 #endif
 #endif

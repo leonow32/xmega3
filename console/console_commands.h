@@ -109,20 +109,18 @@ const Console_NamePointer_t Console_CommandList[] = {
  	{"cir",				SH1106_CmdDrawCircle},
  	{"cur",				SH1106_CmdCursor},
  	{"color",			SH1106_CmdColor},
-// 	{"d-cb",			SSD1351_CmdColorBack},
 	{"txt",				SH1106_CmdText},
 	{"font",			SH1106_CmdFont},
 	
 	// Font demos
-	#if SSD1351_FONT_DOS8x8
-		{"d-dos8",		SSD1351_CmdDemoFontDos8x8},
+	#if SH1106_FONT_DOS8x8
+		{"dos8",		SH1106_CmdDemoFontDos8x8},
 	#endif
 	
-	#if SSD1351_FONT_DOS16x8
-		{"d-dos16",		SSD1351_CmdDemoFontDos16x8},
+	#if SH1106_FONT_DOS16x8
+		{"dos16",		SH1106_CmdDemoFontDos16x8},
 	#endif
 	
-// 	{"d-rainbow",		SSD1351_CmdDemoColorPalette},
 // 	{"d-fonts",			SSD1351_CmDDemoFontTest},
 // 	{"d-align",			SSD1351_CmdDemoTextAlign},
 	
@@ -131,10 +129,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	
 	// Animated demos
 	{"snake",			SH1106_CmdSnake},
-	
-	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
-		{"d-face",		SSD1351_CmdFace},
-	#endif
+	{"pixels",			SH1106_CmdPixels},
+	{"face",			SH1106_CmdFace},
 #endif
 
 // ========================================
