@@ -16,8 +16,8 @@
 #if PRODUCT_SH1106
 	
 	// Interface selection
-	#define		SH1106_USE_I2C					0
-	#define		SH1106_USE_SPI					1
+	#define		SH1106_USE_I2C					1
+	#define		SH1106_USE_SPI					0
 	
 	// Config
 	#define		SH1106_DEFAULT_CONTRAST			255

@@ -14,6 +14,11 @@ PERFORMANCE TEST
 			-	Fill	1024 us, 976 FPS
 			-	Chess	1824 us, 548 FPS
 			-	Pixel	11 us, 90909 FPS
+			I2C mode withour RMW, frequency 400 kHz
+			-	Clear	24 ms, 41 FPS
+			-	Fill	24 ms, 41 FPS
+			-	Chess	24 ms, 41 FPS
+			-	Pixel	250 us, 4000 FPS
 			
 CHANGELOG
 1.01	*	Usuniêcie Spi_0() ze wszystkich funkcji
@@ -94,7 +99,7 @@ HARDWARE
 #include	"display_sh1106_defines.h"
 //#include	"FontR/fontR_typedef.h"
 
-#if SH1106_USE_SPI 
+#if SH1106_USE_SPI
 	#if COMPONENT_SPI_MASTER
 		#include	"../spi_master/spi_master.h"
 	#else
@@ -207,7 +212,7 @@ void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y, SH1106_rmw_t
 void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels, SH1106_rmw_t RmwMode = SH1106_RmwNone);
+void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap, SH1106_rmw_t RmwMode = SH1106_RmwNone);
 #else
 void		SH1106_DrawPixel(uint8_t x, uint8_t y);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
@@ -226,13 +231,13 @@ void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
 const SH1106_FontDef_t * SH1106_FontGet(void);
 void SH1106_FontSet(const SH1106_FontDef_t * Font);
 // uint16_t	SH1106_TextWidth(const char * Text);
-// #if SH1106_USE_RMW
-// void		SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-// void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, uint8_t Negative = 0, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-// #else
+#if SH1106_USE_RMW
+void		SH1106_PrintChar(uint8_t Char, SH1106_rmw_t RmwMode = SH1106_RmwNone);
+void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, SH1106_rmw_t RmwMode = SH1106_RmwNone);
+#else
 void		SH1106_PrintChar(uint8_t Char);
 void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone);
-//#endif
+#endif
 
 // ========================================
 // Testing

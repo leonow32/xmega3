@@ -77,10 +77,10 @@ void SH1106_Init(void) {
 void SH1106_WriteCommand(const uint8_t Command) {
 	
 	#if SH1106_USE_I2C
-		Twi_Start(SH1106_ADDRESS_WRITE);
-		Twi_Write(SH1106_COMMAND_BYTE);
-		Twi_Write(Command);
-		Twi_Stop();
+		I2C_Start(SH1106_ADDRESS_WRITE);
+		I2C_Write(SH1106_COMMAND_BYTE);
+		I2C_Write(Command);
+		I2C_Stop();
 	#endif
 
 	#if SH1106_USE_SPI
@@ -96,10 +96,10 @@ void SH1106_WriteCommand(const uint8_t Command) {
 void SH1106_WriteData(const uint8_t Data) {
 	
 	#if SH1106_USE_I2C
-		Twi_Start(SH1106_ADDRESS_WRITE);
-		Twi_Write(SH1106_DATA_BYTE);
-		Twi_Write(Data);
-		Twi_Stop();
+		I2C_Start(SH1106_ADDRESS_WRITE);
+		I2C_Write(SH1106_DATA_BYTE);
+		I2C_Write(Data);
+		I2C_Stop();
 	#endif
 
 	#if SH1106_USE_SPI
@@ -125,12 +125,12 @@ void SH1106_Clear(const uint8_t Pattern) {
 		SH1106_CursorXSet(0);
 		
 		#if SH1106_USE_I2C
-			Twi_Start(SH1106_ADDRESS_WRITE);
-			Twi_Write(SH1106_DATA_BYTE);
+			I2C_Start(SH1106_ADDRESS_WRITE);
+			I2C_Write(SH1106_DATA_BYTE);
 			for(uint8_t i = 0; i < SH1106_DISPLAY_SIZE_X; i++) {
-				Twi_Write(Pattern);
+				I2C_Write(Pattern);
 			}
-			Twi_Stop();
+			I2C_Stop();
 		#endif
 
 		#if SH1106_USE_SPI
@@ -153,13 +153,13 @@ void SH1106_BackgroundGray(void) {
 		SH1106_CursorXSet(0);
 		
 		#if SH1106_USE_I2C
-			Twi_Start(SH1106_ADDRESS_WRITE);
-			Twi_Write(SH1106_DATA_BYTE);
+			I2C_Start(SH1106_ADDRESS_WRITE);
+			I2C_Write(SH1106_DATA_BYTE);
 			for(uint8_t i = 0; i < (SH1106_DISPLAY_SIZE_X/2); i++) {
-				Twi_Write(0b10101010);
-				Twi_Write(0b01010101);
+				I2C_Write(0b10101010);
+				I2C_Write(0b01010101);
 			}
-			Twi_Stop();
+			I2C_Stop();
 		#endif
 
 		#if SH1106_USE_SPI
@@ -196,12 +196,12 @@ void SH1106_CursorXSet(uint8_t PosX) {
 
 	// Ustawianie z uwaglêdnieniem offsetu X wyœwietlacza
 	#if SH1106_USE_I2C
-		Twi_Start(SH1106_ADDRESS_WRITE);
-		Twi_Write(SH1106_COMMAND_BYTE);
-		Twi_Write(SH1106_COLUMN_LOW((SH1106_CursorX + SH1106_OFFSET_X) & 0x0F));
-		Twi_Write(SH1106_COMMAND_BYTE);
-		Twi_Write(SH1106_COLUMN_HIGH(((SH1106_CursorX + SH1106_OFFSET_X) & 0xF0) >> 4));
-		Twi_Stop();
+		I2C_Start(SH1106_ADDRESS_WRITE);
+		I2C_Write(SH1106_COMMAND_BYTE);
+		I2C_Write(SH1106_COLUMN_LOW((SH1106_CursorX + SH1106_OFFSET_X) & 0x0F));
+		I2C_Write(SH1106_COMMAND_BYTE);
+		I2C_Write(SH1106_COLUMN_HIGH(((SH1106_CursorX + SH1106_OFFSET_X) & 0xF0) >> 4));
+		I2C_Stop();
 	#endif
 
 	#if SH1106_USE_SPI
@@ -231,11 +231,11 @@ void SH1106_CursorPageSet(uint8_t Page) {
 
 // Wejœcie do trybu read-modify-write
 void SH1106_RmwStart(void) {
-	Twi_Start(SH1106_ADDRESS_WRITE);
-	Twi_Write(SH1106_COMMAND_BYTE);
-	Twi_Write(SH1106_READ_MODIFY_WRITE);
-	Twi_Write(SH1106_CoDATA_BYTE);
-	Twi_Stop();
+	I2C_Start(SH1106_ADDRESS_WRITE);
+	I2C_Write(SH1106_COMMAND_BYTE);
+	I2C_Write(SH1106_READ_MODIFY_WRITE);
+	I2C_Write(SH1106_CoDATA_BYTE);
+	I2C_Stop();
 }
 
 // Operacja w trybie read-modify-write. W zaleznoœci od Mode mo¿na nadpisaæ piksele, wyczyœciæ lub zanegowaæ
@@ -243,9 +243,9 @@ void SH1106_RmwExe(uint8_t Byte, SH1106_rmw_t Mode) {
 	uint8_t Buffer;
 
 	// Odczytanie do bufora
-	Twi_Start(SH1106_ADDRESS_READ);
-	Buffer = Twi_Read();
-	Twi_Stop();
+	I2C_Start(SH1106_ADDRESS_READ);
+	Buffer = I2C_Read();
+	I2C_Stop();
 
 	// Wykonanie operacji
 	switch(Mode) {
@@ -322,12 +322,12 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rm
 	SH1106_CursorXSet(x0);
 
 	if(RmwMode == SH1106_RmwNone) {
-		Twi_Start(SH1106_ADDRESS_WRITE);
-		Twi_Write(SH1106_DATA_BYTE);
+		I2C_Start(SH1106_ADDRESS_WRITE);
+		I2C_Write(SH1106_DATA_BYTE);
 		while(Length--) {
-			Twi_Write(Pattern);
+			I2C_Write(Pattern);
 		}
-		Twi_Stop();
+		I2C_Stop();
 	}
 	else {
 		SH1106_RmwStart();
@@ -348,12 +348,12 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	SH1106_CursorXSet(x0);
 
 	#if SH1106_USE_I2C
-		Twi_Start(SH1106_ADDRESS_WRITE);
-		Twi_Write(SH1106_DATA_BYTE);
+		I2C_Start(SH1106_ADDRESS_WRITE);
+		I2C_Write(SH1106_DATA_BYTE);
 		while(Length--) {
-			Twi_Write(Pattern);
+			I2C_Write(Pattern);
 		}
-		Twi_Stop();
+		I2C_Stop();
 	#endif
 
 	#if SH1106_USE_SPI
@@ -667,12 +667,12 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SH1106_CursorPageSet(PageStart);
 
 		#if SH1106_USE_I2C
-			Twi_Start(SH1106_ADDRESS_WRITE);
-			Twi_Write(SH1106_DATA_BYTE);
+			I2C_Start(SH1106_ADDRESS_WRITE);
+			I2C_Write(SH1106_DATA_BYTE);
 			for(uint8_t i=x0; i<=x1; i++) {
-				Twi_Write(PagePatternStart & PagePatternEnd);
+				I2C_Write(PagePatternStart & PagePatternEnd);
 			}
-			Twi_Stop();
+			I2C_Stop();
 		#endif
 
 		#if SH1106_USE_SPI
@@ -689,12 +689,12 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SH1106_CursorPageSet(PageStart);
 		
 		#if SH1106_USE_I2C
-			Twi_Start(SH1106_ADDRESS_WRITE);
-			Twi_Write(SH1106_DATA_BYTE);
+			I2C_Start(SH1106_ADDRESS_WRITE);
+			I2C_Write(SH1106_DATA_BYTE);
 			for(uint8_t i=x0; i<=x1; i++) {
-				Twi_Write(PagePatternStart);
+				I2C_Write(PagePatternStart);
 			}
-			Twi_Stop();
+			I2C_Stop();
 		#endif
 
 		#if SH1106_USE_SPI
@@ -710,12 +710,12 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SH1106_CursorPageSet(PageEnd);
 
 			#if SH1106_USE_I2C
-				Twi_Start(SH1106_ADDRESS_WRITE);
-				Twi_Write(SH1106_DATA_BYTE);
+				I2C_Start(SH1106_ADDRESS_WRITE);
+				I2C_Write(SH1106_DATA_BYTE);
 				for(uint8_t i=x0; i<=x1; i++) {
-					Twi_Write(PagePatternEnd);
+					I2C_Write(PagePatternEnd);
 				}
-				Twi_Stop();
+				I2C_Stop();
 			#endif
 
 			#if SH1106_USE_SPI
@@ -732,12 +732,12 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SH1106_CursorPageSet(++PageStart);
 			
 			#if SH1106_USE_I2C
-				Twi_Start(SH1106_ADDRESS_WRITE);
-				Twi_Write(SH1106_DATA_BYTE);
+				I2C_Start(SH1106_ADDRESS_WRITE);
+				I2C_Write(SH1106_DATA_BYTE);
 				for(uint8_t i=x0; i<=x1; i++) {
-					Twi_Write(0xFF);
+					I2C_Write(0xFF);
 				}
-				Twi_Stop();
+				I2C_Stop();
 			#endif
 
 			#if SH1106_USE_SPI
@@ -828,7 +828,7 @@ void SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 
 // Rysowanie bitmapy
 #if SH1106_USE_RMW
-void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels, SH1106_rmw_t RmwMode) {
+void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap, SH1106_rmw_t RmwMode) {
 #else
 void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 #endif
@@ -848,13 +848,13 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 			#endif
 			
 			#if SH1106_USE_I2C
-				Twi_Start(SH1106_ADDRESS_WRITE);
-				Twi_Write(SH1106_DATA_BYTE);
-				for(uint8_t i=0; i<Pixels; i++) {
-					Twi_Write(Bitmap[Address]);
-					Address = Address + Pages;
+				I2C_Start(SH1106_ADDRESS_WRITE);
+				I2C_Write(SH1106_DATA_BYTE);
+				for(uint8_t i = 0; i < Bitmap->Width; i++) {
+					I2C_Write(SH1106_Color ? Bitmap->Array[Address] : ~Bitmap->Array[Address]);
+					Address = Address + Bitmap->Height / SH1106_PAGE_HEIGHT;
 				}
-				Twi_Stop();
+				I2C_Stop();
 			#endif
 
 			#if SH1106_USE_SPI
@@ -871,9 +871,9 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 		}
 		else {
 			SH1106_RmwStart();
-			for(uint8_t i=0; i<Pixels; i++) {
-				SH1106_RmwExe(Bitmap[Address], RmwMode);
-				Address = Address + Pages;
+			for(uint8_t i = 0; i < Bitmap->Width; i++) {
+				SH1106_RmwExe(Bitmap->Array[Address], RmwMode);
+				Address = Address + Bitmap->Height / SH1106_PAGE_HEIGHT;
 			}
 			SH1106_RmwEnd();
 		}
@@ -925,7 +925,7 @@ void SH1106_FontSet(const SH1106_FontDef_t * Font) {
 // Wyœwietlanie znaku
 // Zmienna Negative jest opcjonalna, wartoœæ inna ni¿ 0 powoduje negacjê koloru
 #if SH1106_USE_RMW
-void SH1106_PrintChar(uint8_t Char, uint8_t Negative, SH1106_rmw_t RmwMode) {
+void SH1106_PrintChar(uint8_t Char, SH1106_rmw_t RmwMode) {
 #else
 void SH1106_PrintChar(uint8_t Char) {
 #endif
@@ -977,20 +977,20 @@ void SH1106_PrintChar(uint8_t Char) {
 		#endif
 			
 			#if SH1106_USE_I2C
-				Twi_Start(SH1106_ADDRESS_WRITE);
-				Twi_Write(SH1106_DATA_BYTE);
+				I2C_Start(SH1106_ADDRESS_WRITE);
+				I2C_Write(SH1106_DATA_BYTE);
 				
 				// Znak
 				for(uint8_t i=0; i<Width; i++) {
-					Twi_Write(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address]);
+					I2C_Write(SH1106_Color ? SH1106_Font->Bitmaps[Address] : ~SH1106_Font->Bitmaps[Address]);
 					Address = Address + Height;
 				}
 
 				// Odstêp miêdzy znakami
-				for(uint8_t i = SH1106_Font.Spacing; i; i--) {
-					Twi_Write(Negative ? 0xFF : 0x00);								
+				for(uint8_t i = SH1106_Font->Spacing; i; i--) {
+					I2C_Write(SH1106_Color ? 0x00 : 0xFF);
 				}
-				Twi_Stop();
+				I2C_Stop();
 			#endif
 
 			#if SH1106_USE_SPI
@@ -1018,11 +1018,11 @@ void SH1106_PrintChar(uint8_t Char) {
 		else {
 			SH1106_RmwStart();
 			for(uint8_t i=0; i<Width; i++) {
-				SH1106_RmwExe(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address], RmwMode);
+				SH1106_RmwExe(SH1106_Color ? SH1106_Font->Bitmaps[Address] : ~SH1106_Font->Bitmaps[Address], RmwMode);
 				Address = Address + Height;
 			}
-			for(uint8_t i = SH1106_Font.Spacing; i; i--) {
-				SH1106_RmwExe(Negative ? 0xFF : 0x00, RmwMode);						// odstêp miêdzy znakami
+			for(uint8_t i = SH1106_Font->Spacing; i; i--) {
+				SH1106_RmwExe(SH1106_Color ? 0x00 : 0xFF, RmwMode);						// odstêp miêdzy znakami
 			}						
 			SH1106_RmwEnd();
 		}
@@ -1092,7 +1092,7 @@ uint16_t SH1106_TextWidth(const char * Text) {
 
 // Pisanie tekstu. Wczeœniej wybraæ czcionkê!
 #if SH1106_USE_RMW
-void SH1106_Text(const char * Text, SH1106_align_t Align, uint8_t Negative, SH1106_rmw_t RmwMode) {
+void SH1106_Text(const char * Text, SH1106_align_t Align, SH1106_rmw_t RmwMode) {
 #else
 void SH1106_Text(const char * Text, SH1106_align_t Align) {
 #endif
@@ -1121,7 +1121,8 @@ void SH1106_Text(const char * Text, SH1106_align_t Align) {
 
 	// Wyœwietlenie tekstu
 	#if SH1106_USE_RMW
-		while(*Text) SH1106_PrintChar(*Text++, RmwMode);
+		//while(*Text) SH1106_PrintChar(*Text++, RmwMode);
+		while(*Text) SH1106_PrintChar(*Text++);
 	#else
 		while(*Text) SH1106_PrintChar(*Text++);
 	#endif
@@ -1171,13 +1172,13 @@ void SH1106_Chessboard(void) {
 		
 		// Loop 128 columns
 		#if SH1106_USE_I2C
-			Twi_Start(SH1106_ADDRESS_WRITE);
-			Twi_Write(SH1106_DATA_BYTE);
+			I2C_Start(SH1106_ADDRESS_WRITE);
+			I2C_Write(SH1106_DATA_BYTE);
 			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
-				Twi_Write(0b10101010);
-				Twi_Write(0x01010101);
+				I2C_Write(0b10101010);
+				I2C_Write(0b01010101);
 			}
-			Twi_Stop();
+			I2C_Stop();
 		#endif
 		
 		#if SH1106_USE_SPI
