@@ -67,7 +67,7 @@
 	#error "SH1106 - Can't use I2C and SPI at the same time"
 #endif
 
-#if SH1106_USE_SPI && SH1106_USE_RMW_NEW
+#if SH1106_USE_SPI && SH1106_USE_RMW
 	#error "SH1106 - Usage of RMW possible only in I2C mode, but selected SPI mode"
 #endif
 

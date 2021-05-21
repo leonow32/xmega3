@@ -62,5 +62,8 @@ task_t SH1106_TaskFace1(runmode_t RunMode);
 	void SH1106_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]);
 #endif
 
+// Benchmark
+void SH1106_CmdCircles(uint8_t argc, uint8_t * argv[]);
+
 
 #endif /* DISPLAY_SH1106_DEMO_H_ */

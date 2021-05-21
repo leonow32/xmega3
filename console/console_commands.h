@@ -131,6 +131,9 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"snake",			SH1106_CmdSnake},
 	{"pixels",			SH1106_CmdPixels},
 	{"face",			SH1106_CmdFace},
+	
+	// Benchmark
+	{"circles",			SH1106_CmdCircles},
 #endif
 
 // ========================================

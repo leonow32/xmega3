@@ -270,7 +270,7 @@ void SH1106_DrawPixel(uint8_t x, uint8_t y) {
 	SH1106_CursorPageSet(Page);
 	SH1106_CursorXSet(x);
 	
-	#if SH1106_USE_RMW_NEW
+	#if SH1106_USE_RMW
 		SH1106_RmwStart();
 		SH1106_RmwExecute(1 << (y % SH1106_PAGE_HEIGHT));
 		SH1106_RmwEnd();
@@ -289,7 +289,7 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	SH1106_CursorXSet(x0);
 	
 	#if SH1106_USE_I2C
-		#if SH1106_USE_RMW_NEW
+		#if SH1106_USE_RMW
 			uint8_t Pattern = (1 << (y0 % SH1106_PAGE_HEIGHT));
 			SH1106_RmwStart();
 			while(Length--) {
@@ -319,7 +319,7 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 // Rysuje liniê pionow¹ od punktu (X,Y) w dó³.
 void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	
-	#if SH1106_USE_RMW_NEW
+	#if SH1106_USE_RMW
 		while(Length--) {
 			SH1106_DrawPixel(x0, y0++);
 		}
@@ -430,7 +430,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SH1106_CursorPageSet(PageStart);
 		
 		#if SH1106_USE_I2C
-			#if SH1106_USE_RMW_NEW
+			#if SH1106_USE_RMW
 				SH1106_RmwStart();
 				for(uint8_t i=x0; i<=x1; i++) {
 					SH1106_RmwExecute(PagePatternStart & PagePatternEnd);
@@ -460,7 +460,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SH1106_CursorPageSet(PageStart);
 		
 		#if SH1106_USE_I2C
-			#if SH1106_USE_RMW_NEW
+			#if SH1106_USE_RMW
 				SH1106_RmwStart();
 				for(uint8_t i=x0; i<=x1; i++) {
 					SH1106_RmwExecute(PagePatternStart);
@@ -489,7 +489,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SH1106_CursorPageSet(PageEnd);
 			
 			#if SH1106_USE_I2C
-				#if SH1106_USE_RMW_NEW
+				#if SH1106_USE_RMW
 					SH1106_RmwStart();
 					for(uint8_t i=x0; i<=x1; i++) {
 						SH1106_RmwExecute(PagePatternEnd);
@@ -519,7 +519,7 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SH1106_CursorPageSet(++PageStart);
 			
 			#if SH1106_USE_I2C
-				#if SH1106_USE_RMW_NEW
+				#if SH1106_USE_RMW
 					SH1106_RmwStart();
 					for(uint8_t i=x0; i<=x1; i++) {
 						SH1106_RmwExecute(0xFF);

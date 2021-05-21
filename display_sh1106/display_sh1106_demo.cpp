@@ -575,7 +575,18 @@ void SH1106_CmdDemoFontDos16x8(uint8_t argc, uint8_t * argv[]) {
 }
 #endif
 
+// ========================================
+// Benchmarks
+// ========================================
 
+void SH1106_CmdCircles(uint8_t argc, uint8_t * argv[]) {
+	SH1106_Clear();
+	for(uint8_t r = 0; r < 32; r = r + 2) {
+		SH1106_DrawCircle(64, 32, r);
+	}
+	
+	Print_ResponseOK();
+}
 
 #endif
 #endif
