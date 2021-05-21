@@ -36,16 +36,16 @@
 #define		SH1106_CHARGE_PERIOD			0xD9						// 16, argument w kolejnym bajcie, czytaæ datasheet
 #define		SH1106_COMMON_PADS_HW_CONFIG	0xDA						// 17, argument w kolejnym bajcie, czytaæ datasheet
 #define		SH1106_VCOM_DESELECT_LEVEL		0xDB						// 18, argument w kolejnym bajcie, czytaæ datasheet
-#define		SH1106_READ_MODIFY_WRITE		0xE0						// 19, nie wiadomo co to robi
-#define		SH1106_END						0xEE						// 20, nie wiadomo co to robi
+#define		SH1106_READ_MODIFY_WRITE		0xE0						// 19, umo¿liwia odczytanie danych z wyœwietlacza
+#define		SH1106_END						0xEE						// 20, koñczy operacjê w trybie read-modify-write
 #define		SH1106_NOP						0xE3						// 21
 #define		SH1106_CHARGE_PUMP				0x8D						// polecenie, któego nie ma w datasheecie
 
 // Komendy steruj¹ce I2C - decyduj¹ czy nastêpny przes³any bajt to dane do wyœwietlenia czy polecenie
 #if SH1106_USE_I2C
-#define		SH1106_COMMAND_BYTE				0x80
-#define		SH1106_DATA_BYTE				0x40
-#define		SH1106_CoDATA_BYTE				0xC0
+	#define SH1106_COMMAND_BYTE				0x80
+	#define SH1106_DATA_BYTE				0x40
+	#define SH1106_CoDATA_BYTE				0xC0
 #endif
 
 // ========================================
@@ -91,14 +91,6 @@ struct SH1106_Bitmap_t {
 // Other stuff
 // ========================================
 
-#if SH1106_USE_RMW
-enum SH1106_rmw_t {
-	SH1106_RmwNone,
-	SH1106_RmwAdd,
-	SH1106_RmwSub,
-	SH1106_RmwInv
-};
-#endif
 
 
 

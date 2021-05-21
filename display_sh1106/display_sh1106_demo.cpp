@@ -67,6 +67,7 @@ void SH1106_CmdPixel(uint8_t argc, uint8_t * argv[]) {
 	
 	// Execute command
 	SH1106_DrawPixel(x, y);
+	//SH1106_DrawPixel(x, y, SH1106_RmwAdd);
 	Print_ResponseOK();
 }
 

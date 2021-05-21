@@ -19,6 +19,11 @@ PERFORMANCE TEST
 			-	Fill	24 ms, 41 FPS
 			-	Chess	24 ms, 41 FPS
 			-	Pixel	250 us, 4000 FPS
+			I2C mode withour RMW, frequency 1 MHz
+			-	Clear	11.5 ms, 87 FPS
+			-	Fill	11,5 ms, 87 FPS
+			-	Chess	11 ms, 90 FPS
+			-	Pixel	122 us, 8196 FPS
 			
 CHANGELOG
 1.01	*	Usuniêcie Spi_0() ze wszystkich funkcji
@@ -97,7 +102,6 @@ HARDWARE
 #include	<util/delay.h>
 #include	"display_sh1106_config.h"
 #include	"display_sh1106_defines.h"
-//#include	"FontR/fontR_typedef.h"
 
 #if SH1106_USE_SPI
 	#if COMPONENT_SPI_MASTER
@@ -167,6 +171,9 @@ HARDWARE
 	#include	"bitmap/extronic_logo.h"
 #endif
 
+/// DEBUG ONLY
+#include "../print/print.h"
+
 
 // ========================================
 // Basic functions
@@ -177,7 +184,7 @@ void		SH1106_WriteCommand(const uint8_t Command);
 void		SH1106_WriteData(const uint8_t Data);
 void		SH1106_ContrastSet(const uint8_t Value);
 void		SH1106_Clear(const uint8_t Pattern = 0);					// Ustawienie Pattern innego ni¿ domyœlny pozwala zape³niæ wyœwietlacz wzorem
-void		SH1106_BackgroundGray(void);
+void		SH1106_BackgroundGray(void);		// ?
 
 // ========================================
 // Cursor setting
@@ -191,29 +198,17 @@ void		SH1106_CursorPageSet(uint8_t Page);
 // ========================================
 // Read-Modify-Write Mode
 // ========================================
-#if SH1106_USE_RMW
 void		SH1106_RmwStart(void);
-void		SH1106_RmwExe(uint8_t Byte, SH1106_rmw_t Mode);
+void		SH1106_RmwExecute(uint8_t Byte);
 void		SH1106_RmwEnd();
-#endif
 
 // ========================================
 // Drawing
 // ========================================
 
-void SH1106_ColorSet(uint8_t Color);
-uint8_t SH1106_ColorGet(void);
+void		SH1106_ColorSet(uint8_t Color);
+uint8_t		SH1106_ColorGet(void);
 
-#if SH1106_USE_RMW
-void		SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-#else
 void		SH1106_DrawPixel(uint8_t x, uint8_t y);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
 void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);		// nie uwzglednia SH1106_Color
@@ -222,22 +217,16 @@ void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
-#endif
 
 // ========================================
 // Text
 // ========================================
 
 const SH1106_FontDef_t * SH1106_FontGet(void);
-void SH1106_FontSet(const SH1106_FontDef_t * Font);
-// uint16_t	SH1106_TextWidth(const char * Text);
-#if SH1106_USE_RMW
-void		SH1106_PrintChar(uint8_t Char, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone, SH1106_rmw_t RmwMode = SH1106_RmwNone);
-#else
+void		SH1106_FontSet(const SH1106_FontDef_t * Font);
+uint16_t	SH1106_TextWidth(const char * Text);
 void		SH1106_PrintChar(uint8_t Char);
 void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone);
-#endif
 
 // ========================================
 // Testing

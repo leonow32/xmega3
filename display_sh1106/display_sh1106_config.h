@@ -20,10 +20,10 @@
 	#define		SH1106_USE_SPI					0
 	
 	// Config
-	#define		SH1106_DEFAULT_CONTRAST			255
-	#define		SH1106_CLEAR_AFERT_INIT			1
+	#define		SH1106_USE_RMW					1	// read-modify-write for I2C interface only
 	#define		SH1106_USE_DEMO_COMMANDS		1
-	#define		SH1106_USE_RMW					0		// for I2C interface only
+	#define		SH1106_CLEAR_AFERT_INIT			1
+	#define		SH1106_DEFAULT_CONTRAST			255
 	
 	// Addess on I2C bus
 	#if SH1106_USE_I2C
@@ -67,7 +67,7 @@
 	#error "SH1106 - Can't use I2C and SPI at the same time"
 #endif
 
-#if SH1106_USE_SPI && SH1106_USE_RMW
+#if SH1106_USE_SPI && SH1106_USE_RMW_NEW
 	#error "SH1106 - Usage of RMW possible only in I2C mode, but selected SPI mode"
 #endif
 
