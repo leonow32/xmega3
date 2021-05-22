@@ -264,6 +264,51 @@ void SH1106_CmdFont(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
+void SH1106_CmdFontDemo(uint8_t argc, uint8_t * argv[]) {
+	SH1106_Clear();
+	
+	SH1106_CursorXSet(0);
+	SH1106_CursorPageSet(0);
+	SH1106_FontSet(&SH1106_FontConsole8x6);
+	SH1106_Text("Left", SH1106_AlignLeft);
+	SH1106_Text("Center", SH1106_AlignCenter);
+	SH1106_Text("Right", SH1106_AlignRight);
+	
+	SH1106_CursorXSet(0);
+	SH1106_CursorPageSet(1);
+	SH1106_FontSet(&SH1106_FontDos16x8);
+	SH1106_Text("Abcdefghij");
+	
+	SH1106_CursorXSet(85);
+	SH1106_CursorPageSet(1);
+	SH1106_FontSet(&SH1106_FontDos8x8);
+	SH1106_Text("Abcde");
+	
+	SH1106_CursorXSet(85);
+	SH1106_CursorPageSet(2);
+	SH1106_Text("fghij");
+	
+	SH1106_CursorXSet(0);
+	SH1106_CursorPageSet(3);
+	SH1106_FontSet(&SH1106_FontSans16);
+	SH1106_Text("Abciwg123");
+	
+	SH1106_CursorPageSet(3);
+	SH1106_FontSet(&SH1106_FontSans16B);
+	SH1106_Text("Abciwg1", SH1106_AlignRight);
+	
+	SH1106_CursorXSet(0);
+	SH1106_CursorPageSet(5);
+	SH1106_FontSet(&SH1106_FontSans24);
+	SH1106_Text("Abciwg1");
+	
+	SH1106_CursorPageSet(5);
+	SH1106_FontSet(&SH1106_FontSans24B);
+	SH1106_Text("Abc", SH1106_AlignRight);
+	
+	Print_ResponseOK();
+}
+
 // ========================================
 // Bitmaps
 // ========================================

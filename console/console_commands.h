@@ -111,6 +111,7 @@ const Console_NamePointer_t Console_CommandList[] = {
  	{"color",			SH1106_CmdColor},
 	{"txt",				SH1106_CmdText},
 	{"font",			SH1106_CmdFont},
+	{"fonts",			SH1106_CmdFontDemo},
 	
 	// Font demos
 	#if SH1106_FONT_DOS8x8
@@ -120,9 +121,6 @@ const Console_NamePointer_t Console_CommandList[] = {
 	#if SH1106_FONT_DOS16x8
 		{"dos16",		SH1106_CmdDemoFontDos16x8},
 	#endif
-	
-// 	{"d-fonts",			SSD1351_CmDDemoFontTest},
-// 	{"d-align",			SSD1351_CmdDemoTextAlign},
 	
 	// Bitmaps
 	{"bitmap",			SH1106_CmdBitmap},
