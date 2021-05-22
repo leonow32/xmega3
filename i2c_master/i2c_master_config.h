@@ -34,6 +34,17 @@
 #endif
 
 // ========================================
+// Demo Display SH1106
+// ========================================
+
+#if PRODUCT_SH1106
+	#define		I2C_PORTB_01						1
+	#define		I2C_MASTER_SCL_FREQUENCY			750000
+	#define		I2C_MASTER_USE_DEMO_COMMANDS		1
+	#define		I2C_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 

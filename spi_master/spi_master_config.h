@@ -41,6 +41,16 @@
 #endif
 
 // ========================================
+// Demo Display SH1106
+// ========================================
+
+#if PRODUCT_SH1106
+	#define			SPI_PORTC_02					1
+	#define			SPI_MASTER_USE_DEMO_COMMANDS	0
+	#define			SPI_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
 // Demo Display SSD1351
 // ========================================
 

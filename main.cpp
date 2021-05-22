@@ -40,6 +40,10 @@
 // External Hardware Includes
 // ========================================
 
+#if COMPONENT_DISPLAY_SH1106
+	#include	"display_sh1106/display_sh1106.h"
+#endif
+
 #if COMPONENT_DISPLAY_SSD1351
 	#include	"display_ssd1351/display_ssd1351.h"
 #endif
@@ -130,6 +134,10 @@ int main(void) {
 	// ========================================
 	// External Hardware init
 	// ========================================
+	
+	#if COMPONENT_DISPLAY_SH1106
+		SH1106_Init();
+	#endif
 	
 	#if COMPONENT_DISPLAY_SSD1351
 		SSD1351_Init();
