@@ -2,18 +2,21 @@
 
 #include	"display_sh1106.h"
 
-// Zmienne globalne
+// ========================================
+// Global variables
+// ========================================
+
 static uint8_t SH1106_CursorP = 0;
 static uint8_t SH1106_CursorX = 0;
 static uint8_t SH1106_Color	= 1;		// White
 static const SH1106_FontDef_t * SH1106_Font = &SH1106_DEFAULT_FONT;
 
-// Konfiguracja wyœwietlacza dla funkcji SH1106_Init()
+// Display config for init function
 static const uint8_t SH1106_InitSequence[] = {
 	SH1106_DISPLAY_OFF,						// Display OFF
-	SH1106_COLUMN_LOW(SH1106_OFFSET_X),		// Low Column
-	SH1106_COLUMN_HIGH(0),					// High Column
-	SH1106_PAGE(0),							// Strona
+	SH1106_COLUMN_LOW(SH1106_OFFSET_X),		// Low Column - select x = 0
+	SH1106_COLUMN_HIGH(0),					// High Column - select x = 0
+	SH1106_PAGE(0),							// First page select
 	SH1106_START_LINE(0),					// Start line
 	SH1106_REMAP(1),						// Remap
 	SH1106_COMMON_PADS_HW_CONFIG,			// Com pins
@@ -41,7 +44,7 @@ static const uint8_t SH1106_InitSequence[] = {
 	#endif
 };
 
-// Inicjalizacja
+// Initialization
 void SH1106_Init(void) {
 	
 	#if SH1106_USE_I2C
@@ -71,7 +74,7 @@ void SH1106_Init(void) {
 	#endif
 }
 
-// Wys³anie komendy
+// Send command to the display
 void SH1106_WriteCommand(const uint8_t Command) {
 	
 	#if SH1106_USE_I2C
@@ -89,7 +92,7 @@ void SH1106_WriteCommand(const uint8_t Command) {
 	#endif
 }
 
-// Wys³anie danych
+// Send data to the display
 void SH1106_WriteData(const uint8_t Data) {
 	
 	#if SH1106_USE_I2C
@@ -107,13 +110,13 @@ void SH1106_WriteData(const uint8_t Data) {
 	#endif
 }
 
-// Ustawianie kontrastu
+// Set contrast
 void SH1106_ContrastSet(const uint8_t Value) {
 	SH1106_WriteCommand(SH1106_CONTRAST);
 	SH1106_WriteCommand(Value);
 }
 
-// Czyszczenie wyœwietlacza
+// Clear display - set Pattern = 0 to clear
 void SH1106_Clear(const uint8_t Pattern) {
 	for(uint8_t Page=0; Page<8; Page++) {
 		SH1106_CursorPageSet(Page);
@@ -140,16 +143,24 @@ void SH1106_Clear(const uint8_t Pattern) {
 	SH1106_CursorPageSet(0);
 }
 
-// Szachownica na ca³y wyœwietlacz
-void SH1106_BackgroundGray(void) {
-	for(uint8_t Page=0; Page<8; Page++) {
+// Light all pixels
+void SH1106_Fill(void) {
+	SH1106_Clear(0xFF);
+}
+
+// Draw chessboard
+void SH1106_Chessboard(void) {
+	
+	// Loop 8 pages
+	for(uint8_t Page = 0; Page < SH1106_PAGE_COUNT; Page++) {
 		SH1106_CursorPageSet(Page);
 		SH1106_CursorXSet(0);
 		
+		// Loop 128 columns
 		#if SH1106_USE_I2C
 			I2C_Start(SH1106_ADDRESS_WRITE);
 			I2C_Write(SH1106_DATA_BYTE);
-			for(uint8_t i = 0; i < (SH1106_DISPLAY_SIZE_X/2); i++) {
+			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
 				I2C_Write(0b10101010);
 				I2C_Write(0b01010101);
 			}
@@ -159,20 +170,17 @@ void SH1106_BackgroundGray(void) {
 		#if SH1106_USE_SPI
 			SH1106_CHIP_SELECT;
 			SH1106_DC_DATA;
-			for(uint8_t i=0; i < (SH1106_DISPLAY_SIZE_X/2); i++) {
+			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
 				Spi_2(0b10101010, 0b01010101);
 			}
-			SH1106_CHIP_DESELECT;			
+			SH1106_CHIP_DESELECT;
 		#endif
 	}
-	
-	SH1106_CursorXSet(0);
-	SH1106_CursorPageSet(0);
 }
 
-// Pozycja kursora
-//  - pozycja pozioma - zmienna Posx, zakres od 0 do 127
-//  - pozycja pionowa - zmienna Line, zakres od 0 do 7, ka¿da strona to 8 pikseli
+// ========================================
+// Cursor setting
+// ========================================
 
 // Odczytanie pozycji X
 uint8_t SH1106_CursorXGet(void) {
@@ -182,10 +190,10 @@ uint8_t SH1106_CursorXGet(void) {
 // Ustawienie pozycji X
 void SH1106_CursorXSet(uint8_t PosX) {
 	
-	// Kontrola
+	// Sanity check
 	SH1106_CursorX = PosX < SH1106_DISPLAY_SIZE_X ? PosX : 0;
 	
-	// Ustawianie z uwaglêdnieniem offsetu X wyœwietlacza
+	// Set in accordande to display x offset
 	#if SH1106_USE_I2C
 		I2C_Start(SH1106_ADDRESS_WRITE);
 		I2C_Write(SH1106_COMMAND_BYTE);
@@ -203,19 +211,24 @@ void SH1106_CursorXSet(uint8_t PosX) {
 	#endif
 }
 
-// Odczytanie aktualniej strony
+// Get actual selected page
 uint8_t SH1106_CursorPageGet(void) {
 	return SH1106_CursorP;
 }
 
-// Ustawienie pozycji strony
+// Set page to write to
 void SH1106_CursorPageSet(uint8_t Page) {
 	SH1106_CursorP = Page;
 	SH1106_WriteCommand(SH1106_PAGE(SH1106_CursorP));
 }
 
-// Funkcje trybu Read-Modify-Write tylko dla I2C, nieobs³ugiwane w SPI
-// Wejœcie do trybu read-modify-write
+// ========================================
+// Read-Modify-Write Mode
+// ========================================
+
+// This is supported only in I2C mode and not for all displays! We've got some SH1106 displays that don't support this feature!
+
+#if SH1106_USE_RMW
 void SH1106_RmwStart(void) {
 	I2C_Start(SH1106_ADDRESS_WRITE);
 	I2C_Write(SH1106_COMMAND_BYTE);
@@ -224,37 +237,37 @@ void SH1106_RmwStart(void) {
 	I2C_Stop();
 }
 
-// Operacja w trybie read-modify-write. W zaleznoœci od Mode mo¿na nadpisaæ piksele, wyczyœciæ lub zanegowaæ
 void SH1106_RmwExecute(uint8_t Byte) {
 	uint8_t Buffer;
 	
-	// Odczytanie do bufora
 	I2C_Start(SH1106_ADDRESS_READ);
 	I2C_Read();		// Dummy read
 	Buffer = I2C_Read();
 	I2C_Stop();
 	
-	// Wykonanie operacji
 	if(SH1106_Color) {
 		Buffer |= Byte;
 	}
 	else {
 		Buffer &= ~Byte;
 	}
+		SH1106_WriteData(Buffer);
 	
-	// Przes³anie z powrotem do pamiêci
-	SH1106_WriteData(Buffer);
-	
-	// Zwiêkszenie pozycji kursora
-	// Uwaga - sterownik ma rozdzielczoœæ 132 a wyœwietlacz ma 128
 	SH1106_CursorX = (SH1106_CursorX == (SH1106_DISPLAY_SIZE_X-1) ? 0 : SH1106_CursorX + 1);
 }
 
-// Wyjœcie z trybu read-mofify-write
 void SH1106_RmwEnd() {
 	SH1106_WriteCommand(SH1106_END);
 	SH1106_CursorXSet(SH1106_CursorX);
 }
+#endif
+
+// ========================================
+// Colors (black & white)
+// ========================================
+
+// 0 - black
+// 1 - white
 
 void SH1106_ColorSet(uint8_t Color) {
 	SH1106_Color = Color;
@@ -264,7 +277,11 @@ uint8_t SH1106_ColorGet(void) {
 	return SH1106_Color;
 }
 
-// Rysowanie piksela
+// ========================================
+// Drawing
+// ========================================
+
+// Single pixel
 void SH1106_DrawPixel(uint8_t x, uint8_t y) {
 	uint8_t Page = y / SH1106_PAGE_HEIGHT;
 	SH1106_CursorPageSet(Page);
@@ -279,11 +296,11 @@ void SH1106_DrawPixel(uint8_t x, uint8_t y) {
 	#endif
 }
 
-// Linia pozioma
+// Horizontal line, thickness is 1 pixel
+// Begin at x0, y0 and draw right
 void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
-	// Rysuje liniê poziom¹ od punktu (x0,y0) w prawo.
 	
-	// Przeliczenie wysokoœci na numer strony i ustawienie kursora
+	// Calculate y0 to page number and set cursor
 	uint8_t Page = y0 / SH1106_PAGE_HEIGHT;
 	SH1106_CursorPageSet(Page);
 	SH1106_CursorXSet(x0);
@@ -316,7 +333,8 @@ void SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	#endif
 }
 
-// Rysuje liniê pionow¹ od punktu (X,Y) w dó³.
+// Verical line, thickness is 1 pixel
+// Begin at x0, y0 and draw bottom
 void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	
 	#if SH1106_USE_RMW
@@ -330,26 +348,26 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 		uint8_t PagePatternEnd		=	~(0xFF << ((y0+Length) % SH1106_PAGE_HEIGHT));
 		
 		if(PageStart == PageEnd) {
-			// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
+			// Tha line fits to single page (<= 8 pixels)
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageStart);
 			SH1106_WriteData(PagePatternStart & PagePatternEnd);
 		}
 		else {
-			// Linia zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
-			// Rysowanie pocz¹tku linii
+			// The line doesn;t fit in single page
+			// Draw biginning of the line
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageStart);
 			SH1106_WriteData(PagePatternStart);
 			
-			// Rysowanie koñca linii
+			// Draw enging of the line
 			if(PagePatternEnd) {
 				SH1106_CursorXSet(x0);
 				SH1106_CursorPageSet(PageEnd);
 				SH1106_WriteData(PagePatternEnd);
 			}
 			
-			// Rysowanie œrodka linii jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
+			// Draw middle part of the line, if there's need to
 			while(PageEnd - PageStart >= 2) {
 				SH1106_CursorXSet(x0);
 				SH1106_CursorPageSet(++PageStart);
@@ -359,8 +377,7 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	#endif
 }
 
-// Linia pod dowolnym k¹tem algorytmem Bresenhama
-// Jeœli trzeba narysowaæ liniê pionow¹ lub poziom¹ to u¿ywaæ funkcji LineHorizontal lub LineVertica, bo dzia³aj¹ szybciej
+// Draw line at any angle with Bresenham's algorithm
 void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	
 	if(x0 == x1) {
@@ -393,9 +410,9 @@ void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	if (x0 < x1) Sx = 1; else Sx = -1;
 	if (y0 < y1) Sy = 1; else Sy = -1;
 	Error = Dx - Dy;
-	for (;;) {
+	while(1) {
 		SH1106_DrawPixel(x0, y0);
-		if (x0==x1 && y0==y1) return;
+		if ((x0 == x1) && (y0 == y1)) return;
 		E2 = Error << 1;
 		if (E2 > -Dy) { 
 			Error = Error - Dy; 
@@ -408,7 +425,7 @@ void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	}
 }
 
-//  Prostok¹t bez wype³nienia
+// Rectangle without fill
 void SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	SH1106_DrawLineVertical(x0, y0, y1-y0+1);
 	SH1106_DrawLineVertical(x1, y0, y1-y0+1);
@@ -416,16 +433,15 @@ void SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	SH1106_DrawLineHorizontal(x0+1, y1, x1-x0-1);
 }
 
-// Prostok¹t z wype³nieniem
+// Rectangle with fill
 void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-	// Funkcja jest podobna do SH1106_DrawLineVertical
+	// This is very similar to SH1106_DrawLineVertical
 	uint8_t PageStart			=	y0 / SH1106_PAGE_HEIGHT;
 	uint8_t PageEnd				=	(y1+1) / SH1106_PAGE_HEIGHT;
 	uint8_t PagePatternStart	=	0xFF << (y0 % SH1106_PAGE_HEIGHT);
 	uint8_t PagePatternEnd		=	~(0xFF << ((y1+1) % SH1106_PAGE_HEIGHT));
 	
 	if(PageStart == PageEnd) {
-		// Linia zawiera siê tylko w jednej stronie wyœwietlacza (<= 8 pikseli)
 		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		
@@ -454,8 +470,6 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		#endif
 	}
 	else {
-		// Prostok¹t zawiera siê w wiêcej ni¿ jednej stronie wyœwietlacza
-		// Rysowanie górnej czêœci
 		SH1106_CursorXSet(x0);
 		SH1106_CursorPageSet(PageStart);
 		
@@ -483,7 +497,6 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SH1106_CHIP_DESELECT;
 		#endif
 		
-		// Rysowanie dolnej czêœci jeœli jest
 		if(PagePatternEnd) {
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageEnd);
@@ -513,7 +526,6 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			#endif
 		}
 		
-		// Rysowanie œrodkowej czêœci jeœli jest, wykorzystywanie zmiennej LineStart do wskazywania aktualnej pozycji linii podczas rysowania
 		while(PageEnd - PageStart >= 2) {
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(++PageStart);
@@ -545,11 +557,8 @@ void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	}
 }
 
-// Okr¹g
+// Circle
 void SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
-	// Uwaga - w niektóych przypadkach przy metodzie RmwInv mo¿e zostawiaæ kropki w miejscach ³¹czenia siê 1/8 czêsci okrêgu
-	// ze wzglêdu na podwójne obliczanie tych punktów
-	
 	int16_t d = 5 - 4*r;
 	int16_t x = 0;
 	int16_t y = r;
@@ -581,17 +590,19 @@ void SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 	}
 }
 
-// Rysowanie bitmapy
+// ========================================
+// Bitmap
+// ========================================
+
+// Draw bitmap
 void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 	uint16_t Address;
-	//uint8_t Page = Pages - 1;
 	uint8_t Page = Bitmap->Height / SH1106_PAGE_HEIGHT - 1;
 	
 	uint8_t CursorX_Old = SH1106_CursorX;
 	uint8_t CursorL_Old = SH1106_CursorP;
 	
 	do {
-		// Podcz¹tkowy offset adresu
 		Address = Page;
 		
 		#if SH1106_USE_I2C
@@ -614,54 +625,57 @@ void SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap) {
 			SH1106_CHIP_DESELECT;
 		#endif
 		
-		// Czy to by³a ostatnia strona
+		// If this was lat page
 		if(Page == 0) {
-			// To by³a ostatnia strona
+			// It was the last page
 			
-			// Kursor strony ustawiamy tam gdzie by³ na pocz¹tku, jeœli znak by³ na wielu stronach
+			// Set curson at the begining of the bitmap
 			if(Bitmap->Height / SH1106_PAGE_HEIGHT > 1) {
 				SH1106_CursorPageSet(CursorL_Old);
 			}
 			
-			// Kursor X ustawiamy na koniec znaku
+			// Set curson at the end of the bitmap
 			SH1106_CursorX = CursorX_Old + Bitmap->Width;
 			if(SH1106_CursorX >= SH1106_DISPLAY_SIZE_X) {
 				SH1106_CursorX = SH1106_CursorX - SH1106_DISPLAY_SIZE_X;
 			}
 		}
 		else {
-			// To nie by³a jeszcze ostatnia strona
+			// It was not the last page
 			
-			// Cofamy kursor na pocz¹tek
+			// Set cursor back at the beginnign of the page
 			SH1106_CursorXSet(CursorX_Old);
 			
-			// Przesuwamy kursor o jedn¹ stronê ni¿ej
+			// Move curson on page below
 			SH1106_CursorPageSet(SH1106_CursorP + 1);
 		}
 	} while(Page--);
 }
 
-// Odczytanie aktualnie ustawionej czcionki
+// ========================================
+// Text
+// ========================================
+
+// Get actual font
 const SH1106_FontDef_t * SH1106_FontGet(void) {
 	return SH1106_Font;
 }
 
-// Ustawienie czcionki
+// Set font
 void SH1106_FontSet(const SH1106_FontDef_t * Font) {
 	SH1106_Font = Font;
 }
-
-// Wyœwietlanie znaku
+// Print single character
 void SH1106_PrintChar(uint8_t Char) {
 	
-	// Kontrola czy ¿¹dany znak znajduje siê w tablicy
+	// Check if the character is supported by the font
 	if(Char < SH1106_Font->FirstChar) Char = SH1106_Font->LastChar;
 	if(Char > SH1106_Font->LastChar) Char = SH1106_Font->LastChar;
 	
-	// Offset znaku, bo tablica bitmap nie musi zawieraæ wszystkich znaków ASCII od zera
+	// Calculate character offset, because font table doesn't have to befin with 0x00 character
 	Char = Char - SH1106_Font->FirstChar;
 	
-	// Okreœlenie szerokoœci znaku oraz jego po³o¿enia w tabeli bitmap
+	// Find width of the character and its position is bitmap table
 	uint8_t Width;
 	uint8_t Height = SH1106_Font->Height;
 	uint16_t Address;
@@ -674,39 +688,38 @@ void SH1106_PrintChar(uint8_t Char) {
 		Address = SH1106_Font->Descriptors[Char].Offset;
 	}
 	
-	// Je¿eli Addres = 0 i Szerokoœæ = 0 to znaczy, ¿e taki znak nie jest zdefiniowany, wiêc wyœwietlamy BadChar (ostatni znak z tabeli)
+	// If Address is null and width = 0 then print last charachter from table (badchar)
 	if((Address == 0) && (Width == 0)) {
 		Char = SH1106_Font->LastChar - SH1106_Font->FirstChar;
 		Address = SH1106_Font->Descriptors[Char].Offset;
 		Width = SH1106_Font->Descriptors[Char].Width;
 	}
 	
-	// Aktualna pozycja kursora
+	// Update cursor position
 	uint8_t CursorX_Old = SH1106_CursorX;
 	uint8_t CursorL_Old = SH1106_CursorP;
 	uint16_t Address_Old = Address;
 	
-	// Iterator pêtli wyœwietlaj¹cej wszystkie strony po kolei
+	// Loop iterator
 	uint8_t Linia = Height - 1;
 	
-	// Wyœwietlamy po kolei wszystkie czêsci znaku w kolejnych stronach wyœwietlacza
+	// Print all bytes of all pages
 	do {
 		
-		// Offset adresu dla znaków wielostronowych (wysokoœæ > 8 pikseli)
 		Address = Address + Linia;
 		
-		// Wyœwietlanie czêœci znaku w³aœciwej dla tej strony
+		// Print part of the charater that is proper for this page
 			#if SH1106_USE_I2C
 				I2C_Start(SH1106_ADDRESS_WRITE);
 				I2C_Write(SH1106_DATA_BYTE);
 				
-				// Znak
+				// Char
 				for(uint8_t i=0; i<Width; i++) {
 					I2C_Write(SH1106_Color ? SH1106_Font->Bitmaps[Address] : ~SH1106_Font->Bitmaps[Address]);
 					Address = Address + Height;
 				}
 				
-				// Odstêp miêdzy znakami
+				// Spacing
 				for(uint8_t i = SH1106_Font->Spacing; i; i--) {
 					I2C_Write(SH1106_Color ? 0x00 : 0xFF);
 				}
@@ -717,15 +730,14 @@ void SH1106_PrintChar(uint8_t Char) {
 				SH1106_CHIP_SELECT;
 				SH1106_DC_DATA;
 				
-				// Znak
+				// Char
 				for(uint8_t i=0; i<Width; i++) {
 					Spi_1(SH1106_Color ? SH1106_Font->Bitmaps[Address] : ~SH1106_Font->Bitmaps[Address]);
 					Address = Address + Height;
 				}
-				//Spi_1(Negative ? ~SH1106_Font.Bitmaps[Address] : SH1106_Font.Bitmaps[Address]);
 				Address = Address + Height;
 				
-				// Odstêp miêdzy znakami
+				// Spacing
 				for(uint8_t i = SH1106_Font->Spacing; i; i--) {
 					Spi_1(SH1106_Color ? 0x00 : 0xFF);
 				}
@@ -733,56 +745,46 @@ void SH1106_PrintChar(uint8_t Char) {
 				SH1106_CHIP_DESELECT;
 			#endif
 		
-		// Czy to by³a ostatnia strona
+		// CzyIf this was the last line
 		if(Linia == 0) {
-			// To by³a ostatnia strona
 			
-			// Kursor strony ustawiamy tam gdzie by³ na pocz¹tku, jeœli znak by³ na wielu stronach
 			if(Height > 1) {
 				SH1106_CursorPageSet(CursorL_Old);
 			}
 			
-			// Kursor X ustawiamy na koniec znaku
 			SH1106_CursorX = CursorX_Old + Width + SH1106_Font->Spacing;
 			if(SH1106_CursorX >= SH1106_DISPLAY_SIZE_X) {
 				SH1106_CursorX = SH1106_CursorX - SH1106_DISPLAY_SIZE_X;
 			}
 		}
 		else {
-			// To nie by³a jeszcze ostatnia strona
-			
-			// Cofamy kursor na pocz¹tek
+			// It was not the last line
 			SH1106_CursorXSet(CursorX_Old);
-			
-			// Przesuwamy kursor o jedn¹ stronê ni¿ej
 			SH1106_CursorPageSet(SH1106_CursorP + 1);
-			
-			// Cofamy licznik adresu
 			Address = Address_Old;
 		}
-	} while(Linia--);		// Powtarzaj dopóki zosta³y jeszcze strony do wysweitlenia
+	} while(Linia--);
 }
 
-// Wylicza d³ugoœæ napisu w pikselach w zale¿noœci od wybranej czcionki
+// Calculate text width
 uint16_t SH1106_TextWidth(const char * Text) {
 	uint16_t Width = 0;
 	uint16_t Offset = SH1106_Font->FirstChar;
 	
-	// Sprawdzenie czy czcionka ma sta³¹ szerokoœæ znaku
+	// Check if the font has characters with fixed width
 	if(SH1106_Font->Width) {
-		// Czcionka o sta³ej szerokoœci znaków
 		
-		// Zliczanie iloœci znaków
+		// Count number of characters
 		while(*Text++) Width++;
 		
-		// Odtsêp za ka¿dym znakiem
+		// Spacing after every character
 		Width = Width + SH1106_Font->Spacing;
 		
-		// Mno¿enie przez sta³¹ szerokoœæ znaku
+		// Multiply by width of single character
 		Width = Width * (SH1106_Font->Width);
 	}
 	else {
-		// Czcionka o zmiennej szerokoœci znaków
+		// Font with variable character width
 		while(*Text) {
 			Width += SH1106_Font->Descriptors[(*Text) - Offset].Width + SH1106_Font->Spacing;			
 			Text++;
@@ -792,10 +794,10 @@ uint16_t SH1106_TextWidth(const char * Text) {
 	return Width;
 }
 
-// Pisanie tekstu. Wczeœniej wybraæ czcionkê!
+// Print text. Remember to set font first!
 void SH1106_Text(const char * Text, SH1106_align_t Align) {
 	
-	// Ustawienie pozycji kursora w zale¿noœci od wyrównania tekstu
+	// Set cursor position to match text widht and align
 	uint16_t Width;
 	switch(Align) {
 		
@@ -817,7 +819,7 @@ void SH1106_Text(const char * Text, SH1106_align_t Align) {
 			break;
 	}
 	
-	// Wyœwietlenie tekstu
+	// Print text
 	while(*Text) SH1106_PrintChar(*Text++);
 }
 
@@ -854,38 +856,6 @@ void SH1106_Slash(void) {
 	#endif
 }
 
-// Draw chessboard
-void SH1106_Chessboard(void) {
-	
-	// Loop 8 pages
-	for(uint8_t Page = 0; Page < SH1106_PAGE_COUNT; Page++) {
-		SH1106_CursorPageSet(Page);
-		SH1106_CursorXSet(0);
-		
-		// Loop 128 columns
-		#if SH1106_USE_I2C
-			I2C_Start(SH1106_ADDRESS_WRITE);
-			I2C_Write(SH1106_DATA_BYTE);
-			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
-				I2C_Write(0b10101010);
-				I2C_Write(0b01010101);
-			}
-			I2C_Stop();
-		#endif
-		
-		#if SH1106_USE_SPI
-			SH1106_CHIP_SELECT;
-			SH1106_DC_DATA;
-			for(uint8_t Column = 0; Column < SH1106_DISPLAY_SIZE_X / 2; Column++) {
-				Spi_2(0b10101010, 0b01010101);
-			}
-			SH1106_CHIP_DESELECT;
-		#endif
-	}
-}
 
-void SH1106_Fill(void) {
-	SH1106_Clear(0xFF);
-}
 
 #endif

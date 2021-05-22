@@ -62,7 +62,7 @@
 	
 #endif
 
-// Komunikaty o b³êdach
+// Error handling
 #if SH1106_USE_I2C && SH1106_USE_SPI
 	#error "SH1106 - Can't use I2C and SPI at the same time"
 #endif

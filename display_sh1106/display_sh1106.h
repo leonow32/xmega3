@@ -1,13 +1,13 @@
 /*
-OPIS
+DESCRIPTION
 		-	Wyœwietlacz SH1106 z interfejsem I2C/SPI
 		
 TODO
-		-	Add support for color in all geometric functions
+		-	None
 		
 UWAGI
 		-	Zapisywanie w trubie RMW (Read-Mofidy-Write) zajmuje ponad 6x wiêcej czasu ni¿ w trybie normalnym
-	
+		
 PERFORMANCE TEST
 		-	SPI mode, clock frequency 10 MHz
 			-	Clear	1024 us, 976 FPS
@@ -24,74 +24,9 @@ PERFORMANCE TEST
 			-	Fill	11,5 ms, 87 FPS
 			-	Chess	11 ms, 90 FPS
 			-	Pixel	122 us, 8196 FPS
-			
-CHANGELOG
-1.01	*	Usuniêcie Spi_0() ze wszystkich funkcji
-1.00	*	Zakoñczenie prac nad podstawow¹ wersj¹ biblioteki SH1106
-0.23	+	SH1106_InitPort() aby móc zainicjalizowaæ pin steruj¹cy SPI wszystkich uk³adów pod³¹czonym pod jeden port SPI,
-			a dopiero póŸniej inicjalizowaæ sterownik wyœwietlacza
-0.22	+	Czcionki Sans z polskimi znakami
-0.21	+	Obs³uga interfejsu SPI
-		!	Poprawienie b³êdu w SH1106_DrawLineVertical() i SH1106_DrawRectangleFill() gdzie w przypadku d³ugoœci linii bêd¹cych 
-			wielokrotnoœci¹ 8 kasowany by³ jeden bajt na stronie poni¿ej koñca linii
-		*	Optymalizacja funkcji SH1106_DrawRectangleFill() by dzia³a³a szybciej
-0.20	*	Zmieniono pliki czcionek na cpp i h, a definicje struktur fontR_info_t i fontR_def_t przeniesiono do pliku fontR_typedef
-		+	Poprawienie i optymalizacja funkcji Bitmap, dodanie trybu RMW
-		*	void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Pages, const uint8_t Pixels, SH1106_rmw_t RmwMode = RmwNone);
-0.19	+	void SH1106_Bitmap(const uint8_t * Bitmap, const uint8_t Length, const uint8_t Height);
-0.18	*	Wydzielenie tablicy bitmap wszystkich czcionek do progmem
-0.17	+	Nowa czcionka FontDos8x8
-		+	Konfiguracja wydzielona do pliku display_sh1106_config.h
-		+	Definicja SH1106_USE_RMW pozwalaj¹ca zrezygnowaæ z RMW jeœli nie ma takiej potrzeby
-0.16	+	Nowa czcionka FontDos16x8
-		*	Poprawienie b³êdu w SH1106_PrintChar(), bo nie epokazywa³o dobrze znaków o sta³ej szerokoœci i wysokoœci wiêkszej ni¿ 1 linia
-		+	Dodanie Spacing do struktury _fontR_definition, aby ustaliæ odstêp miêdzy znakami dla ró¿nych czcionek
-		*	Modyfikacja SH1106_PrintChar() i SH1106_TextWidth() aby uwzglêdniaæ zmienny odstêp miêdzy znakami
-0.15	*	Pliki czcionek przeniesione do katalogu Font
-		+	void SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r, SH1106_rmw_t RmwMode);
-		+	void SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode);
-		+	void SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, SH1106_rmw_t RmwMode);
-		*	Moyfikacja funkcji tekstowych, ¿eby obs³ugiwa³y RMW
-		*	void SH1106_PrintChar(uint8_t Char, uint8_t Negative = 0, SH1106_rmw_t RmwMode = RmwNone);
-		*	void SH1106_Text(const char * Text, SH1106_align_t Align = AlignNone, uint8_t Negative = 0, SH1106_rmw_t RmwMode = RmwNone);
-0.14	+	void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length, SH1106_rmw_t RmwMode = RmwNone);
-		+	void SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = RmwNone);
-		-	Niepotrzebne funkcje do inicjalizacji
-0.13	+	Obs³uga read modify write przez I2C
-			void SH1106_RmwStart(void);
-			void SH1106_RmwExe(uint8_t Byte, SH1106_rmw_t Mode);
-			void SH1106_RmwEnd()
-		+	void SH1106_DrawPixel(uint8_t x, uint8_t y, SH1106_rmw_t RmwMode = RmwNone);
-		+	void SH1106_DrawLineHorizontal(uint8_t x, uint8_t y, uint8_t Length, SH1106_rmw_t RmwMode = RmwNone);
-		+	static const uint8_t SH1106_InitSequence[]
-		*	Optymalizacja - odchudzenie programu o 464B
-0.12	*	Modyfikacja w celu zgodnoœci z wyœwietlaczem 1,3" i 0,9"
-		+	#define SH1106_OFFSET_X 2, bo jak siê okazuje inny wyœwietlacz tego samego typu ma offset w matrycy i obraz jest przesuniêty
-0.11	+	void SH1106_DrawLineHorizontal(uint8_t X, uint8_t Y, uint8_t Length);
-0.10	*	Analiza sekwencji inicjalizacyjnej, w niektórych przypadkach trzeba wstawiæ Twi_Write(SH1106_COMMAND_BYTE) pomiêdzy bajtami, np 
-			przy ustawianiu kontrastu
-0.09	*	Poprawienie b³êdu w SH1106_CursorLineSet przez który rozdzielczoœæ wyœwietlacza by³a ograniczona do 128x56
-		+	Dodatkowe definicje i opisy komend
-0.08	+	void SH1106_DrawPixel(uint8_t X, uint8_t Y);
-		+	void SH1106_ContrastSet(uint8_t Value);
-		+	void SH1106_OffsetComsSet(uint8_t Value);
-		+	void SH1106_CommonPadsHardware(bool Alternative);
-		*	B³¹d w konfiguracji wyœwietlacza - w rezultacie rozdzielczoœæ zosta³a zmniejszona do 128x56
-0.07	+	Wyœwietlanie tekstu w negatywie
-		+	void SH1106_Text(const char * Text, Align_t Align = None, uint8_t Negative = 0);
-		+	uint16_t SH1106_TextWidth(const char * Text);
-0.06	*	Zakoñczenie prac nad funkcj¹ wyœwietlaqj¹c¹ znaki o ró¿nej wysokoœci i szerokoœci
-		+	fontR_definition_t SH1106_Font; jako zmienna globalna do przechowywania nazwy u¿ywanej czcionki
-0.05	*	Rozbudowa funkcji SH1106_PrintCharUniversal by obs³ugiwa³a czcionki o ró¿nych wysokoœciach i szerokoœciach
-0.04	*	Rozbudowa funkcji do czcionek
-		*	Budowa uniwersalnego formatu czcionki
-		*	Poprawienie b³êdu w funkcji ustawiaj¹cej pozycjê kursora
-0.03	*	Uporz¹dkowanie podstawowych funkcji
-0.02	*	Dalszy rozwój
-0.01	*	Pierwsze wydanie
-
-HARDWARE
-		-	I2C
+		
+REQUIREMENTS
+		-	COMPONENT_I2C_MASTER or COMPONENT_SPI_MASTER
 */
 
 #ifndef DISPLAY_SH1106_H_
@@ -107,7 +42,7 @@ HARDWARE
 	#if COMPONENT_SPI_MASTER
 		#include	"../spi_master/spi_master.h"
 	#else
-		#error		"This module requires SPI_MASTER component"
+		#error		"This module requires COMPONENT_SPI_MASTER"
 	#endif
 #endif
 
@@ -115,64 +50,29 @@ HARDWARE
 	#if COMPONENT_I2C_MASTER
 		#include	"../i2c_master/i2c_master.h"
 	#else
-		#error		"This module requires I2C_MASTER component"
+		#error		"This module requires COMPONENT_I2C_MASTER"
 	#endif
 #endif
 
-//#if SH1106_FONT_CONSOLE8x6
-	#include	"font/console8x6.h"
-//#endif
+// Fonts
+#include	"font/console8x6.h"
+#include	"font/dos8x8.h"
+#include	"font/dos16x8.h"
+#include	"font/sans8.h"
+#include	"font/sans16.h"
+#include	"font/sans16B.h"
+#include	"font/sans16_PL.h"
+#include	"font/sans16B_PL.h"
+#include	"font/sans24.h"
+#include	"font/sans24B.h"
+#include	"font/sans24_PL.h"
+#include	"font/sans24B_PL.h"
 
-//#if SH1106_FONT_DOS8x8
-	#include	"font/dos8x8.h"
-//#endif
-
-//#if SH1106_FONT_DOS16x8
-	#include	"font/dos16x8.h"
-//#endif
-
-//#if SH1106_FONT_SANS8
-	#include	"font/sans8.h"
-//#endif
-
-//#if SH1106_FONT_SANS16
-	#include	"font/sans16.h"
-//#endif
-
-//#if SH1106_FONT_SANS16B
-	#include	"font/sans16B.h"
-//#endif
-
-//#if SH1106_FONT_SANS16_PL
-	#include	"font/sans16_PL.h"
-//#endif
-
-//#if SH1106_FONT_SANS16B_PL
-	#include	"font/sans16B_PL.h"
-//#endif
-
-//#if SH1106_FONT_SANS24
-	#include	"font/sans24.h"
-//#endif
-
-//#if SH1106_FONT_SANS24B
-	#include	"font/sans24B.h"
-//#endif
-
-//#if SH1106_FONT_SANS24_PL
-	#include	"font/sans24_PL.h"
-//#endif
-
-//#if SH1106_FONT_SANS24B_PL
-	#include	"font/sans24B_PL.h"
-//#endif
-
-#if SH1106_BITMAP_EXTRONIC_LOGO
-	#include	"bitmap/extronic_logo.h"
-#endif
+// Bitmaps
+#include	"bitmap/extronic_logo.h"
 
 /// DEBUG ONLY
-#include "../print/print.h"
+//#include "../print/print.h"
 
 
 // ========================================
@@ -183,8 +83,9 @@ void		SH1106_Init(void);
 void		SH1106_WriteCommand(const uint8_t Command);
 void		SH1106_WriteData(const uint8_t Data);
 void		SH1106_ContrastSet(const uint8_t Value);
-void		SH1106_Clear(const uint8_t Pattern = 0);					// Ustawienie Pattern innego ni¿ domyœlny pozwala zape³niæ wyœwietlacz wzorem
-void		SH1106_BackgroundGray(void);		// ?
+void		SH1106_Clear(const uint8_t Pattern = 0);
+void		SH1106_Fill(void);
+void		SH1106_Chessboard(void);
 
 // ========================================
 // Cursor setting
@@ -198,16 +99,23 @@ void		SH1106_CursorPageSet(uint8_t Page);
 // ========================================
 // Read-Modify-Write Mode
 // ========================================
-void		SH1106_RmwStart(void);
-void		SH1106_RmwExecute(uint8_t Byte);
-void		SH1106_RmwEnd();
+
+#if SH1106_USE_RMW
+	void	SH1106_RmwStart(void);
+	void	SH1106_RmwExecute(uint8_t Byte);
+	void	SH1106_RmwEnd();
+#endif
 
 // ========================================
-// Drawing
+// Colors (black & white)
 // ========================================
 
 void		SH1106_ColorSet(uint8_t Color);
 uint8_t		SH1106_ColorGet(void);
+
+// ========================================
+// Drawing
+// ========================================
 
 void		SH1106_DrawPixel(uint8_t x, uint8_t y);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
@@ -216,6 +124,11 @@ void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y);
 void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
+
+// ========================================
+// Bitmap
+// ========================================
+
 void		SH1106_Bitmap(const SH1106_Bitmap_t * Bitmap);
 
 // ========================================
@@ -233,8 +146,6 @@ void		SH1106_Text(const char * Text, SH1106_align_t Align = SH1106_AlignNone);
 // ========================================
 
 void		SH1106_Slash(void);
-void		SH1106_Chessboard(void);
-void		SH1106_Fill(void);
 
 #endif /* DISPLAY_SH1106_H_ */
 #endif

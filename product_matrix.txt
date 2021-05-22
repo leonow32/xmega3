@@ -9,7 +9,7 @@ DisplaySH1106																				x
 DisplaySSD1351		x															x
 DS3231				x
 EEPROM				x			x			x			x			x
-I2C Master			x						o
+I2C Master			x						o												x
 MCP9808				x
 Mem23				x
 Mem24				x
