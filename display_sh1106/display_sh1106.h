@@ -1,12 +1,9 @@
 /*
 DESCRIPTION
-		-	Wyœwietlacz SH1106 z interfejsem I2C/SPI
+		-	Display with SH1106 driver
 		
 TODO
 		-	None
-		
-UWAGI
-		-	Zapisywanie w trubie RMW (Read-Mofidy-Write) zajmuje ponad 6x wiêcej czasu ni¿ w trybie normalnym
 		
 PERFORMANCE TEST
 		-	SPI mode, clock frequency 10 MHz
@@ -14,12 +11,12 @@ PERFORMANCE TEST
 			-	Fill	1024 us, 976 FPS
 			-	Chess	1824 us, 548 FPS
 			-	Pixel	11 us, 90909 FPS
-			I2C mode withour RMW, frequency 400 kHz
+			I2C mode without RMW, frequency 400 kHz
 			-	Clear	24 ms, 41 FPS
 			-	Fill	24 ms, 41 FPS
 			-	Chess	24 ms, 41 FPS
 			-	Pixel	250 us, 4000 FPS
-			I2C mode withour RMW, frequency 1 MHz
+			I2C mode without RMW, frequency 1 MHz
 			-	Clear	11.5 ms, 87 FPS
 			-	Fill	11,5 ms, 87 FPS
 			-	Chess	11 ms, 90 FPS
@@ -71,10 +68,6 @@ REQUIREMENTS
 // Bitmaps
 #include	"bitmap/extronic_logo.h"
 
-/// DEBUG ONLY
-//#include "../print/print.h"
-
-
 // ========================================
 // Basic functions
 // ========================================
@@ -119,7 +112,7 @@ uint8_t		SH1106_ColorGet(void);
 
 void		SH1106_DrawPixel(uint8_t x, uint8_t y);
 void		SH1106_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
-void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);		// nie uwzglednia SH1106_Color
+void		SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
 void		SH1106_DrawLine(uint8_t x0, uint8_t y0, uint8_t x, uint8_t y);
 void		SH1106_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SH1106_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);

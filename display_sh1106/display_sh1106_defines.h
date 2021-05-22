@@ -9,7 +9,7 @@
 #define		SH1106_DISPLAY_SIZE_Y			64
 #define		SH1106_PAGE_HEIGHT				8
 #define		SH1106_PAGE_COUNT				8
-#define		SH1106_OFFSET_X					2			// Offset poziomy - ustawiæ jeœli matryca OLED jest przesuniêta wglêdem wspó³rzêdnych sterownika
+#define		SH1106_OFFSET_X					2			// Horizontal offset - change this if the image doesn't appear on the center of the screen
 
 // ========================================
 // Display operation codes
@@ -59,21 +59,20 @@ enum SH1106_align_t {
 	SH1106_AlignCenter
 };
 
-// Struktura d³ugoœci i offsetów znaków w tabeli bitmap
 struct SH1106_CharDef_t {
-	uint8_t		Width;						// Szerokoœæ znaku w pikselach
-	uint16_t	Offset;						// Adres w tablicy bitmap
+	uint8_t		Width;						// Character width
+	uint16_t	Offset;						// Address in characters bitmap array
 };
 
 // Struktura definicji czcionki
 struct SH1106_FontDef_t {
-	uint8_t Height;							// Wysokoœæ zanku w liniach po 8 pixeli
-	uint8_t Width;							// Je¿eli czcionka ma sta³¹ szerokoœæ, jeœli nie to =0
-	uint8_t Spacing;						// Odstêp miêdzy znakami
-	uint8_t FirstChar;						// Pierwszy znak, jaki znajduje siê w tablicy Bitmaps
-	uint8_t LastChar;						// Ostatni znak, jaki znajduje siê w tablicy Bitmaps
-	const SH1106_CharDef_t * Descriptors;		// Tablica szerokoœci i offsetów, jeœli Width jest ustalone to wstawiæ NULL
-	const uint8_t * Bitmaps;				// Tablica znaków
+	uint8_t Height;							// Character height in lines of 8 pixels
+	uint8_t Width;							// Common width of characters, if character width is not constant then place 0
+	uint8_t Spacing;						// Character spacing
+	uint8_t FirstChar;						// First character in bitmap array
+	uint8_t LastChar;						// Last character in bitmap array
+	const SH1106_CharDef_t * Descriptors;	// Pointer to table with width od each character, set to null if width is the same for all characters
+	const uint8_t * Bitmaps;				// Bitmap array
 };
 
 // ========================================
@@ -82,16 +81,9 @@ struct SH1106_FontDef_t {
 
 // Bitmap definition
 struct SH1106_Bitmap_t {
-	const uint8_t Height;						// Height in pixels
-	const uint8_t Width;						// Width in pixels
-	const uint8_t * Array;						// Pointer to bitmap array
+	const uint8_t Height;					// Height in pixels
+	const uint8_t Width;					// Width in pixels
+	const uint8_t * Array;					// Pointer to bitmap array
 };
-
-// ========================================
-// Other stuff
-// ========================================
-
-
-
 
 #endif /* DISPLAY_SH1106_DEFINES_H_ */
