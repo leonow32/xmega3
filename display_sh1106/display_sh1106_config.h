@@ -12,7 +12,7 @@
 	#define		SH1106_USE_SPI					0
 	
 	// Config
-	#define		SH1106_USE_RMW					1	// read-modify-write for I2C interface only
+	#define		SH1106_USE_RMW					1	// read-modify-write for I2C interface only, takes about 6 times longer than without RMW
 	#define		SH1106_USE_DEMO_COMMANDS		1
 	#define		SH1106_CLEAR_AFERT_INIT			1
 	#define		SH1106_DEFAULT_CONTRAST			255
