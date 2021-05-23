@@ -69,6 +69,24 @@
 #endif
 
 // ========================================
+// Demo Display SSD1681
+// ========================================
+
+#if PRODUCT_SSD1681
+	#define			SPI_PORTA_46					1
+	#define			SPI_MASTER_USE_DEMO_COMMANDS	1
+	
+	// Pinout of CS pin only for demo commands (all SPI devices should have configuration of CS pin in their ouw config files)
+	#if SPI_MASTER_USE_DEMO_COMMANDS
+		#define		SPI_DEMO_DIR_SET				VPORTC.DIR	|=	PIN3_bm
+		#define		SPI_DEMO_CHIP_SELECT			VPORTC.OUT	&= ~PIN3_bm
+		#define		SPI_DEMO_CHIP_DESELECT			VPORTC.OUT	|=  PIN3_bm
+	#endif
+	
+	#define			SPI_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 
