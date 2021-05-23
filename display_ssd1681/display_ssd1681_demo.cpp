@@ -12,6 +12,16 @@ void SSD1681_CmdData(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
+void SSD1681_CmdInit(uint8_t argc, uint8_t * argv[]) {
+	SSD1681_Init();
+	Print_ResponseOK();
+}
+
+void SSD1681_CmdRefresh(uint8_t argc, uint8_t * argv[]) {
+	SSD1681_Refresh();
+	Print_ResponseOK();
+}
+
 /*
 // Clear display
 void SSD1681_CmdClear(uint8_t argc, uint8_t * argv[]) {

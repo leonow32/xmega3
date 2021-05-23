@@ -78,8 +78,10 @@ HARDWARE
 // ========================================
 
 void		SSD1681_Init(void);
-// void		SSD1681_WriteCommand(const uint8_t Command);
-// void		SSD1681_WriteData(const uint8_t Data);
+void		SSD1681_WriteCommand(const uint8_t Command);
+void		SSD1681_WriteData(const uint8_t Data);
+void		SSD1681_WriteLUT(const uint8_t * LUT);
+void		SSD1681_Refresh(void);
 // void		SSD1681_WriteRamEnable(void);
 // void		SSD1681_ContrastSet(const uint8_t Value);
 // void		SSD1681_Clear(void);

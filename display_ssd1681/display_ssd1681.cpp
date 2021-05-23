@@ -6,20 +6,37 @@
 // Global variables
 // ========================================
 
-static uint8_t SSD1681_CursorX			= 0;
-static uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_X - 1;
-static uint8_t SSD1681_CursorY			= 0;
-static uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
+// static uint8_t SSD1681_CursorX			= 0;
+// static uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_X - 1;
+// static uint8_t SSD1681_CursorY			= 0;
+// static uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
 //const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
-static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
-static uint8_t SSD1681_ColorFrontL		= 0xFF;
-static uint8_t SSD1681_ColorBackH		= 0x00;		// Black
-static uint8_t SSD1681_ColorBackL		= 0x00;
+// static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
+// static uint8_t SSD1681_ColorFrontL		= 0xFF;
+// static uint8_t SSD1681_ColorBackH		= 0x00;		// Black
+// static uint8_t SSD1681_ColorBackL		= 0x00;
+
+const uint8_t lut_full_update[] =
+{
+	0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22,
+	0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99, 0x88,
+	0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51,
+	0x35, 0x51, 0x51, 0x19, 0x01, 0x00
+};
+
+const uint8_t lut_partial_update[] =
+{
+	0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
 
 // Display config for init function
 static const uint8_t SSD1681_InitSequence[] = {
-	1,	SSD1681_SET_LOCK_COMMAND,
+	
+/*	1,	SSD1681_SET_LOCK_COMMAND,
 	0,	0x12,
 	
 	1,	SSD1681_SET_LOCK_COMMAND,			// Command lock
@@ -97,6 +114,7 @@ static const uint8_t SSD1681_InitSequence[] = {
 	#if SSD1681_CLEAR_AFERT_INIT == 0
 	1, SSD1681_SLEEP_MODE_OFF,				// Display on
 	#endif
+	*/
 };
 
 // ========================================
@@ -109,10 +127,29 @@ void SSD1681_Init(void) {
 	SSD1681_CHIP_SELECT_INIT;
 	SSD1681_DC_INIT;
 	
-	const uint8_t * Index = SSD1681_InitSequence;
-	const uint8_t * Limit = SSD1681_InitSequence + sizeof(SSD1681_InitSequence);
+	SSD1681_WriteCommand(DRIVER_OUTPUT_CONTROL);
+	SSD1681_WriteData((SSD1681_DISPLAY_SIZE_Y - 1) & 0xFF);
+	SSD1681_WriteData(((SSD1681_DISPLAY_SIZE_Y - 1) >> 8) & 0xFF);
+	SSD1681_WriteData(0x00);                     // GD = 0; SM = 0; TB = 0;
+	SSD1681_WriteCommand(BOOSTER_SOFT_START_CONTROL);
+	SSD1681_WriteData(0xD7);
+	SSD1681_WriteData(0xD6);
+	SSD1681_WriteData(0x9D);
+	SSD1681_WriteCommand(WRITE_VCOM_REGISTER);
+	SSD1681_WriteData(0xA8);                     // VCOM 7C
+	SSD1681_WriteCommand(SET_DUMMY_LINE_PERIOD);
+	SSD1681_WriteData(0x1A);                     // 4 dummy lines per gate
+	SSD1681_WriteCommand(SET_GATE_TIME);
+	SSD1681_WriteData(0x08);                     // 2us per line
+	SSD1681_WriteCommand(DATA_ENTRY_MODE_SETTING);
+	SSD1681_WriteData(0x03);                     // X increment; Y increment
 	
-	SSD1681_CHIP_SELECT;
+	SSD1681_WriteLUT(lut_full_update);
+	
+//	const uint8_t * Index = SSD1681_InitSequence;
+//	const uint8_t * Limit = SSD1681_InitSequence + sizeof(SSD1681_InitSequence);
+	
+//	SSD1681_CHIP_SELECT;
 	
 	// Transmit array SSD1681_InitSequence
 // 	while(Index != Limit) {
@@ -121,7 +158,7 @@ void SSD1681_Init(void) {
 // 		Spi_1(*Index++);
 // 	}
 	
-	SSD1681_CHIP_DESELECT;
+//	SSD1681_CHIP_DESELECT;
 	
 	#if SSD1681_CLEAR_AFERT_INIT
 //	SSD1681_Clear();
@@ -143,6 +180,24 @@ void SSD1681_WriteData(const uint8_t Data) {
 	SSD1681_DC_DATA;
 	Spi_1(Data);
 	SSD1681_CHIP_DESELECT;
+}
+
+// Send LUT
+void SSD1681_WriteLUT(const uint8_t * LUT) {
+	SSD1681_WriteCommand(WRITE_LUT_REGISTER);
+	/* the length of look-up table is 30 bytes */
+	for (uint8_t i = 0; i < 30; i++) {
+		SSD1681_WriteData(LUT[i]);
+	}
+}
+
+// Refresh display
+void SSD1681_Refresh(void) {
+	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
+	SSD1681_WriteData(0xC4);
+	SSD1681_WriteCommand(MASTER_ACTIVATION);
+	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
+	//WaitUntilIdle();
 }
 
 #if 0

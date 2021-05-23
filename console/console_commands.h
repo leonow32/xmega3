@@ -188,6 +188,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if SSD1681_USE_DEMO_COMMANDS
 	{"cmd",				SSD1681_CmdCommand},
 	{"data",			SSD1681_CmdData},
+	{"init",			SSD1681_CmdInit},
+	{"refresh",			SSD1681_CmdRefresh},
 #endif
 
 // ========================================

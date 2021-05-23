@@ -31,7 +31,8 @@
 
 void SSD1681_CmdCommand(uint8_t argc, uint8_t * argv[]);
 void SSD1681_CmdData(uint8_t argc, uint8_t * argv[]);
-
+void SSD1681_CmdInit(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdRefresh(uint8_t argc, uint8_t * argv[]);
 // void SSD1681_CmdClear(uint8_t argc, uint8_t * argv[]);
 // void SSD1681_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]);
 // void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]);
