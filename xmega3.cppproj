@@ -901,6 +901,24 @@
     <Compile Include="display_ssd1351\font\sans24_PL.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681_demo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1681\display_ssd1681_demo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ds3231\ds3231.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -1111,6 +1129,8 @@
     <Folder Include="display_sh1106\font" />
     <Folder Include="display_ssd1351\font" />
     <Folder Include="display_ssd1351\bitmap" />
+    <Folder Include="display_ssd1681\bitmap" />
+    <Folder Include="display_ssd1681\font" />
     <Folder Include="eeprom" />
     <Folder Include="i2c_master" />
     <Folder Include="mcp9808" />
@@ -1120,6 +1140,7 @@
     <Folder Include="ds3231" />
     <Folder Include="display_ssd1351" />
     <Folder Include="display_sh1106" />
+    <Folder Include="display_ssd1681" />
     <Folder Include="uart_monitor" />
     <Folder Include="spi_master" />
     <Folder Include="print" />

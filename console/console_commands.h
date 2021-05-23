@@ -19,6 +19,10 @@
 	#include	"../display_ssd1351/display_ssd1351_demo.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1681
+	#include	"../display_ssd1681/display_ssd1681_demo.h"
+#endif
+
 #if COMPONENT_DS3231
 	#include	"../ds3231/ds3231_demo.h"
 #endif
@@ -135,7 +139,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 #endif
 
 // ========================================
-// Display SSD1350 demo
+// Display SSD1351 demo
 // ========================================
 
 #if SSD1351_USE_DEMO_COMMANDS
@@ -175,6 +179,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 	#if SSD1351_FONT_DOS8x8 || SSD1351_FONT_DOS16x8
 		{"face",		SSD1351_CmdFace},
 	#endif
+#endif
+
+// ========================================
+// Display SSD1681 demo
+// ========================================
+
+#if SSD1681_USE_DEMO_COMMANDS
+	{"cmd",				SSD1681_CmdCommand},
+	{"data",			SSD1681_CmdData},
 #endif
 
 // ========================================
