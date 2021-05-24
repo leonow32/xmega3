@@ -118,15 +118,8 @@ void		SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1);
 // Colors
 // ========================================
 
-// uint16_t	SSD1681_ColorFrontGet(void);
-// void		SSD1681_ColorFrontSet(uint16_t ColorRGB565);
-// void		SSD1681_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B);
-// uint16_t	SSD1681_ColorBackGet(void);
-// void		SSD1681_ColorBackSet(uint16_t ColorRGB565);
-// void		SSD1681_ColorBackSet(uint8_t R, uint8_t G, uint8_t B);
-// uint16_t	SSD1681_ColorNameToRGB565(uint8_t ColorName);
-// uint16_t	SSD1681_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B);
-// uint16_t	SSD1681_ColorRGB332toRGB565(uint8_t Color332);
+SSD1681_Color_t SSD1681_ColorGet(void);
+void		SSD1681_ColorSet(SSD1681_Color_t Color);
 
 // ========================================
 // Drawing

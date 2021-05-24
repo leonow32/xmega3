@@ -197,6 +197,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"cur",				SSD1681_CmdCursor},
 	{"area",			SSD1681_CmdActiveArea},
 	
+	{"color",			SSD1681_CmdColor},
+	
 	{"test",			SSD1681_CmdTest},
 #endif
 

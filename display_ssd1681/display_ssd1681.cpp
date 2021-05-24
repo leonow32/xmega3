@@ -11,22 +11,21 @@ uint8_t SSD1681_CursorP_Max		= SSD1681_PAGE_COUNT - 1;
 uint8_t SSD1681_CursorY			= 0;
 uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
+static SSD1681_Color_t SSD1681_Color = SSD1681_ColorBlack;
 //const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
 // static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
 // static uint8_t SSD1681_ColorFrontL		= 0xFF;
 // static uint8_t SSD1681_ColorBackH		= 0x00;		// Black
 // static uint8_t SSD1681_ColorBackL		= 0x00;
 
-const uint8_t lut_full_update[] =
-{
+const uint8_t lut_full_update[] = {
 	0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22,
 	0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99, 0x88,
 	0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51,
 	0x35, 0x51, 0x51, 0x19, 0x01, 0x00
 };
 
-const uint8_t lut_partial_update[] =
-{
+const uint8_t lut_partial_update[] = {
 	0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12,
@@ -34,9 +33,6 @@ const uint8_t lut_partial_update[] =
 };
 
 // Display config for init function
-
-
-
 static const uint8_t SSD1681_InitSequence[] = {
 	
 	SSD1681_COMMAND,	DRIVER_OUTPUT_CONTROL,
@@ -148,16 +144,6 @@ void SSD1681_Refresh(void) {
 	SSD1681_DC_COMMAND;
 	Spi_2(MASTER_ACTIVATION, TERMINATE_FRAME_READ_WRITE);
 	SSD1681_CHIP_DESELECT;
-// 	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
-// 	SSD1681_WriteData(0xC4);
-// 	SSD1681_WriteCommand(MASTER_ACTIVATION);
-// 	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
-//	SSD1681_WaitUntilReady();
-// 	_delay_ms(500);
-// 	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
-// 	SSD1681_WriteData(0xC4);
-// 	SSD1681_WriteCommand(MASTER_ACTIVATION);
-// 	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
 }
 
 // Clear display
@@ -308,114 +294,22 @@ void SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1) {
 	SSD1681_CHIP_DESELECT;
 }
 
-#if 0
+
 // ========================================
 // Colors
 // ========================================
 
 // Get foreground color
-uint16_t SSD1681_ColorFrontGet(void) {
-	return (uint16_t)SSD1681_ColorFrontH << 8 | SSD1681_ColorFrontL;
+SSD1681_Color_t SSD1681_ColorGet(void) {
+	return SSD1681_Color;
 }
 
 // Set background color
-void SSD1681_ColorFrontSet(uint16_t ColorRGB565) {
-	SSD1681_ColorFrontH = (uint8_t)(ColorRGB565 >> 8);
-	SSD1681_ColorFrontL = (uint8_t)(ColorRGB565 & 0x00FF);
+void SSD1681_ColorSet(SSD1681_Color_t Color) {
+	SSD1681_Color = Color;
 }
 
-// Set foreground color, each color speparate
-void SSD1681_ColorFrontSet(uint8_t R, uint8_t G, uint8_t B) {
-	
-	// Convert RGB888 to RGB565
-	R = R & 0b11111000;
-	G = G & 0b11111100;
-	B = B & 0b11111000;
-	SSD1681_ColorFrontH = R | (G >> 5);
-	SSD1681_ColorFrontL = (G << 3) | (B >> 3);
-}
-
-// Get foreground color as RGB565
-uint16_t SSD1681_ColorBackGet(void) {
-	return (uint16_t)SSD1681_ColorBackH << 8 | SSD1681_ColorBackL;
-}
-
-// Set background color
-void SSD1681_ColorBackSet(uint16_t ColorRGB565) {
-	SSD1681_ColorBackH = (uint8_t)(ColorRGB565 >> 8);
-	SSD1681_ColorBackL = (uint8_t)(ColorRGB565 & 0x00FF);
-}
-
-// Set background color, each color speparate
-void SSD1681_ColorBackSet(uint8_t R, uint8_t G, uint8_t B) {
-	
-	// Convert RGB888 to RGB565
-	R = R & 0b11111000;
-	G = G & 0b11111100;
-	B = B & 0b11111000;
-	SSD1681_ColorBackH = R | (G >> 5);
-	SSD1681_ColorBackL = (G << 3) | (B >> 3);
-}
-
-// Convert color name to RGB565
-uint16_t SSD1681_ColorNameToRGB565(uint8_t ColorName) {
-	switch(ColorName) {
-		case SSD1681_COLOR_BLACK_ID:			return SSD1681_COLOR_BLACK_RGB565;
-		case SSD1681_COLOR_RED_ID:				return SSD1681_COLOR_RED_RGB565;
-		case SSD1681_COLOR_GREEN_ID:			return SSD1681_COLOR_GREEN_RGB565;
-		case SSD1681_COLOR_YELLOW_ID:			return SSD1681_COLOR_YELLOW_RGB565;
-		case SSD1681_COLOR_BLUE_ID:				return SSD1681_COLOR_BLUE_RGB565;
-		case SSD1681_COLOR_MAGENTA_ID:			return SSD1681_COLOR_MAGENTA_RGB565;
-		case SSD1681_COLOR_CYAN_ID:				return SSD1681_COLOR_CYAN_RGB565;
-		case SSD1681_COLOR_WHITE_ID:			return SSD1681_COLOR_WHITE_RGB565;
-		case SSD1681_COLOR_GRAY_ID:				return SSD1681_COLOR_GRAY_RGB565;
-		case SSD1681_COLOR_LIGHTRED_ID:			return SSD1681_COLOR_LIGHTRED_RGB565;
-		case SSD1681_COLOR_LIGHTGREEN_ID:		return SSD1681_COLOR_LIGHTGREEN_RGB565;
-		case SSD1681_COLOR_LIGHTYELLOW_ID:		return SSD1681_COLOR_LIGHTYELLOW_RGB565;
-		case SSD1681_COLOR_LIGHTBLUE_ID:		return SSD1681_COLOR_LIGHTBLUE_RGB565;
-		case SSD1681_COLOR_LIGHTMAGENTA_ID:		return SSD1681_COLOR_LIGHTMAGENTA_RGB565;
-		case SSD1681_COLOR_LIGHTCYAN_ID:		return SSD1681_COLOR_LIGHTCYAN_RGB565;
-		case SSD1681_COLOR_LIGHTGRAY_ID:		return SSD1681_COLOR_LIGHTGRAY_RGB565;
-		default:								return 0;
-	}
-}
-
-// Convert RGB888 na RGB565
-uint16_t SSD1681_ColorRGB888toRGB565(uint8_t R, uint8_t G, uint8_t B) {
-	
-	R = R & 0b11111000;
-	G = G & 0b11111100;
-	B = B & 0b11111000;
-	uint8_t ColorH = R | (G >> 5);
-	uint8_t ColorL = (G << 3) | (B >> 3);
-	
-	return ((uint16_t)ColorH << 8) | ColorL;
-}
-
-// Convert RGB323 na RGB565
-uint16_t SSD1681_ColorRGB332toRGB565(uint8_t Color332) {
-	
-	// Tabele konwersji palety
-	const uint8_t b3to6lookup[8] = {0, 9, 18, 27, 36, 45, 54, 63};
-	const uint8_t b3to5lookup[8] = {0, 4, 9, 13, 18, 22, 27, 31};
-	const uint8_t b2to5lookup[4] = {0, 10, 21, 31};
-	
-	uint16_t red, green, blue;
-	
-	red = (Color332 & 0xe0) >> 5;			// rgb332 3 red bits now right justified
-	red = (uint16_t)b3to5lookup[red];		// 3 bits converted to 5 bits
-	red = red << 11;						// red bits now 5 MSB bits
-	
-	green = (Color332 & 0x1c) >> 2;			// rgb332 3 green bits now right justified
-	green = (uint16_t)b3to6lookup[green];	// 3 bits converted to 6 bits
-	green = green << 5;						// green bits now 6 "middle" bits
-	
-	blue = Color332 & 0x03;					// rgb332 2 blue bits are right justified
-	blue = (uint16_t)b2to5lookup[blue];		// 2 bits converted to 5 bits, right justified
-	
-	return (uint16_t)(red | green | blue);
-}
-
+#if 0
 // ========================================
 // Drawing of geometric shapes
 // ========================================

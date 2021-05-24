@@ -26,8 +26,8 @@
 	#define		SSD1681_BUSY_READ						(VPORTD.IN & PIN6_bm)
 	
 	// Config
-	#define		SSD1681_DEFAULT_CONTRAST				255		// ?
 	#define		SSD1681_CLEAR_AFERT_INIT				1
+	#define		SSD1681_USE_TRI_COLOR_DISPLAY			0
 	#define		SSD1681_USE_DEMO_COMMANDS				1
 	
 	// Fonts

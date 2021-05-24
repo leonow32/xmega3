@@ -150,6 +150,38 @@ void SSD1681_CmdChessboard(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_CursorSet(0, 0);
 	Print_ResponseOK();
 }
+
+// ========================================
+// Colors
+// ========================================
+
+void SSD1681_CmdColor(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments, then print actual selected color name
+	if(argc == 1) {
+		switch(SSD1681_ColorGet()) {
+			case SSD1681_ColorBlack:		Print("Black");				return;
+			case SSD1681_ColorWhite:		Print("White");				return;
+			#if SSD1681_USE_TRI_COLOR_DISPLAY
+				case SSD1681_ColorRed:		Print("Red");				return;
+			#endif
+			default:						Print_ResponseUnknown();	return;
+		}
+	}
+	else {
+		switch(*argv[1]) {
+			case 'b':						SSD1681_ColorSet(SSD1681_ColorBlack);	break;
+			case 'w':						SSD1681_ColorSet(SSD1681_ColorWhite);	break;
+			#if SSD1681_USE_TRI_COLOR_DISPLAY
+				case 'r':					SSD1681_ColorSet(SSD1681_ColorRed);		break;
+			#endif
+			default:						Print_ResponseError();					return;
+		}
+	}
+	Print_ResponseOK();
+}
+
+
 /*
 // Set contrast
 void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]) {

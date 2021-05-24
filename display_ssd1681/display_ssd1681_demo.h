@@ -38,8 +38,15 @@ void SSD1681_CmdClear(uint8_t argc, uint8_t * argv[]);
 void SSD1681_CmdFill(uint8_t argc, uint8_t * argv[]);
 void SSD1681_CmdChessboard(uint8_t argc, uint8_t * argv[]);
 
+
 void SSD1681_CmdCursor(uint8_t argc, uint8_t * argv[]);
 void SSD1681_CmdActiveArea(uint8_t argc, uint8_t * argv[]);
+
+// ========================================
+// Colors
+// ========================================
+
+void SSD1681_CmdColor(uint8_t argc, uint8_t * argv[]);
 
 // void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]);
 // void SSD1681_CmdPixel(uint8_t argc, uint8_t * argv[]);

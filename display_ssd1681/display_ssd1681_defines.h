@@ -76,6 +76,15 @@
 // Color definitions
 // ========================================
 
+// Enum to select one of possible color modes
+enum SSD1681_Color_t {
+	SSD1681_ColorWhite = 0,
+	SSD1681_ColorBlack = 1,
+	#if SSD1681_USE_TRI_COLOR_DISPLAY
+		SSD1681_ColorRed = 2,
+	#endif
+};
+
 // RGB565 palette								0bRRRRRGGGGGGBBBBB
 // #define		SSD1681_COLOR_BLACK_ID				0
 // #define		SSD1681_COLOR_BLACK_RGB565			0b0000000000000000
@@ -145,11 +154,11 @@ struct SSD1681_FontDef_t {
 // ========================================
 
 // Enum to select one of possible color modes
-enum SSD1681_Color_t {
-	SSD1681_ColorMono,							// 1 byte = 8 pixels
-	SSD1681_ColorRGB332,						// 1 pixel = 1 byte,  0bRRRGGGBB
-	SSD1681_ColorRGB565							// 1 pixel = 2 bytes, 0bRRRRRGGGGGGBBBBB
-};
+// enum SSD1681_Color_t {
+// 	SSD1681_ColorMono,							// 1 byte = 8 pixels
+// 	SSD1681_ColorRGB332,						// 1 pixel = 1 byte,  0bRRRGGGBB
+// 	SSD1681_ColorRGB565							// 1 pixel = 2 bytes, 0bRRRRRGGGGGGBBBBB
+// };
 
 // Bitmap definition
 struct SSD1681_Bitmap_t {
