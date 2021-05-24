@@ -7,6 +7,8 @@
 
 #define		SSD1681_DISPLAY_SIZE_X				200
 #define		SSD1681_DISPLAY_SIZE_Y				200
+#define		SSD1681_PAGE_HEIGHT					8
+#define		SSD1681_PAGE_COUNT					25		// Page is a horizontal rectangle of 8x200 pixels and each byte corresponds to 8 pixels in vertical
 
 // ========================================
 // Display operation codes

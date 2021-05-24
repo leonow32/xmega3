@@ -6,8 +6,8 @@
 // Global variables
 // ========================================
 
-uint8_t SSD1681_CursorX			= 0;
-uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_X - 1;
+uint8_t SSD1681_CursorP			= 0;
+uint8_t SSD1681_CursorP_Max		= SSD1681_PAGE_COUNT - 1;
 uint8_t SSD1681_CursorY			= 0;
 uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
@@ -143,7 +143,9 @@ void SSD1681_Init(void) {
 	SSD1681_WriteCommand(SET_GATE_TIME);
 	SSD1681_WriteData(0x08);                     // 2us per line
 	SSD1681_WriteCommand(DATA_ENTRY_MODE_SETTING);
-	SSD1681_WriteData(0x03);                     // X increment; Y increment
+	//SSD1681_WriteData(0b00000111);                     // X increment; Y increment, data increment in Y direction
+	SSD1681_WriteData(0b00000110);                     // X decrement; Y increment, data increment in Y direction
+	
 	
 	SSD1681_WriteLUT(lut_full_update);
 	
@@ -216,33 +218,55 @@ void SSD1681_Refresh(void) {
 void SSD1681_Clear(void) {
 	
 	// Set active area to fill all the screen
-	SSD1681_ActiveAreaSet(0, 0, SSD1681_DISPLAY_SIZE_X-1, SSD1681_DISPLAY_SIZE_Y-1);
-	SSD1681_CursorSet(0, 0);
+	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
 	
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
-	SSD1681_DC_DATA;
-	Spi_Repeat(0xFF, SSD1681_DISPLAY_SIZE_X * (SSD1681_DISPLAY_SIZE_Y / 8));
-	SSD1681_CHIP_DESELECT;
+	// Loop for each page
+	for(uint8_t Page = 0; Page < SSD1681_PAGE_COUNT; Page++) {
+		SSD1681_CursorSet(Page, 0);
+		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(WRITE_RAM);
+		SSD1681_DC_DATA;
+		Spi_Repeat(0xFF, SSD1681_DISPLAY_SIZE_Y);
+		SSD1681_CHIP_DESELECT;
+	}
 }
 
 // Fill display
 void SSD1681_Fill(void) {
 	
 	// Set active area to fill all the screen
-	SSD1681_ActiveAreaSet(0, 0, SSD1681_DISPLAY_SIZE_X-1, SSD1681_DISPLAY_SIZE_Y-1);
-	SSD1681_CursorSet(0, 0);
+	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
 	
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
-	SSD1681_DC_DATA;
-	Spi_Repeat(0x00, SSD1681_DISPLAY_SIZE_X * (SSD1681_DISPLAY_SIZE_Y / 8) / 4);
-	SSD1681_CHIP_DESELECT;
+	// Loop for each page
+	for(uint8_t Page = 0; Page < SSD1681_PAGE_COUNT; Page++) {
+		SSD1681_CursorSet(Page, 0);
+		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(WRITE_RAM);
+		SSD1681_DC_DATA;
+		Spi_Repeat(0x00, SSD1681_DISPLAY_SIZE_Y);
+		SSD1681_CHIP_DESELECT;
+	}
 }
 
-
+// Print chessboard on the display
+void SSD1681_Chessboard(void) {
+	
+	// Set active area to fill all the screen
+	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
+		
+	// Loop for each page
+	for(uint8_t Page = 0; Page < SSD1681_PAGE_COUNT; Page++) {
+		SSD1681_CursorSet(Page, 0);
+		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(WRITE_RAM);
+		SSD1681_DC_DATA;
+		Spi_Repeat(0b10101010, 0b01010101, SSD1681_DISPLAY_SIZE_Y / 2);
+		SSD1681_CHIP_DESELECT;
+	}
+}
 
 
 // Allow to display data
@@ -254,61 +278,28 @@ void SSD1681_Fill(void) {
 // }
 
 
-
-
-// Print chessboard on the display
-void SSD1681_Chessboard(void) {
-	
-	// For all range of X
-	SSD1681_ActiveAreaXSet(0, SSD1681_DISPLAY_SIZE_X-1);
-	
-	// For all range of Y
-	for(uint8_t y=0; y<SSD1681_DISPLAY_SIZE_Y; y++) {
-		SSD1681_ActiveAreaYSet(y, y);
-		SSD1681_CursorXSet(0);
-		SSD1681_CursorYSet(y);
-		SSD1681_CHIP_SELECT;
-		if(y & 0x01) {
-			// Odd lines
-			for(uint8_t x=0; x<(SSD1681_DISPLAY_SIZE_X/2); x++) {
-				Spi_1(0b10101010);
-			}
-		}
-		else {
-			// Even lines
-			for(uint8_t x=0; x<(SSD1681_DISPLAY_SIZE_X/2); x++) {
-				Spi_1(0b01010101);
-			}
-		}
-		SSD1681_CHIP_DESELECT;
-	}
-	
-	SSD1681_ActiveAreaSet(0, SSD1681_DISPLAY_SIZE_X-1, 0, SSD1681_DISPLAY_SIZE_Y-1);
-}
-
-
 // ========================================
 // Cursor position
 // ========================================
 
-void SSD1681_CursorSet(uint8_t x, uint8_t y) {
-	SSD1681_CursorX = x < SSD1681_DISPLAY_SIZE_X ? x : SSD1681_DISPLAY_SIZE_X-1;
+void SSD1681_CursorSet(uint8_t p, uint8_t y) {
+	SSD1681_CursorP = p < SSD1681_PAGE_COUNT ? p : SSD1681_PAGE_COUNT-1;
 	SSD1681_CursorY = y < SSD1681_DISPLAY_SIZE_Y ? y : SSD1681_DISPLAY_SIZE_Y-1;
-	SSD1681_CursorXSet(SSD1681_CursorX);
+	SSD1681_CursorPageSet(SSD1681_CursorP);
 	SSD1681_CursorYSet(SSD1681_CursorY);
 }
 
-uint8_t SSD1681_CursorXGet(void) {
-	return SSD1681_CursorX;
+uint8_t SSD1681_CursorPageGet(void) {
+	return SSD1681_CursorP;
 }
 
-void SSD1681_CursorXSet(uint8_t x) {
-	SSD1681_CursorX = x < SSD1681_DISPLAY_SIZE_X ? x : SSD1681_DISPLAY_SIZE_X-1;
+void SSD1681_CursorPageSet(uint8_t Page) {
+	SSD1681_CursorP = Page < SSD1681_PAGE_COUNT ? Page : SSD1681_PAGE_COUNT-1;
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
 	Spi_1(SET_RAM_X_ADDRESS_COUNTER);
 	SSD1681_DC_DATA;
-	Spi_1(SSD1681_CursorX >> 3);
+	Spi_1((SSD1681_PAGE_COUNT-1) - SSD1681_CursorP);
 	SSD1681_CHIP_DESELECT;
 }
 
@@ -327,24 +318,24 @@ void SSD1681_CursorYSet(uint8_t y) {
 }
 
 // Set active area to write to in next operation
-void SSD1681_ActiveAreaSet(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-	SSD1681_ActiveAreaXSet(x0, x1);
+void SSD1681_ActiveAreaSet(uint8_t p0, uint8_t y0, uint8_t p1, uint8_t y1) {
+	SSD1681_ActiveAreaPageSet(p0, p1);
 	SSD1681_ActiveAreaYSet(y0, y1);
 }
 
 // Change active area only in X dimension
-void SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1) {
+void SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1) {
 	
 	// Sanity check
-	SSD1681_CursorX			= x0 < SSD1681_DISPLAY_SIZE_X ? x0 : SSD1681_DISPLAY_SIZE_X-1;
-	SSD1681_CursorX_Max		= x1 < SSD1681_DISPLAY_SIZE_X ? x1 : SSD1681_DISPLAY_SIZE_X-1;
+	SSD1681_CursorP			= p0 < SSD1681_PAGE_COUNT ? p0 : SSD1681_PAGE_COUNT-1;
+	SSD1681_CursorP_Max		= p1 < SSD1681_PAGE_COUNT ? p1 : SSD1681_PAGE_COUNT-1;
 	
 	// Send to display
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
 	Spi_1(SET_RAM_X_ADDRESS_START_END_POSITION);
 	SSD1681_DC_DATA;
-	Spi_2(SSD1681_CursorX >> 3, SSD1681_CursorX_Max >> 3);
+	Spi_2(SSD1681_CursorP, SSD1681_CursorP_Max);
 	SSD1681_CHIP_DESELECT;
 }
 

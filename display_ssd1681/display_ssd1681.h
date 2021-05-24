@@ -80,8 +80,8 @@ HARDWARE
 // Global variables
 // ========================================
 
-extern uint8_t SSD1681_CursorX;
-extern uint8_t SSD1681_CursorX_Max	;;
+extern uint8_t SSD1681_CursorP;
+extern uint8_t SSD1681_CursorP_Max;
 extern uint8_t SSD1681_CursorY;
 extern uint8_t SSD1681_CursorY_Max;
 
@@ -105,13 +105,13 @@ void		SSD1681_Chessboard(void);
 // Cursor and active area
 // ========================================
 
-void		SSD1681_CursorSet(uint8_t x, uint8_t y);
-uint8_t		SSD1681_CursorXGet(void);
-void		SSD1681_CursorXSet(uint8_t x);
+void		SSD1681_CursorSet(uint8_t p, uint8_t y);
+uint8_t		SSD1681_CursorPageGet(void);
+void		SSD1681_CursorPageSet(uint8_t Page);
 uint8_t		SSD1681_CursorYGet(void);
 void		SSD1681_CursorYSet(uint8_t y);
-void		SSD1681_ActiveAreaSet(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-void		SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1);
+void		SSD1681_ActiveAreaSet(uint8_t p0, uint8_t y0, uint8_t p1, uint8_t y1);
+void		SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1);
 void		SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1);
 
 // ========================================
