@@ -190,6 +190,14 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"data",			SSD1681_CmdData},
 	{"init",			SSD1681_CmdInit},
 	{"refresh",			SSD1681_CmdRefresh},
+	{"clr",				SSD1681_CmdClear},
+	{"fill",			SSD1681_CmdFill},
+	{"chess",			SSD1681_CmdChessboard},
+	
+	{"cur",				SSD1681_CmdCursor},
+	{"area",			SSD1681_CmdActiveArea},
+	
+	{"test",			SSD1681_CmdTest},
 #endif
 
 // ========================================

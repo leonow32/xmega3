@@ -6,10 +6,10 @@
 // Global variables
 // ========================================
 
-// static uint8_t SSD1681_CursorX			= 0;
-// static uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_X - 1;
-// static uint8_t SSD1681_CursorY			= 0;
-// static uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
+uint8_t SSD1681_CursorX			= 0;
+uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_X - 1;
+uint8_t SSD1681_CursorY			= 0;
+uint8_t SSD1681_CursorY_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
 //const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
 // static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
@@ -126,6 +126,7 @@ void SSD1681_Init(void) {
 	
 	SSD1681_CHIP_SELECT_INIT;
 	SSD1681_DC_INIT;
+	SSD1681_BUSY_INIT;
 	
 	SSD1681_WriteCommand(DRIVER_OUTPUT_CONTROL);
 	SSD1681_WriteData((SSD1681_DISPLAY_SIZE_Y - 1) & 0xFF);
@@ -166,6 +167,12 @@ void SSD1681_Init(void) {
 	#endif
 }
 
+void SSD1681_WaitUntilReady(void) {
+	while(SSD1681_BUSY_READ) {
+		asm volatile("wdr");
+	}
+}
+
 // Send command
 void SSD1681_WriteCommand(const uint8_t Command) {
 	SSD1681_CHIP_SELECT;
@@ -197,42 +204,57 @@ void SSD1681_Refresh(void) {
 	SSD1681_WriteData(0xC4);
 	SSD1681_WriteCommand(MASTER_ACTIVATION);
 	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
-	//WaitUntilIdle();
-}
-
-#if 0
-// Allow to display data
-void SSD1681_WriteRamEnable(void) {
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_RAM_WRITE);
-	SSD1681_CHIP_DESELECT;
-}
-
-// Set contrast
-void SSD1681_ContrastSet(const uint8_t Value) {
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_SET_CONTRAST);
-	SSD1681_DC_DATA;
-	Spi_Repeat(Value, 3);
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_RAM_WRITE);
-	SSD1681_DC_DATA;
-	SSD1681_CHIP_DESELECT;
+	SSD1681_WaitUntilReady();
+// 	_delay_ms(500);
+// 	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
+// 	SSD1681_WriteData(0xC4);
+// 	SSD1681_WriteCommand(MASTER_ACTIVATION);
+// 	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
 }
 
 // Clear display
 void SSD1681_Clear(void) {
 	
 	// Set active area to fill all the screen
-	SSD1681_ActiveAreaSet(0, SSD1681_DISPLAY_SIZE_X-1, 0, SSD1681_DISPLAY_SIZE_Y-1);
+	SSD1681_ActiveAreaSet(0, 0, SSD1681_DISPLAY_SIZE_X-1, SSD1681_DISPLAY_SIZE_Y-1);
+	SSD1681_CursorSet(0, 0);
 	
-	// Fill with background colored pixels
 	SSD1681_CHIP_SELECT;
-	Spi_Repeat(SSD1681_ColorBackH, SSD1681_ColorBackL, SSD1681_DISPLAY_SIZE_X * SSD1681_DISPLAY_SIZE_Y);
+	SSD1681_DC_COMMAND;
+	Spi_1(WRITE_RAM);
+	SSD1681_DC_DATA;
+	Spi_Repeat(0xFF, SSD1681_DISPLAY_SIZE_X * (SSD1681_DISPLAY_SIZE_Y / 8));
 	SSD1681_CHIP_DESELECT;
 }
+
+// Fill display
+void SSD1681_Fill(void) {
+	
+	// Set active area to fill all the screen
+	SSD1681_ActiveAreaSet(0, 0, SSD1681_DISPLAY_SIZE_X-1, SSD1681_DISPLAY_SIZE_Y-1);
+	SSD1681_CursorSet(0, 0);
+	
+	SSD1681_CHIP_SELECT;
+	SSD1681_DC_COMMAND;
+	Spi_1(WRITE_RAM);
+	SSD1681_DC_DATA;
+	Spi_Repeat(0x00, SSD1681_DISPLAY_SIZE_X * (SSD1681_DISPLAY_SIZE_Y / 8) / 4);
+	SSD1681_CHIP_DESELECT;
+}
+
+
+
+
+// Allow to display data
+// void SSD1681_WriteRamEnable(void) {
+// 	SSD1681_CHIP_SELECT;
+// 	SSD1681_DC_COMMAND;
+// 	Spi_1(SSD1681_RAM_WRITE);
+// 	SSD1681_CHIP_DESELECT;
+// }
+
+
+
 
 // Print chessboard on the display
 void SSD1681_Chessboard(void) {
@@ -243,17 +265,19 @@ void SSD1681_Chessboard(void) {
 	// For all range of Y
 	for(uint8_t y=0; y<SSD1681_DISPLAY_SIZE_Y; y++) {
 		SSD1681_ActiveAreaYSet(y, y);
+		SSD1681_CursorXSet(0);
+		SSD1681_CursorYSet(y);
 		SSD1681_CHIP_SELECT;
 		if(y & 0x01) {
 			// Odd lines
 			for(uint8_t x=0; x<(SSD1681_DISPLAY_SIZE_X/2); x++) {
-				Spi_4(SSD1681_ColorFrontH, SSD1681_ColorFrontL, SSD1681_ColorBackH, SSD1681_ColorBackL);
+				Spi_1(0b10101010);
 			}
 		}
 		else {
 			// Even lines
 			for(uint8_t x=0; x<(SSD1681_DISPLAY_SIZE_X/2); x++) {
-				Spi_4(SSD1681_ColorBackH, SSD1681_ColorBackL, SSD1681_ColorFrontH, SSD1681_ColorFrontL);
+				Spi_1(0b01010101);
 			}
 		}
 		SSD1681_CHIP_DESELECT;
@@ -262,6 +286,7 @@ void SSD1681_Chessboard(void) {
 	SSD1681_ActiveAreaSet(0, SSD1681_DISPLAY_SIZE_X-1, 0, SSD1681_DISPLAY_SIZE_Y-1);
 }
 
+
 // ========================================
 // Cursor position
 // ========================================
@@ -269,6 +294,8 @@ void SSD1681_Chessboard(void) {
 void SSD1681_CursorSet(uint8_t x, uint8_t y) {
 	SSD1681_CursorX = x < SSD1681_DISPLAY_SIZE_X ? x : SSD1681_DISPLAY_SIZE_X-1;
 	SSD1681_CursorY = y < SSD1681_DISPLAY_SIZE_Y ? y : SSD1681_DISPLAY_SIZE_Y-1;
+	SSD1681_CursorXSet(SSD1681_CursorX);
+	SSD1681_CursorYSet(SSD1681_CursorY);
 }
 
 uint8_t SSD1681_CursorXGet(void) {
@@ -277,6 +304,12 @@ uint8_t SSD1681_CursorXGet(void) {
 
 void SSD1681_CursorXSet(uint8_t x) {
 	SSD1681_CursorX = x < SSD1681_DISPLAY_SIZE_X ? x : SSD1681_DISPLAY_SIZE_X-1;
+	SSD1681_CHIP_SELECT;
+	SSD1681_DC_COMMAND;
+	Spi_1(SET_RAM_X_ADDRESS_COUNTER);
+	SSD1681_DC_DATA;
+	Spi_1(SSD1681_CursorX >> 3);
+	SSD1681_CHIP_DESELECT;
 }
 
 uint8_t SSD1681_CursorYGet(void) {
@@ -285,71 +318,53 @@ uint8_t SSD1681_CursorYGet(void) {
 
 void SSD1681_CursorYSet(uint8_t y) {
 	SSD1681_CursorY = y < SSD1681_DISPLAY_SIZE_Y ? y : SSD1681_DISPLAY_SIZE_Y-1;
-}
-
-// Set active area to write to in next operation
-void SSD1681_ActiveAreaSet(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2) {
-	
-	// Sanity check
-	SSD1681_CursorX			= x1 < SSD1681_DISPLAY_SIZE_X ? x1 : SSD1681_DISPLAY_SIZE_X-1;
-	SSD1681_CursorX_Max		= x2 < SSD1681_DISPLAY_SIZE_X ? x2 : SSD1681_DISPLAY_SIZE_X-1;
-	SSD1681_CursorY			= y1 < SSD1681_DISPLAY_SIZE_Y ? y1 : SSD1681_DISPLAY_SIZE_Y-1;
-	SSD1681_CursorY_Max		= y2 < SSD1681_DISPLAY_SIZE_Y ? y2 : SSD1681_DISPLAY_SIZE_Y-1;
-	
-	// Send to display
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_COLUMN_RANGE);
+	Spi_1(SET_RAM_Y_ADDRESS_COUNTER);
 	SSD1681_DC_DATA;
-	Spi_2(SSD1681_CursorX, SSD1681_CursorX_Max);
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_ROW_RANGE);
-	SSD1681_DC_DATA;
-	Spi_2(SSD1681_CursorY, SSD1681_CursorY_Max);
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_RAM_WRITE);
-	SSD1681_DC_DATA;
+	Spi_2(SSD1681_CursorY, 0);
 	SSD1681_CHIP_DESELECT;
 }
 
+// Set active area to write to in next operation
+void SSD1681_ActiveAreaSet(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
+	SSD1681_ActiveAreaXSet(x0, x1);
+	SSD1681_ActiveAreaYSet(y0, y1);
+}
+
 // Change active area only in X dimension
-void SSD1681_ActiveAreaXSet(uint8_t x1, uint8_t x2) {
+void SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1) {
 	
 	// Sanity check
-	SSD1681_CursorX			= x1 < SSD1681_DISPLAY_SIZE_X ? x1 : SSD1681_DISPLAY_SIZE_X-1;
-	SSD1681_CursorX_Max		= x2 < SSD1681_DISPLAY_SIZE_X ? x2 : SSD1681_DISPLAY_SIZE_X-1;
+	SSD1681_CursorX			= x0 < SSD1681_DISPLAY_SIZE_X ? x0 : SSD1681_DISPLAY_SIZE_X-1;
+	SSD1681_CursorX_Max		= x1 < SSD1681_DISPLAY_SIZE_X ? x1 : SSD1681_DISPLAY_SIZE_X-1;
 	
 	// Send to display
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_COLUMN_RANGE);
+	Spi_1(SET_RAM_X_ADDRESS_START_END_POSITION);
 	SSD1681_DC_DATA;
-	Spi_2(SSD1681_CursorX, SSD1681_CursorX_Max);
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_RAM_WRITE);
-	SSD1681_DC_DATA;
+	Spi_2(SSD1681_CursorX >> 3, SSD1681_CursorX_Max >> 3);
 	SSD1681_CHIP_DESELECT;
 }
 
 // Change active area only in Y dimension
-void SSD1681_ActiveAreaYSet(uint8_t y1, uint8_t y2) {
+void SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1) {
 	
 	// Sanity check
-	SSD1681_CursorY			= y1 < SSD1681_DISPLAY_SIZE_Y ? y1 : SSD1681_DISPLAY_SIZE_Y-1;
-	SSD1681_CursorY_Max		= y2 < SSD1681_DISPLAY_SIZE_Y ? y2 : SSD1681_DISPLAY_SIZE_Y-1;
+	SSD1681_CursorY			= y0 < SSD1681_DISPLAY_SIZE_Y ? y0 : SSD1681_DISPLAY_SIZE_Y-1;
+	SSD1681_CursorY_Max		= y1 < SSD1681_DISPLAY_SIZE_Y ? y1 : SSD1681_DISPLAY_SIZE_Y-1;
 	
 	// Send to display
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_ROW_RANGE);
+	Spi_1(SET_RAM_Y_ADDRESS_START_END_POSITION);
 	SSD1681_DC_DATA;
-	Spi_2(SSD1681_CursorY, SSD1681_CursorY_Max);
-	SSD1681_DC_COMMAND;
-	Spi_1(SSD1681_RAM_WRITE);
-	SSD1681_DC_DATA;
+	Spi_4(SSD1681_CursorY, 0, SSD1681_CursorY_Max, 0);
 	SSD1681_CHIP_DESELECT;
 }
 
+#if 0
 // ========================================
 // Colors
 // ========================================
@@ -837,5 +852,14 @@ void SSD1681_Text(const char * Text, uint8_t Align) {
 
 
 #endif
+
+void SSD1681_Bytes(uint8_t Pattern, uint16_t Times) {
+	SSD1681_CHIP_SELECT;
+	SSD1681_DC_COMMAND;
+	Spi_1(WRITE_RAM);
+	SSD1681_DC_DATA;
+	Spi_Repeat(Pattern, Times);
+	SSD1681_CHIP_DESELECT;
+}
 
 #endif

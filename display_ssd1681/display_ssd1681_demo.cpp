@@ -22,17 +22,156 @@ void SSD1681_CmdRefresh(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
-/*
+// Set or get cursor position
+void SSD1681_CmdCursor(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments, then print actual cursor position
+	if(argc == 1) {
+		uint8_t x = SSD1681_CursorXGet();
+		uint8_t y = SSD1681_CursorYGet();
+		Print("x = ");
+		Print_Dec(x);
+		Print("\r\ny = ");
+		Print_Dec(y);
+	}
+	
+	// If arguments given, then set cursor position
+	else {
+		// Argument 1 - coordinate X
+		uint8_t x;
+		if(Parse_Dec8(argv[1], &x, SSD1681_DISPLAY_SIZE_X-1)) return;
+		
+		// Argument 2 - coordinate Y
+		uint8_t y;
+		if(Parse_Dec8(argv[2], &y, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		
+		// Execute command
+		SSD1681_CursorSet(x, y);
+		Print_ResponseOK();
+	}
+}
+
+// Set or get active area position
+void SSD1681_CmdActiveArea(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments, then print actual active area
+	if(argc == 1) {
+		Print("x0 = ");
+		Print_Dec(SSD1681_CursorX);
+		Print("\r\ny0 = ");
+		Print_Dec(SSD1681_CursorY);
+		Print("\r\nx1 = ");
+		Print_Dec(SSD1681_CursorX_Max);
+		Print("\r\ny1 = ");
+		Print_Dec(SSD1681_CursorY_Max);
+	}
+	
+	// If arguments given, then set the position of active area
+	else {
+		
+		// Argument 1 - coordinate X0
+		uint8_t x0;
+		if(Parse_Dec8(argv[1], &x0, SSD1681_DISPLAY_SIZE_X-1)) return;
+		
+		// Argument 2 - coordinate Y0
+		uint8_t y0;
+		if(Parse_Dec8(argv[2], &y0, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		
+		// Argument 3 - coordinate X1
+		uint8_t x1;
+		if(Parse_Dec8(argv[3], &x1, SSD1681_DISPLAY_SIZE_X-1)) return;
+		
+		// Argument 4 - coordinate Y1
+		uint8_t y1;
+		if(Parse_Dec8(argv[4], &y1, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		
+		// Execute command
+		SSD1681_ActiveAreaSet(x0, y0, x1, y1);
+		SSD1681_CursorSet(x0, y0);
+		Print_ResponseOK();
+	}
+}
+
+void SSD1681_CmdTest(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 1 - pattern to send and repeat
+	uint8_t Pattern;
+	if(Parse_Hex8(argv[1], &Pattern)) return;
+	
+	// Argument 2 - how many times to repeat
+	uint16_t Times;
+	if(Parse_Dec16(argv[2], &Times)) return;
+	
+	// Execute command
+	SSD1681_Bytes(Pattern, Times);
+	SSD1681_Refresh();
+	Print_ResponseOK();
+	
+// 	SSD1681_DC_COMMAND;
+// 	SSD1681_CHIP_SELECT;
+// 	Spi_1(WRITE_RAM);
+// 	SSD1681_DC_DATA;
+// 	Spi_1(0b11111110);
+// 	Spi_1(0b11111101);
+// 	Spi_1(0b11111011);
+// 	Spi_1(0b11110111);
+// 	Spi_1(0b11101111);
+// 	Spi_1(0b11011111);
+// 	Spi_1(0b10111111);
+// 	Spi_1(0b01111111);
+// 	Spi_1(0b00000001);
+// 	Spi_1(0b00000010);
+// 	Spi_1(0b00000100);
+// 	Spi_1(0b00001000);
+// 	Spi_1(0b00010000);
+// 	Spi_1(0b00100000);
+// 	Spi_1(0b01000000);
+// 	Spi_1(0b10000000);
+// 	SSD1681_CHIP_DESELECT;
+
+// 	SSD1681_WriteCommand(WRITE_RAM);
+// 	SSD1681_WriteData(0b00000001);
+// 	SSD1681_WriteData(0b00000010);
+// 	SSD1681_WriteData(0b00000100);
+// 	SSD1681_WriteData(0b00001000);
+// 	SSD1681_WriteData(0b00010000);
+// 	SSD1681_WriteData(0b00100000);
+// 	SSD1681_WriteData(0b01000000);
+// 	SSD1681_WriteData(0b10000000);
+	
+}
+
+
 // Clear display
 void SSD1681_CmdClear(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_Clear();
+	SSD1681_Refresh();
+// 	SSD1681_Clear();
+// 	SSD1681_Refresh();
+// 	SSD1681_ActiveAreaSet(0, 199, 0, 199);
+// 	SSD1681_CursorSet(0, 0);
+	Print_ResponseOK();
 }
+
+// Clear display
+void SSD1681_CmdFill(uint8_t argc, uint8_t * argv[]) {
+	SSD1681_Fill();
+	SSD1681_Refresh();
+	// 	SSD1681_Clear();
+	// 	SSD1681_Refresh();
+	// 	SSD1681_ActiveAreaSet(0, 199, 0, 199);
+	// 	SSD1681_CursorSet(0, 0);
+	Print_ResponseOK();
+}
+
 
 // Draw chessboard
-void SSD1681_CmdDrawChessboard(uint8_t argc, uint8_t * argv[]) {
+void SSD1681_CmdChessboard(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_Chessboard();
+	SSD1681_Refresh();
+	Print_ResponseOK();
 }
-
+/*
 // Set contrast
 void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]) {
 	
@@ -72,11 +211,11 @@ void SSD1681_CmdLine(uint8_t argc, uint8_t * argv[]) {
 	uint8_t y0;
 	if(Parse_Dec8(argv[2], &y0, SSD1681_DISPLAY_SIZE_Y-1)) return;
 	
-	// Argument 1 - coordinate X0
+	// Argument 3 - coordinate X1
 	uint8_t x1;
 	if(Parse_Dec8(argv[3], &x1, SSD1681_DISPLAY_SIZE_X-1)) return;
 	
-	// Argument 2 - coordinate Y0
+	// Argument 4 - coordinate Y1
 	uint8_t y1;
 	if(Parse_Dec8(argv[4], &y1, SSD1681_DISPLAY_SIZE_Y-1)) return;
 	
@@ -96,11 +235,11 @@ void SSD1681_CmdRectangle(uint8_t argc, uint8_t * argv[]) {
 	uint8_t y0;
 	if(Parse_Dec8(argv[2], &y0, SSD1681_DISPLAY_SIZE_Y-1)) return;
 	
-	// Argument 1 - coordinate X0
+	// Argument 3 - coordinate X1
 	uint8_t x1;
 	if(Parse_Dec8(argv[3], &x1, SSD1681_DISPLAY_SIZE_X-1)) return;
 	
-	// Argument 2 - coordinate Y0
+	// Argument 4 - coordinate Y1
 	uint8_t y1;
 	if(Parse_Dec8(argv[4], &y1, SSD1681_DISPLAY_SIZE_Y-1)) return;
 	
@@ -153,34 +292,7 @@ void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
-// Set or get cursor position
-void SSD1681_CmdCursor(uint8_t argc, uint8_t * argv[]) {
-	
-	// If no arguments, then print actual cursor position
-	if(argc == 1) {
-		uint8_t x = SSD1681_CursorXGet();
-		uint8_t y = SSD1681_CursorYGet();
-		Print("x = ");
-		Print_Dec(x);
-		Print("\r\ny = ");
-		Print_Dec(y);
-	}
-	
-	// If arguments given, then set cursor position
-	else {
-		// Argument 1 - coordinate X
-		uint8_t x;
-		if(Parse_Dec8(argv[1], &x, SSD1681_DISPLAY_SIZE_X-1)) return;
-		
-		// Argument 2 - coordinate Y
-		uint8_t y;
-		if(Parse_Dec8(argv[2], &y, SSD1681_DISPLAY_SIZE_Y-1)) return;
-		
-		// Execute command
-		SSD1681_CursorSet(x, y);
-		Print_ResponseOK();
-	}
-}
+
 
 // Set foreground color
 void SSD1681_CmdColorFront(uint8_t argc, uint8_t * argv[]) {

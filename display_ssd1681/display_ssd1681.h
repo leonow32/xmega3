@@ -14,6 +14,9 @@ HARDWARE
 // Includes
 // ========================================
 
+// DEBUG
+#include "../print/print.h"
+
 #include	<avr/io.h>
 #include	<util/delay.h>
 #include	"display_ssd1681_defines.h"
@@ -74,31 +77,42 @@ HARDWARE
 // #endif
 
 // ========================================
+// Global variables
+// ========================================
+
+extern uint8_t SSD1681_CursorX;
+extern uint8_t SSD1681_CursorX_Max	;;
+extern uint8_t SSD1681_CursorY;
+extern uint8_t SSD1681_CursorY_Max;
+
+// ========================================
 // Basic functions
 // ========================================
 
 void		SSD1681_Init(void);
+void		SSD1681_WaitUntilReady(void);
 void		SSD1681_WriteCommand(const uint8_t Command);
 void		SSD1681_WriteData(const uint8_t Data);
 void		SSD1681_WriteLUT(const uint8_t * LUT);
 void		SSD1681_Refresh(void);
 // void		SSD1681_WriteRamEnable(void);
 // void		SSD1681_ContrastSet(const uint8_t Value);
-// void		SSD1681_Clear(void);
-// void		SSD1681_Chessboard(void);
+void		SSD1681_Clear(void);
+void		SSD1681_Fill(void);
+void		SSD1681_Chessboard(void);
 
 // ========================================
 // Cursor and active area
 // ========================================
 
-// void		SSD1681_CursorSet(uint8_t x, uint8_t y);
-// uint8_t		SSD1681_CursorXGet(void);
-// void		SSD1681_CursorXSet(uint8_t x);
-// uint8_t		SSD1681_CursorYGet(void);
-// void		SSD1681_CursorYSet(uint8_t y);
-// void		SSD1681_ActiveAreaSet(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2);
-// void		SSD1681_ActiveAreaXSet(uint8_t x1, uint8_t x2);
-// void		SSD1681_ActiveAreaYSet(uint8_t y1, uint8_t y2);
+void		SSD1681_CursorSet(uint8_t x, uint8_t y);
+uint8_t		SSD1681_CursorXGet(void);
+void		SSD1681_CursorXSet(uint8_t x);
+uint8_t		SSD1681_CursorYGet(void);
+void		SSD1681_CursorYSet(uint8_t y);
+void		SSD1681_ActiveAreaSet(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+void		SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1);
+void		SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1);
 
 // ========================================
 // Colors
@@ -127,7 +141,7 @@ void		SSD1681_Refresh(void);
 // void		SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 
 // ========================================
-// BBitmaps
+// Bitmaps
 // ========================================
 
 // void		SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap);
@@ -144,6 +158,12 @@ void		SSD1681_Refresh(void);
 // uint8_t		SSD1681_TextWidthGet(const char * Text);
 // void		SSD1681_PrintChar(uint8_t Char);
 // void		SSD1681_Text(const char * Text, uint8_t Align = 0);
+
+// ========================================
+// Test
+// ========================================
+
+void SSD1681_Bytes(uint8_t Pattern, uint16_t Times);
 
 #endif /* DISPLAY_SSD1681_H_ */
 #endif
