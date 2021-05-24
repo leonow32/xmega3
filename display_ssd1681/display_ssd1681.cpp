@@ -34,87 +34,34 @@ const uint8_t lut_partial_update[] =
 };
 
 // Display config for init function
+
+
+
 static const uint8_t SSD1681_InitSequence[] = {
 	
-/*	1,	SSD1681_SET_LOCK_COMMAND,
-	0,	0x12,
+	SSD1681_COMMAND,	DRIVER_OUTPUT_CONTROL,
+	SSD1681_DATA,		(SSD1681_DISPLAY_SIZE_Y - 1) & 0xFF,
+	SSD1681_DATA,		((SSD1681_DISPLAY_SIZE_Y - 1) >> 8) & 0xFF,
+	SSD1681_DATA,		0x00,
 	
-	1,	SSD1681_SET_LOCK_COMMAND,			// Command lock
-	0,	0xB1,								// Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+	SSD1681_COMMAND,	BOOSTER_SOFT_START_CONTROL,
+	SSD1681_DATA,		0xD7,
+	SSD1681_DATA,		0xD6,
+	SSD1681_DATA,		0x9D,
 	
-	1,	SSD1681_SLEEP_MODE_ON,				// Display off
+	SSD1681_COMMAND,	WRITE_VCOM_REGISTER,
+	SSD1681_DATA,		0xA8,
 	
-	1, SSD1681_SET_DISPLAY_MODE_OFF,		// Normal Display mode
+	SSD1681_COMMAND,	SET_DUMMY_LINE_PERIOD,
+	SSD1681_DATA,		0x1A,						// 4 dummy lines per gate
 	
-	1, SSD1681_COLUMN_RANGE,				// Set column address
-	0, 0x00,								// Column address start value
-	0, 0x7F,								// Column address end value
+	SSD1681_COMMAND,	SET_GATE_TIME,
+	SSD1681_DATA,		0x08,						// 2us per line
 	
-	1, SSD1681_ROW_RANGE,					// Set row address
-	0, 0x00,								// Row address start value
-	0, 0x7F,								// Row address end value
+	SSD1681_COMMAND,	DATA_ENTRY_MODE_SETTING,
+	SSD1681_DATA,		0b00000110,					// X decrement; Y increment, data increment in Y direction
 	
-	1, SSD1681_CLOCK_DIVIDER_OSC_FREQ,
-	0, 0xF1,
-	
-	1, SSD1681_SET_MUX_RATIO,
-	0, 0x7F,
-	
-	1, SSD1681_REMAP_COLOR_DEPTH,			// Set re-map & data format
-	0, 0b01110101,							// Vertical address increment 0b01110101
-	// bit 0 - 1: kursor od lewej do prawej, 1 od góry do do³u
-	// bit 1 - lustrzane odbicie Y
-	// bit 2 - zamiana kolorów
-	// bit 3 - nieu¿ywany
-	// bit 4 - lustrzane odbicie X
-	// bit 5 - naprzemienne linie (nie u¿ywaæ)
-	// bit 67 - format koloru
-	
-	1, SSD1681_SET_DISPLAY_START_LINE,		// Set display start line
-	0, 0x00,
-	
-	1, SSD1681_SET_DISPLAY_OFFSET,			// Set display offset
-	0, 0x00,
-	
-	1, SSD1681_FUNCTION_SELECTION,
-	0, 0x01,
-	
-	1, SSD1681_SET_SEGMENT_LOW_VOLTAGE,
-	0, 0xA0,
-	0, 0xB5,
-	0, 0x55,
-	
-	1, SSD1681_SET_CONTRAST,
-	0, SSD1681_DEFAULT_CONTRAST,
-	0, SSD1681_DEFAULT_CONTRAST,
-	0, SSD1681_DEFAULT_CONTRAST,
-	
-	1, SSD1681_MASTER_CONTRAST_CURRENT,
-	0, 0x0F,
-	
-	1, SSD1681_SET_RESET_PRECHARGE,
-	0, 0x32,
-	
-	1, SSD1681_DISPLAY_ENHANCEMENT,
-	0, 0xA4,
-	0, 0x00,
-	0, 0x00,
-	
-	1, SSD1681_SET_PRECHARGE_VOLTAGE,
-	0, 0x17,
-	
-	1, SSD1681_SET_SECOND_PRECHARGE,
-	0, 0x01,
-	
-	1, SSD1681_SET_VCOMH_VOLTAGE,
-	0, 0x05,
-	
-	1, SSD1681_SET_DISPLAY_MODE_RESET,
-	
-	#if SSD1681_CLEAR_AFERT_INIT == 0
-	1, SSD1681_SLEEP_MODE_OFF,				// Display on
-	#endif
-	*/
+	SSD1681_COMMAND,	WRITE_LUT_REGISTER,
 };
 
 // ========================================
@@ -125,43 +72,33 @@ static const uint8_t SSD1681_InitSequence[] = {
 void SSD1681_Init(void) {
 	
 	SSD1681_CHIP_SELECT_INIT;
+	SSD1681_CHIP_DESELECT;
 	SSD1681_DC_INIT;
 	SSD1681_BUSY_INIT;
 	
-	SSD1681_WriteCommand(DRIVER_OUTPUT_CONTROL);
-	SSD1681_WriteData((SSD1681_DISPLAY_SIZE_Y - 1) & 0xFF);
-	SSD1681_WriteData(((SSD1681_DISPLAY_SIZE_Y - 1) >> 8) & 0xFF);
-	SSD1681_WriteData(0x00);                     // GD = 0; SM = 0; TB = 0;
-	SSD1681_WriteCommand(BOOSTER_SOFT_START_CONTROL);
-	SSD1681_WriteData(0xD7);
-	SSD1681_WriteData(0xD6);
-	SSD1681_WriteData(0x9D);
-	SSD1681_WriteCommand(WRITE_VCOM_REGISTER);
-	SSD1681_WriteData(0xA8);                     // VCOM 7C
-	SSD1681_WriteCommand(SET_DUMMY_LINE_PERIOD);
-	SSD1681_WriteData(0x1A);                     // 4 dummy lines per gate
-	SSD1681_WriteCommand(SET_GATE_TIME);
-	SSD1681_WriteData(0x08);                     // 2us per line
-	SSD1681_WriteCommand(DATA_ENTRY_MODE_SETTING);
-	//SSD1681_WriteData(0b00000111);                     // X increment; Y increment, data increment in Y direction
-	SSD1681_WriteData(0b00000110);                     // X decrement; Y increment, data increment in Y direction
+	const uint8_t * Index = SSD1681_InitSequence;
+	const uint8_t * Limit = SSD1681_InitSequence + sizeof(SSD1681_InitSequence);
 	
-	
-	SSD1681_WriteLUT(lut_full_update);
-	
-//	const uint8_t * Index = SSD1681_InitSequence;
-//	const uint8_t * Limit = SSD1681_InitSequence + sizeof(SSD1681_InitSequence);
-	
-//	SSD1681_CHIP_SELECT;
+	SSD1681_CHIP_SELECT;
 	
 	// Transmit array SSD1681_InitSequence
-// 	while(Index != Limit) {
-// 		if(*Index++) SSD1681_DC_COMMAND;
-// 		else SSD1681_DC_DATA;
-// 		Spi_1(*Index++);
-// 	}
+	while(Index != Limit) {
+		if(*Index++) {
+			SSD1681_DC_COMMAND;
+		}
+		else {
+			SSD1681_DC_DATA;
+		}
+		Spi_1(*Index++);
+	}
 	
-//	SSD1681_CHIP_DESELECT;
+	// Transmit LUT array
+	SSD1681_DC_DATA;
+	for (uint8_t i = 0; i < SSD1681_LUT_LENGTH; i++) {
+		Spi_1(lut_full_update[i]);
+	}
+	
+	SSD1681_CHIP_DESELECT;
 	
 	#if SSD1681_CLEAR_AFERT_INIT
 //	SSD1681_Clear();
@@ -176,37 +113,46 @@ void SSD1681_WaitUntilReady(void) {
 }
 
 // Send command
-void SSD1681_WriteCommand(const uint8_t Command) {
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_COMMAND;
-	Spi_1(Command);
-	SSD1681_CHIP_DESELECT;
-}
+// void SSD1681_WriteCommand(const uint8_t Command) {
+// 	SSD1681_CHIP_SELECT;
+// 	SSD1681_DC_COMMAND;
+// 	Spi_1(Command);
+// 	SSD1681_CHIP_DESELECT;
+// }
 
 // Send data
-void SSD1681_WriteData(const uint8_t Data) {
-	SSD1681_CHIP_SELECT;
-	SSD1681_DC_DATA;
-	Spi_1(Data);
-	SSD1681_CHIP_DESELECT;
-}
+// void SSD1681_WriteData(const uint8_t Data) {
+// 	SSD1681_CHIP_SELECT;
+// 	SSD1681_DC_DATA;
+// 	Spi_1(Data);
+// 	SSD1681_CHIP_DESELECT;
+// }
 
 // Send LUT
-void SSD1681_WriteLUT(const uint8_t * LUT) {
-	SSD1681_WriteCommand(WRITE_LUT_REGISTER);
-	/* the length of look-up table is 30 bytes */
-	for (uint8_t i = 0; i < 30; i++) {
-		SSD1681_WriteData(LUT[i]);
-	}
-}
+// void SSD1681_WriteLUT(const uint8_t * LUT) {
+// 	//SSD13
+// 	SSD1681_WriteCommand(WRITE_LUT_REGISTER);
+// 	for (uint8_t i = 0; i < SSD1681_LUT_LENGTH; i++) {
+// 		SSD1681_WriteData(LUT[i]);
+// 	}
+// }
 
 // Refresh display
 void SSD1681_Refresh(void) {
-	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
-	SSD1681_WriteData(0xC4);
-	SSD1681_WriteCommand(MASTER_ACTIVATION);
-	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
 	SSD1681_WaitUntilReady();
+	SSD1681_CHIP_SELECT;
+	SSD1681_DC_COMMAND;
+	Spi_1(DISPLAY_UPDATE_CONTROL_2);
+	SSD1681_DC_DATA;
+	Spi_1(0xC4);
+	SSD1681_DC_COMMAND;
+	Spi_2(MASTER_ACTIVATION, TERMINATE_FRAME_READ_WRITE);
+	SSD1681_CHIP_DESELECT;
+// 	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
+// 	SSD1681_WriteData(0xC4);
+// 	SSD1681_WriteCommand(MASTER_ACTIVATION);
+// 	SSD1681_WriteCommand(TERMINATE_FRAME_READ_WRITE);
+//	SSD1681_WaitUntilReady();
 // 	_delay_ms(500);
 // 	SSD1681_WriteCommand(DISPLAY_UPDATE_CONTROL_2);
 // 	SSD1681_WriteData(0xC4);
@@ -216,6 +162,7 @@ void SSD1681_Refresh(void) {
 
 // Clear display
 void SSD1681_Clear(void) {
+	SSD1681_WaitUntilReady();
 	
 	// Set active area to fill all the screen
 	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
@@ -234,6 +181,7 @@ void SSD1681_Clear(void) {
 
 // Fill display
 void SSD1681_Fill(void) {
+	SSD1681_WaitUntilReady();
 	
 	// Set active area to fill all the screen
 	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
@@ -252,6 +200,7 @@ void SSD1681_Fill(void) {
 
 // Print chessboard on the display
 void SSD1681_Chessboard(void) {
+	SSD1681_WaitUntilReady();
 	
 	// Set active area to fill all the screen
 	SSD1681_ActiveAreaSet(0, 0, SSD1681_PAGE_COUNT-1, SSD1681_DISPLAY_SIZE_Y-1);
@@ -294,6 +243,7 @@ uint8_t SSD1681_CursorPageGet(void) {
 }
 
 void SSD1681_CursorPageSet(uint8_t Page) {
+	SSD1681_WaitUntilReady();
 	SSD1681_CursorP = Page < SSD1681_PAGE_COUNT ? Page : SSD1681_PAGE_COUNT-1;
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
@@ -308,6 +258,7 @@ uint8_t SSD1681_CursorYGet(void) {
 }
 
 void SSD1681_CursorYSet(uint8_t y) {
+	SSD1681_WaitUntilReady();
 	SSD1681_CursorY = y < SSD1681_DISPLAY_SIZE_Y ? y : SSD1681_DISPLAY_SIZE_Y-1;
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
@@ -325,6 +276,7 @@ void SSD1681_ActiveAreaSet(uint8_t p0, uint8_t y0, uint8_t p1, uint8_t y1) {
 
 // Change active area only in X dimension
 void SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1) {
+	SSD1681_WaitUntilReady();
 	
 	// Sanity check
 	SSD1681_CursorP			= p0 < SSD1681_PAGE_COUNT ? p0 : SSD1681_PAGE_COUNT-1;
@@ -341,6 +293,7 @@ void SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1) {
 
 // Change active area only in Y dimension
 void SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1) {
+	SSD1681_WaitUntilReady();
 	
 	// Sanity check
 	SSD1681_CursorY			= y0 < SSD1681_DISPLAY_SIZE_Y ? y0 : SSD1681_DISPLAY_SIZE_Y-1;
@@ -845,6 +798,7 @@ void SSD1681_Text(const char * Text, uint8_t Align) {
 #endif
 
 void SSD1681_Bytes(uint8_t Pattern, uint16_t Times) {
+	SSD1681_WaitUntilReady();
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
 	Spi_1(WRITE_RAM);

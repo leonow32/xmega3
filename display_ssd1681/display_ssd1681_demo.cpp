@@ -103,44 +103,17 @@ void SSD1681_CmdTest(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Dec16(argv[2], &Times)) return;
 	
 	// Execute command
+// 	uint8_t P = SSD1681_CursorPageGet();
+// 	uint8_t Y = SSD1681_CursorYGet();
 	SSD1681_Bytes(Pattern, Times);
 	SSD1681_Refresh();
-	SSD1681_Bytes(Pattern, Times);
-	SSD1681_Refresh();
+	
+// 	SSD1681_CursorPageSet(P);
+// 	SSD1681_CursorYSet(Y);
+// 	SSD1681_Bytes(Pattern, Times);
+// 	SSD1681_Refresh();
+	
 	Print_ResponseOK();
-	
-// 	SSD1681_DC_COMMAND;
-// 	SSD1681_CHIP_SELECT;
-// 	Spi_1(WRITE_RAM);
-// 	SSD1681_DC_DATA;
-// 	Spi_1(0b11111110);
-// 	Spi_1(0b11111101);
-// 	Spi_1(0b11111011);
-// 	Spi_1(0b11110111);
-// 	Spi_1(0b11101111);
-// 	Spi_1(0b11011111);
-// 	Spi_1(0b10111111);
-// 	Spi_1(0b01111111);
-// 	Spi_1(0b00000001);
-// 	Spi_1(0b00000010);
-// 	Spi_1(0b00000100);
-// 	Spi_1(0b00001000);
-// 	Spi_1(0b00010000);
-// 	Spi_1(0b00100000);
-// 	Spi_1(0b01000000);
-// 	Spi_1(0b10000000);
-// 	SSD1681_CHIP_DESELECT;
-
-// 	SSD1681_WriteCommand(WRITE_RAM);
-// 	SSD1681_WriteData(0b00000001);
-// 	SSD1681_WriteData(0b00000010);
-// 	SSD1681_WriteData(0b00000100);
-// 	SSD1681_WriteData(0b00001000);
-// 	SSD1681_WriteData(0b00010000);
-// 	SSD1681_WriteData(0b00100000);
-// 	SSD1681_WriteData(0b01000000);
-// 	SSD1681_WriteData(0b10000000);
-	
 }
 
 
