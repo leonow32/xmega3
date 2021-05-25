@@ -89,14 +89,12 @@ enum SSD1681_Color_t {
 // Text and fonts
 // ========================================
 
-#define		SSD1681_HALIGN_NONE					0x00
-#define		SSD1681_HALIGN_LEFT					0x01
-#define		SSD1681_HALIGN_CENTER				0x02
-#define		SSD1681_HALIGN_RIGHT				0x03
-#define		SSD1681_VALIGN_NONE					0x00
-#define		SSD1681_VALIGN_TOP					0x10
-#define		SSD1681_VALIGN_CENTER				0x20
-#define		SSD1681_VALIGN_BOTTOM				0x30
+enum SSD1681_align_t {
+	SSD1681_AlignNone,
+	SSD1681_AlignLeft,
+	SSD1681_AlignRight,
+	SSD1681_AlignCenter
+};
 
 // Character definition
 struct SSD1681_CharDef_t {

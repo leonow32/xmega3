@@ -134,23 +134,20 @@ void		SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void		SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 
 // ========================================
-// Bitmaps
+// Bitmap
 // ========================================
 
-// void		SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap);
-// void		SSD1681_BitmapMono(const SSD1681_Bitmap_t * Bitmap);
-// void		SSD1681_BitmapRGB565(const SSD1681_Bitmap_t * Bitmap);
-// void		SSD1681_BitmapRGB332(const SSD1681_Bitmap_t * Bitmap);
+void		SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap);
 
 // ========================================
 // Text
 // ========================================
 
-// const SSD1681_FontDef_t * SSD1681_FontGet(void);
-// void		SSD1681_FontSet(const SSD1681_FontDef_t * Font);
-// uint8_t		SSD1681_TextWidthGet(const char * Text);
-// void		SSD1681_PrintChar(uint8_t Char);
-// void		SSD1681_Text(const char * Text, uint8_t Align = 0);
+const SSD1681_FontDef_t * SSD1681_FontGet(void);
+void		SSD1681_FontSet(const SSD1681_FontDef_t * Font);
+uint16_t	SSD1681_TextWidth(const char * Text);
+void		SSD1681_PrintChar(uint8_t Char);
+void		SSD1681_Text(const char * Text, SSD1681_align_t Align = SSD1681_AlignNone);
 
 // ========================================
 // Test

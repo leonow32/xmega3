@@ -55,7 +55,6 @@ static const uint8_t SSD1681_InitSequence[] = {
 	SSD1681_DATA,		0x08,						// 2us per line
 	
 	SSD1681_COMMAND,	DATA_ENTRY_MODE_SETTING,
-	//SSD1681_DATA,		0b00000110,					// X decrement; Y increment, pointer move in Y direction
 	SSD1681_DATA,		0b00000100,					// X decrement; Y decrement, pointer move in Y direction
 	
 	SSD1681_COMMAND,	WRITE_LUT_REGISTER,
@@ -92,8 +91,8 @@ void SSD1681_Init(void) {
 	// Transmit LUT array
 	SSD1681_DC_DATA;
 	for (uint8_t i = 0; i < SSD1681_LUT_LENGTH; i++) {
-		Spi_1(lut_full_update[i]);
-		//Spi_1(lut_partial_update[i]);
+		//Spi_1(lut_full_update[i]);
+		Spi_1(lut_partial_update[i]);
 	}
 	
 	SSD1681_CHIP_DESELECT;
@@ -396,28 +395,32 @@ void SSD1681_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
-		SSD1681_CursorXSet(x0);
-		SSD1681_CursorPageSet(PageStart);
+		SSD1681_CursorSet(x0, PageStart);
+// 		SSD1681_CursorXSet(x0);
+// 		SSD1681_CursorPageSet(PageStart);
 		SSD1681_WriteData(~(PagePatternStart & PagePatternEnd));
 	}
 	else {
 		// The line doesn;t fit in single page
 		// Draw biginning of the line
-		SSD1681_CursorXSet(x0);
-		SSD1681_CursorPageSet(PageStart);
+		SSD1681_CursorSet(x0, PageStart);
+// 		SSD1681_CursorXSet(x0);
+// 		SSD1681_CursorPageSet(PageStart);
 		SSD1681_WriteData(~PagePatternStart);
 			
 		// Draw enging of the line
 		if(PagePatternEnd) {
-			SSD1681_CursorXSet(x0);
-			SSD1681_CursorPageSet(PageEnd);
+			SSD1681_CursorSet(x0, PageEnd);
+// 			SSD1681_CursorXSet(x0);
+// 			SSD1681_CursorPageSet(PageEnd);
 			SSD1681_WriteData(~PagePatternEnd);
 		}
 			
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
-			SSD1681_CursorXSet(x0);
-			SSD1681_CursorPageSet(++PageStart);
+			SSD1681_CursorSet(x0, ++PageStart);
+// 			SSD1681_CursorXSet(x0);
+// 			SSD1681_CursorPageSet(++PageStart);
 			SSD1681_WriteData(0x00);
 		}
 	}
@@ -500,8 +503,9 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
-		SSD1681_CursorXSet(x0);
-		SSD1681_CursorPageSet(PageStart);
+		SSD1681_CursorSet(x0, PageStart);
+// 		SSD1681_CursorXSet(x0);
+// 		SSD1681_CursorPageSet(PageStart);
 		for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 			SSD1681_WriteData(~(PagePatternStart & PagePatternEnd));
 		}
@@ -509,16 +513,18 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	else {
 		// The line doesn't fit in single page
 		// Draw biginning of the line
-		SSD1681_CursorXSet(x0);
-		SSD1681_CursorPageSet(PageStart);
+		SSD1681_CursorSet(x0, PageStart);
+// 		SSD1681_CursorXSet(x0);
+// 		SSD1681_CursorPageSet(PageStart);
 		for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 			SSD1681_WriteData(~PagePatternStart);
 		}
 		
 		// Draw enging of the line
 		if(PagePatternEnd) {
-			SSD1681_CursorXSet(x0);
-			SSD1681_CursorPageSet(PageEnd);
+			SSD1681_CursorSet(x0, PageEnd);
+// 			SSD1681_CursorXSet(x0);
+// 			SSD1681_CursorPageSet(PageEnd);
 			for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 				SSD1681_WriteData(~PagePatternEnd);
 			}
@@ -526,8 +532,9 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
-			SSD1681_CursorXSet(x0);
-			SSD1681_CursorPageSet(++PageStart);
+			SSD1681_CursorSet(x0, ++PageStart);
+// 			SSD1681_CursorXSet(x0);
+// 			SSD1681_CursorPageSet(++PageStart);
 			for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 				SSD1681_WriteData(0x00);
 			}
@@ -570,102 +577,59 @@ void SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 }
 #if 0
 // ========================================
-// Bitmaps
+// Bitmap
 // ========================================
 
+// Draw bitmap
 void SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap) {
-	switch(Bitmap->ColorDepth) {
-		case SSD1681_ColorMono:		SSD1681_BitmapMono(Bitmap);		break;
-		case SSD1681_ColorRGB332:	SSD1681_BitmapRGB332(Bitmap);	break;
-		case SSD1681_ColorRGB565:	SSD1681_BitmapRGB565(Bitmap);	break;
-	}
-}
-
-// Draw a monochrome bitmap
-// Foreground color, background color, XY coordinates set before calling SSD1681_BitmapMono()
-void SSD1681_BitmapMono(const SSD1681_Bitmap_t * Bitmap) {
+	uint16_t Address;
+	uint8_t Page = Bitmap->Height / SSD1681_PAGE_HEIGHT - 1;
 	
-	// Get size fo bitmap
-	uint8_t WidthPixels = Bitmap->Width;
-	uint8_t HeightPixels = Bitmap->Height;
+	uint8_t CursorX_Old = SSD1681_CursorX;
+	uint8_t CursorL_Old = SSD1681_CursorP;
 	
-	// Set active area to draw in
-	SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorX + WidthPixels - 1, SSD1681_CursorY, SSD1681_CursorY + HeightPixels - 1);
-	
-	// Column loop
-	uint8_t Buffer = 0;
-	uint16_t Address = 0;
-	SSD1681_CHIP_SELECT;
-	for(uint8_t ActualColumn = 0; ActualColumn < WidthPixels; ActualColumn++) {
+	do {
+		Address = Page;
 		
-		uint8_t ActualRow = HeightPixels;
-		uint8_t BitMask = 0;
-		
-		// Row loop
-		while(ActualRow--) {
-			if(BitMask == 0) {
-				BitMask = 0b10000000;
-				Buffer = Bitmap->Bitmaps[Address++];
-			}
-			
-			if(Buffer & BitMask) {
-				// Foreground color
-				Spi_2(SSD1681_ColorFrontH, SSD1681_ColorFrontL);
-			}
-			else {
-				// Background color
-				Spi_2(SSD1681_ColorBackH, SSD1681_ColorBackL);
-			}
-			
-			// Move bitmask
-			BitMask = BitMask >> 1;
+		SSD1681_CHIP_SELECT;
+		SSD1681_DC_DATA;
+		for(uint8_t i = 0; i < Bitmap->Width; i++) {
+			Spi_1(SSD1681_Color ? Bitmap->Array[Address] : ~Bitmap->Array[Address]);
+			Address = Address + Bitmap->Height / SSD1681_PAGE_HEIGHT;
 		}
-	}
-	SSD1681_CHIP_DESELECT;
-}
-
-// Draw a bitmap saved in format RGB565
-// Set XY coordinates set before calling
-void SSD1681_BitmapRGB565(const SSD1681_Bitmap_t * Bitmap) {
-	
-	// Get size fo bitmap
-	uint8_t WidthPixels = Bitmap->Width;
-	uint8_t HeightPixels = Bitmap->Height;
-	
-	// Set active area to draw into
-	SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorX + WidthPixels - 1, SSD1681_CursorY, SSD1681_CursorY + HeightPixels - 1);
-	
-	// Stream all pixels
-	SSD1681_CHIP_SELECT;
-	Spi_Write(Bitmap->Bitmaps, WidthPixels * HeightPixels * 2);
-	SSD1681_CHIP_DESELECT;
-}
-
-// Draw a bitmap saved in format RGB5332
-// Set XY coordinates set before calling
-void SSD1681_BitmapRGB332(const SSD1681_Bitmap_t * Bitmap) {
-	
-	// Get size fo bitmap
-	uint8_t WidthPixels = Bitmap->Width;
-	uint8_t HeightPixels = Bitmap->Height;
-	uint16_t Size = WidthPixels * HeightPixels;
-	uint16_t Color565;
-	const uint8_t * BitmapPointer = Bitmap->Bitmaps;
-	
-	// Set active area to draw in
-	SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorX + WidthPixels - 1, SSD1681_CursorY, SSD1681_CursorY + HeightPixels - 1);
-	
-	// Transmit all pixels
-	SSD1681_CHIP_SELECT;
-	while(Size--) {
-		Color565 = SSD1681_ColorRGB332toRGB565(*BitmapPointer++);
-		Spi_2(Color565 >> 8, Color565 & 0xFF);
-	}
-	SSD1681_CHIP_DESELECT;
+		SSD1681_CHIP_DESELECT;
+		
+		// If this was lat page
+		if(Page == 0) {
+			// It was the last page
+			
+			// Set curson at the begining of the bitmap
+			if(Bitmap->Height / SSD1681_PAGE_HEIGHT > 1) {
+				SSD1681_CursorPageSet(CursorL_Old);
+			}
+			
+			// Set cursor at the end of the bitmap
+			SSD1681_CursorX = CursorX_Old + Bitmap->Width;
+			if(SSD1681_CursorX >= SSD1681_DISPLAY_SIZE_X) {
+				SSD1681_CursorX = SSD1681_CursorX - SSD1681_DISPLAY_SIZE_X;
+			}
+		}
+		else {
+			// It was not the last page
+			
+			// Set cursor back at the beginnign of the page
+			SSD1681_CursorSet(CursorX_Old, SSD1681_CursorP + 1);
+			
+// 			SSD1681_CursorXSet(CursorX_Old);
+// 			
+// 			// Move curson on page below
+// 			SSD1681_CursorPageSet(SSD1681_CursorP + 1);
+		}
+	} while(Page--);
 }
 
 // ========================================
-// Fonts
+// Text
 // ========================================
 
 // Get actual font
@@ -673,15 +637,14 @@ const SSD1681_FontDef_t * SSD1681_FontGet(void) {
 	return SSD1681_Font;
 }
 
-// Set actual font
+// Set font
 void SSD1681_FontSet(const SSD1681_FontDef_t * Font) {
 	SSD1681_Font = Font;
 }
-
 // Print single character
 void SSD1681_PrintChar(uint8_t Char) {
 	
-	// Check if character is supported by font
+	// Check if the character is supported by the font
 	if(Char < SSD1681_Font->FirstChar) Char = SSD1681_Font->LastChar;
 	if(Char > SSD1681_Font->LastChar) Char = SSD1681_Font->LastChar;
 	
@@ -691,15 +654,12 @@ void SSD1681_PrintChar(uint8_t Char) {
 	// Find width of the character and its position is bitmap table
 	uint8_t Width;
 	uint8_t Height = SSD1681_Font->Height;
-	uint8_t Spacing = SSD1681_Font->Spacing;
 	uint16_t Address;
 	if(SSD1681_Font->Width > 0) {
-		// For font with fixed width of all characters
 		Width = SSD1681_Font->Width;
-		Address = Char * Width * (Height/8);
+		Address = Char * Width * Height;
 	}
 	else {
-		// For font with characters with variable width
 		Width = SSD1681_Font->Descriptors[Char].Width;
 		Address = SSD1681_Font->Descriptors[Char].Offset;
 	}
@@ -711,59 +671,62 @@ void SSD1681_PrintChar(uint8_t Char) {
 		Width = SSD1681_Font->Descriptors[Char].Width;
 	}
 	
-	// Set active area to write into
-	SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorX + Width + Spacing - 1, SSD1681_CursorY, SSD1681_CursorY + Height - 1);
+	// Update cursor position
+	uint8_t CursorX_Old = SSD1681_CursorX;
+	uint8_t CursorL_Old = SSD1681_CursorP;
+	uint16_t Address_Old = Address;
 	
-	// Stream all pixels
-	uint8_t Buffer = 0;
-	SSD1681_CHIP_SELECT;
+	// Loop iterator
+	uint8_t Linia = Height - 1;
 	
-	// Column loop
-	for(uint8_t ActualColumn = 0; ActualColumn < Width; ActualColumn++) {
+	// Print all bytes of all pages
+	do {
 		
-		uint8_t ActualRow = Height;
-		uint8_t BitMask = 0;
+		Address = Address + Linia;
 		
-		// Row loop
-		while(ActualRow--) {
-			if(BitMask == 0) {
-				BitMask = 0b10000000;
-				Buffer = SSD1681_Font->Bitmaps[Address++];
+		// Print part of the charater that is proper for this page
+		SSD1681_CHIP_SELECT;
+		SSD1681_DC_DATA;
+				
+		// Char
+		for(uint8_t i=0; i<Width; i++) {
+			Spi_1(SSD1681_Color ? SSD1681_Font->Bitmaps[Address] : ~SSD1681_Font->Bitmaps[Address]);
+			Address = Address + Height;
+		}
+		Address = Address + Height;
+				
+		// Spacing
+		for(uint8_t i = SSD1681_Font->Spacing; i; i--) {
+			Spi_1(SSD1681_Color ? 0x00 : 0xFF);
+		}
+				
+		SSD1681_CHIP_DESELECT;
+		
+		// CzyIf this was the last line
+		if(Linia == 0) {
+			
+			if(Height > 1) {
+				SSD1681_CursorPageSet(CursorL_Old);
 			}
 			
-			if(Buffer & BitMask) {
-				// Transmit foreground color
-				Spi_2(SSD1681_ColorFrontH, SSD1681_ColorFrontL);
+			SSD1681_CursorX = CursorX_Old + Width + SSD1681_Font->Spacing;
+			if(SSD1681_CursorX >= SSD1681_DISPLAY_SIZE_X) {
+				SSD1681_CursorX = SSD1681_CursorX - SSD1681_DISPLAY_SIZE_X;
 			}
-			else {
-				// Transmit background color
-				Spi_2(SSD1681_ColorBackH, SSD1681_ColorBackL);
-			}
-			
-			BitMask = BitMask >> 1;
 		}
-	}
-	
-	// Spacing
-	for(uint8_t Column = 0; Column < Spacing; Column++) {
-		for(uint8_t i=0; i<Height; i++) {
-			Spi_2(SSD1681_ColorBackH, SSD1681_ColorBackL);
+		else {
+			// It was not the last line
+			SSD1681_CursorSet(CursorX_Old, SSD1681_CursorP + 1);
+// 			SSD1681_CursorXSet(CursorX_Old);
+// 			SSD1681_CursorPageSet(SSD1681_CursorP + 1);
+			Address = Address_Old;
 		}
-	}
-	
-	// End of transmission
-	SSD1681_CHIP_DESELECT;
-	
-	// Move cursor at the end of character
-	SSD1681_CursorX = SSD1681_CursorX + Width + Spacing;
-	if(SSD1681_CursorX > SSD1681_DISPLAY_SIZE_X) {
-		SSD1681_CursorX = SSD1681_CursorX - SSD1681_DISPLAY_SIZE_X;
-	}
+	} while(Linia--);
 }
 
 // Calculate text width
-uint8_t SSD1681_TextWidthGet(const char * Text) {
-	uint8_t Width = 0;
+uint16_t SSD1681_TextWidth(const char * Text) {
+	uint16_t Width = 0;
 	uint16_t Offset = SSD1681_Font->FirstChar;
 	
 	// Check if the font has characters with fixed width
@@ -772,13 +735,16 @@ uint8_t SSD1681_TextWidthGet(const char * Text) {
 		// Count number of characters
 		while(*Text++) Width++;
 		
+		// Spacing after every character
+		Width = Width + SSD1681_Font->Spacing;
+		
 		// Multiply by width of single character
-		Width = Width * (SSD1681_Font->Width + SSD1681_Font->Spacing);
+		Width = Width * (SSD1681_Font->Width);
 	}
 	else {
 		// Font with variable character width
 		while(*Text) {
-			Width += SSD1681_Font->Descriptors[(*Text) - Offset].Width + SSD1681_Font->Spacing;
+			Width += SSD1681_Font->Descriptors[(*Text) - Offset].Width + SSD1681_Font->Spacing;			
 			Text++;
 		}
 	}
@@ -787,40 +753,34 @@ uint8_t SSD1681_TextWidthGet(const char * Text) {
 }
 
 // Print text. Remember to set font first!
-void SSD1681_Text(const char * Text, uint8_t Align) {
+void SSD1681_Text(const char * Text, SSD1681_align_t Align) {
 	
 	// Set cursor position to match text widht and align
-	uint8_t Width = SSD1681_TextWidthGet(Text);
-	uint8_t Height = SSD1681_Font->Height;
-	
-	// Horizontal align
-	switch(Align & 0x0F) {
-		case SSD1681_HALIGN_LEFT:
-		SSD1681_CursorX = 0;
-		break;
-		case SSD1681_HALIGN_CENTER:
-		SSD1681_CursorX = SSD1681_DISPLAY_SIZE_X/2 - Width/2;
-		break;
-		case SSD1681_HALIGN_RIGHT:
-		SSD1681_CursorX = SSD1681_DISPLAY_SIZE_X - Width;
-		break;
+	uint16_t Width;
+	switch(Align) {
+		
+		case SSD1681_AlignLeft:
+			SSD1681_CursorXSet(0);
+			break;
+		
+		case SSD1681_AlignRight:
+			Width = SSD1681_TextWidth(Text);
+			SSD1681_CursorXSet(SSD1681_DISPLAY_SIZE_X - Width);
+			break;
+		
+		case SSD1681_AlignCenter:
+			Width = SSD1681_TextWidth(Text);
+			SSD1681_CursorXSet(SSD1681_DISPLAY_SIZE_X/2 - Width/2);
+			break;
+		
+		default:
+			break;
 	}
 	
-	// Vertical align
-	switch(Align & 0xF0) {
-		case SSD1681_VALIGN_TOP:
-		SSD1681_CursorY = 0;
-		break;
-		case SSD1681_VALIGN_CENTER:
-		SSD1681_CursorY = SSD1681_DISPLAY_SIZE_Y/2 - Height/2;
-		break;
-		case SSD1681_VALIGN_BOTTOM:
-		SSD1681_CursorY = SSD1681_DISPLAY_SIZE_Y - Height;
-		break;
-	}
 	// Print text
 	while(*Text) SSD1681_PrintChar(*Text++);
 }
+
 
 
 #endif
