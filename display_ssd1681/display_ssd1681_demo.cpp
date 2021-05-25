@@ -27,26 +27,26 @@ void SSD1681_CmdCursor(uint8_t argc, uint8_t * argv[]) {
 	
 	// If no arguments, then print actual cursor position
 	if(argc == 1) {
+		uint8_t x = SSD1681_CursorXGet();
 		uint8_t p = SSD1681_CursorPageGet();
-		uint8_t y = SSD1681_CursorYGet();
-		Print("p = ");
+		Print("x = ");
+		Print_Dec(x);
+		Print("\r\np = ");
 		Print_Dec(p);
-		Print("\r\ny = ");
-		Print_Dec(y);
 	}
 	
 	// If arguments given, then set cursor position
 	else {
-		// Argument 1 - page
-		uint8_t p;
-		if(Parse_Dec8(argv[1], &p, SSD1681_PAGE_COUNT-1)) return;
+		// Argument 1 - coordinate x
+		uint8_t x;
+		if(Parse_Dec8(argv[1], &x, SSD1681_DISPLAY_SIZE_Y-1)) return;
 		
-		// Argument 2 - coordinate Y
-		uint8_t y;
-		if(Parse_Dec8(argv[2], &y, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		// Argument 2 - page
+		uint8_t p;
+		if(Parse_Dec8(argv[2], &p, SSD1681_PAGE_COUNT-1)) return;
 		
 		// Execute command
-		SSD1681_CursorSet(p, y);
+		SSD1681_CursorSet(x, p);
 		Print_ResponseOK();
 	}
 }
@@ -58,36 +58,36 @@ void SSD1681_CmdActiveArea(uint8_t argc, uint8_t * argv[]) {
 	if(argc == 1) {
 		Print("p0 = ");
 		Print_Dec(SSD1681_CursorP);
-		Print("\r\ny0 = ");
-		Print_Dec(SSD1681_CursorY);
+		Print("\r\nx0 = ");
+		Print_Dec(SSD1681_CursorX);
 		Print("\r\np1 = ");
 		Print_Dec(SSD1681_CursorP_Max);
-		Print("\r\ny1 = ");
-		Print_Dec(SSD1681_CursorY_Max);
+		Print("\r\nx1 = ");
+		Print_Dec(SSD1681_CursorX_Max);
 	}
 	
 	// If arguments given, then set the position of active area
 	else {
 		
-		// Argument 1 - page0
+		// Argument 1 - coordinate x0
+		uint8_t x0;
+		if(Parse_Dec8(argv[1], &x0, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		
+		// Argument 2 - page0
 		uint8_t p0;
-		if(Parse_Dec8(argv[1], &p0, SSD1681_DISPLAY_SIZE_X-1)) return;
+		if(Parse_Dec8(argv[2], &p0, SSD1681_PAGE_COUNT-1)) return;
 		
-		// Argument 2 - coordinate Y0
-		uint8_t y0;
-		if(Parse_Dec8(argv[2], &y0, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		// Argument 3 - coordinate x1
+		uint8_t x1;
+		if(Parse_Dec8(argv[3], &x1, SSD1681_DISPLAY_SIZE_Y-1)) return;
 		
-		// Argument 3 - page1
+		// Argument 4 - page1
 		uint8_t p1;
-		if(Parse_Dec8(argv[3], &p1, SSD1681_DISPLAY_SIZE_X-1)) return;
-		
-		// Argument 4 - coordinate Y1
-		uint8_t y1;
-		if(Parse_Dec8(argv[4], &y1, SSD1681_DISPLAY_SIZE_Y-1)) return;
+		if(Parse_Dec8(argv[4], &p1, SSD1681_PAGE_COUNT-1)) return;
 		
 		// Execute command
-		SSD1681_ActiveAreaSet(p0, y0, p1, y1);
-		SSD1681_CursorSet(p0, y0);
+		SSD1681_ActiveAreaSet(x0, p0, x1, p1);
+		SSD1681_CursorSet(x0, p0);
 		Print_ResponseOK();
 	}
 }
@@ -103,16 +103,8 @@ void SSD1681_CmdTest(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Dec16(argv[2], &Times)) return;
 	
 	// Execute command
-// 	uint8_t P = SSD1681_CursorPageGet();
-// 	uint8_t Y = SSD1681_CursorYGet();
 	SSD1681_Bytes(Pattern, Times);
 	SSD1681_Refresh();
-	
-// 	SSD1681_CursorPageSet(P);
-// 	SSD1681_CursorYSet(Y);
-// 	SSD1681_Bytes(Pattern, Times);
-// 	SSD1681_Refresh();
-	
 	Print_ResponseOK();
 }
 
@@ -123,7 +115,7 @@ void SSD1681_CmdClear(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_Refresh();
 	SSD1681_Clear();
 	SSD1681_Refresh();
-	SSD1681_ActiveAreaSet(0, 0, 24, 199);
+	SSD1681_ActiveAreaSet(0, 0, 199, 24);
 	SSD1681_CursorSet(0, 0);
 	Print_ResponseOK();
 }
@@ -134,7 +126,7 @@ void SSD1681_CmdFill(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_Refresh();
 	SSD1681_Fill();
 	SSD1681_Refresh();
-	SSD1681_ActiveAreaSet(0, 0, 24, 199);
+	SSD1681_ActiveAreaSet(0, 0, 199, 24);
 	SSD1681_CursorSet(0, 0);
 	Print_ResponseOK();
 }
@@ -146,7 +138,7 @@ void SSD1681_CmdChessboard(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_Refresh();
 	SSD1681_Chessboard();
 	SSD1681_Refresh();
-	SSD1681_ActiveAreaSet(0, 0, 24, 199);
+	SSD1681_ActiveAreaSet(0, 0, 199, 24);
 	SSD1681_CursorSet(0, 0);
 	Print_ResponseOK();
 }
@@ -182,18 +174,6 @@ void SSD1681_CmdColor(uint8_t argc, uint8_t * argv[]) {
 }
 
 
-/*
-// Set contrast
-void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]) {
-	
-	// Argument 1 - contrast value
-	uint8_t Contrast;
-	if(Parse_Dec8(argv[1], &Contrast)) return;
-	
-	// Execute command
-	SSD1681_ContrastSet(Contrast);
-	Print_ResponseOK();
-}
 
 // Draw pixel
 void SSD1681_CmdPixel(uint8_t argc, uint8_t * argv[]) {
@@ -303,7 +283,7 @@ void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]) {
 	Print_ResponseOK();
 }
 
-
+/*
 
 // Set foreground color
 void SSD1681_CmdColorFront(uint8_t argc, uint8_t * argv[]) {

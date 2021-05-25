@@ -82,18 +82,18 @@ HARDWARE
 
 extern uint8_t SSD1681_CursorP;
 extern uint8_t SSD1681_CursorP_Max;
-extern uint8_t SSD1681_CursorY;
-extern uint8_t SSD1681_CursorY_Max;
+extern uint8_t SSD1681_CursorX;
+extern uint8_t SSD1681_CursorX_Max;
 
 // ========================================
 // Basic functions
 // ========================================
 
 void		SSD1681_Init(void);
-void		SSD1681_WaitUntilReady(void);
-//void		SSD1681_WriteCommand(const uint8_t Command);
-//void		SSD1681_WriteData(const uint8_t Data);
-//void		SSD1681_WriteLUT(const uint8_t * LUT);
+void		SSD1681_WaitForReady(void);
+void		SSD1681_WriteCommand(const uint8_t Command);
+void		SSD1681_WriteData(const uint8_t Data);
+void		SSD1681_WriteLUT(const uint8_t * LUT);
 void		SSD1681_Refresh(void);
 // void		SSD1681_WriteRamEnable(void);
 // void		SSD1681_ContrastSet(const uint8_t Value);
@@ -105,14 +105,14 @@ void		SSD1681_Chessboard(void);
 // Cursor and active area
 // ========================================
 
-void		SSD1681_CursorSet(uint8_t p, uint8_t y);
+void		SSD1681_CursorSet(uint8_t x, uint8_t p);
 uint8_t		SSD1681_CursorPageGet(void);
-void		SSD1681_CursorPageSet(uint8_t Page);
-uint8_t		SSD1681_CursorYGet(void);
-void		SSD1681_CursorYSet(uint8_t y);
-void		SSD1681_ActiveAreaSet(uint8_t p0, uint8_t y0, uint8_t p1, uint8_t y1);
+void		SSD1681_CursorPageSet(uint8_t p);
+uint8_t		SSD1681_CursorXGet(void);
+void		SSD1681_CursorXSet(uint8_t x);
+void		SSD1681_ActiveAreaSet(uint8_t x0, uint8_t p0, uint8_t x1, uint8_t p1);
 void		SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1);
-void		SSD1681_ActiveAreaYSet(uint8_t y0, uint8_t y1);
+void		SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1);
 
 // ========================================
 // Colors
@@ -125,13 +125,13 @@ void		SSD1681_ColorSet(SSD1681_Color_t Color);
 // Drawing
 // ========================================
 
-// void		SSD1681_DrawPixel(uint8_t x, uint8_t y);
-// void		SSD1681_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
-// void		SSD1681_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
-// void		SSD1681_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-// void		SSD1681_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-// void		SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
-// void		SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
+void		SSD1681_DrawPixel(uint8_t x, uint8_t y);
+void		SSD1681_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length);
+void		SSD1681_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length);
+void		SSD1681_DrawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+void		SSD1681_DrawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+void		SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+void		SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r);
 
 // ========================================
 // Bitmaps

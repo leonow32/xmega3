@@ -48,12 +48,11 @@ void SSD1681_CmdActiveArea(uint8_t argc, uint8_t * argv[]);
 
 void SSD1681_CmdColor(uint8_t argc, uint8_t * argv[]);
 
-// void SSD1681_CmdContrast(uint8_t argc, uint8_t * argv[]);
-// void SSD1681_CmdPixel(uint8_t argc, uint8_t * argv[]);
-// void SSD1681_CmdLine(uint8_t argc, uint8_t * argv[]);
-// void SSD1681_CmdRectangle(uint8_t argc, uint8_t * argv[]);
-// void SSD1681_CmdRectangleFill(uint8_t argc, uint8_t * argv[]);
-// void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdPixel(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdLine(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdRectangle(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdRectangleFill(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 // 
 // void SSD1681_CmdColorFront(uint8_t argc, uint8_t * argv[]);
 // void SSD1681_CmdColorBack(uint8_t argc, uint8_t * argv[]);
