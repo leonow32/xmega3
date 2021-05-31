@@ -99,6 +99,38 @@
 #endif
 
 // ========================================
+// Demo Display SSD1309
+// ========================================
+
+#if PRODUCT_SSD1309
+	
+	#if HW_CPU_ATmegaXX08_32pin
+		#define	UART0_PORTA_01				0
+		#define	UART0_PORTA_45				0
+		#define	UART1_PORTC_01				0		// Connector
+		#define	UART2_PORTF_01				1		// Debug
+		#define	UART2_PORTF_45				0
+	#endif
+	
+	// Baud rate
+	#define		UART_BAUD					115200
+	
+	// Konfiguracja
+	#define		UART_CLEAR_BYTE_AFTER_READ	0				// W celach debugowych, czyœci bajty z TxBuffer i RxBuffer po ich wys³aniu/odebraniu
+	#define		UART_BREAK_ON_BUFFER_FULL	0				// W celach debugowych, zatrzymuje program jeœli bufor zostaje zape³niony
+	#define		UART_DEBUG_RUN				1				// W celach debugorych, UART dzia³a podczas breakpointów
+	
+	// Tryb uœpienia je¿eli jest wykorzystywany AVR uCosmos
+	#define		UART_USE_UCOSMOS_SLEEP		0
+	
+	// Bufory (max 254)
+	#define		UART_TX_BUFFER_LENGTH		255
+	#define		UART_RX_BUFFER_LENGTH		128
+	
+	#define		UART_CONFIG_DONE
+#endif
+
+// ========================================
 // Demo Display SSD1351
 // ========================================
 

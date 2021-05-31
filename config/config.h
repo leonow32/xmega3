@@ -34,6 +34,15 @@ CHANGELOG
 #endif
 
 // ========================================
+// Demo Display SSD1309
+// ========================================
+
+#if PRODUCT_SSD1309
+	#define HW_CPU_ATmegaXX08_32pin			1
+	#define HW_CONFIG_DONE
+#endif
+
+// ========================================
 // Demo Display SSD1351
 // ========================================
 

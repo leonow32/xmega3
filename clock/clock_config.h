@@ -24,6 +24,16 @@
 #endif
 
 // ========================================
+// Demo Display SSD1309
+// ========================================
+
+#if PRODUCT_SSD1309
+	#define CLOCK_PRESCALER				1
+	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
+	#define CLOCK_CONFIG_DONE
+#endif
+
+// ========================================
 // Demo Display SSD1351
 // ========================================
 

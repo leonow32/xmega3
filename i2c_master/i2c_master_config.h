@@ -45,6 +45,17 @@
 #endif
 
 // ========================================
+// Demo Display SSD1309
+// ========================================
+
+#if PRODUCT_SSD1309
+	#define		I2C_PORTA_23						1
+	#define		I2C_MASTER_SCL_FREQUENCY			157000
+	#define		I2C_MASTER_USE_DEMO_COMMANDS		1
+	#define		I2C_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 
