@@ -15,6 +15,10 @@
 	#include	"../display_sh1106/display_sh1106_demo.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1309
+	#include	"../display_ssd1309/display_ssd1309_demo.h"
+#endif
+
 #if COMPONENT_DISPLAY_SSD1351
 	#include	"../display_ssd1351/display_ssd1351_demo.h"
 #endif
@@ -136,6 +140,49 @@ const Console_NamePointer_t Console_CommandList[] = {
 	
 	// Benchmark
 	{"circles",			SH1106_CmdCircles},
+#endif
+
+// ========================================
+// Display SSD1309 demo
+// ========================================
+
+#if SSD1309_USE_DEMO_COMMANDS
+	{"init",			SSD1309_CmdInit},
+	{"clr",				SSD1309_CmdClear},
+	{"fill",			SSD1309_CmdFill},
+	{"slash",			SSD1309_CmdDrawSlash},
+	{"chess",			SSD1309_CmdDrawChessboard},
+ 	{"cont",			SSD1309_CmdContrast},
+ 	{"pix",				SSD1309_CmdPixel},
+ 	{"lin",				SSD1309_CmdLine},
+ 	{"rec",				SSD1309_CmdRectangle},
+ 	{"recf",			SSD1309_CmdRectangleFill},
+ 	{"cir",				SSD1309_CmdDrawCircle},
+ 	{"cur",				SSD1309_CmdCursor},
+ 	{"color",			SSD1309_CmdColor},
+	{"txt",				SSD1309_CmdText},
+	{"font",			SSD1309_CmdFont},
+	{"fonts",			SSD1309_CmdFontDemo},
+	
+	// Font demos
+	#if SSD1309_FONT_DOS8x8
+		{"dos8",		SSD1309_CmdDemoFontDos8x8},
+	#endif
+	
+	#if SSD1309_FONT_DOS16x8
+		{"dos16",		SSD1309_CmdDemoFontDos16x8},
+	#endif
+	
+	// Bitmaps
+	{"bitmap",			SSD1309_CmdBitmap},
+	
+	// Animated demos
+	{"snake",			SSD1309_CmdSnake},
+	{"pixels",			SSD1309_CmdPixels},
+	{"face",			SSD1309_CmdFace},
+	
+	// Benchmark
+	{"circles",			SSD1309_CmdCircles},
 #endif
 
 // ========================================
