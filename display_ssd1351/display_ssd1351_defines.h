@@ -135,5 +135,4 @@ struct SSD1351_Bitmap_t {
 	const uint8_t * Bitmaps;					// Pointer to bitmap array
 };
 
-
 #endif /* DISPLAY_SSD1351_DEFINES_H_ */

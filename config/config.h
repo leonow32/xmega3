@@ -43,6 +43,15 @@ CHANGELOG
 #endif
 
 // ========================================
+// Demo Display SSD1681
+// ========================================
+
+#if PRODUCT_SSD1681
+	#define HW_CPU_ATmegaXX08_32pin			1
+	#define HW_CONFIG_DONE
+#endif
+
+// ========================================
 // Dev Board AVR-IoT
 // ========================================
 

@@ -48,6 +48,10 @@
 	#include	"display_ssd1351/display_ssd1351.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1681
+	#include	"display_ssd1681/display_ssd1681.h"
+#endif
+
 #if COMPONENT_DS3231
 	#include	"ds3231/ds3231.h"
 #endif
@@ -141,6 +145,10 @@ int main(void) {
 	
 	#if COMPONENT_DISPLAY_SSD1351
 		SSD1351_Init();
+	#endif
+	
+	#if COMPONENT_DISPLAY_SSD1681
+		SSD1681_Init();
 	#endif
 	
 	#if COMPONENT_DS3231
