@@ -15,7 +15,7 @@
 	#define		SSD1309_USE_RMW					1	// read-modify-write for I2C interface only, takes about 6 times longer than without RMW
 	#define		SSD1309_USE_DEMO_COMMANDS		1
 	#define		SSD1309_CLEAR_AFERT_INIT			1
-	#define		SSD1309_DEFAULT_CONTRAST			255
+	#define		SSD1309_DEFAULT_CONTRAST			128
 	
 	// Addess on I2C bus
 	#if SSD1309_USE_I2C
@@ -64,10 +64,10 @@
 	#define		SSD1309_USE_SPI					0
 	
 	// Config
-	#define		SSD1309_USE_RMW					1	// read-modify-write for I2C interface only, takes about 6 times longer than without RMW
+	#define		SSD1309_USE_RMW					0	// read-modify-write for I2C interface only, takes about 6 times longer than without RMW
 	#define		SSD1309_USE_DEMO_COMMANDS		1
-	#define		SSD1309_CLEAR_AFERT_INIT			1
-	#define		SSD1309_DEFAULT_CONTRAST			255
+	#define		SSD1309_CLEAR_AFERT_INIT			0
+	#define		SSD1309_DEFAULT_CONTRAST			0xCF
 	
 	// Addess on I2C bus
 	#if SSD1309_USE_I2C
@@ -101,7 +101,7 @@
 	#define		SSD1309_FONT_SANS24B_PL			0						// 
 	
 	// Bitmaps
-	#define		SSD1309_BITMAP_EXTRONIC_LOGO		0						// 1024 B
+	#define		SSD1309_BITMAP_EXTRONIC_LOGO		1						// 1024 B
 	
 #endif
 

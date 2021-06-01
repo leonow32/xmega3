@@ -14,34 +14,69 @@ static const SSD1309_FontDef_t * SSD1309_Font = &SSD1309_DEFAULT_FONT;
 // Display config for init function
 static const uint8_t SSD1309_InitSequence[] = {
 	SSD1309_DISPLAY_OFF,						// Display OFF
-	SSD1309_COLUMN_LOW(SSD1309_OFFSET_X),		// Low Column - select x = 0
-	SSD1309_COLUMN_HIGH(0),					// High Column - select x = 0
-	SSD1309_PAGE(0),							// First page select
-	SSD1309_START_LINE(0),					// Start line
-	SSD1309_REMAP(1),						// Remap
-	SSD1309_COMMON_PADS_HW_CONFIG,			// Com pins
-	0x12,
-	SSD1309_DISPLAY_OFFSET,					// Display offset
-	0x00,									// No offset
-	SSD1309_SCAN_DIRECTION(0),				// Scan direction
-	0xC8,
-	SSD1309_NORMAL_REVERSE(0),				// Normal display
-	SSD1309_ENTRIE_DISPLAY_ON(0),			// Display ON
-	SSD1309_CONTRAST,						// Set contrast
-	SSD1309_DEFAULT_CONTRAST,				// Contrast DATA
-	SSD1309_MULTIPLEX_RATIO,					// Multiplex ratio
-	0x3F,									// 1/64 duty
+	
 	SSD1309_CLOCK_DIV_FREQ,					// Display clock divide
 	0x80,
-	SSD1309_CHARGE_PERIOD,					// Precharge period
-	0xF1,
-	SSD1309_VCOM_DESELECT_LEVEL,				// VCOM deselect
-	0x40,
+	
+	SSD1309_MULTIPLEX_RATIO,					// Multiplex ratio
+	SSD1309_DISPLAY_SIZE_Y - 1,									// 1/64 duty
+	
+	SSD1309_DISPLAY_OFFSET,					// Display offset
+	0x00,									// No offset
+	
+	SSD1309_START_LINE(0),					// Start line
+	
 	SSD1309_CHARGE_PUMP,						// Charge pump 0x8d
 	0x14,
-	#if SSD1309_CLEAR_AFERT_INIT == 0
-		SSD1309_DISPLAY_ON,					// Display ON
-	#endif
+	
+	SSD1309_MEMORY_MODE,
+	0x00, // 0x0 act like ks0108
+	
+	SSD1309_REMAP(1),						// Remap
+	
+	SSD1309_COMSCANDEC,
+	
+	SSD1309_COMMON_PADS_HW_CONFIG,			// Com pins
+	0x12,
+	
+	SSD1309_CONTRAST,						// Set contrast
+	SSD1309_DEFAULT_CONTRAST,				// Contrast DATA
+	
+	SSD1309_CHARGE_PERIOD,					// Precharge period
+	0xF1,
+	
+	SSD1309_VCOM_DESELECT_LEVEL,				// VCOM deselect
+	0x40,
+	
+	SSD1309_ENTRIE_DISPLAY_ON(0),			// Display ON
+	
+	SSD1309_NORMAL_REVERSE(0),				// Normal display
+	
+	SSD1309_DEACTIVATE_SCROLL,
+	
+	SSD1309_DISPLAY_ON,
+	
+	
+	//SSD1309_COLUMN_LOW(SSD1309_OFFSET_X),		// Low Column - select x = 0
+// 	SSD1309_COLUMN_HIGH(0),					// High Column - select x = 0
+// 	SSD1309_PAGE(0),							// First page select
+// 	
+// 	
+// 	
+// 	
+// 	SSD1309_SCAN_DIRECTION(0),				// Scan direction
+// 	0xC8,
+// 	
+// 	
+// 	
+// 	
+// 	
+// 	
+// 	
+// 	
+// 	#if SSD1309_CLEAR_AFERT_INIT == 0
+// 		SSD1309_DISPLAY_ON,					// Display ON
+// 	#endif
 };
 
 // Initialization

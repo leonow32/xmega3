@@ -9,7 +9,7 @@
 #define		SSD1309_DISPLAY_SIZE_Y			64
 #define		SSD1309_PAGE_HEIGHT				8
 #define		SSD1309_PAGE_COUNT				8
-#define		SSD1309_OFFSET_X					2			// Horizontal offset - change this if the image doesn't appear on the center of the screen
+#define		SSD1309_OFFSET_X					0			// Horizontal offset - change this if the image doesn't appear on the center of the screen
 
 // ========================================
 // Display operation codes
@@ -18,9 +18,10 @@
 // Polecenia o d³ugoœc 1 bajta s¹ zrealizowane jako definicje, które nale¿y wywo³aæ poprzez SSD1309_WriteCommand()
 #define		SSD1309_COLUMN_LOW(Nibble)		(0x00 | (Nibble))			// 01, m³odsze 4 bity pozycji X
 #define		SSD1309_COLUMN_HIGH(Nibble)		(0x10 | (Nibble))			// 02, starsze 4 bity pozycji X
+#define		SSD1309_MEMORY_MODE				0x20						// ???
 #define		SSD1309_PUMP_VOLTAGE(Value)		(0x30 | (Value))			// 03, napiêcie przetwornicy, domyœlne 10, zakres od 0x00..0x03
-#define		SSD1309_START_LINE(Line)			(0x40 | (Line))				// 04, offset pionowy, wiêkszanie powoduje przesuwanie w górê, zakres 0..63
-#define		SSD1309_CONTRAST					0x81						// 05, kontrast nale¿y podaæ w kolejnym bajcie (0...255)
+#define		SSD1309_START_LINE(Line)		(0x40 | (Line))				// 04, offset pionowy, wiêkszanie powoduje przesuwanie w górê, zakres 0..63
+#define		SSD1309_CONTRAST				0x81						// 05, kontrast nale¿y podaæ w kolejnym bajcie (0...255)
 #define		SSD1309_REMAP(ADC)				(0xA0 | (ADC))				// 06, 1 wyœwietla praiwd³owo, 0 lustrzane odbicie
 #define		SSD1309_ENTRIE_DISPLAY_ON(On)	(0xA4 | (On))				// 07, 1 ca³y wyœwietlacz bia³y, 0 normalna praca
 #define		SSD1309_NORMAL_REVERSE(Select)	(0xA6 | (Select))			// 08, 1 negatyw, 0 pozytyw
@@ -40,6 +41,8 @@
 #define		SSD1309_END						0xEE						// 20, koñczy operacjê w trybie read-modify-write
 #define		SSD1309_NOP						0xE3						// 21
 #define		SSD1309_CHARGE_PUMP				0x8D						// polecenie, któego nie ma w datasheecie
+#define		SSD1309_COMSCANDEC				0xC8
+#define		SSD1309_DEACTIVATE_SCROLL		0x2E
 
 // Komendy steruj¹ce I2C - decyduj¹ czy nastêpny przes³any bajt to dane do wyœwietlenia czy polecenie
 #if SSD1309_USE_I2C

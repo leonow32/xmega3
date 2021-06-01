@@ -886,6 +886,12 @@
     <Compile Include="display_sh1106\font\sans8.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_ssd1309\bitmap\extronic_logo.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_ssd1309\bitmap\extronic_logo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="display_ssd1309\display_ssd1309.cpp">
       <SubType>compile</SubType>
     </Compile>

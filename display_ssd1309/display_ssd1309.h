@@ -66,7 +66,7 @@ REQUIREMENTS
 // #include	"font/sans24B_PL.h"
 
 // Bitmaps
-//#include	"bitmap/extronic_logo.h"
+#include	"bitmap/extronic_logo.h"
 
 // ========================================
 // Basic functions
