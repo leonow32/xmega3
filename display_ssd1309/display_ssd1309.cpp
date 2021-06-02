@@ -258,46 +258,6 @@ void SSD1309_CursorPageSet(uint8_t Page) {
 }
 
 // ========================================
-// Read-Modify-Write Mode
-// ========================================
-
-// This is supported only in I2C mode and not for all displays! We've got some SSD1309 displays that don't support this feature!
-
-#if SSD1309_USE_RMW
-void SSD1309_RmwStart(void) {
-	I2C_Start(SSD1309_ADDRESS_WRITE);
-	I2C_Write(SSD1309_COMMAND_BYTE);
-	I2C_Write(SSD1309_READ_MODIFY_WRITE);
-	I2C_Write(SSD1309_CoDATA_BYTE);
-	I2C_Stop();
-}
-
-void SSD1309_RmwExecute(uint8_t Byte) {
-	uint8_t Buffer;
-	
-	I2C_Start(SSD1309_ADDRESS_READ);
-	I2C_Read();		// Dummy read
-	Buffer = I2C_Read();
-	I2C_Stop();
-	
-	if(SSD1309_Color) {
-		Buffer |= Byte;
-	}
-	else {
-		Buffer &= ~Byte;
-	}
-		SSD1309_WriteData(Buffer);
-	
-	SSD1309_CursorX = (SSD1309_CursorX == (SSD1309_DISPLAY_SIZE_X-1) ? 0 : SSD1309_CursorX + 1);
-}
-
-void SSD1309_RmwEnd() {
-	SSD1309_WriteCommand(SSD1309_END);
-	SSD1309_CursorXSet(SSD1309_CursorX);
-}
-#endif
-
-// ========================================
 // Colors (black & white)
 // ========================================
 
@@ -321,14 +281,7 @@ void SSD1309_DrawPixel(uint8_t x, uint8_t y) {
 	uint8_t Page = y / SSD1309_PAGE_HEIGHT;
 	SSD1309_CursorPageSet(Page);
 	SSD1309_CursorXSet(x);
-	
-	#if SSD1309_USE_RMW
-		SSD1309_RmwStart();
-		SSD1309_RmwExecute(1 << (y % SSD1309_PAGE_HEIGHT));
-		SSD1309_RmwEnd();
-	#else
-		SSD1309_WriteData(SSD1309_Color << (y % SSD1309_PAGE_HEIGHT));
-	#endif
+	SSD1309_WriteData(SSD1309_Color << (y % SSD1309_PAGE_HEIGHT));
 }
 
 // Horizontal line, thickness is 1 pixel
@@ -341,22 +294,13 @@ void SSD1309_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	SSD1309_CursorXSet(x0);
 	
 	#if SSD1309_USE_I2C
-		#if SSD1309_USE_RMW
-			uint8_t Pattern = (1 << (y0 % SSD1309_PAGE_HEIGHT));
-			SSD1309_RmwStart();
-			while(Length--) {
-				SSD1309_RmwExecute(Pattern);
-			}
-			SSD1309_RmwEnd();
-		#else
-			uint8_t Pattern = (SSD1309_Color << (y0 % SSD1309_PAGE_HEIGHT));
-			I2C_Start(SSD1309_ADDRESS_WRITE);
-			I2C_Write(SSD1309_DATA_BYTE);
-			while(Length--) {
-				I2C_Write(Pattern);
-			}
-			I2C_Stop();
-		#endif
+		uint8_t Pattern = (SSD1309_Color << (y0 % SSD1309_PAGE_HEIGHT));
+		I2C_Start(SSD1309_ADDRESS_WRITE);
+		I2C_Write(SSD1309_DATA_BYTE);
+		while(Length--) {
+			I2C_Write(Pattern);
+		}
+		I2C_Stop();
 	#endif
 	
 	#if SSD1309_USE_SPI
@@ -372,44 +316,38 @@ void SSD1309_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 // Begin at x0, y0 and draw bottom
 void SSD1309_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	
-	#if SSD1309_USE_RMW
-		while(Length--) {
-			SSD1309_DrawPixel(x0, y0++);
-		}
-	#else
-		uint8_t PageStart			=	y0 / SSD1309_PAGE_HEIGHT;
-		uint8_t PageEnd				=	(y0+Length) / SSD1309_PAGE_HEIGHT;
-		uint8_t PagePatternStart	=	0xFF << (y0 % SSD1309_PAGE_HEIGHT);
-		uint8_t PagePatternEnd		=	~(0xFF << ((y0+Length) % SSD1309_PAGE_HEIGHT));
+	uint8_t PageStart			=	y0 / SSD1309_PAGE_HEIGHT;
+	uint8_t PageEnd				=	(y0+Length) / SSD1309_PAGE_HEIGHT;
+	uint8_t PagePatternStart	=	0xFF << (y0 % SSD1309_PAGE_HEIGHT);
+	uint8_t PagePatternEnd		=	~(0xFF << ((y0+Length) % SSD1309_PAGE_HEIGHT));
 		
-		if(PageStart == PageEnd) {
-			// Tha line fits to single page (<= 8 pixels)
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(PageStart);
-			SSD1309_WriteData(PagePatternStart & PagePatternEnd);
-		}
-		else {
-			// The line doesn;t fit in single page
-			// Draw biginning of the line
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(PageStart);
-			SSD1309_WriteData(PagePatternStart);
+	if(PageStart == PageEnd) {
+		// Tha line fits to single page (<= 8 pixels)
+		SSD1309_CursorXSet(x0);
+		SSD1309_CursorPageSet(PageStart);
+		SSD1309_WriteData(PagePatternStart & PagePatternEnd);
+	}
+	else {
+		// The line doesn;t fit in single page
+		// Draw biginning of the line
+		SSD1309_CursorXSet(x0);
+		SSD1309_CursorPageSet(PageStart);
+		SSD1309_WriteData(PagePatternStart);
 			
-			// Draw enging of the line
-			if(PagePatternEnd) {
-				SSD1309_CursorXSet(x0);
-				SSD1309_CursorPageSet(PageEnd);
-				SSD1309_WriteData(PagePatternEnd);
-			}
-			
-			// Draw middle part of the line, if there's need to
-			while(PageEnd - PageStart >= 2) {
-				SSD1309_CursorXSet(x0);
-				SSD1309_CursorPageSet(++PageStart);
-				SSD1309_WriteData(0xFF);
-			}
+		// Draw enging of the line
+		if(PagePatternEnd) {
+			SSD1309_CursorXSet(x0);
+			SSD1309_CursorPageSet(PageEnd);
+			SSD1309_WriteData(PagePatternEnd);
 		}
-	#endif
+			
+		// Draw middle part of the line, if there's need to
+		while(PageEnd - PageStart >= 2) {
+			SSD1309_CursorXSet(x0);
+			SSD1309_CursorPageSet(++PageStart);
+			SSD1309_WriteData(0xFF);
+		}
+	}
 }
 
 // Draw line at any angle with Bresenham's algorithm
@@ -481,20 +419,12 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SSD1309_CursorPageSet(PageStart);
 		
 		#if SSD1309_USE_I2C
-			#if SSD1309_USE_RMW
-				SSD1309_RmwStart();
-				for(uint8_t i=x0; i<=x1; i++) {
-					SSD1309_RmwExecute(PagePatternStart & PagePatternEnd);
-				}
-				SSD1309_RmwEnd();
-			#else
-				I2C_Start(SSD1309_ADDRESS_WRITE);
-				I2C_Write(SSD1309_DATA_BYTE);
-				for(uint8_t i=x0; i<=x1; i++) {
-					I2C_Write(PagePatternStart & PagePatternEnd);
-				}
-				I2C_Stop();
-			#endif
+			I2C_Start(SSD1309_ADDRESS_WRITE);
+			I2C_Write(SSD1309_DATA_BYTE);
+			for(uint8_t i=x0; i<=x1; i++) {
+				I2C_Write(PagePatternStart & PagePatternEnd);
+			}
+			I2C_Stop();
 		#endif
 		
 		#if SSD1309_USE_SPI
@@ -509,20 +439,12 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		SSD1309_CursorPageSet(PageStart);
 		
 		#if SSD1309_USE_I2C
-			#if SSD1309_USE_RMW
-				SSD1309_RmwStart();
-				for(uint8_t i=x0; i<=x1; i++) {
-					SSD1309_RmwExecute(PagePatternStart);
-				}
-				SSD1309_RmwEnd();
-			#else
-				I2C_Start(SSD1309_ADDRESS_WRITE);
-				I2C_Write(SSD1309_DATA_BYTE);
-				for(uint8_t i=x0; i<=x1; i++) {
-					I2C_Write(PagePatternStart);
-				}
-				I2C_Stop();
-			#endif
+			I2C_Start(SSD1309_ADDRESS_WRITE);
+			I2C_Write(SSD1309_DATA_BYTE);
+			for(uint8_t i=x0; i<=x1; i++) {
+				I2C_Write(PagePatternStart);
+			}
+			I2C_Stop();
 		#endif
 		
 		#if SSD1309_USE_SPI
@@ -537,20 +459,12 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SSD1309_CursorPageSet(PageEnd);
 			
 			#if SSD1309_USE_I2C
-				#if SSD1309_USE_RMW
-					SSD1309_RmwStart();
-					for(uint8_t i=x0; i<=x1; i++) {
-						SSD1309_RmwExecute(PagePatternEnd);
-					}
-					SSD1309_RmwEnd();
-				#else
-					I2C_Start(SSD1309_ADDRESS_WRITE);
-					I2C_Write(SSD1309_DATA_BYTE);
-					for(uint8_t i=x0; i<=x1; i++) {
-						I2C_Write(PagePatternEnd);
-					}
-					I2C_Stop();
-				#endif
+				I2C_Start(SSD1309_ADDRESS_WRITE);
+				I2C_Write(SSD1309_DATA_BYTE);
+				for(uint8_t i=x0; i<=x1; i++) {
+					I2C_Write(PagePatternEnd);
+				}
+				I2C_Stop();
 			#endif
 			
 			#if SSD1309_USE_SPI
@@ -566,20 +480,12 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 			SSD1309_CursorPageSet(++PageStart);
 			
 			#if SSD1309_USE_I2C
-				#if SSD1309_USE_RMW
-					SSD1309_RmwStart();
-					for(uint8_t i=x0; i<=x1; i++) {
-						SSD1309_RmwExecute(0xFF);
-					}
-					SSD1309_RmwEnd();
-				#else
-					I2C_Start(SSD1309_ADDRESS_WRITE);
-					I2C_Write(SSD1309_DATA_BYTE);
-					for(uint8_t i=x0; i<=x1; i++) {
-						I2C_Write(0xFF);
-					}
-					I2C_Stop();
-				#endif
+				I2C_Start(SSD1309_ADDRESS_WRITE);
+				I2C_Write(SSD1309_DATA_BYTE);
+				for(uint8_t i=x0; i<=x1; i++) {
+					I2C_Write(0xFF);
+				}
+				I2C_Stop();
 			#endif
 			
 			#if SSD1309_USE_SPI

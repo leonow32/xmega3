@@ -64,20 +64,19 @@
 	#define		SSD1309_USE_SPI					0
 	
 	// Config
-	#define		SSD1309_USE_RMW					0	// read-modify-write for I2C interface only, takes about 6 times longer than without RMW
 	#define		SSD1309_USE_DEMO_COMMANDS		1
-	#define		SSD1309_CLEAR_AFERT_INIT			0
-	#define		SSD1309_DEFAULT_CONTRAST			0xCF
+	#define		SSD1309_CLEAR_AFERT_INIT		0
+	#define		SSD1309_DEFAULT_CONTRAST		255
 	
 	// Addess on I2C bus
 	#if SSD1309_USE_I2C
-		#define		SSD1309_ADDRESS_READ			0x79
+		#define		SSD1309_ADDRESS_READ		0x79
 		#define		SSD1309_ADDRESS_WRITE		0x78
 	#endif
 	
 	// Pinout for SPI
 	#if SSD1309_USE_SPI
-		#define		SSD1309_CHIP_SELECT_INIT		VPORTC.DIR |=  PIN4_bm
+		#define		SSD1309_CHIP_SELECT_INIT	VPORTC.DIR |=  PIN4_bm
 		#define		SSD1309_CHIP_SELECT			VPORTC.OUT &= ~PIN4_bm
 		#define		SSD1309_CHIP_DESELECT		VPORTC.OUT |=  PIN4_bm
 		#define		SSD1309_DC_INIT				VPORTC.DIR |=  PIN5_bm
@@ -86,7 +85,7 @@
 	#endif
 	
 	// Fonts
-	#define		SSD1309_DEFAULT_FONT				SSD1309_FontDos16x8
+	#define		SSD1309_DEFAULT_FONT			SSD1309_FontDos16x8
 	#define		SSD1309_FONT_CONSOLE8x6			1						// 480 B
 	#define		SSD1309_FONT_DOS8x8				1						// 2048 B
 	#define		SSD1309_FONT_DOS16x8			1						// 4096 B
@@ -101,7 +100,7 @@
 	#define		SSD1309_FONT_SANS24B_PL			0						// 
 	
 	// Bitmaps
-	#define		SSD1309_BITMAP_EXTRONIC_LOGO		1						// 1024 B
+	#define		SSD1309_BITMAP_EXTRONIC_LOGO	1						// 1024 B
 	
 #endif
 

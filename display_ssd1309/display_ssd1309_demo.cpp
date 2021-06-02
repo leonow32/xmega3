@@ -267,44 +267,57 @@ void SSD1309_CmdFont(uint8_t argc, uint8_t * argv[]) {
 void SSD1309_CmdFontDemo(uint8_t argc, uint8_t * argv[]) {
 	SSD1309_Clear();
 	
-	SSD1309_CursorXSet(0);
-	SSD1309_CursorPageSet(0);
-	SSD1309_FontSet(&SSD1309_FontConsole8x6);
-	SSD1309_Text("Left", SSD1309_AlignLeft);
-	SSD1309_Text("Center", SSD1309_AlignCenter);
-	SSD1309_Text("Right", SSD1309_AlignRight);
+	#if SSD1309_FONT_CONSOLE8x6
+		SSD1309_CursorXSet(0);
+		SSD1309_CursorPageSet(0);
+		SSD1309_FontSet(&SSD1309_FontConsole8x6);
+		SSD1309_Text("Left", SSD1309_AlignLeft);
+		SSD1309_Text("Center", SSD1309_AlignCenter);
+		SSD1309_Text("Right", SSD1309_AlignRight);
+	#endif
 	
-	SSD1309_CursorXSet(0);
-	SSD1309_CursorPageSet(1);
-	SSD1309_FontSet(&SSD1309_FontDos16x8);
-	SSD1309_Text("Abcdefghij");
+	#if SSD1309_FONT_DOS16x8
+		SSD1309_CursorXSet(0);
+		SSD1309_CursorPageSet(1);
+		SSD1309_FontSet(&SSD1309_FontDos16x8);
+		SSD1309_Text("Abcdefghij");
+	#endif
 	
-	SSD1309_CursorXSet(85);
-	SSD1309_CursorPageSet(1);
-	SSD1309_FontSet(&SSD1309_FontDos8x8);
-	SSD1309_Text("Abcde");
+	#if SSD1309_FONT_DOS8x8
+		SSD1309_CursorXSet(85);
+		SSD1309_CursorPageSet(1);
+		SSD1309_FontSet(&SSD1309_FontDos8x8);
+		SSD1309_Text("Abcde");
+		SSD1309_CursorXSet(85);
+		SSD1309_CursorPageSet(2);
+		SSD1309_Text("fghij");
+	#endif
 	
-	SSD1309_CursorXSet(85);
-	SSD1309_CursorPageSet(2);
-	SSD1309_Text("fghij");
-	
+	#if SSD1309_FONT_SANS16
 	SSD1309_CursorXSet(0);
 	SSD1309_CursorPageSet(3);
 	SSD1309_FontSet(&SSD1309_FontSans16);
 	SSD1309_Text("Abciwg123");
+	#endif
 	
-	SSD1309_CursorPageSet(3);
-	SSD1309_FontSet(&SSD1309_FontSans16B);
-	SSD1309_Text("Abciwg1", SSD1309_AlignRight);
+	#if SSD1309_FONT_SANS16B
+		SSD1309_CursorPageSet(3);
+		SSD1309_FontSet(&SSD1309_FontSans16B);
+		SSD1309_Text("Abciwg1", SSD1309_AlignRight);
+	#endif
 	
-	SSD1309_CursorXSet(0);
-	SSD1309_CursorPageSet(5);
-	SSD1309_FontSet(&SSD1309_FontSans24);
-	SSD1309_Text("Abciwg1");
+	#if SSD1309_FONT_SANS24
+		SSD1309_CursorXSet(0);
+		SSD1309_CursorPageSet(5);
+		SSD1309_FontSet(&SSD1309_FontSans24);
+		SSD1309_Text("Abciwg1");
+	#endif
 	
-	SSD1309_CursorPageSet(5);
-	SSD1309_FontSet(&SSD1309_FontSans24B);
-	SSD1309_Text("Abc", SSD1309_AlignRight);
+	#if SSD1309_FONT_SANS24B
+		SSD1309_CursorPageSet(5);
+		SSD1309_FontSet(&SSD1309_FontSans24B);
+		SSD1309_Text("Abc", SSD1309_AlignRight);
+	#endif
 	
 	Print_ResponseOK();
 }

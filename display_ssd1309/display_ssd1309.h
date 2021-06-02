@@ -90,16 +90,6 @@ uint8_t		SSD1309_CursorPageGet(void);
 void		SSD1309_CursorPageSet(uint8_t Page);
 
 // ========================================
-// Read-Modify-Write Mode
-// ========================================
-
-#if SSD1309_USE_RMW
-	void	SSD1309_RmwStart(void);
-	void	SSD1309_RmwExecute(uint8_t Byte);
-	void	SSD1309_RmwEnd();
-#endif
-
-// ========================================
 // Colors (black & white)
 // ========================================
 
