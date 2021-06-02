@@ -52,18 +52,18 @@ REQUIREMENTS
 #endif
 
 // Fonts
-// #include	"font/console8x6.h"
-// #include	"font/dos8x8.h"
+#include	"font/console8x6.h"
+#include	"font/dos8x8.h"
 #include	"font/dos16x8.h"
-// #include	"font/sans8.h"
-// #include	"font/sans16.h"
-// #include	"font/sans16B.h"
-// #include	"font/sans16_PL.h"
-// #include	"font/sans16B_PL.h"
-// #include	"font/sans24.h"
-// #include	"font/sans24B.h"
-// #include	"font/sans24_PL.h"
-// #include	"font/sans24B_PL.h"
+#include	"font/sans8.h"
+#include	"font/sans16.h"
+#include	"font/sans16B.h"
+#include	"font/sans16_PL.h"
+#include	"font/sans16B_PL.h"
+#include	"font/sans24.h"
+#include	"font/sans24B.h"
+#include	"font/sans24_PL.h"
+#include	"font/sans24B_PL.h"
 
 // Bitmaps
 #include	"bitmap/extronic_logo.h"

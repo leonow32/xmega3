@@ -87,17 +87,17 @@
 	
 	// Fonts
 	#define		SSD1309_DEFAULT_FONT				SSD1309_FontDos16x8
-	#define		SSD1309_FONT_CONSOLE8x6			0						// 480 B
-	#define		SSD1309_FONT_DOS8x8				0						// 2048 B
-	#define		SSD1309_FONT_DOS16x8				1						// 4096 B
-	#define		SSD1309_FONT_SANS8				0						// 
-	#define		SSD1309_FONT_SANS16				0						// 1194 B
+	#define		SSD1309_FONT_CONSOLE8x6			1						// 480 B
+	#define		SSD1309_FONT_DOS8x8				1						// 2048 B
+	#define		SSD1309_FONT_DOS16x8			1						// 4096 B
+	#define		SSD1309_FONT_SANS8				1						// 
+	#define		SSD1309_FONT_SANS16				1						// 1194 B
 	#define		SSD1309_FONT_SANS16_PL			0						// 
-	#define		SSD1309_FONT_SANS16B			0							// 1380 B
+	#define		SSD1309_FONT_SANS16B			1							// 1380 B
 	#define		SSD1309_FONT_SANS16B_PL			0						// 
-	#define		SSD1309_FONT_SANS24				0						// 2658 B
+	#define		SSD1309_FONT_SANS24				1						// 2658 B
 	#define		SSD1309_FONT_SANS24_PL			0						// 
-	#define		SSD1309_FONT_SANS24B			0						// 2937 B
+	#define		SSD1309_FONT_SANS24B			1						// 2937 B
 	#define		SSD1309_FONT_SANS24B_PL			0						// 
 	
 	// Bitmaps
