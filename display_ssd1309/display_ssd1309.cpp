@@ -309,24 +309,24 @@ void SSD1309_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
 		SSD1309_CursorSet(x0, PageStart);
-		SSD1309_WriteData(PagePatternStart & PagePatternEnd);
+		SSD1309_WriteData(SSD1309_Color ? PagePatternStart & PagePatternEnd : 0);
 	}
 	else {
 		// The line doesn;t fit in single page
 		// Draw biginning of the line
 		SSD1309_CursorSet(x0, PageStart);
-		SSD1309_WriteData(PagePatternStart);
+		SSD1309_WriteData(SSD1309_Color ? PagePatternStart : 0);
 			
 		// Draw enging of the line
 		if(PagePatternEnd) {
 			SSD1309_CursorSet(x0, PageEnd);
-			SSD1309_WriteData(PagePatternEnd);
+			SSD1309_WriteData(SSD1309_Color ? PagePatternEnd : 0);
 		}
 			
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
 			SSD1309_CursorSet(x0, ++PageStart);
-			SSD1309_WriteData(0xFF);
+			SSD1309_WriteData(SSD1309_Color ? 0xFF : 0);
 		}
 	}
 }

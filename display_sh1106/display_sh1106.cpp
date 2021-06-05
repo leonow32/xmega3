@@ -351,27 +351,27 @@ void SH1106_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 			// Tha line fits to single page (<= 8 pixels)
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageStart);
-			SH1106_WriteData(PagePatternStart & PagePatternEnd);
+			SH1106_WriteData(SH1106_Color ? PagePatternStart & PagePatternEnd : 0);
 		}
 		else {
 			// The line doesn;t fit in single page
 			// Draw biginning of the line
 			SH1106_CursorXSet(x0);
 			SH1106_CursorPageSet(PageStart);
-			SH1106_WriteData(PagePatternStart);
+			SH1106_WriteData(SH1106_Color ? PagePatternStart : 0);
 			
 			// Draw enging of the line
 			if(PagePatternEnd) {
 				SH1106_CursorXSet(x0);
 				SH1106_CursorPageSet(PageEnd);
-				SH1106_WriteData(PagePatternEnd);
+				SH1106_WriteData(SH1106_Color ? PagePatternEnd : 0);
 			}
 			
 			// Draw middle part of the line, if there's need to
 			while(PageEnd - PageStart >= 2) {
 				SH1106_CursorXSet(x0);
 				SH1106_CursorPageSet(++PageStart);
-				SH1106_WriteData(0xFF);
+				SH1106_WriteData(SH1106_Color ? 0xFF : 0);
 			}
 		}
 	#endif
