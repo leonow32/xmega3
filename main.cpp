@@ -46,6 +46,7 @@
 
 #if COMPONENT_DISPLAY_SSD1309
 	#include	"display_ssd1309/display_ssd1309.h"
+	#include "display_ssd1309/display_ssd1309_demo.h"			// DELETE THIS
 #endif
 
 #if COMPONENT_DISPLAY_SSD1351
@@ -149,6 +150,8 @@ int main(void) {
 	
 	#if COMPONENT_DISPLAY_SSD1309
 		SSD1309_Init();
+		//SSD1309_Chessboard();
+		TaskAdd(SSD1309_TaskSnake, TaskMsToTicks(100));
 	#endif
 	
 	#if COMPONENT_DISPLAY_SSD1351

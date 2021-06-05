@@ -11,12 +11,12 @@ PERFORMANCE TEST
 			-	Fill	1024 us, 976 FPS
 			-	Chess	1824 us, 548 FPS
 			-	Pixel	11 us, 90909 FPS
-			I2C mode without RMW, frequency 400 kHz
+			I2C mode, frequency 400 kHz
 			-	Clear	24 ms, 41 FPS
 			-	Fill	24 ms, 41 FPS
 			-	Chess	24 ms, 41 FPS
 			-	Pixel	250 us, 4000 FPS
-			I2C mode without RMW, frequency 1 MHz
+			I2C mode, frequency 1 MHz
 			-	Clear	11.5 ms, 87 FPS
 			-	Fill	11,5 ms, 87 FPS
 			-	Chess	11 ms, 90 FPS

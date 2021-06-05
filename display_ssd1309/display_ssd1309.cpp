@@ -13,24 +13,24 @@ static const SSD1309_FontDef_t * SSD1309_Font = &SSD1309_DEFAULT_FONT;
 
 // Display config for init function
 static const uint8_t SSD1309_InitSequence[] = {
-	SSD1309_DISPLAY_OFF,						// Display OFF
+	SSD1309_DISPLAY_OFF,					// Display OFF
 	
 	SSD1309_CLOCK_DIV_FREQ,					// Display clock divide
 	0x80,
 	
-	SSD1309_MULTIPLEX_RATIO,					// Multiplex ratio
-	SSD1309_DISPLAY_SIZE_Y - 1,									// 1/64 duty
+	SSD1309_MULTIPLEX_RATIO,				// Multiplex ratio
+	SSD1309_DISPLAY_SIZE_Y - 1,				// 1/64 duty
 	
 	SSD1309_DISPLAY_OFFSET,					// Display offset
 	0x00,									// No offset
 	
 	SSD1309_START_LINE(0),					// Start line
 	
-	SSD1309_CHARGE_PUMP,						// Charge pump 0x8d
+	SSD1309_CHARGE_PUMP,					// Charge pump 0x8d
 	0x14,
 	
 	SSD1309_MEMORY_MODE,
-	0x00, // 0x0 act like ks0108
+	0x00,
 	
 	SSD1309_REMAP(1),						// Remap
 	
@@ -45,7 +45,7 @@ static const uint8_t SSD1309_InitSequence[] = {
 	SSD1309_CHARGE_PERIOD,					// Precharge period
 	0xF1,
 	
-	SSD1309_VCOM_DESELECT_LEVEL,				// VCOM deselect
+	SSD1309_VCOM_DESELECT_LEVEL,			// VCOM deselect
 	0x40,
 	
 	SSD1309_ENTRIE_DISPLAY_ON(0),			// Display ON
@@ -54,33 +54,17 @@ static const uint8_t SSD1309_InitSequence[] = {
 	
 	SSD1309_DEACTIVATE_SCROLL,
 	
-	SSD1309_DISPLAY_ON,
-	
-	
-	//SSD1309_COLUMN_LOW(SSD1309_OFFSET_X),		// Low Column - select x = 0
-// 	SSD1309_COLUMN_HIGH(0),					// High Column - select x = 0
-// 	SSD1309_PAGE(0),							// First page select
-// 	
-// 	
-// 	
-// 	
-// 	SSD1309_SCAN_DIRECTION(0),				// Scan direction
-// 	0xC8,
-// 	
-// 	
-// 	
-// 	
-// 	
-// 	
-// 	
-// 	
-// 	#if SSD1309_CLEAR_AFERT_INIT == 0
-// 		SSD1309_DISPLAY_ON,					// Display ON
-// 	#endif
+	#if SSD1309_CLEAR_AFERT_INIT == 0
+ 		SSD1309_DISPLAY_ON,					// Display ON
+ 	#endif
 };
 
 // Initialization
 void SSD1309_Init(void) {
+	
+	// If you have problem with initialization, add RC circuit to RESET pin
+	// 100n capacitor between RESET and GND
+	// 100k resistor between RESET and VCC
 	
 	#if SSD1309_USE_I2C
 		for(uint8_t i=0; i<sizeof(SSD1309_InitSequence); i++) {
@@ -607,7 +591,7 @@ void SSD1309_FontSet(const SSD1309_FontDef_t * Font) {
 	SSD1309_Font = Font;
 }
 // Print single character
-void SSD1309_PrintChar(uint8_t Char) {
+void SSD1309_PrintCh(uint8_t Char) {
 	
 	// Check if the character is supported by the font
 	if(Char < SSD1309_Font->FirstChar) Char = SSD1309_Font->LastChar;
