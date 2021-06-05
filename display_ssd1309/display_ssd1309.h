@@ -84,6 +84,7 @@ void		SSD1309_Chessboard(void);
 // Cursor setting
 // ========================================
 
+void		SSD1309_CursorSet(uint8_t x, uint8_t p);
 uint8_t		SSD1309_CursorXGet(void);
 void		SSD1309_CursorXSet(uint8_t PosX);
 uint8_t		SSD1309_CursorPageGet(void);

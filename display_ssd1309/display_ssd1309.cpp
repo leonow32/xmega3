@@ -138,8 +138,7 @@ void SSD1309_ContrastSet(const uint8_t Value) {
 // Clear display - set Pattern = 0 to clear
 void SSD1309_Clear(const uint8_t Pattern) {
 	for(uint8_t Page=0; Page<8; Page++) {
-		SSD1309_CursorPageSet(Page);
-		SSD1309_CursorXSet(0);
+		SSD1309_CursorSet(0, Page);
 		
 		#if SSD1309_USE_I2C
 			I2C_Start(SSD1309_ADDRESS_WRITE);
@@ -158,8 +157,7 @@ void SSD1309_Clear(const uint8_t Pattern) {
 		#endif
 	}
 	
-	SSD1309_CursorXSet(0);
-	SSD1309_CursorPageSet(0);
+	SSD1309_CursorSet(0, 0);
 }
 
 // Light all pixels
@@ -172,8 +170,7 @@ void SSD1309_Chessboard(void) {
 	
 	// Loop 8 pages
 	for(uint8_t Page = 0; Page < SSD1309_PAGE_COUNT; Page++) {
-		SSD1309_CursorPageSet(Page);
-		SSD1309_CursorXSet(0);
+		SSD1309_CursorSet(0, Page);
 		
 		// Loop 128 columns
 		#if SSD1309_USE_I2C
@@ -200,6 +197,12 @@ void SSD1309_Chessboard(void) {
 // ========================================
 // Cursor setting
 // ========================================
+
+
+void SSD1309_CursorSet(uint8_t x, uint8_t p) {
+	SSD1309_CursorPageSet(p);
+	SSD1309_CursorXSet(x);
+}
 
 // Odczytanie pozycji X
 uint8_t SSD1309_CursorXGet(void) {
@@ -263,8 +266,7 @@ uint8_t SSD1309_ColorGet(void) {
 // Single pixel
 void SSD1309_DrawPixel(uint8_t x, uint8_t y) {
 	uint8_t Page = y / SSD1309_PAGE_HEIGHT;
-	SSD1309_CursorPageSet(Page);
-	SSD1309_CursorXSet(x);
+	SSD1309_CursorSet(x, Page);
 	SSD1309_WriteData(SSD1309_Color << (y % SSD1309_PAGE_HEIGHT));
 }
 
@@ -274,8 +276,7 @@ void SSD1309_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	
 	// Calculate y0 to page number and set cursor
 	uint8_t Page = y0 / SSD1309_PAGE_HEIGHT;
-	SSD1309_CursorPageSet(Page);
-	SSD1309_CursorXSet(x0);
+	SSD1309_CursorSet(x0, Page);
 	
 	#if SSD1309_USE_I2C
 		uint8_t Pattern = (SSD1309_Color << (y0 % SSD1309_PAGE_HEIGHT));
@@ -307,28 +308,24 @@ void SSD1309_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 		
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
-		SSD1309_CursorXSet(x0);
-		SSD1309_CursorPageSet(PageStart);
+		SSD1309_CursorSet(x0, PageStart);
 		SSD1309_WriteData(PagePatternStart & PagePatternEnd);
 	}
 	else {
 		// The line doesn;t fit in single page
 		// Draw biginning of the line
-		SSD1309_CursorXSet(x0);
-		SSD1309_CursorPageSet(PageStart);
+		SSD1309_CursorSet(x0, PageStart);
 		SSD1309_WriteData(PagePatternStart);
 			
 		// Draw enging of the line
 		if(PagePatternEnd) {
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(PageEnd);
+			SSD1309_CursorSet(x0, PageEnd);
 			SSD1309_WriteData(PagePatternEnd);
 		}
 			
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(++PageStart);
+			SSD1309_CursorSet(x0, ++PageStart);
 			SSD1309_WriteData(0xFF);
 		}
 	}
@@ -399,8 +396,7 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	uint8_t PagePatternEnd		=	~(0xFF << ((y1+1) % SSD1309_PAGE_HEIGHT));
 	
 	if(PageStart == PageEnd) {
-		SSD1309_CursorXSet(x0);
-		SSD1309_CursorPageSet(PageStart);
+		SSD1309_CursorSet(x0, PageStart);
 		
 		#if SSD1309_USE_I2C
 			I2C_Start(SSD1309_ADDRESS_WRITE);
@@ -419,8 +415,7 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		#endif
 	}
 	else {
-		SSD1309_CursorXSet(x0);
-		SSD1309_CursorPageSet(PageStart);
+		SSD1309_CursorSet(x0, PageStart);
 		
 		#if SSD1309_USE_I2C
 			I2C_Start(SSD1309_ADDRESS_WRITE);
@@ -439,8 +434,7 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		#endif
 		
 		if(PagePatternEnd) {
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(PageEnd);
+			SSD1309_CursorSet(x0, PageEnd);
 			
 			#if SSD1309_USE_I2C
 				I2C_Start(SSD1309_ADDRESS_WRITE);
@@ -460,8 +454,7 @@ void SSD1309_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		}
 		
 		while(PageEnd - PageStart >= 2) {
-			SSD1309_CursorXSet(x0);
-			SSD1309_CursorPageSet(++PageStart);
+			SSD1309_CursorSet(x0, ++PageStart);
 			
 			#if SSD1309_USE_I2C
 				I2C_Start(SSD1309_ADDRESS_WRITE);
@@ -567,12 +560,7 @@ void SSD1309_Bitmap(const SSD1309_Bitmap_t * Bitmap) {
 		}
 		else {
 			// It was not the last page
-			
-			// Set cursor back at the beginnign of the page
-			SSD1309_CursorXSet(CursorX_Old);
-			
-			// Move curson on page below
-			SSD1309_CursorPageSet(SSD1309_CursorP + 1);
+			SSD1309_CursorSet(CursorX_Old, SSD1309_CursorP + 1);
 		}
 	} while(Page--);
 }
@@ -591,7 +579,7 @@ void SSD1309_FontSet(const SSD1309_FontDef_t * Font) {
 	SSD1309_Font = Font;
 }
 // Print single character
-void SSD1309_PrintCh(uint8_t Char) {
+void SSD1309_PrintChar(uint8_t Char) {
 	
 	// Check if the character is supported by the font
 	if(Char < SSD1309_Font->FirstChar) Char = SSD1309_Font->LastChar;
@@ -684,8 +672,7 @@ void SSD1309_PrintCh(uint8_t Char) {
 		}
 		else {
 			// It was not the last line
-			SSD1309_CursorXSet(CursorX_Old);
-			SSD1309_CursorPageSet(SSD1309_CursorP + 1);
+			SSD1309_CursorSet(CursorX_Old, SSD1309_CursorP + 1);
 			Address = Address_Old;
 		}
 	} while(Linia--);
