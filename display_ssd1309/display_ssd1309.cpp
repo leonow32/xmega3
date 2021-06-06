@@ -6,10 +6,10 @@
 // Global variables
 // ========================================
 
-static uint8_t SSD1309_CursorP = 0;
-static uint8_t SSD1309_CursorX = 0;
-static uint8_t SSD1309_Color	= 1;		// White
-static const SSD1309_FontDef_t * SSD1309_Font = &SSD1309_DEFAULT_FONT;
+static uint8_t SSD1309_CursorP					= 0;
+static uint8_t SSD1309_CursorX					= 0;
+static uint8_t SSD1309_Color					= SSD1309_COLOR_WHITE;		// White
+static const SSD1309_FontDef_t * SSD1309_Font	= &SSD1309_DEFAULT_FONT;
 
 // Display config for init function
 static const uint8_t SSD1309_InitSequence[] = {
@@ -219,16 +219,16 @@ void SSD1309_CursorXSet(uint8_t PosX) {
 	#if SSD1309_USE_I2C
 		I2C_Start(SSD1309_ADDRESS_WRITE);
 		I2C_Write(SSD1309_COMMAND_BYTE);
-		I2C_Write(SSD1309_COLUMN_LOW((SSD1309_CursorX + SSD1309_OFFSET_X) & 0x0F));
+		I2C_Write(SSD1309_COLUMN_LOW((SSD1309_CursorX) & 0x0F));
 		I2C_Write(SSD1309_COMMAND_BYTE);
-		I2C_Write(SSD1309_COLUMN_HIGH(((SSD1309_CursorX + SSD1309_OFFSET_X) & 0xF0) >> 4));
+		I2C_Write(SSD1309_COLUMN_HIGH(((SSD1309_CursorX) & 0xF0) >> 4));
 		I2C_Stop();
 	#endif
 	
 	#if SSD1309_USE_SPI
 		SSD1309_CHIP_SELECT;
 		SSD1309_DC_COMMAND;
-		Spi_2(SSD1309_COLUMN_LOW((SSD1309_CursorX + SSD1309_OFFSET_X) & 0x0F), SSD1309_COLUMN_HIGH(((SSD1309_CursorX + SSD1309_OFFSET_X) & 0xF0) >> 4));
+		Spi_2(SSD1309_COLUMN_LOW((SSD1309_CursorX) & 0x0F), SSD1309_COLUMN_HIGH(((SSD1309_CursorX) & 0xF0) >> 4));
 		SSD1309_CHIP_DESELECT;
 	#endif
 }

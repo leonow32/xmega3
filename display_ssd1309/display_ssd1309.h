@@ -15,12 +15,12 @@ PERFORMANCE TEST
 			-	Clear	24 ms, 41 FPS
 			-	Fill	24 ms, 41 FPS
 			-	Chess	24 ms, 41 FPS
-			-	Pixel	250 us, 4000 FPS
-			I2C mode, frequency 1 MHz
-			-	Clear	11.5 ms, 87 FPS
-			-	Fill	11,5 ms, 87 FPS
-			-	Chess	11 ms, 90 FPS
-			-	Pixel	122 us, 8196 FPS
+			-	Pixel	269 us, 3717 FPS
+			I2C mode, frequency 900 kHz (max)
+			-	Clear	12.76 ms, 78 FPS
+			-	Fill	12,76 ms, 78 FPS
+			-	Chess	13,16 ms, 75 FPS
+			-	Pixel	145 us, 6896 FPS
 		
 REQUIREMENTS
 		-	COMPONENT_I2C_MASTER or COMPONENT_SPI_MASTER
