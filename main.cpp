@@ -44,6 +44,10 @@
 	#include	"display_sh1106/display_sh1106.h"
 #endif
 
+#if COMPONENT_DISPLAY_SSD1309
+	#include	"display_ssd1309/display_ssd1309.h"
+#endif
+
 #if COMPONENT_DISPLAY_SSD1351
 	#include	"display_ssd1351/display_ssd1351.h"
 #endif
@@ -141,6 +145,10 @@ int main(void) {
 	
 	#if COMPONENT_DISPLAY_SH1106
 		SH1106_Init();
+	#endif
+	
+	#if COMPONENT_DISPLAY_SSD1309
+		SSD1309_Init();
 	#endif
 	
 	#if COMPONENT_DISPLAY_SSD1351
