@@ -128,8 +128,7 @@ struct SSD1681_FontDef_t {
 struct SSD1681_Bitmap_t {
 	const uint8_t Height;						// Height in pixels
 	const uint8_t Width;						// Width in pixels
-	const SSD1681_Color_t ColorDepth;			// Color depth
-	const uint8_t * Bitmaps;					// Pointer to bitmap array
+	const uint8_t * Array;						// Pointer to bitmap array
 };
 
 // ========================================

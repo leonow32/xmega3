@@ -56,25 +56,8 @@ HARDWARE
 // 	#include	"bitmap/arrow.h"
 // #endif
 // 
-// #if SSD1681_BITMAP_EXTRONIC_LOGO_MONO
-// 	#include	"bitmap/extronic_logo_mono.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_EXTRONIC_LOGO_RGB565
-// 	#include	"bitmap/extronic_logo_rgb565.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_ME_AND_MY_GIRLFRIEND
-// 	#include	"bitmap/me_and_my_girlfriend.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_CASSINI_RGB332
-// 	#include	"bitmap/cassini_rgb332.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_CASSINI_RGB565
-// 	#include	"bitmap/cassini_rgb565.h"
-// #endif
+// Bitmaps
+#include	"bitmap/extronic_logo.h"
 
 // ========================================
 // Global variables

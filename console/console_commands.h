@@ -252,6 +252,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"recf",			SSD1681_CmdRectangleFill},
 	{"cir",				SSD1681_CmdDrawCircle},
 	
+	{"bitmap",			SSD1681_CmdBitmap},
+	
 	{"test",			SSD1681_CmdTest},
 #endif
 

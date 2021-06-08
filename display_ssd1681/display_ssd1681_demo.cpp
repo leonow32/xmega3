@@ -565,7 +565,7 @@ void SSD1681_CmdDemoColorPalette(uint8_t argc, uint8_t * argv[]) {
 	
 	SSD1681_CHIP_DESELECT;
 }
-
+*/
 // ========================================
 // Bitmaps
 // ========================================
@@ -575,42 +575,23 @@ void SSD1681_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	const SSD1681_Bitmap_t * Pointer;
 	switch(*argv[1]) {
 		
-		#if SSD1681_BITMAP_ARROW
-			case '1':	Pointer = &SSD1681_BitmapArrow;						break;
-		#endif
-		
-		#if SSD1681_BITMAP_EXTRONIC_LOGO_MONO
-			case '2':	Pointer = &SSD1681_BitmapExtronicLogoMono;			break;
-		#endif
-		
-		#if SSD1681_BITMAP_EXTRONIC_LOGO_RGB565
-			case '3':	Pointer = &SSD1681_BitmapExtronicLogoRGB565;		break;
-		#endif
-		
-		#if SSD1681_BITMAP_ME_AND_MY_GIRLFRIEND
-			case '4':	Pointer = &SSD1681_BitmapMeAndMyGirlfriend;			break;
-		#endif
-		
-		#if SSD1681_BITMAP_CASSINI_RGB332
-			case '5':	Pointer = &SSD1681_BitmapCassiniRGB332;				break;
-		#endif
-		
-		#if SSD1681_BITMAP_CASSINI_RGB565
-			case '6':	Pointer = &SSD1681_BitmapCassiniRGB565;				break;
+		#if SSD1681_BITMAP_EXTRONIC_LOGO
+			case '1':	Pointer = &SSD1681_BitmapExtronicLogo;			break;
 		#endif
 		
 		default:	Print_ResponseError();	return;
 	}
 	
 	SSD1681_CursorXSet((SSD1681_DISPLAY_SIZE_X - Pointer->Width) / 2);
-	SSD1681_CursorYSet((SSD1681_DISPLAY_SIZE_Y - Pointer->Height) / 2);
+//	SSD1681_CursorYSet((SSD1681_DISPLAY_SIZE_Y - Pointer->Height) / 2);
+	SSD1681_CursorPageSet(0);
 	SSD1681_Bitmap(Pointer);
 }
 
 // ========================================
 // Animated demos
 // ========================================
-
+/*
 void SSD1681_CmdSnake(uint8_t argc, uint8_t * argv[]) {
 	if(*argv[1] == '0') {
 		TaskClose(SSD1681_TaskSnake);

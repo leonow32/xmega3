@@ -79,7 +79,7 @@ void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 // Bitmaps
 // ========================================
 
-//void SSD1681_CmdBitmap(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdBitmap(uint8_t argc, uint8_t * argv[]);
 
 // ========================================
 // Animated demos
