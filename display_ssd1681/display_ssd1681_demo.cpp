@@ -56,14 +56,14 @@ void SSD1681_CmdActiveArea(uint8_t argc, uint8_t * argv[]) {
 	
 	// If no arguments, then print actual active area
 	if(argc == 1) {
-		Print("p0 = ");
-		Print_Dec(SSD1681_CursorP);
 		Print("\r\nx0 = ");
 		Print_Dec(SSD1681_CursorX);
-		Print("\r\np1 = ");
-		Print_Dec(SSD1681_CursorP_Max);
+		Print("p0 = ");
+		Print_Dec(SSD1681_CursorP);
 		Print("\r\nx1 = ");
 		Print_Dec(SSD1681_CursorX_Max);
+		Print("\r\np1 = ");
+		Print_Dec(SSD1681_CursorP_Max);
 	}
 	
 	// If arguments given, then set the position of active area
@@ -587,6 +587,146 @@ void SSD1681_CmdBitmap(uint8_t argc, uint8_t * argv[]) {
 	SSD1681_CursorPageSet(0);
 	SSD1681_Bitmap(Pointer);
 }
+
+// ========================================
+// Fonts and text
+// ========================================
+
+// Print text
+void SSD1681_CmdText(uint8_t argc, uint8_t * argv[]) {
+	
+	// Argument 2 optional - text align
+	SSD1681_align_t Align = SSD1681_AlignNone;
+	if(argc == 3) {
+		switch(*argv[2]) {
+			case '1':	Align = SSD1681_AlignLeft;	break;
+			case '2':	Align = SSD1681_AlignCenter;	break;
+			case '3':	Align = SSD1681_AlignRight;	break;
+			default:	Align = SSD1681_AlignNone;	break;
+		}
+	}
+	
+	// Execute command
+	SSD1681_Text((const char *)argv[1], Align);
+	Print_ResponseOK();
+}
+
+// Change font
+void SSD1681_CmdFont(uint8_t argc, uint8_t * argv[]) {
+	
+	uint8_t FontNumber;
+	if(Parse_Dec8(argv[1], &FontNumber)) return;
+	
+	switch(FontNumber) {
+		
+		#if SSD1681_FONT_CONSOLE8x6
+			case 1:	SSD1681_FontSet(&SSD1681_FontConsole8x6);		break;
+		#endif
+		
+		#if SSD1681_FONT_DOS8x8
+			case 2:	SSD1681_FontSet(&SSD1681_FontDos8x8);			break;
+		#endif
+		
+		#if SSD1681_FONT_DOS16x8
+			case 3:	SSD1681_FontSet(&SSD1681_FontDos16x8);		break;
+		#endif
+		
+		#if SSD1681_FONT_SANS8
+			case 5:	SSD1681_FontSet(&SSD1681_FontSans8);			break;
+		#endif
+		
+		#if SSD1681_FONT_SANS16
+			case 6:	SSD1681_FontSet(&SSD1681_FontSans16);			break;
+		#endif
+		
+		#if SSD1681_FONT_SANS16B
+			case 7:	SSD1681_FontSet(&SSD1681_FontSans16B);		break;
+		#endif
+		
+		#if SSD1681_FONT_SANS24
+			case 8:	SSD1681_FontSet(&SSD1681_FontSans24);			break;
+		#endif
+		
+		#if SSD1681_FONT_SANS24B
+			case 9:	SSD1681_FontSet(&SSD1681_FontSans24B);		break;
+		#endif
+		
+		default:
+			Print_ResponseError();
+			return;
+	}
+	
+	Print_ResponseOK();
+}
+
+void SSD1681_CmdFontDemo(uint8_t argc, uint8_t * argv[]) {
+	SSD1681_Clear();
+	
+	#if SSD1681_FONT_CONSOLE8x6
+		SSD1681_CursorSet(0, 0);
+		SSD1681_FontSet(&SSD1681_FontConsole8x6);
+		SSD1681_Text("Left", SSD1681_AlignLeft);
+		SSD1681_Text("Center", SSD1681_AlignCenter);
+		SSD1681_Text("Right", SSD1681_AlignRight);
+	#endif
+	
+	#if SSD1681_FONT_DOS16x8
+		SSD1681_CursorSet(0, 1);
+		SSD1681_FontSet(&SSD1681_FontDos16x8);
+		SSD1681_Text("Abcdefghij");
+	#endif
+	
+	#if SSD1681_FONT_DOS8x8
+		SSD1681_CursorSet(85, 1);
+		SSD1681_FontSet(&SSD1681_FontDos8x8);
+		SSD1681_Text("Abcde");
+		SSD1681_CursorSet(85, 2);
+		SSD1681_Text("fghij");
+	#endif
+	
+	#if SSD1681_FONT_SANS16
+		SSD1681_CursorSet(0, 3);
+		SSD1681_FontSet(&SSD1681_FontSans16);
+		SSD1681_Text("Abciwg123");
+	#endif
+	
+	#if SSD1681_FONT_SANS16B
+		SSD1681_FontSet(&SSD1681_FontSans16B);
+		SSD1681_Text("Abciwg1", SSD1681_AlignRight);
+	#endif
+	
+	#if SSD1681_FONT_SANS24
+		SSD1681_CursorSet(0, 5);
+		SSD1681_FontSet(&SSD1681_FontSans24);
+		SSD1681_Text("Abciwg1");
+	#endif
+	
+	#if SSD1681_FONT_SANS24B
+		SSD1681_FontSet(&SSD1681_FontSans24B);
+		SSD1681_Text("Abc", SSD1681_AlignRight);
+	#endif
+	
+	Print_ResponseOK();
+}
+
+// Display all characters from Dos8x8 font
+#if SSD1681_FONT_DOS8x8
+void SSD1681_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]) {
+	
+	static uint8_t Char = 0;
+	SSD1681_FontSet(&SSD1681_FontDos8x8);
+	
+	for(uint8_t Line = 4; Line < 4+16; Line++) {
+		SSD1681_CursorSet(36, Line);
+		
+		for(uint8_t i = 0; i < 16; i++) {
+			SSD1681_PrintChar(Char++);
+		}
+	}
+	
+	Print_ResponseOK();
+}
+#endif
 
 // ========================================
 // Animated demos

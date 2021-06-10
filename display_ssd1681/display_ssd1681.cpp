@@ -12,11 +12,7 @@ uint8_t SSD1681_CursorX			= 0;
 uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
 static SSD1681_Color_t SSD1681_Color = SSD1681_ColorBlack;
-//const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
-// static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
-// static uint8_t SSD1681_ColorFrontL		= 0xFF;
-// static uint8_t SSD1681_ColorBackH		= 0x00;		// Black
-// static uint8_t SSD1681_ColorBackL		= 0x00;
+const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
 
 const uint8_t SSD1681_Lut[] = {
 	
@@ -627,7 +623,7 @@ void SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap) {
 		}
 	} while(Page--);
 }
-#if 0
+
 // ========================================
 // Text
 // ========================================
@@ -641,6 +637,7 @@ const SSD1681_FontDef_t * SSD1681_FontGet(void) {
 void SSD1681_FontSet(const SSD1681_FontDef_t * Font) {
 	SSD1681_Font = Font;
 }
+
 // Print single character
 void SSD1681_PrintChar(uint8_t Char) {
 	
@@ -648,12 +645,13 @@ void SSD1681_PrintChar(uint8_t Char) {
 	if(Char < SSD1681_Font->FirstChar) Char = SSD1681_Font->LastChar;
 	if(Char > SSD1681_Font->LastChar) Char = SSD1681_Font->LastChar;
 	
-	// Calculate character offset, because font table doesn't have to befin with 0x00 character
+	// Calculate character offset, because font table doesn't have to begin with 0x00 character
 	Char = Char - SSD1681_Font->FirstChar;
 	
 	// Find width of the character and its position is bitmap table
 	uint8_t Width;
 	uint8_t Height = SSD1681_Font->Height;
+	uint8_t Spacing = SSD1681_Font->Spacing;
 	uint16_t Address;
 	if(SSD1681_Font->Width > 0) {
 		Width = SSD1681_Font->Width;
@@ -677,24 +675,29 @@ void SSD1681_PrintChar(uint8_t Char) {
 	uint16_t Address_Old = Address;
 	
 	// Loop iterator
-	uint8_t Linia = Height - 1;
+	uint8_t Line = Height - 1;
 	
 	// Print all bytes of all pages
 	do {
 		
-		Address = Address + Linia;
+		Address = Address + Line;
+		
+		//SSD1681_WaitForReady();
+		SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorP, SSD1681_CursorX + Width + Spacing - 1, SSD1681_CursorP + Height - 1);
 		
 		// Print part of the charater that is proper for this page
 		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(WRITE_RAM);
 		SSD1681_DC_DATA;
-				
+		
 		// Char
 		for(uint8_t i=0; i<Width; i++) {
 			Spi_1(SSD1681_Color ? SSD1681_Font->Bitmaps[Address] : ~SSD1681_Font->Bitmaps[Address]);
 			Address = Address + Height;
 		}
 		Address = Address + Height;
-				
+		
 		// Spacing
 		for(uint8_t i = SSD1681_Font->Spacing; i; i--) {
 			Spi_1(SSD1681_Color ? 0x00 : 0xFF);
@@ -702,11 +705,11 @@ void SSD1681_PrintChar(uint8_t Char) {
 				
 		SSD1681_CHIP_DESELECT;
 		
-		// CzyIf this was the last line
-		if(Linia == 0) {
+		// If this was the last line
+		if(Line == 0) {
 			
 			if(Height > 1) {
-				SSD1681_CursorPageSet(CursorL_Old);
+				SSD1681_CursorP = CursorL_Old;
 			}
 			
 			SSD1681_CursorX = CursorX_Old + Width + SSD1681_Font->Spacing;
@@ -716,12 +719,10 @@ void SSD1681_PrintChar(uint8_t Char) {
 		}
 		else {
 			// It was not the last line
-			SSD1681_CursorSet(CursorX_Old, SSD1681_CursorP + 1);
-// 			SSD1681_CursorXSet(CursorX_Old);
-// 			SSD1681_CursorPageSet(SSD1681_CursorP + 1);
 			Address = Address_Old;
+			SSD1681_CursorP++;
 		}
-	} while(Linia--);
+	} while(Line--);
 }
 
 // Calculate text width
@@ -783,7 +784,7 @@ void SSD1681_Text(const char * Text, SSD1681_align_t Align) {
 
 
 
-#endif
+
 
 void SSD1681_Bytes(uint8_t Pattern, uint16_t Times) {
 	SSD1681_WaitForReady();

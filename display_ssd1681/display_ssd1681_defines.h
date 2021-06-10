@@ -36,42 +36,6 @@
 #define		SET_RAM_Y_ADDRESS_COUNTER				0x4F
 #define		TERMINATE_FRAME_READ_WRITE				0xFF		// tego nie ma w datasheet
 
-// #define		SSD1681_COLUMN_RANGE				0x15						// 01 specifies the range in which the cursor can increment
-// #define		SSD1681_ROW_RANGE					0x75						// 02 specifies the range in which the cursor can increment
-// #define		SSD1681_RAM_WRITE					0x5C						// 03
-// #define		SSD1681_RAM_READ					0x5D						// 04 reading from the display doesn't work in SPI mode
-// #define		SSD1681_REMAP_COLOR_DEPTH			0xA0						// 05
-// #define		SSD1681_SET_DISPLAY_START_LINE		0xA1						// 06 set vertical scroll by RAM from 0~127. [reset=00h]
-// #define		SSD1681_SET_DISPLAY_OFFSET			0xA2						// 07 set vertical scroll by Row from 0-127. [reset=60h]
-// #define		SSD1681_SET_DISPLAY_MODE_OFF		0xA4						// 08a
-// #define		SSD1681_SET_DISPLAY_MODE_ON			0xA5						// 08b
-// #define		SSD1681_SET_DISPLAY_MODE_RESET		0xA6						// 08c
-// #define		SSD1681_SET_DISPLAY_MODE_INVERT		0xA7						// 08d
-// #define		SSD1681_FUNCTION_SELECTION			0xAB						// 09,
-// #define		SSD1681_NOP							0xAD						// 10
-// #define		SSD1681_SLEEP_MODE_ON				0xAE						// 11a
-// #define		SSD1681_SLEEP_MODE_OFF				0xAF						// 11b
-// #define		SSD1681_NOP2						0xB0						// 12
-// #define		SSD1681_SET_RESET_PRECHARGE			0xB1						// 13
-// #define		SSD1681_DISPLAY_ENHANCEMENT			0xB2						// 14
-// #define		SSD1681_CLOCK_DIVIDER_OSC_FREQ		0xB3						// 15
-// #define		SSD1681_SET_SEGMENT_LOW_VOLTAGE		0xB4						// 16
-// #define		SSD1681_SET_GPIO					0xB5						// 17
-// #define		SSD1681_SET_SECOND_PRECHARGE		0xB6						// 18
-// #define		SSD1681_LOOKUP_TABLE				0xB8						// 19
-// #define		SSD1681_USE_BUILTIN_LINEAR_LUT		0xB9						// 20
-// #define		SSD1681_SET_PRECHARGE_VOLTAGE		0xBB						// 21
-// #define		SSD1681_SET_VCOMH_VOLTAGE			0xBE						// 22
-// #define		SSD1681_SET_CONTRAST				0xC1						// 23
-// #define		SSD1681_MASTER_CONTRAST_CURRENT		0xC7						// 24
-// #define		SSD1681_SET_MUX_RATIO				0xCA						// 25
-// #define		SSD1681_NOP3						0xD1						// 26
-// #define		SSD1681_NOP4						0xE3						// 27
-// #define		SSD1681_SET_LOCK_COMMAND			0xFD						// 28
-// #define		SSD1681_HORIZONTAL_SCROLL			0x96						// 29
-// #define		SSD1681_STOP_MOVING					0x9E						// 30
-// #define		SSD1681_START_MOVING				0x9F						// 31
-
 // ========================================
 // Color definitions
 // ========================================

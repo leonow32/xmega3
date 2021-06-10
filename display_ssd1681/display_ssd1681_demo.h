@@ -82,6 +82,15 @@ void SSD1681_CmdDrawCircle(uint8_t argc, uint8_t * argv[]);
 void SSD1681_CmdBitmap(uint8_t argc, uint8_t * argv[]);
 
 // ========================================
+// Fonts and text
+// ========================================
+
+void SSD1681_CmdText(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdFont(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdFontDemo(uint8_t argc, uint8_t * argv[]);
+void SSD1681_CmdDemoFontDos8x8(uint8_t argc, uint8_t * argv[]);
+
+// ========================================
 // Animated demos
 // ========================================
 

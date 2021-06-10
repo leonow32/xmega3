@@ -28,33 +28,33 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
-// #if SSD1681_FONT_CONSOLE8x6
-// 	#include	"font/console8x6.h"
-// #endif
-// 
-// #if SSD1681_FONT_DOS8x8
-// 	#include	"font/dos8x8.h"
-// #endif
-// 
-// #if SSD1681_FONT_DOS16x8
-// 	#include	"font/dos16x8.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS16_PL
-// 	#include	"font/sans16_PL.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS16B_PL
-// 	#include	"font/sans16B_PL.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS24_PL
-// 	#include	"font/sans24_PL.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_ARROW
-// 	#include	"bitmap/arrow.h"
-// #endif
+#if SSD1681_FONT_CONSOLE8x6
+	#include	"font/console8x6.h"
+#endif
+
+#if SSD1681_FONT_DOS8x8
+	#include	"font/dos8x8.h"
+#endif
+
+#if SSD1681_FONT_DOS16x8
+	#include	"font/dos16x8.h"
+#endif
+
+#if SSD1681_FONT_SANS16_PL
+	#include	"font/sans16_PL.h"
+#endif
+
+#if SSD1681_FONT_SANS16B_PL
+	#include	"font/sans16B_PL.h"
+#endif
+
+#if SSD1681_FONT_SANS24_PL
+	#include	"font/sans24_PL.h"
+#endif
+
+#if SSD1681_BITMAP_ARROW
+	#include	"bitmap/arrow.h"
+#endif
 // 
 // Bitmaps
 #include	"bitmap/extronic_logo.h"
