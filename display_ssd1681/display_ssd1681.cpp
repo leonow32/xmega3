@@ -12,52 +12,47 @@ uint8_t SSD1681_CursorX			= 0;
 uint8_t SSD1681_CursorX_Max		= SSD1681_DISPLAY_SIZE_Y - 1;
 
 static SSD1681_Color_t SSD1681_Color = SSD1681_ColorBlack;
-//const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
-// static uint8_t SSD1681_ColorFrontH		= 0xFF;		// White
-// static uint8_t SSD1681_ColorFrontL		= 0xFF;
-// static uint8_t SSD1681_ColorBackH		= 0x00;		// Black
-// static uint8_t SSD1681_ColorBackL		= 0x00;
+const static SSD1681_FontDef_t * SSD1681_Font = &SSD1681_DEFAULT_FONT;
 
-const uint8_t lut_full_update[] = {
-	0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22,
-	0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99, 0x88,
-	0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51,
-	0x35, 0x51, 0x51, 0x19, 0x01, 0x00
-};
-
-const uint8_t lut_partial_update[] = {
-	0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+const uint8_t SSD1681_Lut[] = {
+	
+	#if SSD1681_USE_REFRESH_FULL
+		0x02, 0x02, 0x01, 0x11, 0x12, 0x12, 0x22, 0x22, 0x66, 0x69, 0x69, 0x59, 0x58, 0x99, 0x99,
+		0x88, 0x00, 0x00, 0x00, 0x00, 0xF8, 0xB4, 0x13, 0x51, 0x35, 0x51, 0x51, 0x19, 0x01, 0x00,
+	#endif
+	
+	#if SSD1681_USE_REFRESH_PARTIAL
+		0x10, 0x18, 0x18, 0x08, 0x18, 0x18, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x14, 0x44, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	#endif
 };
 
 // Display config for init function
 static const uint8_t SSD1681_InitSequence[] = {
 	
-	SSD1681_COMMAND,	DRIVER_OUTPUT_CONTROL,
+	SSD1681_COMMAND,	SSD1681_DRIVER_OUTPUT_CONTROL,
 	SSD1681_DATA,		(SSD1681_DISPLAY_SIZE_Y - 1) & 0xFF,
 	SSD1681_DATA,		((SSD1681_DISPLAY_SIZE_Y - 1) >> 8) & 0xFF,
 	SSD1681_DATA,		0x00,
 	
-	SSD1681_COMMAND,	BOOSTER_SOFT_START_CONTROL,
+	SSD1681_COMMAND,	SSD1681_BOOSTER_SOFT_START_CONTROL,
 	SSD1681_DATA,		0xD7,
 	SSD1681_DATA,		0xD6,
 	SSD1681_DATA,		0x9D,
 	
-	SSD1681_COMMAND,	WRITE_VCOM_REGISTER,
+	SSD1681_COMMAND,	SSD1681_WRITE_VCOM_REGISTER,
 	SSD1681_DATA,		0xA8,
 	
-	SSD1681_COMMAND,	SET_DUMMY_LINE_PERIOD,
+	SSD1681_COMMAND,	SSD1681_SET_DUMMY_LINE_PERIOD,
 	SSD1681_DATA,		0x1A,						// 4 dummy lines per gate
 	
-	SSD1681_COMMAND,	SET_GATE_TIME,
+	SSD1681_COMMAND,	SSD1681_SET_GATE_TIME,
 	SSD1681_DATA,		0x08,						// 2us per line
 	
-	SSD1681_COMMAND,	DATA_ENTRY_MODE_SETTING,
+	SSD1681_COMMAND,	SSD1681_DATA_ENTRY_MODE_SETTING,
 	SSD1681_DATA,		0b00000100,					// X decrement; Y decrement, pointer move in Y direction
 	
-	SSD1681_COMMAND,	WRITE_LUT_REGISTER,
+	SSD1681_COMMAND,	SSD1681_WRITE_LUT_REGISTER,
 };
 
 // ========================================
@@ -91,15 +86,13 @@ void SSD1681_Init(void) {
 	// Transmit LUT array
 	SSD1681_DC_DATA;
 	for (uint8_t i = 0; i < SSD1681_LUT_LENGTH; i++) {
-		//Spi_1(lut_full_update[i]);
-		Spi_1(lut_partial_update[i]);
+		Spi_1(SSD1681_Lut[i]);
 	}
 	
 	SSD1681_CHIP_DESELECT;
 	
 	#if SSD1681_CLEAR_AFERT_INIT
-//	SSD1681_Clear();
-//	SSD1681_WriteCommand(SSD1681_SLEEP_MODE_OFF);
+		SSD1681_Clear();
 	#endif
 }
 
@@ -123,31 +116,22 @@ void SSD1681_WriteData(const uint8_t Data) {
 	SSD1681_WaitForReady();
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
+	Spi_1(SSD1681_WRITE_RAM);
 	SSD1681_DC_DATA;
 	Spi_1(Data);
 	SSD1681_CHIP_DESELECT;
 }
-
-// Send LUT
-// void SSD1681_WriteLUT(const uint8_t * LUT) {
-// 	//SSD13
-// 	SSD1681_WriteCommand(WRITE_LUT_REGISTER);
-// 	for (uint8_t i = 0; i < SSD1681_LUT_LENGTH; i++) {
-// 		SSD1681_WriteData(LUT[i]);
-// 	}
-// }
 
 // Refresh display
 void SSD1681_Refresh(void) {
 	SSD1681_WaitForReady();
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(DISPLAY_UPDATE_CONTROL_2);
+	Spi_1(SSD1681_DISPLAY_UPDATE_CONTROL_2);
 	SSD1681_DC_DATA;
 	Spi_1(0xC4);
 	SSD1681_DC_COMMAND;
-	Spi_2(MASTER_ACTIVATION, TERMINATE_FRAME_READ_WRITE);
+	Spi_2(SSD1681_MASTER_ACTIVATION, SSD1681_TERMINATE_FRAME_READ_WRITE);
 	SSD1681_CHIP_DESELECT;
 }
 
@@ -163,7 +147,7 @@ void SSD1681_Clear(void) {
 		SSD1681_CursorSet(0, Page);
 		SSD1681_CHIP_SELECT;
 		SSD1681_DC_COMMAND;
-		Spi_1(WRITE_RAM);
+		Spi_1(SSD1681_WRITE_RAM);
 		SSD1681_DC_DATA;
 		Spi_Repeat(0xFF, SSD1681_DISPLAY_SIZE_Y);
 		SSD1681_CHIP_DESELECT;
@@ -182,7 +166,7 @@ void SSD1681_Fill(void) {
 		SSD1681_CursorSet(0, Page);
 		SSD1681_CHIP_SELECT;
 		SSD1681_DC_COMMAND;
-		Spi_1(WRITE_RAM);
+		Spi_1(SSD1681_WRITE_RAM);
 		SSD1681_DC_DATA;
 		Spi_Repeat(0x00, SSD1681_DISPLAY_SIZE_Y);
 		SSD1681_CHIP_DESELECT;
@@ -201,22 +185,12 @@ void SSD1681_Chessboard(void) {
 		SSD1681_CursorSet(0, Page);
 		SSD1681_CHIP_SELECT;
 		SSD1681_DC_COMMAND;
-		Spi_1(WRITE_RAM);
+		Spi_1(SSD1681_WRITE_RAM);
 		SSD1681_DC_DATA;
 		Spi_Repeat(0b10101010, 0b01010101, SSD1681_DISPLAY_SIZE_Y / 2);
 		SSD1681_CHIP_DESELECT;
 	}
 }
-
-
-// Allow to display data
-// void SSD1681_WriteRamEnable(void) {
-// 	SSD1681_CHIP_SELECT;
-// 	SSD1681_DC_COMMAND;
-// 	Spi_1(SSD1681_RAM_WRITE);
-// 	SSD1681_CHIP_DESELECT;
-// }
-
 
 // ========================================
 // Cursor position
@@ -236,9 +210,8 @@ void SSD1681_CursorPageSet(uint8_t p) {
 	p = p < SSD1681_PAGE_COUNT ? p : SSD1681_PAGE_COUNT-1;
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SET_RAM_X_ADDRESS_COUNTER);
+	Spi_1(SSD1681_SET_RAM_X_ADDRESS_COUNTER);
 	SSD1681_DC_DATA;
-	//Spi_1((SSD1681_PAGE_COUNT-1) - Page);
 	Spi_1(p);
 	SSD1681_CHIP_DESELECT;
 	SSD1681_CursorP = p;
@@ -253,9 +226,8 @@ void SSD1681_CursorXSet(uint8_t x) {
 	x = x < SSD1681_DISPLAY_SIZE_Y ? x : SSD1681_DISPLAY_SIZE_Y-1;
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SET_RAM_Y_ADDRESS_COUNTER);
+	Spi_1(SSD1681_SET_RAM_Y_ADDRESS_COUNTER);
 	SSD1681_DC_DATA;
-	//Spi_2(y, 0);
 	Spi_2((SSD1681_DISPLAY_SIZE_Y-1) - x, 0);
 	SSD1681_CHIP_DESELECT;
 	SSD1681_CursorX = x;
@@ -278,10 +250,9 @@ void SSD1681_ActiveAreaPageSet(uint8_t p0, uint8_t p1) {
 	// Set active area
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SET_RAM_X_ADDRESS_START_END_POSITION);
+	Spi_1(SSD1681_SET_RAM_X_ADDRESS_START_END_POSITION);
 	SSD1681_DC_DATA;
 	Spi_2(p0, p1);
-	//Spi_2((SSD1681_PAGE_COUNT-1) - p0, (SSD1681_PAGE_COUNT-1) - p1);
 	SSD1681_CHIP_DESELECT;
 	
 	// Set cursor
@@ -301,9 +272,8 @@ void SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1) {
 	// Set active area
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(SET_RAM_Y_ADDRESS_START_END_POSITION);
+	Spi_1(SSD1681_SET_RAM_Y_ADDRESS_START_END_POSITION);
 	SSD1681_DC_DATA;
-	//Spi_4(y0, 0, y1, 0);
 	Spi_4((SSD1681_DISPLAY_SIZE_Y-1) - x0, 0, (SSD1681_DISPLAY_SIZE_Y-1) - x1, 0);
 	SSD1681_CHIP_DESELECT;
 	
@@ -314,7 +284,6 @@ void SSD1681_ActiveAreaXSet(uint8_t x0, uint8_t x1) {
 	SSD1681_CursorX = x0;
 	SSD1681_CursorX_Max = x1;
 }
-
 
 // ========================================
 // Colors
@@ -330,7 +299,6 @@ void SSD1681_ColorSet(SSD1681_Color_t Color) {
 	SSD1681_Color = Color;
 }
 
-
 // ========================================
 // Drawing of geometric shapes
 // ========================================
@@ -342,7 +310,7 @@ void SSD1681_DrawPixel(uint8_t x, uint8_t y) {
 	SSD1681_WaitForReady();
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
+	Spi_1(SSD1681_WRITE_RAM);
 	SSD1681_DC_DATA;
 	Spi_1(~(1 << (y % SSD1681_PAGE_HEIGHT)));
 	SSD1681_CHIP_DESELECT;
@@ -352,14 +320,6 @@ void SSD1681_DrawPixel(uint8_t x, uint8_t y) {
 // Horizontal line, thickness is 1 pixel
 // Begin at x0, y0 and draw right
 void SSD1681_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
-	
-	Print("L- ");
-	Print_Dec(x0);
-	Print(' ');
-	Print_Dec(y0);
-	Print(' ');
-	Print_Dec(Length);
-	
 	// Calculate y0 to page number and set cursor
 	uint8_t p = y0 / SSD1681_PAGE_HEIGHT;
 	SSD1681_ActiveAreaSet(x0, p, x0 + Length, p);
@@ -367,7 +327,7 @@ void SSD1681_DrawLineHorizontal(uint8_t x0, uint8_t y0, uint8_t Length) {
 	uint8_t Pattern = ~(1 << (y0 % SSD1681_PAGE_HEIGHT));
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
+	Spi_1(SSD1681_WRITE_RAM);
 	SSD1681_DC_DATA;
 	Spi_Repeat(Pattern, Length);
 	SSD1681_CHIP_DESELECT;
@@ -384,43 +344,27 @@ void SSD1681_DrawLineVertical(uint8_t x0, uint8_t y0, uint8_t Length) {
 	if(PagePatternEnd == 0) {
 		PagePatternEnd = 0xFF;
 	}
-	Print("PageStart = ");
-	Print_Dec(PageStart);
-	Print("\r\nPageEnd =   ");
-	Print_Dec(PageEnd);
-	Print("\r\nParrterStart = ");
-	Print_Bin(PagePatternStart);
-	Print("\r\nParrterEnd =   ");
-	Print_Bin(PagePatternEnd);
 	
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
 		SSD1681_CursorSet(x0, PageStart);
-// 		SSD1681_CursorXSet(x0);
-// 		SSD1681_CursorPageSet(PageStart);
 		SSD1681_WriteData(~(PagePatternStart & PagePatternEnd));
 	}
 	else {
 		// The line doesn;t fit in single page
 		// Draw biginning of the line
 		SSD1681_CursorSet(x0, PageStart);
-// 		SSD1681_CursorXSet(x0);
-// 		SSD1681_CursorPageSet(PageStart);
 		SSD1681_WriteData(~PagePatternStart);
 			
 		// Draw enging of the line
 		if(PagePatternEnd) {
 			SSD1681_CursorSet(x0, PageEnd);
-// 			SSD1681_CursorXSet(x0);
-// 			SSD1681_CursorPageSet(PageEnd);
 			SSD1681_WriteData(~PagePatternEnd);
 		}
 			
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
 			SSD1681_CursorSet(x0, ++PageStart);
-// 			SSD1681_CursorXSet(x0);
-// 			SSD1681_CursorPageSet(++PageStart);
 			SSD1681_WriteData(0x00);
 		}
 	}
@@ -492,20 +436,10 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 	if(PagePatternEnd == 0) {
 		PagePatternEnd = 0xFF;
 	}
-	Print("PageStart = ");
-	Print_Dec(PageStart);
-	Print("\r\nPageEnd =   ");
-	Print_Dec(PageEnd);
-	Print("\r\nParrterStart = ");
-	Print_Bin(PagePatternStart);
-	Print("\r\nParrterEnd =   ");
-	Print_Bin(PagePatternEnd);
 	
 	if(PageStart == PageEnd) {
 		// Tha line fits to single page (<= 8 pixels)
 		SSD1681_CursorSet(x0, PageStart);
-// 		SSD1681_CursorXSet(x0);
-// 		SSD1681_CursorPageSet(PageStart);
 		for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 			SSD1681_WriteData(~(PagePatternStart & PagePatternEnd));
 		}
@@ -514,8 +448,6 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		// The line doesn't fit in single page
 		// Draw biginning of the line
 		SSD1681_CursorSet(x0, PageStart);
-// 		SSD1681_CursorXSet(x0);
-// 		SSD1681_CursorPageSet(PageStart);
 		for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 			SSD1681_WriteData(~PagePatternStart);
 		}
@@ -523,8 +455,6 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		// Draw enging of the line
 		if(PagePatternEnd) {
 			SSD1681_CursorSet(x0, PageEnd);
-// 			SSD1681_CursorXSet(x0);
-// 			SSD1681_CursorPageSet(PageEnd);
 			for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 				SSD1681_WriteData(~PagePatternEnd);
 			}
@@ -533,8 +463,6 @@ void SSD1681_DrawRectangleFill(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 		// Draw middle part of the line, if there's need to
 		while(PageEnd - PageStart >= 2) {
 			SSD1681_CursorSet(x0, ++PageStart);
-// 			SSD1681_CursorXSet(x0);
-// 			SSD1681_CursorPageSet(++PageStart);
 			for(uint8_t i = 0; i < y1 - y0 + 1; i++) {
 				SSD1681_WriteData(0x00);
 			}
@@ -575,7 +503,7 @@ void SSD1681_DrawCircle(uint8_t x0, uint8_t y0, uint8_t r) {
 		}
 	}
 }
-#if 0
+
 // ========================================
 // Bitmap
 // ========================================
@@ -592,6 +520,8 @@ void SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap) {
 		Address = Page;
 		
 		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(SSD1681_WRITE_RAM);
 		SSD1681_DC_DATA;
 		for(uint8_t i = 0; i < Bitmap->Width; i++) {
 			Spi_1(SSD1681_Color ? Bitmap->Array[Address] : ~Bitmap->Array[Address]);
@@ -619,11 +549,6 @@ void SSD1681_Bitmap(const SSD1681_Bitmap_t * Bitmap) {
 			
 			// Set cursor back at the beginnign of the page
 			SSD1681_CursorSet(CursorX_Old, SSD1681_CursorP + 1);
-			
-// 			SSD1681_CursorXSet(CursorX_Old);
-// 			
-// 			// Move curson on page below
-// 			SSD1681_CursorPageSet(SSD1681_CursorP + 1);
 		}
 	} while(Page--);
 }
@@ -641,6 +566,7 @@ const SSD1681_FontDef_t * SSD1681_FontGet(void) {
 void SSD1681_FontSet(const SSD1681_FontDef_t * Font) {
 	SSD1681_Font = Font;
 }
+
 // Print single character
 void SSD1681_PrintChar(uint8_t Char) {
 	
@@ -648,12 +574,13 @@ void SSD1681_PrintChar(uint8_t Char) {
 	if(Char < SSD1681_Font->FirstChar) Char = SSD1681_Font->LastChar;
 	if(Char > SSD1681_Font->LastChar) Char = SSD1681_Font->LastChar;
 	
-	// Calculate character offset, because font table doesn't have to befin with 0x00 character
+	// Calculate character offset, because font table doesn't have to begin with 0x00 character
 	Char = Char - SSD1681_Font->FirstChar;
 	
 	// Find width of the character and its position is bitmap table
 	uint8_t Width;
 	uint8_t Height = SSD1681_Font->Height;
+	uint8_t Spacing = SSD1681_Font->Spacing;
 	uint16_t Address;
 	if(SSD1681_Font->Width > 0) {
 		Width = SSD1681_Font->Width;
@@ -677,24 +604,29 @@ void SSD1681_PrintChar(uint8_t Char) {
 	uint16_t Address_Old = Address;
 	
 	// Loop iterator
-	uint8_t Linia = Height - 1;
+	uint8_t Line = Height - 1;
 	
 	// Print all bytes of all pages
 	do {
 		
-		Address = Address + Linia;
+		Address = Address + Line;
+		
+		//SSD1681_WaitForReady();
+		SSD1681_ActiveAreaSet(SSD1681_CursorX, SSD1681_CursorP, SSD1681_CursorX + Width + Spacing - 1, SSD1681_CursorP + Height - 1);
 		
 		// Print part of the charater that is proper for this page
 		SSD1681_CHIP_SELECT;
+		SSD1681_DC_COMMAND;
+		Spi_1(SSD1681_WRITE_RAM);
 		SSD1681_DC_DATA;
-				
+		
 		// Char
 		for(uint8_t i=0; i<Width; i++) {
 			Spi_1(SSD1681_Color ? SSD1681_Font->Bitmaps[Address] : ~SSD1681_Font->Bitmaps[Address]);
 			Address = Address + Height;
 		}
 		Address = Address + Height;
-				
+		
 		// Spacing
 		for(uint8_t i = SSD1681_Font->Spacing; i; i--) {
 			Spi_1(SSD1681_Color ? 0x00 : 0xFF);
@@ -702,11 +634,11 @@ void SSD1681_PrintChar(uint8_t Char) {
 				
 		SSD1681_CHIP_DESELECT;
 		
-		// CzyIf this was the last line
-		if(Linia == 0) {
+		// If this was the last line
+		if(Line == 0) {
 			
 			if(Height > 1) {
-				SSD1681_CursorPageSet(CursorL_Old);
+				SSD1681_CursorP = CursorL_Old;
 			}
 			
 			SSD1681_CursorX = CursorX_Old + Width + SSD1681_Font->Spacing;
@@ -716,12 +648,10 @@ void SSD1681_PrintChar(uint8_t Char) {
 		}
 		else {
 			// It was not the last line
-			SSD1681_CursorSet(CursorX_Old, SSD1681_CursorP + 1);
-// 			SSD1681_CursorXSet(CursorX_Old);
-// 			SSD1681_CursorPageSet(SSD1681_CursorP + 1);
 			Address = Address_Old;
+			SSD1681_CursorP++;
 		}
-	} while(Linia--);
+	} while(Line--);
 }
 
 // Calculate text width
@@ -781,15 +711,15 @@ void SSD1681_Text(const char * Text, SSD1681_align_t Align) {
 	while(*Text) SSD1681_PrintChar(*Text++);
 }
 
-
-
-#endif
+// ========================================
+// Test
+// ========================================
 
 void SSD1681_Bytes(uint8_t Pattern, uint16_t Times) {
 	SSD1681_WaitForReady();
 	SSD1681_CHIP_SELECT;
 	SSD1681_DC_COMMAND;
-	Spi_1(WRITE_RAM);
+	Spi_1(SSD1681_WRITE_RAM);
 	SSD1681_DC_DATA;
 	Spi_Repeat(Pattern, Times);
 	SSD1681_CHIP_DESELECT;

@@ -252,6 +252,20 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"recf",			SSD1681_CmdRectangleFill},
 	{"cir",				SSD1681_CmdDrawCircle},
 	
+	{"bitmap",			SSD1681_CmdBitmap},
+	
+	{"txt",				SSD1681_CmdText},
+	{"font",			SSD1681_CmdFont},
+	{"fonts",			SSD1681_CmdFontDemo},
+		
+	#if SSD1681_FONT_DOS8x8
+		{"dos8",		SSD1681_CmdDemoFontDos8x8},
+	#endif
+	
+	#if SSD1681_FONT_DOS16x8
+		{"dos16",		SSD1681_CmdDemoFontDos16x8},
+	#endif
+	
 	{"test",			SSD1681_CmdTest},
 #endif
 

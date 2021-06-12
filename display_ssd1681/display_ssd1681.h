@@ -14,9 +14,6 @@ HARDWARE
 // Includes
 // ========================================
 
-// DEBUG
-#include "../print/print.h"
-
 #include	<avr/io.h>
 #include	<util/delay.h>
 #include	"display_ssd1681_defines.h"
@@ -28,53 +25,22 @@ HARDWARE
 	#error		"This module requires SPI_MASTER component"
 #endif
 
-// #if SSD1681_FONT_CONSOLE8x6
-// 	#include	"font/console8x6.h"
-// #endif
-// 
-// #if SSD1681_FONT_DOS8x8
-// 	#include	"font/dos8x8.h"
-// #endif
-// 
-// #if SSD1681_FONT_DOS16x8
-// 	#include	"font/dos16x8.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS16_PL
-// 	#include	"font/sans16_PL.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS16B_PL
-// 	#include	"font/sans16B_PL.h"
-// #endif
-// 
-// #if SSD1681_FONT_SANS24_PL
-// 	#include	"font/sans24_PL.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_ARROW
-// 	#include	"bitmap/arrow.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_EXTRONIC_LOGO_MONO
-// 	#include	"bitmap/extronic_logo_mono.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_EXTRONIC_LOGO_RGB565
-// 	#include	"bitmap/extronic_logo_rgb565.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_ME_AND_MY_GIRLFRIEND
-// 	#include	"bitmap/me_and_my_girlfriend.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_CASSINI_RGB332
-// 	#include	"bitmap/cassini_rgb332.h"
-// #endif
-// 
-// #if SSD1681_BITMAP_CASSINI_RGB565
-// 	#include	"bitmap/cassini_rgb565.h"
-// #endif
+// Fonts
+#include	"font/console8x6.h"
+#include	"font/dos8x8.h"
+#include	"font/dos16x8.h"
+#include	"font/sans8.h"
+#include	"font/sans16.h"
+#include	"font/sans16B.h"
+#include	"font/sans16_PL.h"
+#include	"font/sans16B_PL.h"
+#include	"font/sans24.h"
+#include	"font/sans24B.h"
+#include	"font/sans24_PL.h"
+#include	"font/sans24B_PL.h"
+
+// Bitmaps
+#include	"bitmap/extronic_logo.h"
 
 // ========================================
 // Global variables
@@ -93,10 +59,7 @@ void		SSD1681_Init(void);
 void		SSD1681_WaitForReady(void);
 void		SSD1681_WriteCommand(const uint8_t Command);
 void		SSD1681_WriteData(const uint8_t Data);
-void		SSD1681_WriteLUT(const uint8_t * LUT);
 void		SSD1681_Refresh(void);
-// void		SSD1681_WriteRamEnable(void);
-// void		SSD1681_ContrastSet(const uint8_t Value);
 void		SSD1681_Clear(void);
 void		SSD1681_Fill(void);
 void		SSD1681_Chessboard(void);
