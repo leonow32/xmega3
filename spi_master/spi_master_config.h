@@ -142,6 +142,26 @@
 #endif
 
 // ========================================
+// GameBox
+// ========================================
+
+#if PRODUCT_GAMEBOX
+	#define			SPI_PORTA_46					0
+	#define			SPI_PORTC_02					1
+	#define			SPI_PORTE_02					0
+	#define			SPI_MASTER_USE_DEMO_COMMANDS	0
+	
+	// Pinout of CS pin only for demo commands (all SPI devices should have configuration of CS pin in their ouw config files)
+	#if SPI_MASTER_USE_DEMO_COMMANDS
+		#define		SPI_DEMO_DIR_SET				VPORTC.DIR	|=	PIN3_bm
+		#define		SPI_DEMO_CHIP_SELECT			VPORTC.OUT	&= ~PIN3_bm
+		#define		SPI_DEMO_CHIP_DESELECT			VPORTC.OUT	|=  PIN3_bm
+	#endif
+	
+	#define			SPI_MASTER_CONFIG_DONE
+#endif
+
+// ========================================
 // Error handling
 // ========================================
 

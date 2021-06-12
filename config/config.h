@@ -106,6 +106,15 @@ CHANGELOG
 #endif
 
 // ========================================
+// GameBox
+// ========================================
+
+#if PRODUCT_GAMEBOX
+	#define HW_CPU_ATmegaXX09				1
+	#define HW_CONFIG_DONE
+#endif
+
+// ========================================
 // Error handling
 // ========================================
 
