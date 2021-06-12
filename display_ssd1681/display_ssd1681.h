@@ -14,9 +14,6 @@ HARDWARE
 // Includes
 // ========================================
 
-// DEBUG
-#include "../print/print.h"
-
 #include	<avr/io.h>
 #include	<util/delay.h>
 #include	"display_ssd1681_defines.h"
@@ -62,10 +59,7 @@ void		SSD1681_Init(void);
 void		SSD1681_WaitForReady(void);
 void		SSD1681_WriteCommand(const uint8_t Command);
 void		SSD1681_WriteData(const uint8_t Data);
-void		SSD1681_WriteLUT(const uint8_t * LUT);
 void		SSD1681_Refresh(void);
-// void		SSD1681_WriteRamEnable(void);
-// void		SSD1681_ContrastSet(const uint8_t Value);
 void		SSD1681_Clear(void);
 void		SSD1681_Fill(void);
 void		SSD1681_Chessboard(void);

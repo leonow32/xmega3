@@ -5,36 +5,36 @@
 // Basic constants
 // ========================================
 
-#define		SSD1681_DISPLAY_SIZE_X				200
-#define		SSD1681_DISPLAY_SIZE_Y				200
-#define		SSD1681_PAGE_HEIGHT					8
-#define		SSD1681_PAGE_COUNT					25		// Page is a horizontal rectangle of 8x200 pixels and each byte corresponds to 8 pixels in vertical
+#define		SSD1681_DISPLAY_SIZE_X				uint8_t(200)
+#define		SSD1681_DISPLAY_SIZE_Y				uint8_t(200)
+#define		SSD1681_PAGE_HEIGHT					uint8_t(8)
+#define		SSD1681_PAGE_COUNT					uint8_t(25)		// Page is a horizontal rectangle of 8x200 pixels and each byte corresponds to 8 pixels in vertical
 
 // ========================================
 // Display operation codes
 // ========================================
 
-#define		DRIVER_OUTPUT_CONTROL					0x01
-#define		BOOSTER_SOFT_START_CONTROL				0x0C
-#define		GATE_SCAN_START_POSITION				0x0F
-#define		DEEP_SLEEP_MODE							0x10
-#define		DATA_ENTRY_MODE_SETTING					0x11
-#define		SW_RESET								0x12
-#define		TEMPERATURE_SENSOR_CONTROL				0x1A
-#define		MASTER_ACTIVATION						0x20
-#define		DISPLAY_UPDATE_CONTROL_1				0x21
-#define		DISPLAY_UPDATE_CONTROL_2				0x22
-#define		WRITE_RAM								0x24
-#define		WRITE_VCOM_REGISTER						0x2C
-#define		WRITE_LUT_REGISTER						0x32
-#define		SET_DUMMY_LINE_PERIOD					0x3A		// tego nie ma w datasheet
-#define		SET_GATE_TIME							0x3B		// tego nie ma w datasheet
-#define		BORDER_WAVEFORM_CONTROL					0x3C
-#define		SET_RAM_X_ADDRESS_START_END_POSITION	0x44
-#define		SET_RAM_Y_ADDRESS_START_END_POSITION	0x45
-#define		SET_RAM_X_ADDRESS_COUNTER				0x4E
-#define		SET_RAM_Y_ADDRESS_COUNTER				0x4F
-#define		TERMINATE_FRAME_READ_WRITE				0xFF		// tego nie ma w datasheet
+#define		SSD1681_DRIVER_OUTPUT_CONTROL					uint8_t(0x01)
+#define		SSD1681_BOOSTER_SOFT_START_CONTROL				uint8_t(0x0C)
+#define		SSD1681_GATE_SCAN_START_POSITION				uint8_t(0x0F)
+#define		SSD1681_DEEP_SLEEP_MODE							uint8_t(0x10)
+#define		SSD1681_DATA_ENTRY_MODE_SETTING					uint8_t(0x11)
+#define		SSD1681_SW_RESET								uint8_t(0x12)
+#define		SSD1681_TEMPERATURE_SENSOR_CONTROL				uint8_t(0x1A)
+#define		SSD1681_MASTER_ACTIVATION						uint8_t(0x20)
+#define		SSD1681_DISPLAY_UPDATE_CONTROL_1				uint8_t(0x21)
+#define		SSD1681_DISPLAY_UPDATE_CONTROL_2				uint8_t(0x22)
+#define		SSD1681_WRITE_RAM								uint8_t(0x24)
+#define		SSD1681_WRITE_VCOM_REGISTER						uint8_t(0x2C)
+#define		SSD1681_WRITE_LUT_REGISTER						uint8_t(0x32)
+#define		SSD1681_SET_DUMMY_LINE_PERIOD					uint8_t(0x3A)		// Not described in datasheet
+#define		SSD1681_SET_GATE_TIME							uint8_t(0x3B)		// Not described in datasheet
+#define		SSD1681_BORDER_WAVEFORM_CONTROL					uint8_t(0x3C)
+#define		SSD1681_SET_RAM_X_ADDRESS_START_END_POSITION	uint8_t(0x44)
+#define		SSD1681_SET_RAM_Y_ADDRESS_START_END_POSITION	uint8_t(0x45)
+#define		SSD1681_SET_RAM_X_ADDRESS_COUNTER				uint8_t(0x4E)
+#define		SSD1681_SET_RAM_Y_ADDRESS_COUNTER				uint8_t(0x4F)
+#define		SSD1681_TERMINATE_FRAME_READ_WRITE				uint8_t(0xFF)		// Not described in datasheet
 
 // ========================================
 // Color definitions
@@ -80,13 +80,6 @@ struct SSD1681_FontDef_t {
 // ========================================
 // Bitmaps
 // ========================================
-
-// Enum to select one of possible color modes
-// enum SSD1681_Color_t {
-// 	SSD1681_ColorMono,							// 1 byte = 8 pixels
-// 	SSD1681_ColorRGB332,						// 1 pixel = 1 byte,  0bRRRGGGBB
-// 	SSD1681_ColorRGB565							// 1 pixel = 2 bytes, 0bRRRRRGGGGGGBBBBB
-// };
 
 // Bitmap definition
 struct SSD1681_Bitmap_t {

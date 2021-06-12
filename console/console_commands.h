@@ -256,8 +256,6 @@ const Console_NamePointer_t Console_CommandList[] = {
 	
 	{"txt",				SSD1681_CmdText},
 	{"font",			SSD1681_CmdFont},
-	
-	// Font demos
 	{"fonts",			SSD1681_CmdFontDemo},
 		
 	#if SSD1681_FONT_DOS8x8
