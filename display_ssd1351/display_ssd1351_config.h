@@ -130,7 +130,7 @@
 	// Config
 	#define		SSD1351_DEFAULT_CONTRAST				255
 	#define		SSD1351_CLEAR_AFERT_INIT				1
-	#define		SSD1351_USE_DEMO_COMMANDS				1
+	#define		SSD1351_USE_DEMO_COMMANDS				0
 	
 	// Fonts
 	#define		SSD1351_DEFAULT_FONT					SSD1351_FontSans16_PL

@@ -37,6 +37,7 @@
 
 #if COMPONENT_GAMEBOX
 	#include	"../gamebox/gamebox.h"
+	#include	"../gamebox/snake.h"
 #endif
 
 #if COMPONENT_I2C_MASTER
@@ -302,6 +303,8 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if COMPONENT_GAMEBOX
 	{"queue",			GB_KeyboardCmdPrintQueue},
 	{"pop",				GB_KeyboardCmdPopEvent},
+	
+	{"snake",			GB_SnakeCmdRun},
 #endif
 
 // ========================================

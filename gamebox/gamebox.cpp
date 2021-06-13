@@ -117,7 +117,10 @@ void GB_KeyboardCmdPrintQueue(uint8_t argc, uint8_t * argv[]) {
 
 // Debug - pop event from queue and print
 void GB_KeyboardCmdPopEvent(uint8_t argc, uint8_t * argv[]) {
-	Print_Hex(uint8_t(GB_KeyboardQueuePop()));
+	GB_KeyEvent_t Event = GB_KeyboardQueuePop();
+	Print_Hex(uint8_t(Event));
+	Print(' ');
+	GB_KeyboardPrintEvent(Event);
 }
 
 // Keyboard reading task
