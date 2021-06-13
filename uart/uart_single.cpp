@@ -91,38 +91,35 @@ void Uart_Init(void) {
 		VPORTF.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTF.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 	
-	#else
-		#error "Missing config for UART"
-	#endif
-	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-	#if UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
+	#elif UART2_PORTF_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART2_ALT1_gc;
 		PORTF.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 		PORTF.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 									PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 		VPORTF.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 		VPORTF.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
-	#endif
 	
 	// Konfiguracja dla ATmegaXX08/XX09 - port podstawowy
-	#if UART3_PORTB_01 && (HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin || HW_CPU_ATmegaXX09)
+	#elif UART3_PORTB_01 && (HW_CPU_ATmegaXX08_28pin || HW_CPU_ATmegaXX08_32pin || HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		&= ~PORTMUX_USART3_gm;
 		PORTB.PIN1CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 		PORTB.PIN0CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 									PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 		VPORTB.OUT				|=	PIN0_bm;									// Pin Tx jako wyjœcie
 		VPORTB.DIR				|=	PIN0_bm;									// Pin Tx jako wyjœcie
-	#endif
 	
 	// Konfiguracja dla ATmegaXX08/XX09 - port alternatywny
-	#if UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
+	#elif UART3_PORTB_45 && (HW_CPU_ATmegaXX09)
 		PORTMUX.USARTROUTEA		|=	PORTMUX_USART3_ALT1_gc;
 		PORTB.PIN5CTRL			 =	PORT_PULLUPEN_bm;							// Pin Rx ma w³¹czony rezystor pull-up
 		PORTB.PIN4CTRL			 =	PORT_PULLUPEN_bm |							// Pin Tx ma w³¹czony rezystor pull-up
 									PORT_ISC_INPUT_DISABLE_gc;					// Pin Tx ma wy³¹czony bufor wejœciowy
 		VPORTB.OUT				|=	PIN4_bm;									// Pin Tx jako wyjœcie
 		VPORTB.DIR				|=	PIN4_bm;									// Pin Tx jako wyjœcie
+	
+	#else
+		#error "Missing config for UART"
 	#endif
 	
 	USARTX.BAUD					=	uint16_t((F_CPU * 4) / UART_BAUD);			// Baud rate

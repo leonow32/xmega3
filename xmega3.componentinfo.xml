@@ -26,13 +26,13 @@
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include\avr\iom4808.h</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include\avr\iom4809.h</AbsolutePath>
 					<Attribute></Attribute>
 					<Category>header</Category>
 					<Condition>C</Condition>
-					<FileContentHash>tox3jP6Nufq+23sjGkt/Iw==</FileContentHash>
+					<FileContentHash>E1mt3ptORaPqOFQECBLDLA==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>include/avr/iom4808.h</Name>
+					<Name>include/avr/iom4809.h</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
@@ -59,13 +59,13 @@
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega4808</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega4809</AbsolutePath>
 					<Attribute></Attribute>
 					<Category>libraryPrefix</Category>
 					<Condition>GCC</Condition>
 					<FileContentHash i:nil="true" />
 					<FileVersion></FileVersion>
-					<Name>gcc/dev/atmega4808</Name>
+					<Name>gcc/dev/atmega4809</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
@@ -74,7 +74,7 @@
 			<PackPath>C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/Atmel.ATmega_DFP.pdsc</PackPath>
 			<PackVersion>1.6.364</PackVersion>
 			<PresentInProject>true</PresentInProject>
-			<ReferenceConditionId>ATmega4808</ReferenceConditionId>
+			<ReferenceConditionId>ATmega4809</ReferenceConditionId>
 			<RteComponents xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 				<d4p1:string></d4p1:string>
 			</RteComponents>

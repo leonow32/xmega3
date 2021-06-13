@@ -19,7 +19,7 @@
 	#error		"This module requires PRINT component"
 #endif
 
-#if COMPONENT_PRINT
+#if COMPONENT_UCOSMOS
 	#include	"../uCosmos/uCosmos.h"
 #else
 	#error		"This module requires uCOSMOS component"

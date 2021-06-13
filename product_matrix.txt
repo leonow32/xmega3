@@ -1,13 +1,13 @@
 Matrix of all products
 
-Product				AVR-IoT		CurioM4809	CurioT1627	CurioT3217	XNANO		DemoSSD1309	DemoSSD1351	DemoSSD1681	DemoSH1106
-CPU					ATmega4808	ATmega4809	ATtiny1627	ATtiny3217	ATtiny161	ATmega4808	ATmega4808	ATmega4808	ATtiny3217
+Product				AVR-IoT		CurioM4809	CurioT1627	CurioT3217	XNANO		DemoSSD1309	DemoSSD1351	DemoSSD1681	DemoSH1106	GameBox
+CPU					ATmega4808	ATmega4809	ATtiny1627	ATtiny3217	ATtiny161	ATmega4808	ATmega4808	ATmega4808	ATtiny3217	ATmga4809
 
-Clock				x			x			x			x			x			x			x			x			x
-Console				x			x			x			x			x			x			x			x			x
+Clock				x			x			x			x			x			x			x			x			x			x
+Console				x			x			x			x			x			x			x			x			x			x
 DisplaySH1106																										x
 DisplaySSD1309																	x
-DisplaySSD1351		x																		x
+DisplaySSD1351		x																		x									x
 DisplaySSD1681																							x
 DS3231				x
 EEPROM				x			x			x			x			x
@@ -17,9 +17,9 @@ Mem23				x
 Mem24				x
 Mem25				x
 Peripherals			x			x			x			x			x
-Print				x			x			x			x			x			x			x			x			x
-SPI Master			x						o									o			x			x			x
+Print				x			x			x			x			x			x			x			x			x			x
+SPI Master			x						o									o			x			x			x			x
 UartMonitor			x						o
-UartSingle			o						o			x			x			x			x			x			x
+UartSingle			o						o			x			x			x			x			x			x			x
 UartMulti			o			x			x
-uCosmos				x			x			x			x			x			x			x			x			x
+uCosmos				x			x			x			x			x			x			x			x			x			x

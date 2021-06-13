@@ -35,6 +35,10 @@
 	#include	"../eeprom/eeprom_demo.h"
 #endif
 
+#if COMPONENT_GAMEBOX
+	#include	"../gamebox/gamebox.h"
+#endif
+
 #if COMPONENT_I2C_MASTER
 	#include	"../i2c_master/i2c_master_demo.h"
 #endif
@@ -289,6 +293,15 @@ const Console_NamePointer_t Console_CommandList[] = {
 #if EEPROM_USE_DEMO_COMMANDS
 	{"ee-w",			EEPROM_CmdWrite},
 	{"ee-E",			EEPROM_CmdErase},
+#endif
+
+// ========================================
+// Gamebox
+// ========================================
+
+#if COMPONENT_GAMEBOX
+	{"queue",			GB_KeyboardCmdPrintQueue},
+	{"pop",				GB_KeyboardCmdPopEvent},
 #endif
 
 // ========================================
