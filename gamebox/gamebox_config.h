@@ -1,3 +1,4 @@
+#if COMPONENT_GAMEBOX
 #ifndef GAMEBOX_CONFIG_H_
 #define GAMEBOX_CONFIG_H_
 
@@ -18,6 +19,7 @@
 	#define GB_KEY_ESCAPE			PIN1_bm
 	#define GB_KEY_A				PIN0_bm
 	#define GB_KEY_B				PIN3_bm
+	#define GB_KEY_QUEUE_LENGTH		16
 	
 	#define GP_CONFIG_DONE
 	
@@ -32,3 +34,4 @@
 #endif
 
 #endif /* GAMEBOX_CONFIG_H_ */
+#endif

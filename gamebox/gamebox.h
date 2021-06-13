@@ -1,3 +1,4 @@
+#if COMPONENT_GAMEBOX
 #ifndef GAMEBOX_H_
 #define GAMEBOX_H_
 
@@ -6,6 +7,7 @@
 // ========================================
 
 #include		"gamebox_config.h"
+#include		"gamebox_defines.h"
 
 #if COMPONENT_CONSOLE
 	#include	"../console/console.h"
@@ -37,7 +39,17 @@
 
 void GB_Init(void);
 
+// ========================================
+// Keyboard
+// ========================================
+
+void GB_KeyboarQueueClear(void);
+void GB_KeyboardQueuePush(GB_KeyEvent_t Event);
+GB_KeyEvent_t GB_KeyboardQueuePop(void);
+void GB_KeyboardCmdShowQueue(uint8_t argc, uint8_t * argv[]);
+void GB_KeyboardCmdPopEvent(uint8_t argc, uint8_t * argv[]);
 task_t GB_KeyboardTask(runmode_t RunMode);
+
 // ========================================
 // Macros
 // ========================================
@@ -45,3 +57,4 @@ task_t GB_KeyboardTask(runmode_t RunMode);
 
 
 #endif /* GAMEBOX_H_ */
+#endif
