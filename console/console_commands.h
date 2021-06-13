@@ -300,7 +300,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 // ========================================
 
 #if COMPONENT_GAMEBOX
-	{"queue",			GB_KeyboardCmdShowQueue},
+	{"queue",			GB_KeyboardCmdPrintQueue},
 	{"pop",				GB_KeyboardCmdPopEvent},
 #endif
 

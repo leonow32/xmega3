@@ -7,6 +7,8 @@
 // Keyboard
 // ========================================
 
+#define GB_KEY_MASK				0xF0
+#define GB_KEY_ACTION			0x0F
 #define GB_KEY_UP_MASK			0x10
 #define GB_KEY_DOWN_MASK		0x20
 #define GB_KEY_LEFT_MASK		0x30

@@ -78,12 +78,39 @@ GB_KeyEvent_t GB_KeyboardQueuePop(void) {
 	return Result;
 }
 
+// Print name of event
+void GB_KeyboardPrintEvent(GB_KeyEvent_t Event) {
+	switch(uint8_t(Event) & GB_KEY_MASK) {
+		case 0:													break;
+		case GB_KEY_UP_MASK:		Print("U");					break;
+		case GB_KEY_DOWN_MASK:		Print("D");					break;
+		case GB_KEY_LEFT_MASK:		Print("L");					break;
+		case GB_KEY_RIGHT_MASK:		Print("R");					break;
+		case GB_KEY_OK_MASK:		Print("O");					break;
+		case GB_KEY_ESCAPE_MASK:	Print("E");					break;
+		case GB_KEY_A_MASK:			Print("A");					break;
+		case GB_KEY_B_MASK:			Print("B");					break;
+		default:					Print_ResponseUnknown();	break;
+	}
+	
+	Print(' ');
+	switch(uint8_t(Event) & GB_KEY_ACTION) {
+		case 0:													break;
+		case GB_KEY_PRESS_MASK:		Print("press");				break;
+		case GB_KEY_LONG_MASK:		Print("long");				break;
+		case GB_KEY_RELEASE_MASK:	Print("rel");				break;
+		default:					Print_ResponseUnknown();	break;
+	}
+}
+
 // Print all events in the queue
-void GB_KeyboardCmdShowQueue(uint8_t argc, uint8_t * argv[]) {
+void GB_KeyboardCmdPrintQueue(uint8_t argc, uint8_t * argv[]) {
 	for(uint8_t i = 0; i < GB_KEY_QUEUE_LENGTH; i++) {
 		Print_Dec(i);
 		Print('\t');
 		Print_Hex(uint8_t(GB_KeyQueue[i]));
+		Print(' ');
+		GB_KeyboardPrintEvent(GB_KeyQueue[i]);
 		Print_NL();
 	}
 }

@@ -46,7 +46,8 @@ void GB_Init(void);
 void GB_KeyboarQueueClear(void);
 void GB_KeyboardQueuePush(GB_KeyEvent_t Event);
 GB_KeyEvent_t GB_KeyboardQueuePop(void);
-void GB_KeyboardCmdShowQueue(uint8_t argc, uint8_t * argv[]);
+void GB_KeyboardPrintEvent(GB_KeyEvent_t Event);
+void GB_KeyboardCmdPrintQueue(uint8_t argc, uint8_t * argv[]);
 void GB_KeyboardCmdPopEvent(uint8_t argc, uint8_t * argv[]);
 task_t GB_KeyboardTask(runmode_t RunMode);
 
