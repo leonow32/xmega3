@@ -250,10 +250,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	
 	// Whether to use one output stream at all times or whether it should be changeable
 	#define PRINT_USE_STREAM_SINGLE					1

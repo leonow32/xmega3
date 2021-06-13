@@ -1,73 +1,35 @@
 #ifndef UCOSMOS_TEMPLATE_H_
 #define UCOSMOS_TEMPLATE_H_
 
-// Szablon tasku v1.16
+// Task template v1.17
 task_t Task_Template(runmode_t RunMode) {
 	
-	// Zmienne
+	// Variables
 	
 	
-	// Normalne wywo³anie
+	// Normal execution
 	if(RunMode == Run) {
 		
 	}
 	
-	// Konstruktor
+	// Constructor
 	else if(RunMode == FirstRun) {
 		
 	}
 	
-	// Destruktor
+	// Destructor
 	else if(RunMode == Close) {
 		
 	}
 	
-	// Identyfikacja
+	// Identification
 	#if OS_USE_TASK_IDENTIFY
 	else if(RunMode == Identify) {
-		Uart_Write("TaskName");
+		Print("TaskName");
 	}
 	#endif
 	
 	return TaskOK;
 }
-
-// Szablon tasku na uCosmos v1.11
-task_t Task_Template(runmode_t RunMode) {
-	
-	// Zmienne
-
-
-	// Tryb wywo³ania
-	switch(RunMode) {
-		
-		// Konstruktor
-		case FirstRun:
-			
-			return TaskOK;
-
-		// Destruktor
-		case Close:
-			
-			return TaskDone;
-		
-		// Wywo³anie identyfikacyjne
-		#if OS_USE_TASK_IDENTIFY
-		case Identify:
-			Uart_Write("TemplateName");
-			return TaskOK;
-		#endif
-
-		// Normalne wywo³anie przez Scheduler
-		case Run:
-			
-			// Je¿eli podczas normalnego wywo³ania task nie bêdzie ju¿ wiêcej potrzebny
-			// to mo¿e zwróciæ TaskDane, aby Scheduler usun¹³ go z tablicy tasków
-			return TaskOK;
-	}
-
-	return TaskOK;
-} 
-
 
 #endif /* UCOSMOS_TEMPLATE_H_ */

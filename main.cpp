@@ -84,6 +84,10 @@
 	#include	"console/console.h"
 #endif
 
+#if COMPONENT_GAMEBOX
+	#include	"gamebox/gamebox.h"
+#endif
+
 #if COMPONENT_PRINT
 	#include	"print/print.h"
 #endif
@@ -204,6 +208,10 @@ int main(void) {
 	
 	#if PRODUCT_CURIOSITY_T3217 && PERIPHERALS_USE_DEMO_TASKS
 		TaskAddMs(Peripherals_TaskYellow,	1000);
+	#endif
+	
+	#if COMPONENT_GAMEBOX
+		GB_Init();
 	#endif
 	
 	#if COMPONENT_UART_MONITOR

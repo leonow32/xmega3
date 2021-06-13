@@ -351,10 +351,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	
 	#if HW_CPU_ATmegaXX09
 		#define	UART0_PORTA_01				0

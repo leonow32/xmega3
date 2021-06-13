@@ -142,10 +142,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	#define			SPI_PORTA_46					0
 	#define			SPI_PORTC_02					1
 	#define			SPI_PORTE_02					0

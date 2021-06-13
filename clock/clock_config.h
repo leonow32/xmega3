@@ -104,10 +104,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	#define CLOCK_PRESCALER				1
 	#define CLOCK_CLKOUT_ENABLE			0			// Clock output on CLKOUT pin
 	#define CLOCK_CONFIG_DONE

@@ -114,10 +114,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	
 	// Pinout
 	#define		SSD1351_CHIP_SELECT_INIT				VPORTC.DIR	|=	PIN3_bm

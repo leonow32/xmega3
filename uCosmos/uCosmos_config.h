@@ -545,10 +545,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	
 	// Wybór generatora
 	#define		OS_GENERATOR_ULP				1
@@ -556,7 +556,7 @@
 	
 	// Konfiguracja systemu
 	#define		OS_TASK_MAXCOUNT				10			// Od tego zalezy rozmiar tablicy Task[] w RAM
-	#define		OS_TICK_DELAY					100			// Okres timera systemowego w ms, zakres 1-1000
+	#define		OS_TICK_DELAY					10			// Okres timera systemowego w ms, zakres 1-1000
 	typedef		uint16_t						Os_Timer_t;	// Typ zmiennej timerów programowych, od tego zale¿y maksymalny odliczany czas i zajêtoœæ pamiêci
 	#define		OS_MULTIPLE_TASKS_ALLOWED		0			// Mo¿na dodawaæ kilka razy ten sam task
 	#define		OS_SHOW_RESET_SOURCE_AT_START	1			// Czy pokazywaæ Ÿród³o resetu na starcie

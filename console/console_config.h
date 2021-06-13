@@ -182,10 +182,10 @@
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	#define CONSOLE_COMMAND_LENGTH				250
 	#define CONSOLE_MAX_ARGUMENTS				10
 	#define CONSOLE_USE_HELP					1

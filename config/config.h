@@ -106,10 +106,10 @@ CHANGELOG
 #endif
 
 // ========================================
-// GameBox
+// GameBox4809
 // ========================================
 
-#if PRODUCT_GAMEBOX
+#if PRODUCT_GAMEBOX4809
 	#define HW_CPU_ATmegaXX09				1
 	#define HW_CONFIG_DONE
 #endif
