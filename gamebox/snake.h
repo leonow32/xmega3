@@ -6,6 +6,7 @@
 // Includes
 // ========================================
 
+#include "snake_defines.h"
 #include "snake_config.h"
 
 #if COMPONENT_CONSOLE
@@ -44,8 +45,8 @@
 
 void GB_SnakeCmdRun(uint8_t argc, uint8_t * argv[]);
 void GB_SnakeCanvas(void);
+void GB_SnakeDrawBlock(uint8_t x, uint8_t y, GB_SnakeBlockColor_t Color);
 
-
-
+void GB_SnakeCmdDrawBlock(uint8_t argc, uint8_t * argv[]);
 #endif /* SNAKE_H_ */
 #endif

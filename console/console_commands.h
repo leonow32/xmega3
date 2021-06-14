@@ -305,6 +305,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"pop",				GB_KeyboardCmdPopEvent},
 	
 	{"snake",			GB_SnakeCmdRun},
+	{"block",			GB_SnakeCmdDrawBlock},
 #endif
 
 // ========================================

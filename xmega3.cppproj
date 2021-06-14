@@ -1296,6 +1296,9 @@
     <Compile Include="gamebox\snake_config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="gamebox\snake_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="i2c_master\i2c_master.cpp">
       <SubType>compile</SubType>
     </Compile>
