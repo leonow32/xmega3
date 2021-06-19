@@ -10,28 +10,23 @@
 // Global variables
 // ========================================
 
-uint8_t GB_SnakeHeadX = 5;
-uint8_t GB_SnakeHeadY = 5;
-uint8_t GB_SnakeFoodX = 10;
-uint8_t GB_SnakeFoodY = 10;
+uint8_t Snake_HeadX = 5;
+uint8_t Snake_HeadY = 5;
+uint8_t Snake_FoodX = 10;
+uint8_t Snake_FoodY = 10;
+static uint16_t Snake_Score = 12345;
 
 // ========================================
 // Functions
 // ========================================
 
-
-// Glabal variables
-static uint16_t GB_SnakeScore = 12345;
-
 // Run game
-void GB_SnakeCmdRun(uint8_t argc, uint8_t * argv[]) {
-	//GB_SnakeCanvas();
-	
-	TaskAddMs(GB_SnakeTask, 10);
+void Snake_CmdRun(uint8_t argc, uint8_t * argv[]) {
+	TaskAddMs(Snake_MainTask, 10);
 }
 
 // Print canvas in the background
-void GB_SnakeCanvas(void) {
+void Snake_DrawCanvas(void) {
 	
 	// Title
 	SSD1351_CursorSet(0, 0);
@@ -47,7 +42,7 @@ void GB_SnakeCanvas(void) {
 	SSD1351_CursorSet(0, 111);
 	SSD1351_FontSet(&SSD1351_FontSans16_PL);
 	char Score[6];
-	itoa(GB_SnakeScore, Score, 10);
+	itoa(Snake_Score, Score, 10);
 	SSD1351_Text(Score, SSD1351_HALIGN_CENTER);
 	
 // 	for(uint8_t i=0; i<24; i++) {
@@ -70,7 +65,7 @@ void GB_SnakeCanvas(void) {
 }
 
 // Draw block
-void GB_SnakeDrawBlock(uint8_t x, uint8_t y, GB_SnakeBlockColor_t Color) {
+void Snake_DrawBlock(uint8_t x, uint8_t y, Snake_BlockColor_t Color) {
 	
 	switch(Color) {
 		case GB_SnakeColorBody:			SSD1351_ColorFrontSet(SSD1351_COLOR_YELLOW_RGB565);		break;
@@ -86,7 +81,7 @@ void GB_SnakeDrawBlock(uint8_t x, uint8_t y, GB_SnakeBlockColor_t Color) {
 	);
 }
 
-void GB_SnakeCmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
+void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
 	
 	// Argument 1 - coordinate X
 	uint8_t x;
@@ -97,7 +92,7 @@ void GB_SnakeCmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
 	if(Parse_Dec8(argv[2], &y, SNAKE_BLOCK_Y_MAX)) return;
 	
 	// Argument 3 - color
-	GB_SnakeBlockColor_t Color;
+	Snake_BlockColor_t Color;
 	switch(*argv[3]) {
 		case 's':		Color = GB_SnakeColorBody;				break;
 		case 'f':		Color = GB_SnakeColorFood;				break;
@@ -106,26 +101,25 @@ void GB_SnakeCmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// Execute command
-	GB_SnakeDrawBlock(x, y, Color);
+	Snake_DrawBlock(x, y, Color);
 }
 
-void GB_SnakeCmdNewFood(uint8_t argc, uint8_t * argv[]) {
+// Generate new food
+void Snake_NewFood(void) {
 	while(1) {
 		// Generate new coordinates
 		uint8_t RandomX = rand() % SNAKE_BLOCK_X_MAX+1;
-		Print_Dec(RandomX);
 		uint8_t RandomY = rand()  % SNAKE_BLOCK_Y_MAX+1;
-		Print_Dec(RandomY);
 		
 		// Check if new coordinated don't match with snake's body
-		if((RandomX == GB_SnakeHeadX) && (RandomY == GB_SnakeHeadY)) {
+		if((RandomX == Snake_HeadX) && (RandomY == Snake_HeadY)) {
 			continue;
 		}
 		
 		// Draw new food and update globals
-		GB_SnakeDrawBlock(RandomX, RandomY, GB_SnakeColorFood);
-		GB_SnakeHeadX = RandomX;
-		GB_SnakeHeadY = RandomY;
+		Snake_DrawBlock(RandomX, RandomY, GB_SnakeColorFood);
+		Snake_HeadX = RandomX;
+		Snake_HeadY = RandomY;
 		
 		// Display result
 		Print_Format(ForegroundMagentaBright);
@@ -138,11 +132,15 @@ void GB_SnakeCmdNewFood(uint8_t argc, uint8_t * argv[]) {
 	}
 }
 
+void Snake_CmdNewFood(uint8_t argc, uint8_t * argv[]) {
+	Snake_NewFood();
+}
+
 // ========================================
 // Tasks
 // ========================================
 
-task_t GB_SnakeTask(runmode_t RunMode) {
+task_t Snake_MainTask(runmode_t RunMode) {
 	
 	// Variables
 	bool RefreshRequest = false;
@@ -153,37 +151,37 @@ task_t GB_SnakeTask(runmode_t RunMode) {
 		switch(GB_KeyboardQueuePop()) {
 			
 			case GB_KeyUpPress:
-				if(GB_SnakeHeadY != 0) {
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBackground);
-					GB_SnakeHeadY--;
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBody);
+				if(Snake_HeadY != 0) {
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
+					Snake_HeadY--;
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyDownPress:
-				if(GB_SnakeHeadY < SNAKE_BLOCK_Y_MAX) {
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBackground);
-					GB_SnakeHeadY++;
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBody);
+				if(Snake_HeadY < SNAKE_BLOCK_Y_MAX) {
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
+					Snake_HeadY++;
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyLeftPress:
-				if(GB_SnakeHeadX != 0) {
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBackground);
-					GB_SnakeHeadX--;
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBody);
+				if(Snake_HeadX != 0) {
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
+					Snake_HeadX--;
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyRightPress:
-				if(GB_SnakeHeadX < SNAKE_BLOCK_X_MAX) {
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBackground);
-					GB_SnakeHeadX++;
-					GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBody);
+				if(Snake_HeadX < SNAKE_BLOCK_X_MAX) {
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
+					Snake_HeadX++;
+					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
@@ -201,13 +199,13 @@ task_t GB_SnakeTask(runmode_t RunMode) {
 	else if(RunMode == FirstRun) {
 		
 		// Print canvas
-		GB_SnakeCanvas();
+		Snake_DrawCanvas();
 		
 		// Print snake's head
-		GB_SnakeDrawBlock(GB_SnakeHeadX, GB_SnakeHeadY, GB_SnakeColorBody);
+		Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
 		
 		// Print food
-		GB_SnakeDrawBlock(GB_SnakeFoodX, GB_SnakeFoodY, GB_SnakeColorFood);
+		Snake_DrawBlock(Snake_FoodX, Snake_FoodY, GB_SnakeColorFood);
 	}
 	
 	// Destructor

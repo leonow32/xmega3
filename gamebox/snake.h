@@ -43,17 +43,19 @@
 // Functions
 // ========================================
 
-void GB_SnakeCmdRun(uint8_t argc, uint8_t * argv[]);
-void GB_SnakeCanvas(void);
-void GB_SnakeDrawBlock(uint8_t x, uint8_t y, GB_SnakeBlockColor_t Color);
-void GB_SnakeCmdDrawBlock(uint8_t argc, uint8_t * argv[]);
+void Snake_CmdRun(uint8_t argc, uint8_t * argv[]);
+void Snake_DrawCanvas(void);
+void Snake_DrawBlock(uint8_t x, uint8_t y, Snake_BlockColor_t Color);
+void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]);
 
-void GB_SnakeCmdNewFood(uint8_t argc, uint8_t * argv[]);
+void Snake_NewFood(void);
+void Snake_CmdNewFood(uint8_t argc, uint8_t * argv[]);
+
 // ========================================
 // Tasks
 // ========================================
 
-task_t GB_SnakeTask(runmode_t RunMode);
+task_t Snake_MainTask(runmode_t RunMode);
 
 #endif /* SNAKE_H_ */
 #endif
