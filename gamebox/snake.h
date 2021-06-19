@@ -44,8 +44,10 @@
 // ========================================
 
 void Snake_CmdRun(uint8_t argc, uint8_t * argv[]);
+void Snake_GenerateRandomPoint(Snake_Point * Point);
+bool Snake_ComparePoints(Snake_Point * Point1, Snake_Point * Point2);
 void Snake_DrawCanvas(void);
-void Snake_DrawBlock(uint8_t x, uint8_t y, Snake_BlockColor_t Color);
+void Snake_DrawBlock(Snake_Point * Point, Snake_BlockColor_t Color);
 void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]);
 
 void Snake_NewFood(void);

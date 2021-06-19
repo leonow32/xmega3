@@ -10,10 +10,8 @@
 // Global variables
 // ========================================
 
-uint8_t Snake_HeadX = 5;
-uint8_t Snake_HeadY = 5;
-uint8_t Snake_FoodX = 10;
-uint8_t Snake_FoodY = 10;
+Snake_Point Snake_Head = {.x=5, .y=5};
+Snake_Point Snake_Food = {.x = 10, .y=10};
 static uint16_t Snake_Score = 12345;
 
 // ========================================
@@ -23,6 +21,17 @@ static uint16_t Snake_Score = 12345;
 // Run game
 void Snake_CmdRun(uint8_t argc, uint8_t * argv[]) {
 	TaskAddMs(Snake_MainTask, 10);
+}
+
+// Get radnom coordinates
+void Snake_GenerateRandomPoint(Snake_Point * Point) {
+	Point->x = rand() % SNAKE_BLOCK_X_MAX+1;
+	Point->y = rand() % SNAKE_BLOCK_Y_MAX+1;
+}
+
+// Compare two points, return true if equal
+bool Snake_ComparePoints(Snake_Point * Point1, Snake_Point * Point2) {
+	return (Point1->x == Point2->x) && (Point1->y == Point2->y);
 }
 
 // Print canvas in the background
@@ -44,28 +53,10 @@ void Snake_DrawCanvas(void) {
 	char Score[6];
 	itoa(Snake_Score, Score, 10);
 	SSD1351_Text(Score, SSD1351_HALIGN_CENTER);
-	
-// 	for(uint8_t i=0; i<24; i++) {
-// 		SSD1351_DrawRectangle(
-// 			SNAKE_BLOCK_START_X_POSITION + i*SNAKE_BLOCK_SIZE,
-// 			SNAKE_BLOCK_START_Y_POSITION, 
-// 			SNAKE_BLOCK_START_X_POSITION + (SNAKE_BLOCK_SIZE-1) + i*SNAKE_BLOCK_SIZE, 
-// 			SNAKE_BLOCK_START_Y_POSITION + (SNAKE_BLOCK_SIZE-1)
-// 		);
-// 	}
-// 	
-// 	for(uint8_t i=0; i<17; i++) {
-// 		SSD1351_DrawRectangle(
-// 			SNAKE_BLOCK_START_X_POSITION, 
-// 			SNAKE_BLOCK_START_Y_POSITION + i*SNAKE_BLOCK_SIZE,
-// 			SNAKE_BLOCK_START_X_POSITION + (SNAKE_BLOCK_SIZE-1), 
-// 			SNAKE_BLOCK_START_Y_POSITION + (SNAKE_BLOCK_SIZE-1) + i*SNAKE_BLOCK_SIZE
-// 		);
-// 	}
 }
 
 // Draw block
-void Snake_DrawBlock(uint8_t x, uint8_t y, Snake_BlockColor_t Color) {
+void Snake_DrawBlock(Snake_Point * Point, Snake_BlockColor_t Color) {
 	
 	switch(Color) {
 		case GB_SnakeColorBody:			SSD1351_ColorFrontSet(SSD1351_COLOR_YELLOW_RGB565);		break;
@@ -74,22 +65,22 @@ void Snake_DrawBlock(uint8_t x, uint8_t y, Snake_BlockColor_t Color) {
 	}
 	
 	SSD1351_DrawRectangleFill(
-		SNAKE_BLOCK_START_X_POSITION + x * SNAKE_BLOCK_SIZE,
-		SNAKE_BLOCK_START_Y_POSITION + y * SNAKE_BLOCK_SIZE,
-		SNAKE_BLOCK_START_X_POSITION + (SNAKE_BLOCK_SIZE-1) + x * SNAKE_BLOCK_SIZE,
-		SNAKE_BLOCK_START_Y_POSITION + (SNAKE_BLOCK_SIZE-1) + y *SNAKE_BLOCK_SIZE
+	SNAKE_BLOCK_START_X_POSITION + Point->x * SNAKE_BLOCK_SIZE,
+	SNAKE_BLOCK_START_Y_POSITION + Point->y * SNAKE_BLOCK_SIZE,
+	SNAKE_BLOCK_START_X_POSITION + (SNAKE_BLOCK_SIZE-1) + Point->x * SNAKE_BLOCK_SIZE,
+	SNAKE_BLOCK_START_Y_POSITION + (SNAKE_BLOCK_SIZE-1) + Point->y *SNAKE_BLOCK_SIZE
 	);
 }
 
 void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
 	
+	Snake_Point Point;
+	
 	// Argument 1 - coordinate X
-	uint8_t x;
-	if(Parse_Dec8(argv[1], &x, SNAKE_BLOCK_X_MAX)) return;
+	if(Parse_Dec8(argv[1], &Point.x, SNAKE_BLOCK_X_MAX)) return;
 	
 	// Argument 2 - coordinate Y
-	uint8_t y;
-	if(Parse_Dec8(argv[2], &y, SNAKE_BLOCK_Y_MAX)) return;
+	if(Parse_Dec8(argv[2], &Point.y, SNAKE_BLOCK_Y_MAX)) return;
 	
 	// Argument 3 - color
 	Snake_BlockColor_t Color;
@@ -101,32 +92,33 @@ void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
 	}
 	
 	// Execute command
-	Snake_DrawBlock(x, y, Color);
+	Snake_DrawBlock(&Point, Color);
 }
 
 // Generate new food
 void Snake_NewFood(void) {
 	while(1) {
 		// Generate new coordinates
-		uint8_t RandomX = rand() % SNAKE_BLOCK_X_MAX+1;
-		uint8_t RandomY = rand()  % SNAKE_BLOCK_Y_MAX+1;
+		Snake_Point Point;
+		Snake_GenerateRandomPoint(&Point);
 		
 		// Check if new coordinated don't match with snake's body
-		if((RandomX == Snake_HeadX) && (RandomY == Snake_HeadY)) {
+		//if((Point.x == Snake_Head.x) && (Point.y == Snake_Head.y)) {
+		if(Snake_ComparePoints(&Point, &Snake_Head)) {
 			continue;
 		}
 		
 		// Draw new food and update globals
-		Snake_DrawBlock(RandomX, RandomY, GB_SnakeColorFood);
-		Snake_HeadX = RandomX;
-		Snake_HeadY = RandomY;
+		Snake_DrawBlock(&Point, GB_SnakeColorFood);
+		Snake_Head.x = Point.x;
+		Snake_Head.y = Point.y;
 		
 		// Display result
 		Print_Format(ForegroundMagentaBright);
 		Print("\r\nNew food ");
-		Print_Dec(RandomX);
+		Print_Dec(Point.x);
 		Print(" ");
-		Print_Dec(RandomY);
+		Print_Dec(Point.y);
 		Console_PromptShow();
 		return;
 	}
@@ -151,37 +143,37 @@ task_t Snake_MainTask(runmode_t RunMode) {
 		switch(GB_KeyboardQueuePop()) {
 			
 			case GB_KeyUpPress:
-				if(Snake_HeadY != 0) {
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
-					Snake_HeadY--;
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
+				if(Snake_Head.y != 0) {
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBackground);
+					Snake_Head.y--;
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyDownPress:
-				if(Snake_HeadY < SNAKE_BLOCK_Y_MAX) {
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
-					Snake_HeadY++;
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
+				if(Snake_Head.y < SNAKE_BLOCK_Y_MAX) {
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBackground);
+					Snake_Head.y++;
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyLeftPress:
-				if(Snake_HeadX != 0) {
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
-					Snake_HeadX--;
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
+				if(Snake_Head.x != 0) {
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBackground);
+					Snake_Head.x--;
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
 			
 			case GB_KeyRightPress:
-				if(Snake_HeadX < SNAKE_BLOCK_X_MAX) {
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBackground);
-					Snake_HeadX++;
-					Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
+				if(Snake_Head.x < SNAKE_BLOCK_X_MAX) {
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBackground);
+					Snake_Head.x++;
+					Snake_DrawBlock(&Snake_Head, GB_SnakeColorBody);
 				}
 				RefreshRequest = true;
 				break;
@@ -202,10 +194,10 @@ task_t Snake_MainTask(runmode_t RunMode) {
 		Snake_DrawCanvas();
 		
 		// Print snake's head
-		Snake_DrawBlock(Snake_HeadX, Snake_HeadY, GB_SnakeColorBody);
+		Snake_DrawBlock(&Snake_Head, GB_SnakeColorBody);
 		
 		// Print food
-		Snake_DrawBlock(Snake_FoodX, Snake_FoodY, GB_SnakeColorFood);
+		Snake_DrawBlock(&Snake_Food, GB_SnakeColorFood);
 	}
 	
 	// Destructor
