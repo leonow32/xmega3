@@ -2,7 +2,6 @@
 #ifndef GAMEBOX_DEFINES_H_
 #define GAMEBOX_DEFINES_H_
 
-
 // ========================================
 // Keyboard
 // ========================================
@@ -50,6 +49,11 @@ enum GB_KeyEvent_t {
 	GB_KeyBRelease			= GB_KEY_B_MASK			| GB_KEY_RELEASE_MASK,
 };
 
+// ========================================
+// Display dependent macros
+// ========================================
+
+#define GB_Clear		SSD1351_Clear
 
 #endif /* GAMEBOX_DEFINES_H_ */
 #endif

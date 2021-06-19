@@ -133,42 +133,42 @@ task_t GB_KeyboardTask(runmode_t RunMode) {
 	// Normal execution
 	if(RunMode == Run) {
 		if((Actual & GB_KEY_UP) && !(Previous & GB_KEY_UP)) {
-			Print("UP");
+			//Print("UP");
 			GB_KeyboardQueuePush(GB_KeyUpPress);
 		}
 		
 		if((Actual & GB_KEY_DOWN) && !(Previous & GB_KEY_DOWN)) {
-			Print("DOWN");
+			//Print("DOWN");
 			GB_KeyboardQueuePush(GB_KeyDownPress);
 		}
 		
 		if((Actual & GB_KEY_LEFT) && !(Previous & GB_KEY_LEFT)) {
-			Print("GB_KEY_LEFT");
+			//Print("GB_KEY_LEFT");
 			GB_KeyboardQueuePush(GB_KeyLeftPress);
 		}
 		
 		if((Actual & GB_KEY_RIGHT) && !(Previous & GB_KEY_RIGHT)) {
-			Print("GB_KEY_RIGHT");
+			//Print("GB_KEY_RIGHT");
 			GB_KeyboardQueuePush(GB_KeyRightPress);
 		}
 		
 		if((Actual & GP_KEY_OK) && !(Previous & GP_KEY_OK)) {
-			Print("GP_KEY_OK");
+			//Print("GP_KEY_OK");
 			GB_KeyboardQueuePush(GB_KeyOKPress);
 		}
 		
 		if((Actual & GB_KEY_ESCAPE) && !(Previous & GB_KEY_ESCAPE)) {
-			Print("GB_KEY_ESCAPE");
+			//Print("GB_KEY_ESCAPE");
 			GB_KeyboardQueuePush(GB_KeyEscapePress);
 		}
 		
 		if((Actual & GB_KEY_A) && !(Previous & GB_KEY_A)) {
-			Print("GB_KEY_A");
+			//Print("GB_KEY_A");
 			GB_KeyboardQueuePush(GB_KeyAPress);
 		}
 		
 		if((Actual & GB_KEY_B) && !(Previous & GB_KEY_B)) {
-			Print("GB_KEY_B");
+			//Print("GB_KEY_B");
 			GB_KeyboardQueuePush(GB_KeyBPress);
 		}
 		
