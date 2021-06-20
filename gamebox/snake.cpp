@@ -110,8 +110,8 @@ void Snake_NewFood(void) {
 		
 		// Draw new food and update globals
 		Snake_DrawBlock(&Point, GB_SnakeColorFood);
-		Snake_Head.x = Point.x;
-		Snake_Head.y = Point.y;
+		Snake_Food.x = Point.x;
+		Snake_Food.y = Point.y;
 		
 		// Display result
 		Print_Format(ForegroundMagentaBright);
