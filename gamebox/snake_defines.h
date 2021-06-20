@@ -9,6 +9,22 @@ enum Snake_BlockColor_t {
 	GB_SnakeColorBackground,
 };
 
+// Direction of move
+enum Snake_Direction_t {
+	Snake_Up,
+	Snake_Down,
+	Snake_Left,
+	Snake_Right,
+};
+
+// Return values for function that analyzes next head position
+enum Snake_NextPosition_t {
+	Snake_Correct,
+	Snake_EatFood,
+	Snake_HitWall,
+	Snake_HitBody,
+};
+
 // Struct to store foot position and each block of snake's body
 struct Snake_Point {
 	uint8_t x;
@@ -19,6 +35,7 @@ struct Snake_Point {
 struct Snake_Control {
 	Snake_Point Head;
 	Snake_Point Food;
+	Snake_Direction_t Direction;
 	uint16_t Score;
 };
 

@@ -10,7 +10,7 @@
 // Global variables
 // ========================================
 
-Snake_Control * Snake = (Snake_Control *)0x1234;
+Snake_Control * Snake;
 
 // Snake_Control Snake = {
 // 	.Head = {
@@ -113,71 +113,107 @@ void Snake_NewFood(void) {
 task_t Snake_MainTask(runmode_t RunMode) {
 	
 	// Variables
-	bool RefreshRequest = false;
+	//bool RefreshRequest = false;
 	
 	// Normal execution
 	if(RunMode == Run) {
 		
+		// Read keyboard event
 		switch(GB_KeyboardQueuePop()) {
-			
 			case GB_KeyUpPress:
-				if(Snake->Head.y != 0) {
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBackground);
-					Snake->Head.y--;
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBody);
+				if(Snake->Direction != Snake_Down) {
+					Snake->Direction = Snake_Up;
 				}
-				RefreshRequest = true;
 				break;
 			
 			case GB_KeyDownPress:
-				if(Snake->Head.y < SNAKE_BLOCK_Y_MAX) {
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBackground);
-					Snake->Head.y++;
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBody);
+				if(Snake->Direction != Snake_Up) {
+					Snake->Direction = Snake_Down;
 				}
-				RefreshRequest = true;
 				break;
 			
 			case GB_KeyLeftPress:
-				if(Snake->Head.x != 0) {
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBackground);
-					Snake->Head.x--;
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBody);
+				if(Snake->Direction != Snake_Right) {
+					Snake->Direction = Snake_Left;
 				}
-				RefreshRequest = true;
 				break;
 			
 			case GB_KeyRightPress:
-				if(Snake->Head.x < SNAKE_BLOCK_X_MAX) {
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBackground);
-					Snake->Head.x++;
-					Snake_DrawBlock(&Snake->Head, GB_SnakeColorBody);
+				if(Snake->Direction != Snake_Left) {
+					Snake->Direction = Snake_Right;
 				}
-				RefreshRequest = true;
 				break;
 			
 			default:
 				break;
 		}
 		
-		if(RefreshRequest) {
+		// Clear actual head position
+		Snake_DrawBlock(&Snake->Head, GB_SnakeColorBackground);
+		
+		// Move head
+		switch(Snake->Direction) {
+			case Snake_Up:
+				if(Snake->Head.y != 0) {
+					Snake->Head.y--;
+				}
+				else {
+					Print("Game over");
+				}
+				break;
 			
+			case Snake_Down:
+				if(Snake->Head.y < SNAKE_BLOCK_Y_MAX) {
+					Snake->Head.y++;
+				}
+				else {
+					Print("Game over");
+				}
+				break;
+			
+			case Snake_Left:
+				if(Snake->Head.x != 0) {
+					Snake->Head.x--;
+				}
+				else {
+					Print("Game over");
+				}
+				break;
+			
+			case Snake_Right:
+				if(Snake->Head.x < SNAKE_BLOCK_X_MAX) {
+					Snake->Head.x++;
+				}
+				else {
+					Print("Game over");
+				}
+				break;
 		}
+		
+		// Print actual head position
+		Snake_DrawBlock(&Snake->Head, GB_SnakeColorBody);
+		
+// 		if(RefreshRequest) {
+// 			
+// 		}
 	}
 	
 	// Constructor
 	else if(RunMode == FirstRun) {
 		
+		GB_KeyboarQueueClear();
+		
 		// Create instance of control structure
 		Snake = (Snake_Control*)malloc(sizeof(Snake_Control));
-// 		Snake->Head.x = 1;
-// 		Snake->Head.y = 2;
-// 		Snake->Food.x = 3;
-// 		Snake->Food.y = 4;
-// 		Snake->Score = 1000;
 		memset(Snake, 0, sizeof(Snake_Control));
 		Snake_GenerateRandomPoint(&Snake->Head);
 		Snake_GenerateRandomPoint(&Snake->Food);
+		if(Snake->Head.y > SNAKE_BLOCK_Y_MAX / 2) {
+			Snake->Direction = Snake_Up;
+		}
+		else {
+			Snake->Direction = Snake_Down;
+		}
 		
 		// Print canvas
 		Snake_DrawCanvas();
@@ -213,12 +249,18 @@ task_t Snake_MainTask(runmode_t RunMode) {
 
 // Run game
 void Snake_CmdRun(uint8_t argc, uint8_t * argv[]) {
+	
+	// If no arguments given, then close task
 	if(argc == 1) {
-		TaskAddMs(Snake_MainTask, 10);
-	}
-	else {
 		TaskClose(Snake_MainTask);
+		return;
 	}
+	
+	// Argument 1 - coordinate X
+	uint16_t Period;
+	if(Parse_Dec16(argv[1], &Period)) return;
+	
+	TaskAdd(Snake_MainTask, TaskMsToTicks(Period));
 }
 
 void Snake_CmdPrintStruct(uint8_t argc, uint8_t * argv[]) {
@@ -243,6 +285,9 @@ void Snake_CmdPrintStruct(uint8_t argc, uint8_t * argv[]) {
 	
 	Print("\r\n.Score\t");
 	Print_Dec(Snake->Score);
+	
+	Print("\r\n.Dir\t");
+	Print_Dec(uint8_t(Snake->Direction));
 }
 
 void Snake_CmdDrawBlock(uint8_t argc, uint8_t * argv[]) {
