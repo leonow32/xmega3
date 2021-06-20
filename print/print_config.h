@@ -270,7 +270,7 @@
 	#define PRINT_USE_COLORS						1
 	
 	// Use demo commands
-	#define PRINT_USE_DEMO_COMMANDS					0
+	#define PRINT_USE_DEMO_COMMANDS					1
 	
 	#define PRINT_CONFIG_DONE
 	

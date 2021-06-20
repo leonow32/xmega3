@@ -307,6 +307,7 @@ const Console_NamePointer_t Console_CommandList[] = {
 	{"snake",			Snake_CmdRun},
 	{"block",			Snake_CmdDrawBlock},
 	{"food",			Snake_CmdNewFood},
+	{"sd",				Snake_CmdPrintStruct},
 #endif
 
 // ========================================
